@@ -89,7 +89,7 @@ const ItinBuilder3: React.FC<DefinedProps & PageComponentProps &
   
   const [stateVariables, setStateVariables] = useState<StateVariables>({
     destination:"Pari",
-    curStep:"80T",
+    curStep:"10T",
     travelDate: "3/17/23",
     itinStartTime: "8am",
     itinEndTime: "6pm",
