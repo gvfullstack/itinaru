@@ -76,7 +76,7 @@ type DefinedProps = {
 };
 
 
-const ItinBuilder = () => {
+const ItinBuilder2 = () => {
   
   const [step, setStep] = useState<number>(1);
   const [destination, setDestination] = useState<string>("");
@@ -279,7 +279,7 @@ const ItinBuilder = () => {
         prompt: "Please provide details about your meal preferences.",
         meals: meals,
         createButtonText: createButtonText,
-        nextButtonText:"Done! On to commuting options"},
+        nextButtonText:"Done! Show additional meal options"},
         { 
         pageStep: 17,
         page: "160T",
@@ -326,11 +326,12 @@ const ItinBuilder = () => {
     <>
       <h1>itinerue</h1>
           
-      {messageProps.map((props) => (
+      pageProps.map(function (props) {pageProps.introText}</>)
+      { {pageProps.map((props) => (
         <React.Fragment key={uuidv4()}>
-          {props && step === props.step && (
+          {props && step === props.pageStep && (
             <PageComponent
-              page={props.pageStep}
+              pageStep={props.pageStep}
               introText={props.introText}
               infoText1={props.infoText1}
               infoText2={props.infoText2}
@@ -342,7 +343,7 @@ const ItinBuilder = () => {
               button1Text={props.button1Text}
               button2Text={props.button2Text}
             />
-          )}
+          )} }
         </React.Fragment>
       ))}
   
@@ -350,4 +351,4 @@ const ItinBuilder = () => {
     </>
   );
           }
-export default ItinBuilder;
+export default ItinBuilder2;

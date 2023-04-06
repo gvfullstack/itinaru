@@ -1,14 +1,14 @@
 import React from "react";
 
-interface Props {
-  onClick: () => void;
+interface PageComponentProps {
+  createButtonText?: string;
+  handleCreateItinerary?: () => void;
 }
 
-const CreateItineraryButton: React.FC<Props> = ({ onClick }) => {
+const CreateItineraryButton: React.FC<Props> = ({ createButtonText, handleCreateItinerary }) => {
   return (
     <div>
-      <h2>Ready to create your itinerary?</h2>
-      <button onClick={onClick}>Create itinerary now</button>
+      <button onClick={handleCreateItinerary}>{createButtonText}</button>
     </div>
   );
 };

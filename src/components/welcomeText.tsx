@@ -1,13 +1,14 @@
 import React from "react";
-import { definedProps } from "../pages/PageComponent";
 
 type PageComponentProps = { 
-  definedProps: definedProps;
-};
+  introText?: string;
+  infoText1?: string;
+  infoText2?: string;
+  prompt?: string;};
 
 
 const WelcomeText: React.FC<PageComponentProps> = (
-  {definedProps}) => {
+  {introText, infoText1, infoText2, prompt}) => {
 
   return (
     <div>
