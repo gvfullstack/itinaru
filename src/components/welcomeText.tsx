@@ -1,17 +1,19 @@
 import React from "react";
-import { definedProps } from "../pages/PageComponent";
+import styles from './backButton.module.css'
 
 type PageComponentProps = { 
-  definedProps: definedProps;
-};
+  introText?: string;
+  infoText1?: string;
+  infoText2?: string;
+  prompt?: string;};
 
 
 const WelcomeText: React.FC<PageComponentProps> = (
-  {definedProps}) => {
+  {introText, infoText1, infoText2, prompt}) => {
 
   return (
     <div>
-      <p>{introText}</p>
+      <p className={styles.introText}>{introText}</p>
       <p>{infoText1}</p>
       <p>{infoText2}</p>
       <p>{prompt}</p>
