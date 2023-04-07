@@ -1,4 +1,5 @@
 import React from "react";
+import styles from './backButton.module.css'
 
 type PageComponentProps = { 
   introText?: string;
@@ -12,7 +13,7 @@ const WelcomeText: React.FC<PageComponentProps> = (
 
   return (
     <div>
-      <p>{introText}</p>
+      <p className={styles.introText}>{introText}</p>
       <p>{infoText1}</p>
       <p>{infoText2}</p>
       <p>{prompt}</p>

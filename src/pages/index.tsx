@@ -2,6 +2,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
+// import '../styles/global.css'
 import Itinbuilder3 from './ItinBuilder3.tsx'
 
 const inter = Inter({ subsets: ['latin'] })

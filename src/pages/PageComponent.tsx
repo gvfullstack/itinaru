@@ -57,6 +57,7 @@ type ItinBuilderProps = {
   selectedOptions?: string[];   
   themeSelections?: string[]; 
   userDefinedThemes?: string;
+  destination?: string;
 };
 
 const PageComponent: React.FC<ItinBuilderProps> = (props) => {
@@ -92,6 +93,7 @@ const PageComponent: React.FC<ItinBuilderProps> = (props) => {
           handleInputChange={props.handleInputChange}
           handleMultiSelect={props.handleMultiSelect}
           selectedOptions={props.selectedOptions}
+          destination={props.destination}
           />}
       
       {input1StateVariables.map((input1StateVariable) => 
@@ -133,6 +135,7 @@ const PageComponent: React.FC<ItinBuilderProps> = (props) => {
           nextPageStep={props.nextPageStep}
           specificSitesBool={props.specificSitesBool}
           nextPageStepR2={props.nextPageStepR2}
+          destination={props.destination}
           />
       <NextButton 
           key={uuidv4()}

@@ -147,7 +147,9 @@ const ItinBuilder3: React.FC<DefinedProps & PageComponentProps &
           createButtonText: createButtonText,
           nextButtonText: "Lets customize!", 
           backButtonText: backButtonText, 
-          shouldAutoFocus: stateVariables.shouldAutoFocus
+          shouldAutoFocus: stateVariables.shouldAutoFocus,
+          destination: stateVariables.destination
+
         },
         {
           curStep: stateVariables.curStep,
@@ -323,6 +325,7 @@ const ItinBuilder3: React.FC<DefinedProps & PageComponentProps &
             keyOfStateVariable: "userDefinedThemes",
             valOfStateVariable: stateVariables.userDefinedThemes,
             shouldAutoFocus: stateVariables.shouldAutoFocus,
+            destination: stateVariables.destination
             }, 
             {
             curStep: stateVariables.curStep,

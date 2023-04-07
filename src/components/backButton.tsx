@@ -11,7 +11,7 @@ const BackButton: React.FC<PageComponentProps> = (props) => {
 
   const handleClick = () => props.handleInputChange("curStep", props.prevPageStep)
 
-  return <button onClick={handleClick}>{props.backButtonText}</button>;
+  return <button className="backButton" onClick={handleClick}>{props.backButtonText}</button>;
 };
 
 export default BackButton;
