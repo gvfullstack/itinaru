@@ -21,8 +21,8 @@ interface Props {
 const NextButton: React.FC<Props> = (props) => {
 console.log("what", props.destination)
   const handleClick = () => {
-    const baseUrl = 'localhost:3000';
-    axios.post(baseUrl +'/api/neighborhoods/city', { city: "san fransisco" }) 
+    const baseUrl = 'http://localhost:3000';
+    axios.post(baseUrl +'/api/neighborhood/city', { city: "san fransisco" }) 
       .then((response) => { console.log(response); 
         
         if (props.nextButtonStaticValue === undefined) {
