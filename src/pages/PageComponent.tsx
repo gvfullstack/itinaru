@@ -8,7 +8,8 @@ import CreateItineraryButton from "../components/createItineraryButton";
 import BackButton from "../components/backButton";
 import SingleSelectButtonList from "@/components/singleSelectButtonList";
 import MultipleSelectButtonList from "@/components/multipleSelectButtonList"
-
+import SeparatorText from "@/components/separatorText";
+import styles from "./PageComponent.module.css";
 
 const { v4: uuidv4 } = require('uuid');
 
@@ -22,6 +23,7 @@ type ItinBuilderProps = {
   prevPageStep?: string;
   nextPageStep?: string;
   introText?: string;
+  destinationText?: string;
   infoText1?: string;
   infoText2?: string;
   prompt?: string;
@@ -32,8 +34,8 @@ type ItinBuilderProps = {
   backButtonText?: string;
   createButtonText?: string;
   handleCreateItinerary?: () => void;
-  handleInputChange?: (key: string, value: string | number | Date | undefined | boolean | string[]) => void; 
-  handleMultiSelect?: (key: string, value: string | number | Date | undefined | boolean | string[]) => void; 
+  handleInputChange?: HandleInputChange; 
+  handleMultiSelect?: MultiSelectHandler; 
   keyOfStateVariable?:string
   valOfStateVariable?: string;
   keyOfStateVariable2?:string
@@ -58,6 +60,12 @@ type ItinBuilderProps = {
   themeSelections?: string[]; 
   userDefinedThemes?: string;
   destination?: string;
+  nextButtonGenerateAPI?: boolean;
+  isLoading?: boolean;
+  separatorText?: string;
+  userInputPlaceholder?: string;
+  userInputPlaceholder2?: string;
+
 };
 
 const PageComponent: React.FC<ItinBuilderProps> = (props) => {
@@ -69,12 +77,13 @@ const PageComponent: React.FC<ItinBuilderProps> = (props) => {
   const input2StateVariables = ["itinEndTime"]
 
   return (
-    <>
+    <div className={styles.pageComponentContainer}>
       <WelcomeText 
           introText={props.introText}
           infoText1={props.infoText1}
           infoText2={props.infoText2}
           prompt={props.prompt}
+          destinationText={props.destinationText}
       />
 
 
@@ -106,7 +115,7 @@ const PageComponent: React.FC<ItinBuilderProps> = (props) => {
                 valOfStateVariable={props.valOfStateVariable}
                 handleInputChange={props.handleInputChange}
                 shouldAutoFocus={props.shouldAutoFocus}
-
+                userInputPlaceholder={props.userInputPlaceholder}
             />)   
           )
         }
@@ -121,6 +130,7 @@ const PageComponent: React.FC<ItinBuilderProps> = (props) => {
                 keyOfStateVariable={props.keyOfStateVariable2}
                 valOfStateVariable={props.valOfStateVariable2}
                 handleInputChange={props.handleInputChange}
+                userInputPlaceholder={props.userInputPlaceholder2}
             />)   
           )
         }
@@ -136,8 +146,12 @@ const PageComponent: React.FC<ItinBuilderProps> = (props) => {
           specificSitesBool={props.specificSitesBool}
           nextPageStepR2={props.nextPageStepR2}
           destination={props.destination}
+          nextButtonGenerateAPI= {props.nextButtonGenerateAPI}
+          multipleSelectOptions = {props.multipleSelectOptions}
+          keyOfMultiSelectButton = {props.keyOfMultiSelectButton}
           />
-      <NextButton 
+
+      {props.nextPageStepR2 && (<NextButton 
           key={uuidv4()}
           handleInputChange={props.handleInputChange} 
           nextButtonText={props.nextButton2Text} 
@@ -145,14 +159,18 @@ const PageComponent: React.FC<ItinBuilderProps> = (props) => {
           nextPageStep={props.nextPageStep}
           specificSitesBool={props.specificSitesBool}
           nextPageStepR2={props.nextPageStepR2}
-          />
+          />)}
       
-      <BackButton
+      {props.backButtonText && (<BackButton
         key={uuidv4()}
         backButtonText={props.backButtonText}
         prevPageStep={props.prevPageStep}
         handleInputChange={props.handleInputChange} 
-        />
+        />)}
+
+      <SeparatorText 
+          separatorText={props.separatorText}
+      />
 
       <CreateItineraryButton 
           key={uuidv4()}
@@ -161,7 +179,7 @@ const PageComponent: React.FC<ItinBuilderProps> = (props) => {
           />
           
         
-        </>
+        </div>
           
       );
 };
