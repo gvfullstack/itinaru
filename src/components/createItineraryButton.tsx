@@ -1,14 +1,15 @@
 import React from "react";
+import styles from "./createItineraryButton.module.css";
 
 interface PageComponentProps {
   createButtonText?: string;
   handleCreateItinerary?: () => void;
 }
 
-const CreateItineraryButton: React.FC<Props> = ({ createButtonText, handleCreateItinerary }) => {
+const CreateItineraryButton: React.FC<PageComponentProps> = (props) => {
   return (
-    <div>
-      <button onClick={handleCreateItinerary}>{createButtonText}</button>
+    <div className={styles.createItineraryButtonContainer}>
+      <button className={styles.createItineraryButton} onClick={props.handleCreateItinerary}>{props.createButtonText}</button>
     </div>
   );
 };

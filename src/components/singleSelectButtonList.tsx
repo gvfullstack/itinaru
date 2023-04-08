@@ -1,44 +1,50 @@
 import React, { useState } from "react";
+import styles from "./singleSelectButton.module.css";
+
 const { v4: uuidv4 } = require('uuid');
+
+type HandleInputChange = (key: string, value: string | number | Date | undefined | boolean | string[]) => void;
 
 interface PageComponentProps {
   paceOptions: string[];
-  handleInputChange: (key: string, value: string | number | Date | undefined | boolean) => void; 
+  handleInputChange?: HandleInputChange; 
   selectedPaceOption?: string
   shouldAutoFocus?: boolean
 }
 
 const singleSelectButtonList: React.FC<PageComponentProps> = (props) => {
   
+  const handleInputChange = props.handleInputChange ? props.handleInputChange : () => {};
 
   const handleOptionSelect = (option: string, index: number) => {
 
     const extractedPaceNumber = index + 1
     if (props.shouldAutoFocus) {
-      props.handleInputChange("shouldAutoFocus", false);
+      handleInputChange("shouldAutoFocus", false);
     }
 
     if (props.selectedPaceOption === option) {
-      props.handleInputChange("pace", undefined);
-      props.handleInputChange("selectedPaceOption", undefined);
+      handleInputChange("pace", undefined);
+      handleInputChange("selectedPaceOption", undefined);
     } else {
-      props.handleInputChange("pace", extractedPaceNumber);
-      props.handleInputChange("selectedPaceOption", option);
-      props.handleInputChange("specificPace", undefined);
+      handleInputChange("pace", extractedPaceNumber);
+      handleInputChange("selectedPaceOption", option);
+      handleInputChange("specificPace", extractedPaceNumber);
+
     }
    
 
   };
 
   return (
-    <div>
+    <div className={styles.singleSelectButtonContainer}>
       {props.paceOptions.map((option, index) => (
 
         <button
         key={uuidv4()}
         onClick={() => handleOptionSelect(option, index)}
-        className={props.selectedPaceOption === option ? "selected" : ""}
-         >
+        className={`${styles.singleSelectButton} ${props.selectedPaceOption === option ? styles.selected : ""}`}
+        >
           {option}
         </button>
       ))}

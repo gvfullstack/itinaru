@@ -1,9 +1,9 @@
-.backButtonContainer{
+.createItineraryButtonContainer{
     display: flex;
     justify-content: center;
 }
 
-.backButton{
+.createItineraryButton{
     background-color: #FC4869;
     border: none;
     color: #F3EFEF;

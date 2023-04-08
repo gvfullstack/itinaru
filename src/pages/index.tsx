@@ -3,7 +3,7 @@ import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
 // import '../styles/global.css'
-import Itinbuilder3 from './ItinBuilder3.tsx'
+import Itinbuilder from './ItinBuilder.tsx'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -17,7 +17,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-          <Itinbuilder3 />
+          <Itinbuilder />
       </main>
     </>
   )

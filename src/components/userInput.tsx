@@ -1,9 +1,10 @@
 import React from "react";
 import { useRef, useEffect } from 'react';
+import styles from "./userInput.module.css";
 
-// const PageComponent: React.FC<ItinBuilderProps> = (props) => 
 const { v4: uuidv4 } = require('uuid');
 
+type HandleInputChange = (key: string, value: string | number | Date | undefined | boolean | string[]) => void;
 
 interface PageComponentProps {
   keyOfStateVariable: string,
@@ -11,12 +12,14 @@ interface PageComponentProps {
   travelDate?: string;
   itinStartTime?: string;
   itinEndTime?: string;
-  handleInputChange: (key: string, value: string | number | Date | boolean) => void; 
-  shouldAutoFocus?: boolean
+  handleInputChange?: HandleInputChange; 
+  shouldAutoFocus?: boolean;
+  userInputPlaceholder?: string;
 }
 
 const UserInput: React.FC<PageComponentProps> = (props) => {
   const inputRef = useRef<HTMLInputElement>(null);
+  const handleInputChange = props.handleInputChange ? props.handleInputChange : () => {};
   
   useEffect(() => {
     console.log("useEffect", props.shouldAutoFocus)
@@ -27,27 +30,29 @@ const UserInput: React.FC<PageComponentProps> = (props) => {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!props.shouldAutoFocus) {
-      props.handleInputChange("shouldAutoFocus", true);
+      handleInputChange("shouldAutoFocus", true);
     }    
 
-    props.handleInputChange(props.keyOfStateVariable, event.target.value);
+    handleInputChange(props.keyOfStateVariable, event.target.value);
 
     if(props.keyOfStateVariable === "specificPace") {
-      props.handleInputChange("pace", event.target.value)
-      props.handleInputChange("selectedPaceOption", "userSpecifiedSelection");
+      handleInputChange("pace", event.target.value)
+      handleInputChange("selectedPaceOption", "userSpecifiedSelection");
     };
   };
 
 
 
   return (
-    <div>
+    <div className={styles.userInputContainer}>
       <input
+        className={styles.userInput}
         ref={inputRef} 
         type="text" 
         id={props.keyOfStateVariable} 
         value={props.valOfStateVariable} 
         onChange={handleChange}
+        placeholder={props.userInputPlaceholder}
         />
     </div>
   );

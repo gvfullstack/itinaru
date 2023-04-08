@@ -1,9 +1,9 @@
-.backButtonContainer{
+.nextButtonContainer{
     display: flex;
     justify-content: center;
 }
 
-.backButton{
+.nextButton{
     background-color: #FC4869;
     border: none;
     color: #F3EFEF;

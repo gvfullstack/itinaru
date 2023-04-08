@@ -3,6 +3,8 @@ import { useState } from "react";
 import PageComponent from "./PageComponent";
 import UserInput from '@/components/userInput';
 import { isBooleanObject } from 'util/types';
+import IsLoadingPage from '@/components/IsLoadingPage';
+import styles from '../styles/ItinBuilder.module.css';
 
 const { v4: uuidv4 } = require('uuid');
 
@@ -21,22 +23,23 @@ type DefinedProps = {
     nextPageStep?: string;
     nextPageStepR2?: string
     introText?: string;
+    destinationText?: string;
     infoText1?: string;
     infoText2?: string;
     prompt?: string;
     destination?: string; 
     createButtonText?: string;
     nextButtonText?: string; 
-    nextButtonStaticValue?: string | boolean
+    nextButtonStaticValue?: string | boolean //assign a static value for values that cannot be inferred from state variable being updated and helps distinguish what button selection means when more than one button exists in a page
     nextButton2Text?: string; 
-    nextButton2StaticValue?: string | boolean
+    nextButton2StaticValue?: string | boolean //assign a static value for values that cannot be inferred from state variable being updated and helps distinguish what button selection means when more than one button exists in a page
     backButtonText?: string;
     travelDate?: string;
     itinStartTime?: string;
     itinEndTime?: string;
-    valOfStateVariable?: string | number | undefined;
+    valOfStateVariable?: any;
     keyOfStateVariable?: string;
-    valOfStateVariable2?: string | number | undefined;
+    valOfStateVariable2?: any;
     keyOfStateVariable2?: string;
     specificSitesBool?: boolean;
     specificSites?: string;
@@ -58,7 +61,11 @@ type DefinedProps = {
     userDefinedThemes?: string;
     neighborhoodSelections?: string[];
     userDefinedNeighborhoods?: string;
-
+    nextButtonGenerateAPI?: boolean;
+    isLoading?: boolean;
+    separatorText?: string;
+    userInputPlaceholder?: string;
+    userInputPlaceholder2?: string;
   };
   
 type StateVariables = {
@@ -82,17 +89,20 @@ type StateVariables = {
   userDefinedThemes?: string;
   neighborhoodSelections?: string[];
   userDefinedNeighborhoods?: string;
+  nextButtonGenerateAPI?: boolean;
+  isLoading?: boolean;
+  multipleSelectOptions?: string[];
 }
 
-const ItinBuilder3: React.FC<DefinedProps & PageComponentProps & 
+const ItinBuilder: React.FC<DefinedProps & PageComponentProps & 
                     StateVariables & HandleInputChange & MultiSelectHandler>  = (props) => {
   
   const [stateVariables, setStateVariables] = useState<StateVariables>({
-    destination:"Pari",
-    curStep:"10T",
-    travelDate: "3/17/23",
-    itinStartTime: "8am",
-    itinEndTime: "6pm",
+    destination:undefined,
+    curStep:"70T",
+    travelDate: undefined,
+    itinStartTime: undefined,
+    itinEndTime: undefined,
     specificSitesBool: false,
     specificSites:"",
     itineraryItems:"",
@@ -106,7 +116,10 @@ const ItinBuilder3: React.FC<DefinedProps & PageComponentProps &
     themeSelections: [],
     userDefinedThemes: undefined,
     neighborhoodSelections: [],
-    userDefinedNeighborhoods: undefined
+    userDefinedNeighborhoods: undefined,
+    nextButtonGenerateAPI: false,
+    isLoading: false,
+    multipleSelectOptions: []
   })
 
   const backButtonText = "Prev page please!"
@@ -138,18 +151,16 @@ const ItinBuilder3: React.FC<DefinedProps & PageComponentProps &
           pageStep: "10T",
           prevPageStep: "10T",
           nextPageStep: "20T",
-          introText: "Welcome!",
-          infoText1: "We're here to help you plan your next trip.",
-          infoText2: "Let's put together a little itinerue for you!",
+          introText: "Hello fellow traveler!",
+          infoText1: "Let's put the 'u' in itinaru by planning your perfect trip!",
           prompt: "Where are you traveling to?",
           keyOfStateVariable: "destination",
           valOfStateVariable: stateVariables.destination,
           createButtonText: createButtonText,
           nextButtonText: "Lets customize!", 
-          backButtonText: backButtonText, 
           shouldAutoFocus: stateVariables.shouldAutoFocus,
-          destination: stateVariables.destination
-
+          separatorText: "OR",
+          userInputPlaceholder: "Enter a destination"        
         },
         {
           curStep: stateVariables.curStep,
@@ -157,14 +168,18 @@ const ItinBuilder3: React.FC<DefinedProps & PageComponentProps &
           prevPageStep: "10T",
           nextPageStep: "30T",
           introText: "OMG!",
-          infoText1: `${stateVariables.destination} sounds fantastic!`,
+          destinationText: `${stateVariables.destination}`,
+          infoText1: `sounds fantastic!`,
           prompt: "What is your travel date?",
           keyOfStateVariable: "travelDate",
           valOfStateVariable: stateVariables.travelDate,
           createButtonText: createButtonText,
           nextButtonText: "Lets continue!",
           backButtonText: backButtonText,
-          shouldAutoFocus: stateVariables.shouldAutoFocus
+          shouldAutoFocus: stateVariables.shouldAutoFocus,
+          destination: stateVariables.destination,
+          separatorText: "OR",
+          userInputPlaceholder: "Enter a travel date"
         },
           
         {   
@@ -181,7 +196,10 @@ const ItinBuilder3: React.FC<DefinedProps & PageComponentProps &
           createButtonText: createButtonText,
           nextButtonText: "time set! Next!",
           backButtonText: backButtonText,
-          shouldAutoFocus: stateVariables.shouldAutoFocus 
+          shouldAutoFocus: stateVariables.shouldAutoFocus,
+          separatorText: "OR",
+          userInputPlaceholder: "Enter a start time",
+          userInputPlaceholder2: "Enter an end time"  
         },
         {
           curStep: stateVariables.curStep,
@@ -190,7 +208,7 @@ const ItinBuilder3: React.FC<DefinedProps & PageComponentProps &
           nextPageStep: "50T",
           nextPageStepR2: "60T",
           introText: "Perfect!",
-          prompt: "Before I offer some suggestions, do you have any specific points of interest already in mind?",
+          prompt: "Do you have any specific points of interest already in mind?",
           createButtonText: createButtonText,
           nextButtonText: "Oh, yeah!",
           nextButtonStaticValue: true,
@@ -198,7 +216,8 @@ const ItinBuilder3: React.FC<DefinedProps & PageComponentProps &
           nextButton2StaticValue: false,
           specificSitesBool: stateVariables.specificSitesBool,
           backButtonText: backButtonText,
-          shouldAutoFocus: stateVariables.shouldAutoFocus 
+          shouldAutoFocus: stateVariables.shouldAutoFocus,
+          separatorText: "OR" 
         },
         {   
           curStep: stateVariables.curStep,
@@ -213,7 +232,9 @@ const ItinBuilder3: React.FC<DefinedProps & PageComponentProps &
           keyOfStateVariable: "specificSites",
           valOfStateVariable: stateVariables.specificSites,
           backButtonText: backButtonText,
-          shouldAutoFocus: stateVariables.shouldAutoFocus
+          shouldAutoFocus: stateVariables.shouldAutoFocus,
+          separatorText: "OR",
+          userInputPlaceholder: "Enter sites"
         },
         {
           curStep: stateVariables.curStep,
@@ -228,7 +249,10 @@ const ItinBuilder3: React.FC<DefinedProps & PageComponentProps &
           keyOfStateVariable: "excludedSites",
           valOfStateVariable: stateVariables.excludedSites,
           backButtonText: backButtonText,
-          shouldAutoFocus: stateVariables.shouldAutoFocus
+          shouldAutoFocus: stateVariables.shouldAutoFocus,
+          separatorText: "OR",
+          userInputPlaceholder: "Enter sites"
+
         },
         {   
           curStep: stateVariables.curStep,
@@ -236,7 +260,6 @@ const ItinBuilder3: React.FC<DefinedProps & PageComponentProps &
           prevPageStep: "60T",
           nextPageStep: "80T",
           introText: "No worries, I got you!",
-          infoText1: "Now I’ll ask a few questions about your preferences, so I can make appropriate recommendations.",
           prompt: "How quickly do you want to move through your itinerary/ how many sites do you want to see?",
           paceOptions: [
               "just want to chill! (1 site)",
@@ -255,6 +278,9 @@ const ItinBuilder3: React.FC<DefinedProps & PageComponentProps &
           backButtonText: backButtonText,
           selectedPaceOption: stateVariables.selectedPaceOption,
           shouldAutoFocus: stateVariables.shouldAutoFocus,
+          separatorText: "OR",
+          userInputPlaceholder: "Custom number of sites"
+
           },
           {   
             curStep: stateVariables.curStep,
@@ -263,13 +289,15 @@ const ItinBuilder3: React.FC<DefinedProps & PageComponentProps &
             nextPageStep: "90T",
             shouldAutoFocus: stateVariables.shouldAutoFocus,
             introText: "Okay!",
-            infoText1: "Now, I’d like to incorporate some information about your group to tailor your itinerary to your needs.",
-            prompt: "First, how many people are traveling on this trip?",
+            prompt: "How many people are traveling on this trip?",
             createButtonText: createButtonText,
             backButtonText: backButtonText,
             nextButtonText: "head count set! Next!",
             keyOfStateVariable: "travelerCount",
-            valOfStateVariable: stateVariables.travelerCount
+            valOfStateVariable: stateVariables.travelerCount,
+            separatorText: "OR",
+            userInputPlaceholder: "e.g. 2"
+
           },
           {   
             curStep: stateVariables.curStep,
@@ -291,14 +319,15 @@ const ItinBuilder3: React.FC<DefinedProps & PageComponentProps &
             createButtonText: createButtonText,
             nextButtonText: "age range set! Next!", 
             handleMultiSelect: handleMultiSelect,
-            selectedOptions: stateVariables.ageRangeSelection
+            selectedOptions: stateVariables.ageRangeSelection,
+            separatorText: "OR"
                 },
           {
             curStep: stateVariables.curStep,
             pageStep: "100T",
             prevPageStep: "90T",
             nextPageStep: "110T",
-            prompt: "Are there any additional themes or keywords you'd like me to consider for recommendations?",
+            prompt: "What theme(s) or keyword(s) describe the trip you want to take?",
             keyOfMultiSelectButton:"themeSelections",
             themeSelections: stateVariables.themeSelections,
             multipleSelectOptions: [
@@ -314,45 +343,40 @@ const ItinBuilder3: React.FC<DefinedProps & PageComponentProps &
                 "tourist attractions",
                 "nature & wildlife",
                 "night clubs",
-                "live shows",
-                "string"]
+                "live shows"]
                 , 
             createButtonText: createButtonText,
             backButtonText: backButtonText,
             nextButtonText: "Done! Now, what?",
+            nextButtonGenerateAPI: true,
             handleMultiSelect: handleMultiSelect,
             selectedOptions: stateVariables.themeSelections,
             keyOfStateVariable: "userDefinedThemes",
             valOfStateVariable: stateVariables.userDefinedThemes,
             shouldAutoFocus: stateVariables.shouldAutoFocus,
-            destination: stateVariables.destination
+            destination: stateVariables.destination,
+            separatorText: "OR",
+            userInputPlaceholder: "e.g. 'art' or 'taverns'"
             }, 
             {
             curStep: stateVariables.curStep,
             pageStep: "110T",
             prevPageStep: "100T",
             nextPageStep: "120T",
-            introText: "Awesome, possom!",
-            infoText1: `Here are popular neighborhoods to explore in ${stateVariables.destination}.`, 
-            infoText2: "Feel free to select a few neighborhoods to explore.",
+            introText: `Here are popular neighborhoods to explore in ${stateVariables.destination}.`,
+            infoText1: "Feel free to select a few neighborhoods to explore.", 
+            
             prompt: "Selecting fewer usually means less commute between points of interest.",
             keyOfMultiSelectButton:"neighborhoodSelections",
             neighborhoodSelections: stateVariables.neighborhoodSelections,
-            multipleSelectOptions: [
-                "mission district",
-                "north beach",
-                "haight-ashbury",
-                "castro district",
-                "chinatown"]
-                , 
+            multipleSelectOptions: stateVariables.multipleSelectOptions,
             createButtonText: createButtonText,
             backButtonText: backButtonText,
             nextButtonText: "to my suggestions",
             handleMultiSelect: handleMultiSelect,
             selectedOptions: stateVariables.neighborhoodSelections,
-            keyOfStateVariable: "userDefinedNeighborhoods",
-            valOfStateVariable: stateVariables.userDefinedNeighborhoods,
             shouldAutoFocus: stateVariables.shouldAutoFocus,
+            separatorText: "OR"
             },
             {   
               curStep: stateVariables.curStep,
@@ -366,7 +390,10 @@ const ItinBuilder3: React.FC<DefinedProps & PageComponentProps &
               // mealItineraryItems: mealItineraryItems,
               createButtonText: createButtonText,
               nextButtonText: "selections complete. Lets talk meals!",
-              nextButton2Text: "show more attractions!"
+              nextButton2Text: "show more attractions!",
+              separatorText: "OR",
+              backButtonText: backButtonText,
+              
               // itineraryItems: itineraryItems
           }
       ]
@@ -377,9 +404,11 @@ const handleCreateItinerary = () => {
 
 
 return (
-  <div>
+  <div className={styles.pageComponentContainer}>
     {pageProps.map(props => (
-      stateVariables.curStep === props.pageStep && (
+      stateVariables.curStep === props.pageStep && 
+      !stateVariables.isLoading &&
+      (
         <PageComponent 
               key={uuidv4()} 
               {...props} 
@@ -387,8 +416,9 @@ return (
               handleInputChange={handleInputChange}
               />)
           ))}
+    {stateVariables.isLoading && (<IsLoadingPage />)}
           {props.children}
   </div>
 );
           }
-export default ItinBuilder3;
+export default ItinBuilder;
