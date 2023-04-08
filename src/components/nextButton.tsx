@@ -24,6 +24,7 @@ interface Props {
 }
 
 const NextButton: React.FC<Props> = (props) => {
+<<<<<<< HEAD
 
   const handleInputChange = props.handleInputChange ? props.handleInputChange : () => {};
   const nextButtonGenerateAPI = props.nextButtonGenerateAPI ? props.nextButtonGenerateAPI : false;
@@ -57,6 +58,7 @@ const NextButton: React.FC<Props> = (props) => {
         setTimeout(()=> handleInputChange("isLoading",false), 1000);
         normalExecutionBlock();
         updateNeighborhoods(response.data);
+
       })
   }
 
