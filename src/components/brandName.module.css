@@ -1,0 +1,87 @@
+@keyframes fadeInBounceFadeOut {
+    0% {
+      transform: scale(0.5);
+      opacity: 0;
+    }
+    
+    10% {
+      transform: scale(1.2);
+      opacity: 1;
+    
+    }
+    14%, 28%, 42%, 57%, 71%, 85% {
+        transform: translateY(0);
+          opacity: 1;
+      }
+    
+    21% {
+    transform: translateY(-10%);
+    opacity: 1;
+    }
+    35% {
+    transform: translateY(-5%);
+    opacity: 1;
+    }
+    50% {
+    transform: translateY(-2.5%);
+    opacity: 1;
+    }
+    64% {
+    transform: translateY(-1.25%);
+    opacity: 1;
+    }
+    78% {
+    transform: translateY(-0.625%);
+    opacity: 1;
+    }
+    
+    85% {
+      opacity: .5;
+    }
+
+    100% {
+      transform: scale(1);
+      opacity: 0;
+    }
+  }
+
+  @keyframes fadeInFadeOut {
+    0% {
+      opacity: 1;
+    }
+    
+    100% {
+      opacity: .95;
+    }
+  }
+
+  
+  .brandNameContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    pointer-events: none;
+    background-color: #FC4869;
+    height: 100%;
+    width: 100%;
+    animation: fadeInFadeOut 2.2s;
+  }
+  
+  .brandName {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 5rem;
+    color: #F3EFEF;
+    text-shadow:
+    -1px -1px 0px #F3EFEF,
+    1px -1px 0px #F3EFEF,
+    -1px 1px 0px #F3EFEF,
+    1px 1px 0px #F3EFEF;
+    animation:  fadeInBounceFadeOut 2.2s;
+  }

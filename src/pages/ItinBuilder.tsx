@@ -99,7 +99,7 @@ const ItinBuilder: React.FC<DefinedProps & PageComponentProps &
   
   const [stateVariables, setStateVariables] = useState<StateVariables>({
     destination:undefined,
-    curStep:"70T",
+    curStep:"10T",
     travelDate: undefined,
     itinStartTime: undefined,
     itinEndTime: undefined,
