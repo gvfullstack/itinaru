@@ -24,7 +24,6 @@ interface Props {
 }
 
 const NextButton: React.FC<Props> = (props) => {
-<<<<<<< HEAD
 
   const handleInputChange = props.handleInputChange ? props.handleInputChange : () => {};
   const nextButtonGenerateAPI = props.nextButtonGenerateAPI ? props.nextButtonGenerateAPI : false;
