@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import WelcomeText from "../components/welcomeText";
 import UserInput from "../components/userInput";
-import TimeDropdown from "../components/timeDropdown";
-import DateInput from "../components/dateInput";
 import NextButton from "../components/nextButton";
 import CreateItineraryButton from "../components/createItineraryButton";
 import BackButton from "../components/backButton";
@@ -10,6 +8,7 @@ import SingleSelectButtonList from "@/components/singleSelectButtonList";
 import MultipleSelectButtonList from "@/components/multipleSelectButtonList"
 import SeparatorText from "@/components/separatorText";
 import styles from "./PageComponent.module.css";
+import MapComponent from "../components/mapComponent";
 
 const { v4: uuidv4 } = require('uuid');
 
@@ -18,6 +17,7 @@ type HandleInputChange = (key: string, value: string | number | Date | undefined
 type MultiSelectHandler = (key: string, value: string | number | Date | undefined | boolean | string[]) => void;
 
 type ItinBuilderProps = {
+  children?: React.ReactNode;
   curStep?: string;
   pageStep?: string;
   prevPageStep?: string;
@@ -65,7 +65,7 @@ type ItinBuilderProps = {
   separatorText?: string;
   userInputPlaceholder?: string;
   userInputPlaceholder2?: string;
-
+  showMap?: boolean;
 };
 
 const PageComponent: React.FC<ItinBuilderProps> = (props) => {
@@ -179,7 +179,10 @@ const PageComponent: React.FC<ItinBuilderProps> = (props) => {
           />
           
         
-        </div>
+      {props.showMap && (<MapComponent />)}
+
+   </div>
+
           
       );
 };

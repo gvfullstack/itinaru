@@ -9,7 +9,7 @@ import styles from '../styles/ItinBuilder.module.css';
 const { v4: uuidv4 } = require('uuid');
 
 interface PageComponentProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 type HandleInputChange = (key: string, value: string | number | Date | undefined | boolean | string[]) => void;
@@ -66,6 +66,7 @@ type DefinedProps = {
     separatorText?: string;
     userInputPlaceholder?: string;
     userInputPlaceholder2?: string;
+    showMap?: boolean;
   };
   
 type StateVariables = {
@@ -94,8 +95,7 @@ type StateVariables = {
   multipleSelectOptions?: string[];
 }
 
-const ItinBuilder: React.FC<DefinedProps & PageComponentProps & 
-                    StateVariables & HandleInputChange & MultiSelectHandler>  = (props) => {
+const ItinBuilder: React.FC<PageComponentProps> = (props) => {
   
   const [stateVariables, setStateVariables] = useState<StateVariables>({
     destination:undefined,
@@ -119,7 +119,8 @@ const ItinBuilder: React.FC<DefinedProps & PageComponentProps &
     userDefinedNeighborhoods: undefined,
     nextButtonGenerateAPI: false,
     isLoading: false,
-    multipleSelectOptions: []
+    multipleSelectOptions: [],
+    
   })
 
   const backButtonText = "Prev page please!"
@@ -376,7 +377,8 @@ const ItinBuilder: React.FC<DefinedProps & PageComponentProps &
             handleMultiSelect: handleMultiSelect,
             selectedOptions: stateVariables.neighborhoodSelections,
             shouldAutoFocus: stateVariables.shouldAutoFocus,
-            separatorText: "OR"
+            separatorText: "OR",
+            showMap: true
             },
             {   
               curStep: stateVariables.curStep,
@@ -393,7 +395,8 @@ const ItinBuilder: React.FC<DefinedProps & PageComponentProps &
               nextButton2Text: "show more attractions!",
               separatorText: "OR",
               backButtonText: backButtonText,
-              
+            showMap: true
+
               // itineraryItems: itineraryItems
           }
       ]
