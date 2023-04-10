@@ -41,10 +41,17 @@ export default async function (
       model: "text-davinci-003",
       prompt: generatePrompt(city),
       temperature: 0.6,
+      max_tokens: 2048
     });
 
-    let resp: ResponseData = {neighborhood: completion.data?.choices[0]?.text ? completion.data.choices[0].text : ''}
-    res.status(200).json([{neighborhood: 'santa monica'}, {neighborhood:'venice'}, {neighborhood:'hawaiian gardens'}, {neighborhood:'cerritos'}, {neighborhood:'long beach'}]);
+    let responseArray = []
+    if(completion.data?.choices[0]?.text){
+     responseArray = JSON.parse(completion.data?.choices[0]?.text).map((neighborhoodName: string) => {
+        return {neighborhood: neighborhoodName}
+    })
+}
+
+    res.status(200).json(responseArray);
   } catch(error) {
     // Consider adjusting the error handling logic for your use case
     if (error.response) {
@@ -62,5 +69,5 @@ export default async function (
 }
 
 const generatePrompt = (city: string) =>{
-  return `please provide 5 popular neighborhood names in the city of ${city}`;
+  return `please provide 5 popular neighborhood names in the city of ${city} in a json array`;
 }

@@ -42,9 +42,22 @@ export default async function (
       model: "text-davinci-003",
       prompt: prompt,
       temperature: 0.6,
+      max_tokens: 2048
     });
 
-    res.status(200).json({itinarue: completion.data.choices[0].text, generatedPrompt: prompt});
+    let answer = []
+    if(completion.data?.choices[0]?.text){
+        if(completion.data.choices[0].text.charAt(0) === '.'){
+            completion.data.choices[0].text = replaceChar(completion.data.choices[0].text, '', 0)
+        }
+        try{
+            answer = JSON.parse(completion.data.choices[0].text)
+
+        }catch (error){
+            answer = [completion.data.choices[0].text]
+        }
+    }
+    res.status(200).json({itinarue: answer, generatedPrompt: prompt});
   } catch(error) {
     // Consider adjusting the error handling logic for your use case
     if (error.response) {
@@ -61,10 +74,18 @@ export default async function (
   }
 }
 
+const replaceChar = (origString: string, replaceChar: string, index: number) => {
+    let firstPart = origString.substr(0, index);
+    let lastPart = origString.substr(index + 1);
+      
+    let newString = firstPart + replaceChar + lastPart;
+    return newString;
+}
+
 const generatePrompt = (data: any) => {
-    return generateDestinationPrompt(data) + generateDatePrompt(data) + generateTimeStartPrompt(data) + generateTimeEndPrompt(data)
-        + generateIncludeSitesPrompt(data) + generateExcludeSitesPrompt(data) + generatePacePrompt(data) + generateTavelerCountPrompt(data)
-        + generateTavelerAgePrompt(data) + generateThemePrompt(data) + generateNeighborhoodPrompt(data)
+    return generateDestinationPrompt(data) + generatePacePrompt(data) +  generateDatePrompt(data) + generateTimeStartPrompt(data) + generateTimeEndPrompt(data)
+        + generateIncludeSitesPrompt(data) + generateExcludeSitesPrompt(data) + generateTavelerCountPrompt(data)
+        + generateTavelerAgePrompt(data) + generateThemePrompt(data) + generateNeighborhoodPrompt(data) + ' please provide the reponse in a json array and each item should be a json object with the following attributes venue, start time, end time, description and location address' 
 }
 
 const validate = (data: any) => {
@@ -74,7 +95,13 @@ const validate = (data: any) => {
 const generateDestinationPrompt = (data: any) => {
     if (!data.destination || data.destination === '') return '';
 
-    return `please create a trip itenirary for ${data.destination} city. `;
+    return `please create a trip itenirary for ${data.destination} city `;
+}
+
+const generatePacePrompt = (data: any) => {
+    if (!data.pace || data.pace === '') return;
+
+    return `that only takes me to ${data.pace} locations. `;
 }
 
 const generateDatePrompt = (data: any) => {
@@ -108,11 +135,6 @@ const generateExcludeSitesPrompt = (data: any) => {
     return `Please exclude ${data.excludedSites.join(",")} from my trip. `;
 }
 
-const generatePacePrompt = (data: any) => {
-    if (!data.pace || data.pace === '') return;
-
-    return `Please limit my trip to exactly ${data.pace} sites. `;
-}
 
 const generateTavelerCountPrompt = (data: any) => {
     if (!data.travelerCount || data.travelerCount === '') return;
