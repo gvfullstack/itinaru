@@ -106,6 +106,6 @@ export default async function (
   }
 }
 
-function generatePrompt(city: string) {
-  return `please provide 5 popular neighborhood names in the city of ${city}`;
+const generatePrompt = (city: string) =>{
+  return `please provide 5 popular neighborhood names in the city of ${city} in a json array`;
 }
