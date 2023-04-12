@@ -12,9 +12,14 @@ import MapComponent from "../components/mapComponent";
 
 const { v4: uuidv4 } = require('uuid');
 
-type HandleInputChange = (key: string, value: string | number | Date | undefined | boolean | string[]) => void;
+type HandleInputChange = (key: string, value: any) => void;
 
-type MultiSelectHandler = (key: string, value: string | number | Date | undefined | boolean | string[]) => void;
+type MultiSelectHandler = (key: string, value: any) => void;
+
+interface Neighborhoods {
+  neighborhood: string;
+  coordinates: { lat: number, lng: number }[];
+}
 
 type ItinBuilderProps = {
   children?: React.ReactNode;
@@ -53,7 +58,9 @@ type ItinBuilderProps = {
   selectedPaceOption?: string;
   shouldAutoFocus?: boolean;
   travelerCount?: string;
-  multipleSelectOptions?: string[];
+  multipleSelectOptions?: string[] ;  
+  multipleSelectObjects?: string[] | Neighborhoods[];
+  mapCoordinates?:  (string | { lat: number; lng: number;}[]) [];  
   ageRangeSelection?: string[];  
   keyOfMultiSelectButton?: string; 
   selectedOptions?: string[];   
@@ -66,10 +73,11 @@ type ItinBuilderProps = {
   userInputPlaceholder?: string;
   userInputPlaceholder2?: string;
   showMap?: boolean;
+  selectedNeighborhoods?: string[];
 };
 
 const PageComponent: React.FC<ItinBuilderProps> = (props) => {
-  
+  console.log("PageComponent just REDENDERED")
   const input1StateVariables = ["destination", "travelDate", "itinStartTime", 
     "specificSites", "excludedSites", "specificPace", "travelerCount", "userDefinedThemes",
     "userDefinedNeighborhoods"]
@@ -179,7 +187,15 @@ const PageComponent: React.FC<ItinBuilderProps> = (props) => {
           />
           
         
-      {props.showMap && (<MapComponent />)}
+      {props.showMap && 
+      (<MapComponent 
+          key={uuidv4()}
+          multipleSelectObjects={props.multipleSelectObjects}
+          selectedNeighborhoods={props.selectedNeighborhoods}
+          handleMultiSelect={props.handleMultiSelect}
+          keyOfMultiSelectButton={props.keyOfMultiSelectButton}
+        />
+          )}
 
    </div>
 
@@ -188,4 +204,4 @@ const PageComponent: React.FC<ItinBuilderProps> = (props) => {
 };
 
 
-export default PageComponent;
+export default React.memo(PageComponent);

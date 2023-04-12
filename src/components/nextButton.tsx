@@ -7,7 +7,15 @@ import style from './nextButton.module.css';
 const {serverRuntimeConfig, publicRuntimeConfig} = getConfig();
 const { BASE_URL } = publicRuntimeConfig;
 
-type HandleInputChange = (key: string, value: string | number | Date | undefined | boolean | string[]) => void;
+type HandleInputChange = (key: string, value: string | number | Date | undefined | boolean | string[] |
+  {neighborhood: string
+   coordinates?: { lat: number, lng: number }[]}[]
+) => void;
+
+interface Neighborhoods {
+  neighborhood: string;
+  coordinates: { lat: number, lng: number }[];
+}
 
 interface Props {
 
@@ -19,7 +27,7 @@ interface Props {
   nextPageStepR2?: string
   destination?: string
   nextButtonGenerateAPI?: boolean;
-  multipleSelectOptions?: string[];
+  multipleSelectOptions?: string[] | Neighborhoods[];  
   keyOfMultiSelectButton?: string;
 }
 
@@ -43,9 +51,12 @@ const NextButton: React.FC<Props> = (props) => {
     } 
   }
 
-  const updateNeighborhoods = (neighborhoods: { neighborhood: string }[]) => {
-    const neighborhoodNames = neighborhoods.map((neighborhood) => neighborhood.neighborhood);
-    handleInputChange("multipleSelectOptions", neighborhoodNames);
+  const updateNeighborhoods = (neighborhoods: {
+                                neighborhood: string
+                                coordinates?: { lat: number, lng: number }[]
+                              }[]) => {
+                                
+     handleInputChange("multipleSelectObjects", neighborhoods);
   }
  
 
@@ -54,7 +65,7 @@ const NextButton: React.FC<Props> = (props) => {
     const baseUrl = 'http://localhost:3000';
     axios.post(baseUrl +'/api/neighborhood/city', { city: "san fransisco" }) 
       .then((response) => { 
-        setTimeout(()=> handleInputChange("isLoading",false), 1000);
+        setTimeout(()=> handleInputChange("isLoading",false), 100);
         normalExecutionBlock();
         updateNeighborhoods(response.data);
 

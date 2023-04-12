@@ -13,7 +13,6 @@ type PageComponentProps = {
 const WelcomeText: React.FC<PageComponentProps> = (props) => {
   
   const destination = props.destinationText ? props.destinationText.toUpperCase() : "";
-  
   return (
     <div className={styles.welcomeTextContainer}>
       <p className={styles.introText}>{props.introText}</p>

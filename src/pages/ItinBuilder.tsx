@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import PageComponent from "./PageComponent";
 import UserInput from '@/components/userInput';
 import { isBooleanObject } from 'util/types';
@@ -12,9 +12,14 @@ interface PageComponentProps {
   children?: React.ReactNode;
 }
 
-type HandleInputChange = (key: string, value: string | number | Date | undefined | boolean | string[]) => void;
+type HandleInputChange = (key: string, value: any) => void;
 
-type MultiSelectHandler = (key: string, value: string | number | Date | undefined | boolean | string[]) => void;
+type MultiSelectHandler = (key: string, value: any) => void;
+
+interface Neighborhoods {
+  neighborhood: string;
+  coordinates: { lat: number, lng: number }[];
+}
 
 type DefinedProps = {
     curStep?: string;
@@ -52,14 +57,16 @@ type DefinedProps = {
     shouldAutoFocus?: boolean;
     travelerCount?: string;
     keyOfMultiSelectButton?: string;
-    multipleSelectOptions?: string[];
+    multipleSelectOptions?: string[]   
+    multipleSelectObjects?: string[] | Neighborhoods[];
+    mapCoordinates?:  (string | { lat: number; lng: number;}[]) [];  
     ageRangeSelection?: string[];
     handleMultiSelect?: MultiSelectHandler; 
     handleInputChange?: HandleInputChange;
     selectedOptions?: string[];  
     themeSelections?: string[]; 
     userDefinedThemes?: string;
-    neighborhoodSelections?: string[];
+    selectedNeighborhoods?: string[];
     userDefinedNeighborhoods?: string;
     nextButtonGenerateAPI?: boolean;
     isLoading?: boolean;
@@ -88,18 +95,19 @@ type StateVariables = {
   ageRangeSelection?: string[]; 
   themeSelections?: string[];
   userDefinedThemes?: string;
-  neighborhoodSelections?: string[];
+  selectedNeighborhoods?: string[];
   userDefinedNeighborhoods?: string;
   nextButtonGenerateAPI?: boolean;
   isLoading?: boolean;
-  multipleSelectOptions?: string[];
-}
+  multipleSelectObjects?: string[] | Neighborhoods[];
+  
+  }
 
 const ItinBuilder: React.FC<PageComponentProps> = (props) => {
   
   const [stateVariables, setStateVariables] = useState<StateVariables>({
     destination:undefined,
-    curStep:"10T",
+    curStep:"100T",
     travelDate: undefined,
     itinStartTime: undefined,
     itinEndTime: undefined,
@@ -115,24 +123,25 @@ const ItinBuilder: React.FC<PageComponentProps> = (props) => {
     ageRangeSelection: [],    
     themeSelections: [],
     userDefinedThemes: undefined,
-    neighborhoodSelections: [],
+    selectedNeighborhoods: [],
     userDefinedNeighborhoods: undefined,
     nextButtonGenerateAPI: false,
     isLoading: false,
-    multipleSelectOptions: [],
+    multipleSelectObjects: [],
     
   })
 
   const backButtonText = "Prev page please!"
   const createButtonText = "create itinerary now!";
   
-  const handleInputChange:HandleInputChange = (key, value) => {
+  const handleInputChange:HandleInputChange = useCallback((key, value) => {
       setStateVariables((prevInputs) => ({ ...prevInputs, [key]: value }));
       console.log("state variable",{stateVariables})
-  };
+  }, []);
 
-  const handleMultiSelect: MultiSelectHandler = (key, value) => {
+  const handleMultiSelect: MultiSelectHandler = useCallback((key, value) => {
     if(stateVariables[key].includes(value)){
+      console.log("item found")
       setStateVariables((prevInputs) => ({...prevInputs, 
         [key]:prevInputs[key].filter((selectedOption: any) => selectedOption !== value)
       }))    
@@ -143,7 +152,7 @@ const ItinBuilder: React.FC<PageComponentProps> = (props) => {
       }))
     }
     console.log(stateVariables)
-  }
+  }, [])
 
   const pageProps: DefinedProps[]   =
       [
@@ -352,12 +361,13 @@ const ItinBuilder: React.FC<PageComponentProps> = (props) => {
             nextButtonGenerateAPI: true,
             handleMultiSelect: handleMultiSelect,
             selectedOptions: stateVariables.themeSelections,
+            
             keyOfStateVariable: "userDefinedThemes",
             valOfStateVariable: stateVariables.userDefinedThemes,
             shouldAutoFocus: stateVariables.shouldAutoFocus,
             destination: stateVariables.destination,
             separatorText: "OR",
-            userInputPlaceholder: "e.g. 'art' or 'taverns'"
+            userInputPlaceholder: "e.g. 'art' or 'taverns'"            
             }, 
             {
             curStep: stateVariables.curStep,
@@ -368,14 +378,19 @@ const ItinBuilder: React.FC<PageComponentProps> = (props) => {
             infoText1: "Feel free to select a few neighborhoods to explore.", 
             
             prompt: "Selecting fewer usually means less commute between points of interest.",
-            keyOfMultiSelectButton:"neighborhoodSelections",
-            neighborhoodSelections: stateVariables.neighborhoodSelections,
-            multipleSelectOptions: stateVariables.multipleSelectOptions,
+            keyOfMultiSelectButton:"selectedNeighborhoods",
+            multipleSelectOptions: stateVariables.multipleSelectObjects && stateVariables.multipleSelectObjects.length ? 
+                       stateVariables.multipleSelectObjects.map((selection) => typeof selection === 'string' ? selection : selection.neighborhood) : [] ,
+            
+            mapCoordinates: stateVariables.multipleSelectObjects && stateVariables.multipleSelectObjects.length ? 
+                     stateVariables.multipleSelectObjects.map((selection) => typeof selection === 'string' ? selection : selection.coordinates) : undefined,
+            multipleSelectObjects: stateVariables.multipleSelectObjects,
             createButtonText: createButtonText,
             backButtonText: backButtonText,
             nextButtonText: "to my suggestions",
             handleMultiSelect: handleMultiSelect,
-            selectedOptions: stateVariables.neighborhoodSelections,
+            selectedOptions: stateVariables.selectedNeighborhoods,
+            selectedNeighborhoods: stateVariables.selectedNeighborhoods,
             shouldAutoFocus: stateVariables.shouldAutoFocus,
             separatorText: "OR",
             showMap: true
@@ -405,6 +420,7 @@ const handleCreateItinerary = () => {
   //for button that created itinerary at any stage
 }
 
+console.log("rerendered the main itinbuidler component")
 
 return (
   <div className={styles.pageComponentContainer}>

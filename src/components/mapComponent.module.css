@@ -12,3 +12,15 @@
   height: 100%;
 }
 
+.polygon{
+  fill: #FF7890;
+  fill-opacity: 0.5;
+  stroke: #FF7890;
+  stroke-width: 1;
+  stroke-opacity: 1;
+}
+
+.gm-style .my-polygon {
+  /* Add your styles here */
+  fill-opacity: 0.5;
+}
