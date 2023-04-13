@@ -15,7 +15,7 @@ type MultiSelectHandler = (key: string, value: any) => void;
 
 interface Neighborhoods {
   neighborhood: string;
-  coordinates: { lat: number, lng: number }[];
+  loc: { lat: number, lng: number }[];
 }
 
 type PageComponentProps = {
@@ -53,7 +53,6 @@ const MapsComponent: React.FC<PageComponentProps> = (props) => {
   }
 
   const handlePolygonClick = (key: string, value: any) => {
-  console.log(key)    
   handleMultiSelect(key, value)}
 
   return (
@@ -69,10 +68,10 @@ const MapsComponent: React.FC<PageComponentProps> = (props) => {
         zoom={15} 
         options={options}>
           { neighborhoods.map((neighborhood) =>
-              typeof neighborhood === 'object' && neighborhood.coordinates ? (
+              typeof neighborhood === 'object' && neighborhood.loc ? (
                 <React.Fragment key={key+uuidv4()}>
                   <Polygon
-                    paths={neighborhood.coordinates}
+                    paths={neighborhood.loc}
                     options={{
                       strokeColor: '#FC4869',
                       strokeOpacity: 0.8,
@@ -87,8 +86,8 @@ const MapsComponent: React.FC<PageComponentProps> = (props) => {
                   />
                   <OverlayView
                     position={{
-                      lat: neighborhood.coordinates[0].lat,
-                      lng: neighborhood.coordinates[0].lng,
+                      lat: neighborhood.loc[0].lat,
+                      lng: neighborhood.loc[0].lng,
                     }}
                     mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
                     getPixelPositionOffset={getPixelPositionOffset}

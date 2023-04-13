@@ -16,7 +16,7 @@ type MultiSelectHandler = (key: string, value: any) => void;
 
 interface Neighborhoods {
   neighborhood: string;
-  coordinates: { lat: number, lng: number }[];
+  loc: { lat: number, lng: number }[];
 }
 
 interface itineraryObject {

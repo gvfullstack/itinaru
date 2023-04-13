@@ -9,7 +9,8 @@ const openai = new OpenAIApi(configuration);
 
 type ResponseData = {
     neighborhood: string
-    coordinates?: { lat: number, lng: number }[]
+    loc?: { lat: number, lng: number }[]
+    desc?: string
   }
 
 type Error = {
@@ -47,48 +48,36 @@ export default async function (
     });
 
     let resp: ResponseData = {neighborhood: completion.data?.choices[0]?.text ? completion.data.choices[0].text : ''}
-    res.status(200).json([
-      {neighborhood: "ponderosa park",
-      coordinates: [
-        { lat: 37.3739, lng: -122.0263 },
-        { lat: 37.3741, lng: -122.0255 },
-        { lat: 37.3695, lng: -122.0235 },
-        { lat: 37.3685, lng: -122.0261 },
-        { lat: 37.3739, lng: -122.0263 },
-      ]
-    }, 
-      {neighborhood:"heritage district"
-      , coordinates: [
-        { lat: 37.369275, lng: -122.036657 },
-        { lat: 37.368918, lng: -122.037739 },
-        { lat: 37.368287, lng: -122.036996 },
-        { lat: 37.368626, lng: -122.035911 },
-        { lat: 37.369275, lng: -122.036657 }
-      ]}, 
-      {neighborhood:"Lakewood Village"
-      , coordinates:[
-        { lat: 37.3684, lng: -122.0403 },
-        { lat: 37.3673, lng: -122.0368 },
-        { lat: 37.3634, lng: -122.0386 },
-        { lat: 37.3643, lng: -122.0421 },
-        { lat: 37.3684, lng: -122.0403 }
-      ]}, 
-      {neighborhood:"Wazzu"
-      , coordinates:[
-        { lat: 37.3682, lng: -122.0277 },
-        { lat: 37.3676, lng: -122.0246 },
-        { lat: 37.3651, lng: -122.0256 },
-        { lat: 37.3646, lng: -122.0286 },
-        { lat: 37.3682, lng: -122.0277 }
-      ]}, 
-      {neighborhood:"Sunnyvale West"
-      , coordinates:[
-        { lat: 37.3751, lng: -122.0686 },
-        { lat: 37.3757, lng: -122.0537 },
-        { lat: 37.3714, lng: -122.0528 },
-        { lat: 37.3709, lng: -122.068 },
-        { lat: 37.3751, lng: -122.0686 }
-      ]}]);
+    res.status(200).json(
+      [{
+          neighborhood: "Little Italy",
+          loc: [{lat : 32.7204, lng: -117.1667}, {lat: 32.7181, lng: -117.1755}, {lat: 32.7235, lng: -117.1734}],
+          desc: "Little Italy is a vibrant, historic neighborhood in San Diego. With its vibrant Italian culture, Little Italy is perfect for families of all ages. Visitors will enjoy exploring the many restaurants, boutiques, galleries, and art installations. For children, the Amici Park Playground is a great place to explore."
+      },
+      
+      {
+          neighborhood: "La Jolla",
+          loc: [{lat: 32.8350, lng: -117.2711}, {lat: 32.8274, lng: -117.2858}, {lat: 32.8402, lng: -117.2783}],
+          desc: "La Jolla is a picturesque coastal neighborhood in San Diego. Families can enjoy the beach, explore Torrey Pines State Reserve, and visit the Birch Aquarium. Children of all ages will enjoy the La Jolla Children's Pool, the La Jolla Playhouse, and the La Jolla Historical Society."
+      },
+      
+      {
+          neighborhood: "Coronado",
+          loc: [{lat: 32.6789, lng: -117.1759}, {lat: 32.6841, lng: -117.1862}, {lat: 32.6814, lng: -117.1784}],
+          desc: "Coronado is a popular destination for families. There is plenty to explore, including the Coronado Museum of History and Art, Coronado Beach, and the Coronado Ferry Landing. Kids of all ages will enjoy the Coronado Skatepark, the Coronado Dog Beach, and the Coronado Playhouse."
+      },
+      
+      {
+          neighborhood: "Oceanside",
+          loc: [{lat: 33.1929, lng: -117.3820}, {lat: 33.1872, lng: -117.3993}, {lat: 33.1974, lng: -117.3949}],
+          desc: "Oceanside is a charming beach community in San Diego county. Families can explore the Oceanside Pier, the Oceanside Harbor, and the Oceanside Museum of Art. The Oceanside Longboard Surfing Club is perfect for children of all ages, and the Oceanside Public Library is a great place to relax and explore."
+      },
+      
+      {
+          neighborhood: "Del Mar",
+          loc: [{lat: 32.9554, lng: -117.2645}, {lat: 32.9512, lng: -117.2771}, {lat: 32.9592, lng: -117.2714}],
+          desc: "Del Mar is a beautiful coastal community in San Diego County. Visitors can explore the Del Mar Race Track, the Del Mar Plaza, and the Del Mar Fairgrounds. Children of all ages will enjoy the Del Mar Beach, the Del Mar Skate Park, and the Del Mar Library."
+      }]);
 
   } catch(error: any) {
     // Consider adjusting the error handling logic for your use case
@@ -109,3 +98,11 @@ export default async function (
 const generatePrompt = (city: string) =>{
   return `please provide 5 popular neighborhood names in the city of ${city} in a json array`;
 }
+
+
+// List five <San Diego> neighborhoods in JSON with culture and history, relaxation, and museums points of interest  that cater to ages 0 - 3, ages 4 - 8, and ages 9 - 17 e.g. 
+// [{
+//   neighborhood: "La Jolla",
+//   loc: [{lat: 32.8350, lng: -117.2711}, {lat: 32.8274, lng: -117.2858}, {lat: 32.8402, lng: -117.2783}], //3 coordinates
+//   desc: "La Jolla is a picturesque coastal neighborhood in San Diego. Families can enjoy the beach, explore Torrey Pines State Reserve, and visit the Birch Aquarium. Children of all ages will enjoy the La Jolla Children's Pool, the La Jolla Playhouse, and the La Jolla Historical Society." //max 50 words
+// }]

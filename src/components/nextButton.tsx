@@ -9,12 +9,12 @@ const { BASE_URL } = publicRuntimeConfig;
 
 type HandleInputChange = (key: string, value: string | number | Date | undefined | boolean | string[] |
   {neighborhood: string
-   coordinates?: { lat: number, lng: number }[]}[]
+   loc?: { lat: number, lng: number }[]}[]
 ) => void;
 
 interface Neighborhoods {
   neighborhood: string;
-  coordinates: { lat: number, lng: number }[];
+  loc: { lat: number, lng: number }[];
 }
 
 interface Props {
@@ -53,7 +53,7 @@ const NextButton: React.FC<Props> = (props) => {
 
   const updateNeighborhoods = (neighborhoods: {
                                 neighborhood: string
-                                coordinates?: { lat: number, lng: number }[]
+                                loc?: { lat: number, lng: number }[]
                               }[]) => {
                                 
      handleInputChange("multipleSelectObjects", neighborhoods);
