@@ -7,8 +7,8 @@ import styles from "./mapComponent.module.css";
 const { v4: uuidv4 } = require('uuid');
   
   const center = {
-    lat: 37.3688,
-    lng: -122.0363,
+    lat: 32.7157,
+    lng: -117.1611
   };
  
 type MultiSelectHandler = (key: string, value: any) => void;
@@ -65,7 +65,7 @@ const MapsComponent: React.FC<PageComponentProps> = (props) => {
         onLoad={handleMapLoad} 
         mapContainerClassName	={styles.mapsContainer} 
         center={center} 
-        zoom={15} 
+        zoom={12} 
         options={options}>
           { neighborhoods.map((neighborhood) =>
               typeof neighborhood === 'object' && neighborhood.loc ? (
