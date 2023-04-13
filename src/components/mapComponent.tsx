@@ -30,12 +30,9 @@ const myAPIKEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "";
 
 const options = {
   gestureHandling: 'greedy',
+  mapId: "8f57db831e8da641"
 };
 
-let count = 0;
-const countAdder = () => count+1
-countAdder()
-console.log("count", count)
 
 const MapsComponent: React.FC<PageComponentProps> = (props) => {
 
@@ -77,11 +74,11 @@ const MapsComponent: React.FC<PageComponentProps> = (props) => {
                   <Polygon
                     paths={neighborhood.coordinates}
                     options={{
-                      strokeColor: '#FF0000',
+                      strokeColor: '#FC4869',
                       strokeOpacity: 0.8,
                       strokeWeight: 2,
                       fillColor: selectedNeighborhoods.includes(
-                        neighborhood.neighborhood) ? '#FF0000' : "#00FF30",
+                        neighborhood.neighborhood) ? '#FC4869' : "none",
                       fillOpacity: 0.35,
                     }}
                     onClick={() =>

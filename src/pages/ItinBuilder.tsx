@@ -1,9 +1,7 @@
 import * as React from 'react';
 import { useState, useCallback } from "react";
 import PageComponent from "./PageComponent";
-import UserInput from '@/components/userInput';
-import { isBooleanObject } from 'util/types';
-import IsLoadingPage from '@/components/IsLoadingPage';
+import IsLoadingPage from '@/components/isLoadingPage';
 import styles from '../styles/ItinBuilder.module.css';
 
 const { v4: uuidv4 } = require('uuid');
@@ -19,6 +17,10 @@ type MultiSelectHandler = (key: string, value: any) => void;
 interface Neighborhoods {
   neighborhood: string;
   coordinates: { lat: number, lng: number }[];
+}
+
+interface itineraryObject {
+
 }
 
 type DefinedProps = {
