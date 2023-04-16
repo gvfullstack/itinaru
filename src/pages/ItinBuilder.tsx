@@ -142,19 +142,22 @@ const ItinBuilder: React.FC<PageComponentProps> = (props) => {
   }, []);
 
   const handleMultiSelect: MultiSelectHandler = useCallback((key, value) => {
-    if(stateVariables[key].includes(value)){
-      console.log("item found")
-      setStateVariables((prevInputs) => ({...prevInputs, 
-        [key]:prevInputs[key].filter((selectedOption: any) => selectedOption !== value)
-      }))    
+    if (stateVariables.hasOwnProperty(key)) {
+      if (stateVariables[key].includes(value)) {
+        setStateVariables(prevState => ({
+          ...prevState,
+          [key]: prevState[key].filter((selectedOption: any) => selectedOption !== value)
+        }));
+      } else {
+        setStateVariables(prevState => ({
+          ...prevState,
+          [key]: [...prevState[key], value]
+        }));
+      }
+    } else {
+      console.warn(`Property ${key} not found in stateVariables object.`);
     }
-    else{
-      setStateVariables((prevInputs) => ({...prevInputs, 
-        [key]: [...prevInputs[key], value]
-      }))
-    }
-    console.log(stateVariables)
-  }, [])
+  }, [stateVariables.shouldAutoFocus, stateVariables.themeSelections, stateVariables.selectedNeighborhoods]);
 
   const pageProps: DefinedProps[]   =
       [
@@ -385,7 +388,7 @@ const ItinBuilder: React.FC<PageComponentProps> = (props) => {
                        stateVariables.multipleSelectObjects.map((selection) => typeof selection === 'string' ? selection : selection.neighborhood) : [] ,
             
             mapCoordinates: stateVariables.multipleSelectObjects && stateVariables.multipleSelectObjects.length ? 
-                     stateVariables.multipleSelectObjects.map((selection) => typeof selection === 'string' ? selection : selection.coordinates) : undefined,
+                     stateVariables.multipleSelectObjects.map((selection) => typeof selection === 'string' ? selection : selection.loc) : undefined,
             multipleSelectObjects: stateVariables.multipleSelectObjects,
             createButtonText: createButtonText,
             backButtonText: backButtonText,

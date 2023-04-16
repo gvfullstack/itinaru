@@ -4,7 +4,6 @@ import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
 import BrandName from '@/components/brandName'
 import ItinBuilder from './ItinBuilder'
-import SearchMap from '@/components/searchMap'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -19,9 +18,8 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-          <BrandName />
+          {/* <BrandName /> */}
           <ItinBuilder />
-          
       </main>
     </>
   )
