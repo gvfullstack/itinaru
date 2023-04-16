@@ -1,12 +1,45 @@
 import Head from 'next/head'
-import Image from 'next/image'
+// import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
 import BrandName from '@/components/brandName'
-import ItinBuilder from './ItinBuilder'
-import SearchMap from '@/components/searchMap'
+import HomeComponent from '../components/homeComponent'
+// import SearchMap from '@/components/searchMap'
+import {
+  RecoilRoot,
+  atom,
+  selector,
+  useRecoilState,
+  useRecoilValue,
+} from 'recoil';
 
 const inter = Inter({ subsets: ['latin'] })
+
+interface Neighborhood {
+  neighborhood: string,
+  coordinates: { lat: number, lng: number }[];
+}
+
+export const neighborhoodsState = atom<Neighborhood[]>({
+  key: 'neighborhoodsState', 
+  default: []
+});
+
+export const selectedNeighborhoodsState = atom<any[]>({
+  key: 'selectedNeighborhoodsState', 
+  default: []
+});
+
+export const keyOfMultiSelectButtonState = atom({
+  key: 'keyOfMultiSelectButtonState', 
+  default: ""
+});
+
+export const handleMultiSelectState = atom({
+  key: 'handleMultiSelectState', 
+  default: []
+});
+
 
 export default function Home() {
   return (
@@ -18,11 +51,13 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
+      <RecoilRoot>
       <main className={styles.main}>
           <BrandName />
-          <ItinBuilder />
+          <HomeComponent />
           
       </main>
+      </RecoilRoot>
     </>
   )
 }

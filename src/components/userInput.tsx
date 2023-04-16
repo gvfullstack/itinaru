@@ -22,7 +22,7 @@ const UserInput: React.FC<PageComponentProps> = (props) => {
   const handleInputChange = props.handleInputChange ? props.handleInputChange : () => {};
   
   useEffect(() => {
-    console.log("useEffect", props.shouldAutoFocus)
+    // console.log("useEffect", props.shouldAutoFocus)
     if (inputRef.current && props.shouldAutoFocus) {
       inputRef.current.focus();
     }

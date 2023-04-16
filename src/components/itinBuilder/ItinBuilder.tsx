@@ -1,12 +1,14 @@
 import * as React from 'react';
-import { useState, useCallback } from "react";
-import PageComponent from "./PageComponent";
-import UserInput from '@/components/userInput';
-import { isBooleanObject } from 'util/types';
-import IsLoadingPage from '@/components/IsLoadingPage';
-import styles from '../styles/ItinBuilder.module.css';
-
+import { useState, useCallback, useEffect } from "react";
+import {
+  useRecoilState
+} from 'recoil';
+import InitForm from "./itinForm";
+import IsLoadingPage from '@/components/isLoadingPage';
+import styles from '../../styles/ItinBuilder.module.css';
+import { selectedNeighborhoodsState } from "../../../src/pages"
 const { v4: uuidv4 } = require('uuid');
+import { Neighborhoods } from "../../../src/typeDefs"
 
 interface PageComponentProps {
   children?: React.ReactNode;
@@ -15,11 +17,6 @@ interface PageComponentProps {
 type HandleInputChange = (key: string, value: any) => void;
 
 type MultiSelectHandler = (key: string, value: any) => void;
-
-interface Neighborhoods {
-  neighborhood: string;
-  coordinates: { lat: number, lng: number }[];
-}
 
 type DefinedProps = {
     curStep?: string;
@@ -103,8 +100,9 @@ type StateVariables = {
   
   }
 
-const ItinBuilder: React.FC<PageComponentProps> = (props) => {
-  
+const ItinBuilder = (props: any) => {
+  const [selectedNeighborhoods, setSelectedNeighborhoodsState] = useRecoilState(selectedNeighborhoodsState);
+
   const [stateVariables, setStateVariables] = useState<StateVariables>({
     destination:undefined,
     curStep:"100T",
@@ -134,25 +132,35 @@ const ItinBuilder: React.FC<PageComponentProps> = (props) => {
   const backButtonText = "Prev page please!"
   const createButtonText = "create itinerary now!";
   
+  useEffect(()=> {
+    if(stateVariables.selectedNeighborhoods && stateVariables.selectedNeighborhoods.length !== selectedNeighborhoods.length )
+      setSelectedNeighborhoodsState(stateVariables.selectedNeighborhoods ?? [])
+    
+}, [stateVariables.selectedNeighborhoods])
+
   const handleInputChange:HandleInputChange = useCallback((key, value) => {
       setStateVariables((prevInputs) => ({ ...prevInputs, [key]: value }));
       console.log("state variable",{stateVariables})
-  }, []);
+  }, [stateVariables]);
+
 
   const handleMultiSelect: MultiSelectHandler = useCallback((key, value) => {
-    if(stateVariables[key].includes(value)){
-      console.log("item found")
+     if(stateVariables[key].includes(value)){
+      // console.log("item found")
       setStateVariables((prevInputs) => ({...prevInputs, 
         [key]:prevInputs[key].filter((selectedOption: any) => selectedOption !== value)
-      }))    
+      }))   
     }
+    
     else{
       setStateVariables((prevInputs) => ({...prevInputs, 
         [key]: [...prevInputs[key], value]
       }))
     }
-    console.log(stateVariables)
-  }, [])
+    
+    
+    // console.log(stateVariables)
+  }, [stateVariables])
 
   const pageProps: DefinedProps[]   =
       [
@@ -420,7 +428,11 @@ const handleCreateItinerary = () => {
   //for button that created itinerary at any stage
 }
 
-console.log("rerendered the main itinbuidler component")
+useEffect(() => {
+  // console.log("rerendered the main itinbuidler component")
+
+});
+
 
 return (
   <div className={styles.pageComponentContainer}>
@@ -428,7 +440,7 @@ return (
       stateVariables.curStep === props.pageStep && 
       !stateVariables.isLoading &&
       (
-        <PageComponent 
+        <InitForm 
               key={uuidv4()} 
               {...props} 
               handleCreateItinerary={handleCreateItinerary}

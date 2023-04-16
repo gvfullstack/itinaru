@@ -1,14 +1,13 @@
 import React, { useState } from "react";
-import WelcomeText from "../components/welcomeText";
-import UserInput from "../components/userInput";
-import NextButton from "../components/nextButton";
-import CreateItineraryButton from "../components/createItineraryButton";
-import BackButton from "../components/backButton";
+import WelcomeText from "../welcomeText";
+import UserInput from "../userInput";
+import NextButton from "../nextButton";
+import CreateItineraryButton from "../createItineraryButton";
+import BackButton from "../backButton";
 import SingleSelectButtonList from "@/components/singleSelectButtonList";
 import MultipleSelectButtonList from "@/components/multipleSelectButtonList"
 import SeparatorText from "@/components/separatorText";
-import styles from "./PageComponent.module.css";
-import MapComponent from "../components/mapComponent";
+import styles from "./itinForm.module.css";
 
 const { v4: uuidv4 } = require('uuid');
 
@@ -76,7 +75,7 @@ type ItinBuilderProps = {
   selectedNeighborhoods?: string[];
 };
 
-const PageComponent: React.FC<ItinBuilderProps> = (props) => {
+const InitForm: React.FC<ItinBuilderProps> = (props) => {
   console.log("PageComponent just REDENDERED")
   const input1StateVariables = ["destination", "travelDate", "itinStartTime", 
     "specificSites", "excludedSites", "specificPace", "travelerCount", "userDefinedThemes",
@@ -187,7 +186,7 @@ const PageComponent: React.FC<ItinBuilderProps> = (props) => {
           />
           
         
-      {props.showMap && 
+      {/* {props.showMap && 
       (<MapComponent 
           key={uuidv4()}
           multipleSelectObjects={props.multipleSelectObjects}
@@ -195,7 +194,7 @@ const PageComponent: React.FC<ItinBuilderProps> = (props) => {
           handleMultiSelect={props.handleMultiSelect}
           keyOfMultiSelectButton={props.keyOfMultiSelectButton}
         />
-          )}
+          )} */}
 
    </div>
 
@@ -204,4 +203,4 @@ const PageComponent: React.FC<ItinBuilderProps> = (props) => {
 };
 
 
-export default React.memo(PageComponent);
+export default React.memo(InitForm);

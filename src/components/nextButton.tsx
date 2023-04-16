@@ -1,7 +1,10 @@
 import React from "react";
 import axios from 'axios';
+import { useRecoilState } from 'recoil';
+
 import getConfig from 'next/config';
 import style from './nextButton.module.css';
+import { neighborhoodsState, selectedNeighborhoodsState, keyOfMultiSelectButtonState } from "../../src/pages"
 
 
 const {serverRuntimeConfig, publicRuntimeConfig} = getConfig();
@@ -32,6 +35,7 @@ interface Props {
 }
 
 const NextButton: React.FC<Props> = (props) => {
+  const [neighborhoods, setNeighborhoods] = useRecoilState(neighborhoodsState);
 
   const handleInputChange = props.handleInputChange ? props.handleInputChange : () => {};
   const nextButtonGenerateAPI = props.nextButtonGenerateAPI ? props.nextButtonGenerateAPI : false;
@@ -51,12 +55,10 @@ const NextButton: React.FC<Props> = (props) => {
     } 
   }
 
-  const updateNeighborhoods = (neighborhoods: {
-                                neighborhood: string
-                                coordinates?: { lat: number, lng: number }[]
-                              }[]) => {
+  const updateNeighborhoods = (neighborhoods: any[]) => {
                                 
      handleInputChange("multipleSelectObjects", neighborhoods);
+     setNeighborhoods(neighborhoods)
   }
  
 
