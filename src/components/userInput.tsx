@@ -7,6 +7,28 @@ import { DefinedProps, HandleInputChange } from "@/typeDefs";
 import { useRecoilState } from "recoil";
 import { defaultAtom, paceOptionsState} from "@/atoms/atoms";
 
+
+
+const PinkOutlinedTextField = styled(TextField)(({ theme }) => ({
+  '& .MuiOutlinedInput-root': {
+    '&:hover fieldset': {
+      borderColor: theme.palette.primary.main,
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: theme.palette.primary.main,
+    },
+    borderRadius: '30px',
+    borderColor: 'pink',
+  },
+  '& .MuiOutlinedInput-input': {
+    fontSize: '18px',
+    fontWeight: '400',
+    padding: '10px 10px 10px 20px' ,
+  },
+}));
+
+
+
 const UserInput: React.FC<DefinedProps> = (props) => {
     const [value, setValue] = useRecoilState(props.userInput ? props.userInput : defaultAtom);
     const [paceOptions, setPaceOptions] = useRecoilState(paceOptionsState);
@@ -30,24 +52,6 @@ const UserInput: React.FC<DefinedProps> = (props) => {
     };
 
    useEffect(() => {console.log("value: ", value)}, [value]);
-
-   const PinkOutlinedTextField = styled(TextField)(({ theme }) => ({
-    '& .MuiOutlinedInput-root': {
-      '&:hover fieldset': {
-        borderColor: theme.palette.primary.main,
-      },
-      '&.Mui-focused fieldset': {
-        borderColor: theme.palette.primary.main,
-      },
-      borderRadius: '30px',
-      borderColor: 'pink',
-    },
-    '& .MuiOutlinedInput-input': {
-      fontSize: '18px',
-      fontWeight: '400',
-      padding: '10px 10px 10px 20px' ,
-    },
-  }));
 
   useEffect(() => {
     if (inputRef.current && props.shouldAutoFocus) {
