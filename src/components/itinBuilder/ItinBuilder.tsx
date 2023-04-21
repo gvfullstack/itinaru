@@ -39,7 +39,6 @@ const ItinBuilder = (props: any) => {
   const createButtonText = "create itinerary now!";
   
 
-
   const handleInputChange:HandleInputChange = useCallback((key, value) => {
       setStateVariables((prevInputs) => ({ ...prevInputs, [key]: value }));
       console.log("state variable",{stateVariables})
