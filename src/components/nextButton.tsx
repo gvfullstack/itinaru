@@ -1,71 +1,45 @@
 import React from "react";
 import axios from 'axios';
 import { useRecoilState } from 'recoil';
-
+import { DefinedProps } from "@/typeDefs";
 import getConfig from 'next/config';
-import style from './nextButton.module.css';
-import { neighborhoodsState, selectedNeighborhoodsState, keyOfMultiSelectButtonState } from "../../src/pages"
+import style from './itinBuilderCSS/nextButton.module.css';
+import { neighborhoodsState, curStepState} from "../../src/atoms/atoms"
 
 
 const {serverRuntimeConfig, publicRuntimeConfig} = getConfig();
 const { BASE_URL } = publicRuntimeConfig;
 
-type HandleInputChange = (key: string, value: string | number | Date | undefined | boolean | string[] |
-  {neighborhood: string
-   loc?: { lat: number, lng: number }[]}[]
-) => void;
-
-interface Neighborhoods {
-  neighborhood: string;
-  loc: { lat: number, lng: number }[];
-}
-
-interface Props {
-
-  handleInputChange?: HandleInputChange; 
-  nextButtonText?: string;
-  nextPageStep?: string
-  nextButtonStaticValue?: string | boolean | number | readonly string[]
-  specificSitesBool?: boolean
-  nextPageStepR2?: string
-  destination?: string
-  nextButtonGenerateAPI?: boolean;
-  multipleSelectOptions?: string[] | Neighborhoods[];  
-  keyOfMultiSelectButton?: string;
-}
-
-const NextButton: React.FC<Props> = (props) => {
+const NextButton: React.FC<DefinedProps> = (props) => {
   const [neighborhoods, setNeighborhoods] = useRecoilState(neighborhoodsState);
-
+  const [curStep, setCurStep] = useRecoilState(curStepState);
+  
   const handleInputChange = props.handleInputChange ? props.handleInputChange : () => {};
   const nextButtonGenerateAPI = props.nextButtonGenerateAPI ? props.nextButtonGenerateAPI : false;
   
 
   const normalExecutionBlock = () => {
-    if (props.nextButtonStaticValue === undefined) {
-      handleInputChange("curStep", props.nextPageStep);
-    } 
-    else if(props.nextButtonStaticValue === true){
-      handleInputChange("curStep", props.nextPageStep);
-      handleInputChange("specificSitesBool", props.nextButtonStaticValue);
-    } 
-    else if(props.nextButtonStaticValue === false){
-      handleInputChange("curStep", props.nextPageStepR2);
-      handleInputChange("specificSitesBool", props.nextButtonStaticValue);
-    } 
-  }
+    if(props.nextPageStep){
+      if (props.nextButtonStaticValue === undefined) {
+        setCurStep(props.nextPageStep);
+      } 
+      else if(props.nextButtonStaticValue === true){
+        setCurStep(props.nextPageStep);
+        handleInputChange("specificSitesBool", props.nextButtonStaticValue);
+      } 
+      else if(props.nextButtonStaticValue === false){
+        if(props.nextPageStepR2){
+          setCurStep(props.nextPageStepR2);}
+          handleInputChange("specificSitesBool", props.nextButtonStaticValue);
+      } 
+  }}
 
-<<<<<<< HEAD
-  const updateNeighborhoods = (neighborhoods: {
-                                neighborhood: string
-                                loc?: { lat: number, lng: number }[]
-                              }[]) => {
-=======
   const updateNeighborhoods = (neighborhoods: any[]) => {
->>>>>>> 5283079ed629e50554d6b34ed7aded3b37613e05
-                                
-     handleInputChange("multipleSelectObjects", neighborhoods);
-     setNeighborhoods(neighborhoods)
+     const neighborhoodsWithSelectedFalse = neighborhoods.map((neighborhood: any) => {                                                       
+        return {...neighborhood, selected: false, descHidden: true}
+      })
+    //  handleInputChange("multipleSelectObjects", neighborhoods);
+     setNeighborhoods(neighborhoodsWithSelectedFalse)
   }
  
 
@@ -77,7 +51,6 @@ const NextButton: React.FC<Props> = (props) => {
         setTimeout(()=> handleInputChange("isLoading",false), 100);
         normalExecutionBlock();
         updateNeighborhoods(response.data);
-
       })
   }
 

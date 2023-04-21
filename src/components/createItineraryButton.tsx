@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./createItineraryButton.module.css";
+import styles from "./itinBuilderCSS/createItineraryButton.module.css";
 
 interface PageComponentProps {
   createButtonText?: string;

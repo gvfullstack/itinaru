@@ -57,20 +57,17 @@
 
   
   .brandNameContainer {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 9999;
     pointer-events: none;
     background-color: #FC4869;
-    height: 100%;
-    width: 100%;
+    height: 100vh;
+    width: 100vw;
     animation: fadeInFadeOut 2.2s;
+    transition: height 0.3s ease;
+
   }
   
   .brandName {
@@ -84,4 +81,20 @@
     -1px 1px 0px #F3EFEF,
     1px 1px 0px #F3EFEF;
     animation:  fadeInBounceFadeOut 2.2s;
+    transition: height 0.3s ease;
+
+  }
+
+  .brandNameContainer.animationComplete{
+    height: 3rem;
+    transition: height 0.3s ease;
+    background: linear-gradient(to bottom, #FC4869, #f75b78);
+  }
+
+  .brandName.animationComplete{
+    font-size: 1.5rem;
+    font-weight: 400;
+    transition: height 0.3s ease;
+    letter-spacing: .01em;
+    text-shadow:none
   }

@@ -3,11 +3,8 @@ import Head from 'next/head'
 import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
 import BrandName from '@/components/brandName'
-<<<<<<< HEAD
-import ItinBuilder from './ItinBuilder'
-=======
 import HomeComponent from '../components/homeComponent'
-// import SearchMap from '@/components/searchMap'
+
 import {
   RecoilRoot,
   atom,
@@ -15,34 +12,10 @@ import {
   useRecoilState,
   useRecoilValue,
 } from 'recoil';
->>>>>>> 5283079ed629e50554d6b34ed7aded3b37613e05
+
+import YouTubeSearch from '@/components/youtubeSearch'
 
 const inter = Inter({ subsets: ['latin'] })
-
-interface Neighborhood {
-  neighborhood: string,
-  coordinates: { lat: number, lng: number }[];
-}
-
-export const neighborhoodsState = atom<Neighborhood[]>({
-  key: 'neighborhoodsState', 
-  default: []
-});
-
-export const selectedNeighborhoodsState = atom<any[]>({
-  key: 'selectedNeighborhoodsState', 
-  default: []
-});
-
-export const keyOfMultiSelectButtonState = atom({
-  key: 'keyOfMultiSelectButtonState', 
-  default: ""
-});
-
-export const handleMultiSelectState = atom({
-  key: 'handleMultiSelectState', 
-  default: []
-});
 
 
 export default function Home() {
@@ -57,14 +30,8 @@ export default function Home() {
 
       <RecoilRoot>
       <main className={styles.main}>
-<<<<<<< HEAD
-          {/* <BrandName /> */}
-          <ItinBuilder />
-=======
           <BrandName />
-          <HomeComponent />
-          
->>>>>>> 5283079ed629e50554d6b34ed7aded3b37613e05
+          <HomeComponent />  
       </main>
       </RecoilRoot>
     </>

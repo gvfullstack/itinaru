@@ -1,9 +1,12 @@
-.backButtonContainer{
+.createItineraryButtonContainer{
     display: flex;
     justify-content: center;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
 }
 
-.backButton{
+.createItineraryButton{
     background-color: #FC4869;
     border: none;
     color: #F3EFEF;
@@ -12,10 +15,10 @@
     text-decoration: none;
     display: inline-block;
     font-size: 12px;
-    margin: 1rem 2px;
     cursor: pointer;
     border-radius: 20px;
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    margin: .5rem 2px;
 }

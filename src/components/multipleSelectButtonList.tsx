@@ -1,52 +1,44 @@
 import React, { useState, useEffect, useCallback } from "react";
-import styles from "./multipleSelectButton.module.css";
+import styles from "./itinBuilderCSS/multipleSelectButton.module.css";
 const { v4: uuidv4 } = require('uuid');
+import { DefinedProps } from "../../../src/typeDefs" 
+import { ageRangeOptionsState } from "../../src/atoms/atoms";
+import { useRecoilState } from 'recoil';
 
-type HandleInputChange = (key: string, value: any) => void;
 
-type MultiSelectHandler = (key: string, value: any) => void;
-
-interface Neighborhoods {
-  neighborhood: string;
-  coordinates: { lat: number, lng: number }[];
+type Option = {
+  label: string;
+  selected: boolean;
 }
 
-interface PageComponentProps {
-  multipleSelectOptions?: string[];
-  keyOfMultiSelectButton: string;
-  handleInputChange?: HandleInputChange; 
-  handleMultiSelect?: MultiSelectHandler; 
-  shouldAutoFocus?: boolean;
-  selectedOptions?: string[];
-  destination?: string;
+const MultipleSelectButtonList: React.FC<DefinedProps> = (props) => {
 
-}
-
-const MultipleSelectButtonList: React.FC<PageComponentProps> = (props) => {
-  
-  const handleInputChange = props.handleInputChange ? props.handleInputChange : () => {};
-  const handleMultiSelect = props.handleMultiSelect ? props.handleMultiSelect : () => {};
-  const multipleSelectOptions = props.multipleSelectOptions ? props.multipleSelectOptions : [];
-  
-
+  const [optionList, setOptionList] = useRecoilState<Option[]>(props.multipleSelectOptions ??  "")
+ 
   const selectedOptionsPassed: string[] | undefined = !props.selectedOptions ? [] : props.selectedOptions 
   
-  const handleOptionSelect = useCallback((option: string) => {
-
-    handleInputChange("shouldAutoFocus", false);
-    
-    handleMultiSelect(props.keyOfMultiSelectButton, option)
-  },[handleInputChange, handleMultiSelect, props.keyOfMultiSelectButton])
+  const handleOptionSelect =((option: Option) => {
+    setOptionList(prevState => {
+      const updatedOptionList = prevState.map((stateOption) => {
+        if(stateOption.label === option.label) {
+          return {...stateOption, selected: !stateOption.selected}
+        }
+        else {       
+          return stateOption}
+      })
+      return updatedOptionList;
+    }
+  )})
    
   return (
     <div className={styles.multiSelectButtonContainer}>
-      {multipleSelectOptions.map((option) => (
+      {optionList.map((option:Option) => (
         <button
           key={uuidv4()}
           onClick={() => handleOptionSelect(option)}
-          className= {`${styles.multiSelectButton} ${selectedOptionsPassed.includes(option) ? styles.selected : ""}`}
+          className= {`${styles.multiSelectButton} ${option.selected ? styles.selected : ""}`}
           >
-          {option}
+          {option.label}
         </button>
       ))}
     </div>

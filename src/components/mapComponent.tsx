@@ -1,37 +1,20 @@
 import { Component, useCallback, useState, useEffect } from 'react';
 import * as React from 'react';
-
 import { GoogleMap, LoadScript, Marker, Polygon, OverlayView } from "@react-google-maps/api";
 import {
-  useRecoilValue,
+  useRecoilState,
 } from 'recoil';
-
-import styles from "./mapComponent.module.css";
-import { neighborhoodsState, selectedNeighborhoodsState, keyOfMultiSelectButtonState, handleMultiSelectState } from "../../src/pages"
+import styles from "./itinBuilderCSS/mapComponent.module.css";
+import { neighborhoodsState } from "../../src/atoms/atoms"
+import { Neighborhoods } from "../../src/typeDefs/index";
 
 const { v4: uuidv4 } = require('uuid');
-<<<<<<< HEAD
-  
-  const center = {
-    lat: 32.7157,
-    lng: -117.1611
-  };
- 
-type MultiSelectHandler = (key: string, value: any) => void;
 
-interface Neighborhoods {
-  neighborhood: string;
-  loc: { lat: number, lng: number }[];
-}
-=======
 
 const center = {
-  lat: 37.3688,
-  lng: -122.0363,
+  lat: 32.7157,
+  lng: -117.1611,
 };
->>>>>>> 5283079ed629e50554d6b34ed7aded3b37613e05
-
-// type MultiSelectHandler = (key: string, value: any) => void;
 
 
 const myAPIKEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "";
@@ -41,24 +24,11 @@ const options = {
   mapId: "8f57db831e8da641"
 };
 
-<<<<<<< HEAD
-=======
-let count = 0;
-const countAdder = () => count + 1
-countAdder()
-// console.log("count", count)
->>>>>>> 5283079ed629e50554d6b34ed7aded3b37613e05
 
 const MapsComponent = (props: any) => {
 
-  const neighborhoods = useRecoilValue(neighborhoodsState);
-  const selectedNeighborhoods = useRecoilValue(selectedNeighborhoodsState);
-  const keyOfMultiSelectButton = useRecoilValue(keyOfMultiSelectButtonState);
-  // const handleMultiSelect = props.handleMultiSelect ? props.handleMultiSelect : () => {};
-
-  useEffect(() => {
-  console.log('maps neighborhoods - ' + neighborhoods)
-  }, [neighborhoods]);
+  const [neighborhoods, setNeighborhoodsState] = useRecoilState(neighborhoodsState);
+  
 
   const getPixelPositionOffset = (width: number, height: number) => ({
     x: -(width / 2),
@@ -74,62 +44,21 @@ const MapsComponent = (props: any) => {
   useEffect(()=> {
    console.log("map rendered")
    console.log("neighborhoods " + JSON.stringify(neighborhoods))
-   console.log("selectedNeighborhoods " + selectedNeighborhoods)
     
-}, [neighborhoods, selectedNeighborhoods])
+}, [neighborhoods])
 
-  const handlePolygonClick = (key: string, value: any) => {
-<<<<<<< HEAD
-  handleMultiSelect(key, value)}
-
-  return (
-    <LoadScript
-      googleMapsApiKey={myAPIKEY}
-    >
-    <React.Fragment>
-
-      <GoogleMap 
-        onLoad={handleMapLoad} 
-        mapContainerClassName	={styles.mapsContainer} 
-        center={center} 
-        zoom={12} 
-        options={options}>
-          { neighborhoods.map((neighborhood) =>
-              typeof neighborhood === 'object' && neighborhood.loc ? (
-                <React.Fragment key={key+uuidv4()}>
-                  <Polygon
-                    paths={neighborhood.loc}
-                    options={{
-                      strokeColor: '#FC4869',
-                      strokeOpacity: 0.8,
-                      strokeWeight: 2,
-                      fillColor: selectedNeighborhoods.includes(
-                        neighborhood.neighborhood) ? '#FC4869' : "none",
-                      fillOpacity: 0.35,
-                    }}
-                    onClick={() =>
-                      handlePolygonClick(keyOfMultiSelectButton, neighborhood.neighborhood)
-                    }
-                  />
-                  <OverlayView
-                    position={{
-                      lat: neighborhood.loc[0].lat,
-                      lng: neighborhood.loc[0].lng,
-                    }}
-                    mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
-                    getPixelPositionOffset={getPixelPositionOffset}
-                  >
-                    <div
-                      style={{
-                        background: '#FC4869',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '20rem',
-                        padding: 5,
-=======
-    // console.log(key)
-    // handleMultiSelect(key, value)}
-  }
+const handleOptionSelect = (neighborhood: Neighborhoods) => {
+  setNeighborhoodsState(prevState => {
+    const neighborhoods = prevState.map((stateNeighborhood: Neighborhoods) => {
+      if(stateNeighborhood.neighborhood === neighborhood.neighborhood) {
+        return {...stateNeighborhood, selected: !stateNeighborhood.selected}
+      }
+      else {return stateNeighborhood}
+    })
+    return neighborhoods
+  })
+}
+  
     return (
       <>
         <LoadScript
@@ -141,42 +70,41 @@ const MapsComponent = (props: any) => {
               onLoad={handleMapLoad}
               mapContainerClassName={styles.mapsContainer}
               center={center}
-              zoom={15}
+              zoom={8}
               options={options}>
               {neighborhoods.map((neighborhood: any) =>
-                typeof neighborhood === 'object' && neighborhood.coordinates ? (
+                typeof neighborhood === 'object' && neighborhood.loc ? (
                   <React.Fragment key={key + uuidv4()}>
                     <Polygon
-                      paths={neighborhood.coordinates}
+                      paths={neighborhood.loc}
                       options={{
                         strokeColor: '#FF0000',
                         strokeOpacity: 0.8,
                         strokeWeight: 2,
-                        fillColor: selectedNeighborhoods.includes(
-                          neighborhood.neighborhood) ? '#FF0000' : "#00FF30",
+                        fillColor: neighborhood.selected ? "#FC4869":'#FF7890',
                         fillOpacity: 0.35,
->>>>>>> 5283079ed629e50554d6b34ed7aded3b37613e05
                       }}
-                      // onClick={() =>
-                      //   handlePolygonClick(keyOfMultiSelectButton, neighborhood.neighborhood)
-                      // }
+                     
                     />
                     <OverlayView
                       position={{
-                        lat: neighborhood.coordinates[0].lat,
-                        lng: neighborhood.coordinates[0].lng,
+                        lat: neighborhood.loc[0].lat,
+                        lng: neighborhood.loc[0].lng,
                       }}
                       mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
                       getPixelPositionOffset={getPixelPositionOffset}
                     >
                       <div
                         style={{
-                          background: '#FC4869',
+                          background: neighborhood.selected ? "#FC4869":'#FF7890'  ,
                           color: 'white',
                           border: 'none',
                           borderRadius: '20rem',
                           padding: 5,
                         }}
+                         onClick={() =>
+                          handleOptionSelect(neighborhood)
+                      }
                       >
                         {neighborhood.neighborhood}
                       </div>

@@ -7,75 +7,16 @@ import BackButton from "../backButton";
 import SingleSelectButtonList from "@/components/singleSelectButtonList";
 import MultipleSelectButtonList from "@/components/multipleSelectButtonList"
 import SeparatorText from "@/components/separatorText";
-import styles from "./itinForm.module.css";
+import styles from "../itinBuilderCSS/itinForm.module.css";
+import MultipleSelectNeighborhoodButtons from "@/components/multipleSelectNeighborhoodButtons";
+import { DefinedProps } from "../../../src/typeDefs" 
+import Itinerary from "../itinerary";
 
 const { v4: uuidv4 } = require('uuid');
 
-type HandleInputChange = (key: string, value: any) => void;
 
-type MultiSelectHandler = (key: string, value: any) => void;
 
-interface Neighborhoods {
-  neighborhood: string;
-  loc: { lat: number, lng: number }[];
-}
-
-type ItinBuilderProps = {
-  children?: React.ReactNode;
-  curStep?: string;
-  pageStep?: string;
-  prevPageStep?: string;
-  nextPageStep?: string;
-  introText?: string;
-  destinationText?: string;
-  infoText1?: string;
-  infoText2?: string;
-  prompt?: string;
-  nextButtonText?: string; 
-  nextButtonStaticValue?: string | boolean
-  nextButton2Text?: string; 
-  nextButton2StaticValue?: string | boolean
-  backButtonText?: string;
-  createButtonText?: string;
-  handleCreateItinerary?: () => void;
-  handleInputChange?: HandleInputChange; 
-  handleMultiSelect?: MultiSelectHandler; 
-  keyOfStateVariable?:string
-  valOfStateVariable?: string;
-  keyOfStateVariable2?:string
-  valOfStateVariable2?: string;
-  step?: number;
-  travelDate?: string;
-  itinStartTime?: string;
-  itinEndTime?: string;
-  specificSitesBool?: boolean;
-  nextPageStepR2?: string;
-  specificPace?: number | undefined;
-  pace?: number | undefined;
-  paceOptions?: string[];
-  excludedSites?: string;
-  selectedPaceOption?: string;
-  shouldAutoFocus?: boolean;
-  travelerCount?: string;
-  multipleSelectOptions?: string[] ;  
-  multipleSelectObjects?: string[] | Neighborhoods[];
-  mapCoordinates?:  (string | { lat: number; lng: number;}[]) [];  
-  ageRangeSelection?: string[];  
-  keyOfMultiSelectButton?: string; 
-  selectedOptions?: string[];   
-  themeSelections?: string[]; 
-  userDefinedThemes?: string;
-  destination?: string;
-  nextButtonGenerateAPI?: boolean;
-  isLoading?: boolean;
-  separatorText?: string;
-  userInputPlaceholder?: string;
-  userInputPlaceholder2?: string;
-  showMap?: boolean;
-  selectedNeighborhoods?: string[];
-};
-
-const InitForm: React.FC<ItinBuilderProps> = (props) => {
+const InitForm: React.FC<DefinedProps> = (props) => {
   console.log("PageComponent just REDENDERED")
   const input1StateVariables = ["destination", "travelDate", "itinStartTime", 
     "specificSites", "excludedSites", "specificPace", "travelerCount", "userDefinedThemes",
@@ -90,16 +31,13 @@ const InitForm: React.FC<ItinBuilderProps> = (props) => {
           infoText1={props.infoText1}
           infoText2={props.infoText2}
           prompt={props.prompt}
-          destinationText={props.destinationText}
+          pageStep={props.pageStep}
       />
 
-
-      {props.paceOptions && 
+      {props.singleSelectOptions && 
         <SingleSelectButtonList
-          paceOptions={props.paceOptions}
-          handleInputChange={props.handleInputChange}
-          selectedPaceOption= {props.selectedPaceOption}
-          shouldAutoFocus={props.shouldAutoFocus}
+          singleSelectOptions = {props.singleSelectOptions}
+          keyOfStateVariable = {props.keyOfStateVariable}
           />}
       
       {props.multipleSelectOptions && props.keyOfMultiSelectButton && 
@@ -111,6 +49,8 @@ const InitForm: React.FC<ItinBuilderProps> = (props) => {
           selectedOptions={props.selectedOptions}
           destination={props.destination}
           />}
+
+      {props.showNeighborhoods && <MultipleSelectNeighborhoodButtons />}
       
       {input1StateVariables.map((input1StateVariable) => 
         {
@@ -118,11 +58,9 @@ const InitForm: React.FC<ItinBuilderProps> = (props) => {
             props.keyOfStateVariable === input1StateVariable && (
             <UserInput
                 key={uuidv4()}
-                keyOfStateVariable={props.keyOfStateVariable}
-                valOfStateVariable={props.valOfStateVariable}
-                handleInputChange={props.handleInputChange}
-                shouldAutoFocus={props.shouldAutoFocus}
+                userInput={props.userInput1}
                 userInputPlaceholder={props.userInputPlaceholder}
+                keyOfStateVariable={props.keyOfStateVariable}
             />)   
           )
         }
@@ -134,9 +72,8 @@ const InitForm: React.FC<ItinBuilderProps> = (props) => {
             props.keyOfStateVariable2 === input2StateVariable && (
             <UserInput
                 key={uuidv4()}
-                keyOfStateVariable={props.keyOfStateVariable2}
-                valOfStateVariable={props.valOfStateVariable2}
-                handleInputChange={props.handleInputChange}
+                userInput={props.userInput2}
+                keyOfStateVariable={props.keyOfStateVariable}
                 userInputPlaceholder={props.userInputPlaceholder2}
             />)   
           )
@@ -144,7 +81,7 @@ const InitForm: React.FC<ItinBuilderProps> = (props) => {
       )}
           
     
-      <NextButton 
+      {props.nextButtonText && <NextButton 
           key={uuidv4()}
           handleInputChange={props.handleInputChange} 
           nextButtonText={props.nextButtonText} 
@@ -156,7 +93,7 @@ const InitForm: React.FC<ItinBuilderProps> = (props) => {
           nextButtonGenerateAPI= {props.nextButtonGenerateAPI}
           multipleSelectOptions = {props.multipleSelectOptions}
           keyOfMultiSelectButton = {props.keyOfMultiSelectButton}
-          />
+          />}
 
       {props.nextPageStepR2 && (<NextButton 
           key={uuidv4()}
@@ -167,6 +104,10 @@ const InitForm: React.FC<ItinBuilderProps> = (props) => {
           specificSitesBool={props.specificSitesBool}
           nextPageStepR2={props.nextPageStepR2}
           />)}
+
+      {props.itineraryItemsState && 
+      props.pageStep === "120T" &&
+      <Itinerary />}
       
       {props.backButtonText && (<BackButton
         key={uuidv4()}
@@ -179,22 +120,12 @@ const InitForm: React.FC<ItinBuilderProps> = (props) => {
           separatorText={props.separatorText}
       />
 
-      <CreateItineraryButton 
+      {props.createButtonText &&
+       <CreateItineraryButton 
           key={uuidv4()}
           createButtonText={props.createButtonText}
-          handleCreateItinerary={props.handleCreateItinerary} 
-          />
+          />}
           
-        
-      {/* {props.showMap && 
-      (<MapComponent 
-          key={uuidv4()}
-          multipleSelectObjects={props.multipleSelectObjects}
-          selectedNeighborhoods={props.selectedNeighborhoods}
-          handleMultiSelect={props.handleMultiSelect}
-          keyOfMultiSelectButton={props.keyOfMultiSelectButton}
-        />
-          )} */}
 
    </div>
 
