@@ -43,26 +43,28 @@ const MultipleSelectNeighborhoodButtons: React.FC = () => {
     <div className={styles.multiSelectButtonContainer}>
       {neighborhoods.map((neighborhood: Neighborhood) => (
         <div key={uuidv4()} className={styles.buttonAndDescContainer}>
-          <div className={`${styles.buttonContainer} ${neighborhood.selected ? styles.selected : ""}`}>
-            <button
-              onClick={() => handleOptionSelect(neighborhood)}
-              className={styles.multiSelectButton}
-            >
-              {neighborhood.neighborhood}
-            </button>
-            <div className={styles.caretContainer} 
-              onClick={() => handleShowHideDescription(neighborhood)}> 
-              {element}
+          {neighborhood.neighborhood && (
+            <div className={`${styles.buttonContainer} ${neighborhood.selected ? styles.selected : ""}`}>
+              <button
+                onClick={() => handleOptionSelect(neighborhood)}
+                className={styles.multiSelectButton}
+              >
+                {neighborhood.neighborhood}
+              </button>
+              <div className={styles.caretContainer} 
+                onClick={() => handleShowHideDescription(neighborhood)}> 
+                {element}
+              </div>
             </div>
-          </div>
-
+          )}
+  
           <div 
            className={`${styles.extendedDescription} ${neighborhood.descHidden ? "" : styles.isShown}`}
            onClick={() => handleShowHideDescription(neighborhood)}
             >
             <p>{neighborhood.desc}</p>
           </div>
-
+  
         </div>
       ))}
     </div>

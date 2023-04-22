@@ -1,14 +1,16 @@
 import React from "react";
 import styles from "./itinBuilderCSS/welcomeText.module.css";
-import {useRecoilValue} from "recoil";
+import {useRecoilState} from "recoil";
 import { destinationState } from "@/atoms/atoms";
 import { DefinedProps } from "@/typeDefs";
 
 
 const WelcomeText: React.FC<DefinedProps> = (props) => {
   const pageStep = props.pageStep ?? "0"
-  const destination = useRecoilValue(destinationState)
+  const [destination, setDestination] = useRecoilState(destinationState)
+
   const destinationFieldPages = ["20T"]
+  
   return (
     <div className={styles.welcomeTextContainer}>
       {props.introText && <p className={styles.introText}>{props.introText}</p>}

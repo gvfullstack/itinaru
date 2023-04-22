@@ -10,47 +10,6 @@ export const neighborhoodsState = atom<Neighborhoods[]>({
   export const itineraryItemsState = atom<Itinerary>({
     key: 'itineraryItemsState', 
     default: [
-          {
-              "venue": "Golden Gate Park",
-              "startTime": "9:30 am",
-              "endTime": "12:00 pm",
-              "description": "Explore the beautiful Golden Gate Park and its many attractions including the Conservatory of Flowers, the Japanese Tea Garden, and the California Academy of Sciences. Enjoy a picnic lunch and take in the views of the San Francisco skyline.",
-              "locationAddress": "501 Stanyan St, San Francisco, CA 94117",
-              "locationWebsite": "google.com",
-              "budget": "$10-$15",
-              "descHidden": true
-          },
-          {
-              "venue": "Mission District",
-              "startTime": "1:00 pm",
-              "endTime": "4:00 pm",
-              "description": "Explore the vibrant Mission District of San Francisco and its many murals, galleries, and restaurants. Visit the famous Clarion Alley and learn about the history of the area. Stop in at local shops and get a souvenir.",
-              "locationAddress": "Mission St, San Francisco, CA 94110",
-              "locationWebsite": "google.com",
-              "budget": "$10-$15",
-              "descHidden": true
-          },
-          {
-              "venue": "North Beach",
-              "startTime": "4:30 pm",
-              "endTime": "6:00 pm",
-              "description": "Explore the charming North Beach neighborhood of San Francisco. Take a stroll along the waterfront and visit the iconic Washington Square Park. Stop into one of the many cafes and sample some of the local cuisine.",
-              "locationAddress": "Washington Square Park, San Francisco, CA 94133",
-              "locationWebsite": "google.com",
-              "budget": "$10-$15",
-              "descHidden": true
-  
-          },
-          {
-              "venue": "Castro District",
-              "startTime": "6:30 pm",
-              "endTime": "8:00 pm",
-              "description": "Explore the lively Castro District of San Francisco. Visit the famous Castro Theater and take in a show, stop into one of the many bars and clubs, and visit the GLBT History Museum. End the day with a visit to the iconic Twin Peaks.",
-              "locationAddress": "Castro St, San Francisco, CA 94114",
-              "locationWebsite": "google.com",
-              "budget": "$10-$15",
-              "descHidden": true
-          }
       ]
   });
 
@@ -203,3 +162,68 @@ export const neighborhoodsState = atom<Neighborhoods[]>({
         selected: false}
       ]
   });
+
+  export const perPersonAverageBudgetState = atom<string>({ 
+    key: 'perPersonAverageBudgetState',
+    default: "$25"
+  });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+//   {
+//     "venue": "Golden Gate Park",
+//     "startTime": "9:30 am",
+//     "endTime": "12:00 pm",
+//     "description": "Explore the beautiful Golden Gate Park and its many attractions including the Conservatory of Flowers, the Japanese Tea Garden, and the California Academy of Sciences. Enjoy a picnic lunch and take in the views of the San Francisco skyline.",
+//     "locationAddress": "501 Stanyan St, San Francisco, CA 94117",
+//     "locationWebsite": "google.com",
+//     "budget": "$10-$15",
+//     "descHidden": true
+// },
+// {
+//     "venue": "Mission District",
+//     "startTime": "1:00 pm",
+//     "endTime": "4:00 pm",
+//     "description": "Explore the vibrant Mission District of San Francisco and its many murals, galleries, and restaurants. Visit the famous Clarion Alley and learn about the history of the area. Stop in at local shops and get a souvenir.",
+//     "locationAddress": "Mission St, San Francisco, CA 94110",
+//     "locationWebsite": "google.com",
+//     "budget": "$10-$15",
+//     "descHidden": true
+// },
+// {
+//     "venue": "North Beach",
+//     "startTime": "4:30 pm",
+//     "endTime": "6:00 pm",
+//     "description": "Explore the charming North Beach neighborhood of San Francisco. Take a stroll along the waterfront and visit the iconic Washington Square Park. Stop into one of the many cafes and sample some of the local cuisine.",
+//     "locationAddress": "Washington Square Park, San Francisco, CA 94133",
+//     "locationWebsite": "google.com",
+//     "budget": "$10-$15",
+//     "descHidden": true
+
+// },
+// {
+//     "venue": "Castro District",
+//     "startTime": "6:30 pm",
+//     "endTime": "8:00 pm",
+//     "description": "Explore the lively Castro District of San Francisco. Visit the famous Castro Theater and take in a show, stop into one of the many bars and clubs, and visit the GLBT History Museum. End the day with a visit to the iconic Twin Peaks.",
+//     "locationAddress": "Castro St, San Francisco, CA 94114",
+//     "locationWebsite": "google.com",
+//     "budget": "$10-$15",
+//     "descHidden": true
+// }

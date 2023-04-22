@@ -2,7 +2,7 @@ import React from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
-import {itineraryItemsState} from '../../src/atoms/atoms';
+import {itineraryItemsState, perPersonAverageBudgetState} from '../../src/atoms/atoms';
 import { useRecoilState } from 'recoil';
 import styles from '../components/itinBuilderCSS/itinerary.module.css';
 import YouTubeSearch from "./youtubeSearch";
@@ -17,6 +17,8 @@ const Itinerary: React.FC = () => {
     const ellipsisVertical = <FontAwesomeIcon icon={faEllipsisVertical} />;
 
 const [itineraryItems, setItineraryItems] = useRecoilState(itineraryItemsState);
+const [perPersonAverageBudget, setperPersonAverageBudget] = useRecoilState(perPersonAverageBudgetState);
+
 
 const handleShowHideDescription = (curItineraryItem: ItineraryItem) => {
     setItineraryItems(prevState => {
@@ -97,7 +99,7 @@ const openGoogleMapsDirection = async (destinationAddress?: string) => {
                         <div className={styles.expandedItinBudgetContainer}
                         onClick={()=>handleShowHideDescription(itineraryItem)}
                         >
-                            Budget: {itineraryItem.budget}
+                            Budget: {itineraryItem.perPersonAverageBudget}
                         </div>
                         <div className={styles.expandedItinAddressContainer}
                         onClick={()=>handleShowHideDescription(itineraryItem)}

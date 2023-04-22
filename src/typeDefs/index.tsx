@@ -18,7 +18,7 @@ export type Neighborhoods = {
     description?: string;
     locationAddress?: string;
     locationWebsite?: string;
-    budget?: string;
+    perPersonAverageBudget?: string;
     descHidden?: boolean;
   }
 
@@ -34,6 +34,8 @@ export type HandleInputChange = (key: string, value: any) => void;
 export type MultiSelectHandler = (key: string, value: any) => void;
 
 export type DefinedProps = {
+  
+      inScopeThemes?: string;
       multipleSelectOptions?:RecoilState<Array<{ label: string, selected: boolean}>>
       themeOptionsState?: RecoilState<Array<{ label: string, selected: boolean}>>
       ageRangeOptionsState?: RecoilState<Array<{ label: string, selected: boolean}>>
