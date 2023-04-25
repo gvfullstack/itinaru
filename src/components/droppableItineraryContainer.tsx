@@ -1,0 +1,107 @@
+import React, { useRef, useState, useEffect } from "react";
+import { ItineraryItem } from "../typeDefs";
+import { useDrop } from "react-dnd";
+import DraggableItineraryItem from "./draggableItineraryItem";
+import styles from "../components/itinBuilderCSS/itinerary.module.css";
+import { useRecoilState, atom } from "recoil";
+import { itineraryItemsState, itinStartTimeState } from "../atoms/atoms";
+import { convertCompilerOptionsFromJson } from "typescript";
+
+
+interface DroppableItineraryContainerProps {
+  handleShowHideDescription: (curItineraryItem: ItineraryItem) => void;
+}
+
+
+const DroppableItineraryContainer: React.FC<DroppableItineraryContainerProps> = ({
+  handleShowHideDescription
+}) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [itineraryItems, setItineraryItems] = useRecoilState(itineraryItemsState);
+
+  const dropIndexRef = useRef<number | null>(null);
+
+  const [, drop] = useDrop(() => ({
+    accept: "itineraryItem",
+    hover: (item, monitor) => {
+      if (!ref.current) return;
+
+      const draggedItem = monitor.getItem() as ItineraryItem;
+      const draggedItemIndex = itineraryItems.findIndex(
+        (i) => i.id === draggedItem.id
+      );
+
+      const hoverBoundingRect = ref.current.getBoundingClientRect();
+      const clientOffset = monitor.getClientOffset();
+
+      if (!clientOffset) return;
+
+      const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+
+      let newDropIndex: number | null = null;
+      for (let i = 0; i < itineraryItems.length; i++) {
+        if (i === draggedItemIndex) continue;
+        const itemY =
+          (hoverBoundingRect.height / itineraryItems.length) * i;
+        const itemHeight = hoverBoundingRect.height / itineraryItems.length;
+        if (hoverClientY < itemY + itemHeight / 2) {
+          newDropIndex = i;
+          break;
+        }
+      }
+      if (newDropIndex === null) {
+        newDropIndex = itineraryItems.length - 1;
+      }
+      dropIndexRef.current = newDropIndex;
+    },
+
+    drop: (item, monitor) => {
+      if (dropIndexRef.current === null) return;
+
+      const draggedItemIndex = itineraryItems.findIndex(
+        (item) => item.id === (monitor.getItem() as ItineraryItem).id
+      );
+      const newOrderedItems = [...itineraryItems];
+      const draggedItem = newOrderedItems.splice(draggedItemIndex, 1)[0];
+      newOrderedItems.splice(dropIndexRef.current, 0, draggedItem);
+      const updatedItemsWithNewTimes = updateStartTimes(newOrderedItems);
+      setItineraryItems(updatedItemsWithNewTimes);
+    },
+  }));
+
+  const updateStartTimes = (items: ItineraryItem[]) => {
+    const updatedItems = [...items];
+    const dayStartTime = new Date(itineraryItems[0].startTime || Date.now());
+    for (let i = 0; i < updatedItems.length; i++) {
+      const previousItem = i===0 ? undefined : updatedItems[i - 1];
+      const previousEndTime = new Date(previousItem?.endTime || Date.now());
+      const currentItemDuration = parseInt(updatedItems[i].activityDuration || "0") || 0;
+      const newStartTime = new Date(i===0 ? dayStartTime : previousEndTime.getTime() );
+      const newEndTime = new Date(newStartTime.getTime() + currentItemDuration);
+      console.log("newStartTime", newStartTime)
+      updatedItems[i] = {
+        ...updatedItems[i],
+        startTime: newStartTime, 
+        endTime: newEndTime
+      };
+    }
+    return updatedItems;
+  };
+
+  drop(ref);
+
+  return (
+    <div ref={ref} className={styles.parentDropDiv}>
+      {itineraryItems.map((itineraryItem: ItineraryItem) => (
+        <DraggableItineraryItem
+          key={itineraryItem.id}
+          id={itineraryItem.id || "default-id"} // Provide a default value here
+          itineraryItem={itineraryItem}
+          handleShowHideDescription={handleShowHideDescription}
+        />
+      ))}
+    </div>
+  );
+};
+
+export default DroppableItineraryContainer;

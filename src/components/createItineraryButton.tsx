@@ -9,6 +9,7 @@ import { neighborhoodsState, curStepState, destinationState,
 
 } from "../../src/atoms/atoms"
 import { useRecoilState } from 'recoil';
+const { v4: uuidv4 } = require('uuid');
 
 
 
@@ -56,25 +57,30 @@ const CreateItineraryButton: React.FC<DefinedProps> = (props) => {
       inScopeThemes: inScopeThemes, 
       neighborhoodSelections: neighborhoodSelections,
       perPersonAverageBudget: perPersonAverageBudget,
-      travelDate: travelDateState
+      travelDate: travelDate
     }) 
       .then((response) => { 
-        setTimeout(()=> handleInputChange("isLoading",false));
         setCurStep("120T");
         console.log("success", response.data.itinaru);
         updateItineraryHiddenStatus(response.data.itinaru);
         
       }).catch((error) => {
         console.log("error", error);
-      });
+      }).finally(() => {handleInputChange("isLoading", false); console.log(itineraryItems)});
   }
 
   const updateItineraryHiddenStatus = (itineraryItems: any[]) => {
-    const itineraryItemsWithSelectedFalse = itineraryItems.map((itineraryItem: any) => {                                                       
-       return {...itineraryItem, descHidden: true}
-     })
+    const itineraryItemsWithSelectedFalse = itineraryItems.map((itineraryItem: any) => { 
+      const startTime = new Date("1970-01-01T" + itineraryItem.startTime);
+      const endTime = new Date("1970-01-01T" + itineraryItem.endTime);                                                  
+      return {...itineraryItem, 
+            descHidden: true, 
+            id: uuidv4(), 
+            startTime: startTime,
+            endTime: endTime}
+    })
     setItineraryItems(itineraryItemsWithSelectedFalse)
- }
+  }
 
   const handleClick = () => {
       apiExecutionBlock();

@@ -74,13 +74,13 @@ export default async function (
     const generateDestinationPrompt = (data: any) => {
       if (!destination || destination === '') return '';
 
-      return `please create a trip itinerary for ${destination} `;
+      return `please create a trip itinerary for ${destination}. `;
     }
     
     const generatePacePrompt = (data: any) => {
       if (!selectedPace || selectedPace === '') return;
     
-      return `to visit ${selectedPace} points of interest  `;
+      return `Provide ${selectedPace} points of interest  `;
     }
     
     const generateTimeStartPrompt = (data: any) => {
@@ -92,7 +92,7 @@ export default async function (
     const generateTimeEndPrompt = (data: any) => {
       if (!itinEndTime || itinEndTime === '') return '';
     
-      return `and end by ${itinEndTime}. `;
+      return `and end by ${itinEndTime} and presented in 24-hour time format. `;
     }
     
     const generateIncludeSitesPrompt = (data: any) => {
@@ -162,16 +162,21 @@ export default async function (
       [
                 {
                     "venue": "Golden Gate Park",
-                    "startTime": "9:30 am",
-                    "endTime": "12:00 pm",
+                    "startTime": "09:30",
+                    "endTime": "13:00",
                     "description": "Explore the beautiful Golden Gate Park and its many attractions including the Conservatory of Flowers, the Japanese Tea Garden, and the California Academy of Sciences. Enjoy a picnic lunch and take in the views of the San Francisco skyline.",
                     "locationAddress": "501 Stanyan St, San Francisco, CA 94117",
                     "locationWebsite": "google.com",
                     "expectedPerPersonBudget": "$10-$15",
-                    "averageWeather": 45 F Cloudy Windy 
+                    "averageWeather": 45 F Cloudy Windy,
+                    "activityDuration": 7200000 
                 },
         ...
       ] `;
+    }
+
+    const generateDurationPrompt = (data: any) => {
+      return `Please provide the duration at each destination in milliseconds based on average time visitors spend at those destinations.`;
     }
 
     const generatePrompt = (data: any) => {
@@ -179,7 +184,7 @@ export default async function (
           generateTimeStartPrompt(data) + generateTimeEndPrompt(data) + generateExcludeSitesPrompt(data) 
           + generateTavelerCountPrompt(data) + generateTavelerAgePrompt(data) + generateThemePrompt(data) 
           + generateNeighborhoodPrompt(data) + generateBudgetPrompt (data) + generateDatePrompt(data) +
-          generateJSONExamplePrompt();
+          generateJSONExamplePrompt() + generateDurationPrompt(data);
         }
 
         const prompt = generatePrompt(req.body)

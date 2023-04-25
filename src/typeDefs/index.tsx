@@ -4,6 +4,10 @@ import { RecoilState } from 'recoil';
 //   atom: RecoilState<string>;
 // }
 
+export const ItemTypes = {
+  ITINERARY_ITEM: 'itineraryItem',
+};
+
 export type Neighborhoods = {
     neighborhood?: string;
     loc?: { lat: number, lng: number }[];
@@ -13,14 +17,18 @@ export type Neighborhoods = {
 
   export type ItineraryItem = {
     venue?: string;
-    startTime?: string;
-    endTime?: string;
+    startTime?: Date;
+    endTime?: Date;
     description?: string;
     locationAddress?: string;
     locationWebsite?: string;
-    perPersonAverageBudget?: string;
+    expectedPerPersonBudget?: string;
     descHidden?: boolean;
+    id?: string;
+    averageWeather?: string;
+    activityDuration?: string;
   }
+
 
   export type Itinerary = ItineraryItem[];
 

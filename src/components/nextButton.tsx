@@ -52,16 +52,12 @@ const NextButton: React.FC<DefinedProps> = (props) => {
  
 
   const apiExecutionBlock = () => {
-    console.log(neighborhoods, curStep, destination, userDefinedThemes, themeOptions, ageRangeOptions)
     handleInputChange("isLoading", true);
     const baseUrl = 'http://localhost:3000';
     const selectedThemeOptions = themeOptions.filter((theme: { label: string, selected: boolean}) => theme.selected === true).map((theme)=>theme.label).join(',');
     const inScopeThemes = selectedThemeOptions + ',' + userDefinedThemes;
     const inScopeAgeRange = ageRangeOptions.filter((ageRange: { label: string, selected: boolean}) => ageRange.selected === true).map((ageRange)=>ageRange.label).join(',');
 
-    console.log("destination", destination, 
-    "inScopeThemes", inScopeThemes, 
-    "inScopeAgeRange", inScopeAgeRange);
    
     axios.post(baseUrl +'/api/neighborhood/destination', 
     {destination: destination, 
@@ -69,14 +65,15 @@ const NextButton: React.FC<DefinedProps> = (props) => {
       inScopeAgeRange: inScopeAgeRange}) 
 
       .then((response) => { 
-        setTimeout(()=> handleInputChange("isLoading",false));
         normalExecutionBlock();
         console.log("success", response.data.neighborhoods);
         updateNeighborhoods(response.data.neighborhoods);
         
       }).catch((error) => {
         console.log("error", error);
-      });
+      }).finally(() => {
+        handleInputChange("isLoading", false);
+      })
   }
 
   const handleClick = () => {

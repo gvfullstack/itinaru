@@ -26,6 +26,7 @@ type StateVariables = {
 
 const ItinBuilder = (props: any) => {
   const [curStep, setCurStepState] = useRecoilState(curStepState);
+  const [itineraryItems, setitineraryItems] = useRecoilState(itineraryItemsState);
 
   const [stateVariables, setStateVariables] = useState<StateVariables>({
     specificSitesBool: false,
@@ -284,6 +285,7 @@ return (
           ))}
     {stateVariables.isLoading && (<IsLoadingPage />)}
           {props.children}
+          <button onClick={()=>console.log(itineraryItems)}>log state</button>
   </div>
 );
           }
