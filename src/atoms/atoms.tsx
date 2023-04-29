@@ -24,20 +24,20 @@ export const neighborhoodsState = atom<Neighborhoods[]>({
     default: ""
   });
   
-  export const travelDateState = atom<string>({
+  export const travelDateState = atom<Date>({
     key: 'travelDateState', 
-    default: ""
+    default: new Date()
   });
   
 
-  export const itinStartTimeState = atom<string>({
+  export const itinStartTimeState = atom<Date>({
     key: 'itinStartTimeState', 
-    default: ""
+    default: new Date(new Date().setHours(8, 0, 0, 0))
   });
 
-  export const itinEndTimeState = atom<string>({
+  export const itinEndTimeState = atom<Date>({
     key: 'itinEndTimeState', 
-    default: ""
+    default: new Date(new Date().setHours(18, 30, 0, 0))
   });
 
   export const specificSitesState = atom<string>({
@@ -163,9 +163,9 @@ export const neighborhoodsState = atom<Neighborhoods[]>({
       ]
   });
 
-  export const perPersonAverageBudgetState = atom<string>({ 
+  export const perPersonAverageBudgetState = atom<number>({ 
     key: 'perPersonAverageBudgetState',
-    default: "$25"
+    default: 0
   });
 
 

@@ -16,7 +16,7 @@ const BackButton: React.FC<DefinedProps> = (props) => {
 
 
   return <div className= {styles.backButtonContainer}>
-    <button className= {styles.backButton} onClick={handleClick}>{props.backButtonText}</button>
+    <button className= {styles.backButton} onClick={handleClick}>back</button>
   </div>
 };
 

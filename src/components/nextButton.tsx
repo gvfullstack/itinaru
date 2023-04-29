@@ -83,9 +83,10 @@ const NextButton: React.FC<DefinedProps> = (props) => {
       normalExecutionBlock();
     }
   }
+  let disabled = !destination ? true : false;
 
   return <div className={style.nextButtonContainer}>
-    <button className={style.nextButton}onClick={handleClick} >{props.nextButtonText}</button>
+    <button className={`${style.nextButton} ${disabled? style.disabled:""}`} onClick={handleClick} disabled={disabled}>next</button>
     </div>
 };
 

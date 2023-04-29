@@ -6,6 +6,9 @@ const { v4: uuidv4 } = require('uuid');
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
+import { useRecoilState } from 'recoil';
+import { itineraryItemsState } from '../atoms/atoms';
+import ResponsiveTimePicker from './responsiveTimePicker';
 
 const caretDown2 = <FontAwesomeIcon icon={faCaretDown} />;
 const ellipsisVertical = <FontAwesomeIcon icon={faEllipsisVertical} />;
@@ -16,6 +19,7 @@ interface DraggableItineraryItemProps {
   handleShowHideDescription: (curItineraryItem: ItineraryItem) => void;
 
 }
+
 
 const openGoogleMapsDirection = async (destinationAddress?: string) => {
   try {
@@ -67,47 +71,136 @@ const DraggableItineraryItem: React.FC<DraggableItineraryItemProps> = ({
   };
 
   function formatTimeWithoutSeconds(date: Date): string {
+    if (isNaN(date.getTime())) {
+      return "";
+    }
+
     const formatter = new Intl.DateTimeFormat('en-US', {
       hour: 'numeric',
       minute: 'numeric',
       hour12: true,
     });
   
-    return formatter.format(date).toLowerCase(); // <-- Add toLowerCase() here
+    return formatter.format(date)
   }
 
-  console.log("itineraryItem", itineraryItem.startTime)
-  const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?? new Date());
-  console.log("formattedStartTime", formattedStartTime)
-  const formattedEndTime = formatTimeWithoutSeconds(itineraryItem.endTime?? new Date());
+  const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.time?? new Date());
+  const formattedEndTime = formatTimeWithoutSeconds(itineraryItem.endTime?.time?? new Date());
 
+  const [itineraryItemsInState, setItineraryItemsInState] = useRecoilState<ItineraryItem[]>(itineraryItemsState);
+
+  function convertDateToTimeInputValue(date: Date) {
+    if (isNaN(date.getTime())) {
+      return "";
+    }
+    const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60 * 1000);
+    return localDate.toISOString().substring(11, 16);
+  }
+
+  const handleTimeEditStatus = (propertyName: "startTime" | "endTime") => {
+    const index = itineraryItemsInState.findIndex(item => item.id === itineraryItem.id);
+    const updatedItem = {
+      ...itineraryItem,
+      [propertyName]: {
+        ...itineraryItem[propertyName],
+        beingEdited: !itineraryItem[propertyName]?.beingEdited, 
+      },
+      [propertyName === "startTime" ? "endTime": "startTime"]: {
+          ...itineraryItem[propertyName === "startTime" ? "endTime": "startTime"],
+          beingEdited: false, 
+        }
+    };
+    const newItems = [...itineraryItemsInState];
+    newItems[index] = updatedItem;
+
+    const newItemsWithFalseBeingEdited = newItems.map((item: ItineraryItem) => {
+      if (item.id !== itineraryItem.id) {
+        return {
+          ...item,
+          startTime: {
+            ...item.startTime,
+            beingEdited: false,
+            time: item.startTime?.time ?? new Date()
+          },
+          endTime: {
+            ...item.endTime,
+            beingEdited: false,
+            time: item.endTime?.time ?? new Date()
+          }
+        };
+      }
+      return item;
+    });
+    setItineraryItemsInState(newItemsWithFalseBeingEdited);
+  };
+
+  const handleOnBlur = (propertyName: "startTime" | "endTime") => {
+    const index = itineraryItemsInState.findIndex(item => item.id === itineraryItem.id);
+    const updatedItem = {
+      ...itineraryItem,
+      [propertyName]: {
+        ...itineraryItem[propertyName],
+        beingEdited: false, 
+      }
+    };
+
+    const newItems = [...itineraryItemsInState];
+    newItems[index] = updatedItem;
+
+    setItineraryItemsInState(newItems);
+  };
+     
   return (
     <div ref={drag} style={itemStyle}  className={styles.dropDiv} >
       <div key={uuidv4()} className={styles.itineraryParent}>
-                <div className={styles.mainItinItemContainer}>
-                <div className={styles.activityTime}>
-                    <div className={styles.startTime}>
-                      {formattedStartTime} 
-                    </div>
-                    <div className={styles.timeSeparator}>
-                      -
-                    </div>
-                    <div className={styles.endTime}>
-                      {formattedEndTime}
-                    </div>
-                </div>
-                <div className={styles.itinTitleContainer}>
-                    <h2 className={styles.itinTitle}>{itineraryItem.venue}</h2>
-                    <div className={styles.belowTitleCaretContainer}
-                    onClick={()=>handleShowHideDescription(itineraryItem)}
-                    >
-                       {caretDown2}
-                    </div>
-                </div>
-                <div className={styles.hamburgerMenuContainer}>
-                    {ellipsisVertical}
-                </div>
-            </div>
+             <div className={styles.mainItinItemContainer}>
+                  <div className={styles.itineraryItemContainerContainer}>
+
+                        {/* //////////////////////////// */}
+                      <div className={styles.activityTime}>
+                          <div className={styles.startTime}>
+                                {itineraryItem.startTime?.beingEdited ?
+                                  <ResponsiveTimePicker
+                                    propertyName="startTime"
+                                    itineraryItem = {itineraryItem}
+                                  />  
+                                :
+                                <div onClick={()=>handleTimeEditStatus("startTime")}>  
+                                  {formattedStartTime}
+                                </div>}
+                          </div>
+
+                          <div className={styles.timeSeparator}>-</div>
+
+                          <div className={styles.endTime}>
+                                {itineraryItem.endTime?.beingEdited ? 
+                                    <ResponsiveTimePicker
+                                      propertyName="endTime"
+                                      itineraryItem = {itineraryItem}
+                                    /> 
+                                :
+                                <div onClick={()=>handleTimeEditStatus("endTime")}>
+                                  {formattedEndTime}
+                                </div>}
+                          </div>
+                        </div>
+                      {/* /////////////////////////////////// */}
+                  <div className={styles.bottomItinContainer}>                  
+                      <div className={styles.itinTitleContainer}>
+                          <h2 className={styles.itinTitle}>{itineraryItem.venue}</h2>
+                      </div>
+                      
+                  </div>
+                  <div className={styles.belowTitleCaretContainer}
+                      onClick={()=>handleShowHideDescription(itineraryItem)}
+                          >
+                            {caretDown2}
+                  </div>
+              </div>
+              <div className={styles.hamburgerMenuContainer}>
+                          {ellipsisVertical}
+              </div>
+          </div>
   {/* ////////////////////////////////////////////////////////////////////////////       */}
             <div className={`${styles.expandedItinItemContainer} ${itineraryItem.descHidden ? "" : styles.isShown }`}>
 

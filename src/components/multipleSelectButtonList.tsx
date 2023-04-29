@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import styles from "./itinBuilderCSS/multipleSelectButton.module.css";
 const { v4: uuidv4 } = require('uuid');
-import { DefinedProps } from "../../../src/typeDefs" 
+import { DefinedProps } from "./../../src/typeDefs" 
 import { ageRangeOptionsState } from "../../src/atoms/atoms";
 import { useRecoilState } from 'recoil';
 
@@ -13,10 +13,8 @@ type Option = {
 
 const MultipleSelectButtonList: React.FC<DefinedProps> = (props) => {
 
-  const [optionList, setOptionList] = useRecoilState<Option[]>(props.multipleSelectOptions ??  "")
- 
-  const selectedOptionsPassed: string[] | undefined = !props.selectedOptions ? [] : props.selectedOptions 
-  
+  const [optionList, setOptionList] = useRecoilState<Option[]>(props.multipleSelectOptions as any)
+   
   const handleOptionSelect =((option: Option) => {
     setOptionList(prevState => {
       const updatedOptionList = prevState.map((stateOption) => {

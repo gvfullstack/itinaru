@@ -11,18 +11,19 @@ import styles from "../itinBuilderCSS/itinForm.module.css";
 import MultipleSelectNeighborhoodButtons from "@/components/multipleSelectNeighborhoodButtons";
 import { DefinedProps } from "../../../src/typeDefs" 
 import Itinerary from "../itinerary";
-
+import UserInputTimePicker from "../userInputTimePicker";
+import UserInputDatePicker from "../userInputDatePicker";
+import UserInputCurrencyInputField from "../userInputCurrencyInputField";
 const { v4: uuidv4 } = require('uuid');
 
 
 
 const InitForm: React.FC<DefinedProps> = (props) => {
   console.log("PageComponent just REDENDERED")
-  const input1StateVariables = ["destination", "travelDate", "itinStartTime", 
-    "specificSites", "excludedSites", "specificPace", "travelerCount", "userDefinedThemes",
+  const input1StateVariables = ["destination", "specificSites", "excludedSites", "specificPace", "travelerCount", "userDefinedThemes",
     "userDefinedNeighborhoods"]
-
-  const input2StateVariables = ["itinEndTime"]
+  
+  const [hasInputData, setHasInputData] = useState(false);
 
   return (
     <div className={styles.pageComponentContainer}>
@@ -65,20 +66,9 @@ const InitForm: React.FC<DefinedProps> = (props) => {
           )
         }
       )}
-
-      {input2StateVariables.map((input2StateVariable) => 
-        {
-          return (
-            props.keyOfStateVariable2 === input2StateVariable && (
-            <UserInput
-                key={uuidv4()}
-                userInput={props.userInput2}
-                keyOfStateVariable={props.keyOfStateVariable}
-                userInputPlaceholder={props.userInputPlaceholder2}
-            />)   
-          )
-        }
-      )}
+      {props.displayBudgetInput && <UserInputCurrencyInputField />}
+      {props.displayDatePicker && <UserInputDatePicker />}
+      {props.displayTimePicker && <UserInputTimePicker />}
           
     
       {props.nextButtonText && <NextButton 

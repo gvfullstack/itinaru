@@ -7,8 +7,6 @@ import { DefinedProps, HandleInputChange } from "@/typeDefs";
 import { useRecoilState } from "recoil";
 import { defaultAtom, paceOptionsState} from "@/atoms/atoms";
 
-
-
 const PinkOutlinedTextField = styled(TextField)(({ theme }) => ({
   '& .MuiOutlinedInput-root': {
     '&:hover fieldset': {
@@ -26,8 +24,6 @@ const PinkOutlinedTextField = styled(TextField)(({ theme }) => ({
     padding: '10px 10px 10px 20px' ,
   },
 }));
-
-
 
 const UserInput: React.FC<DefinedProps> = (props) => {
     const [value, setValue] = useRecoilState(props.userInput ? props.userInput : defaultAtom);
@@ -51,8 +47,6 @@ const UserInput: React.FC<DefinedProps> = (props) => {
       }
     };
 
-   useEffect(() => {console.log("value: ", value)}, [value]);
-
   useEffect(() => {
     if (inputRef.current && props.shouldAutoFocus) {
       inputRef.current.focus();
@@ -60,7 +54,7 @@ const UserInput: React.FC<DefinedProps> = (props) => {
   }, [props.shouldAutoFocus]);
   
   return (
-    <PinkOutlinedTextField 
+    <PinkOutlinedTextField
       label={props.userInputPlaceholder}
       value={value}
       onChange={handleChange}

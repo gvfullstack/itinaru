@@ -4,7 +4,7 @@ import { useDrop } from "react-dnd";
 import DraggableItineraryItem from "./draggableItineraryItem";
 import styles from "../components/itinBuilderCSS/itinerary.module.css";
 import { useRecoilState, atom } from "recoil";
-import { itineraryItemsState, itinStartTimeState } from "../atoms/atoms";
+import { itineraryItemsState } from "../atoms/atoms";
 import { convertCompilerOptionsFromJson } from "typescript";
 
 
@@ -71,18 +71,18 @@ const DroppableItineraryContainer: React.FC<DroppableItineraryContainerProps> = 
 
   const updateStartTimes = (items: ItineraryItem[]) => {
     const updatedItems = [...items];
-    const dayStartTime = new Date(itineraryItems[0].startTime || Date.now());
+    const dayStartTime = new Date(itineraryItems[0].startTime?.time || Date.now());
     for (let i = 0; i < updatedItems.length; i++) {
       const previousItem = i===0 ? undefined : updatedItems[i - 1];
-      const previousEndTime = new Date(previousItem?.endTime || Date.now());
+      const previousEndTime = new Date(previousItem?.endTime?.time || Date.now());
       const currentItemDuration = parseInt(updatedItems[i].activityDuration || "0") || 0;
       const newStartTime = new Date(i===0 ? dayStartTime : previousEndTime.getTime() );
       const newEndTime = new Date(newStartTime.getTime() + currentItemDuration);
       console.log("newStartTime", newStartTime)
       updatedItems[i] = {
         ...updatedItems[i],
-        startTime: newStartTime, 
-        endTime: newEndTime
+        startTime: {...updatedItems[i].startTime, time: newStartTime, beingEdited: updatedItems[i].startTime?.beingEdited ?? false}, 
+        endTime: {...updatedItems[i].startTime, time: newEndTime, beingEdited: updatedItems[i].endTime?.beingEdited ?? false}
       };
     }
     return updatedItems;

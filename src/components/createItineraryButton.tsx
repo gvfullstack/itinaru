@@ -36,6 +36,12 @@ const CreateItineraryButton: React.FC<DefinedProps> = (props) => {
   
 
   const apiExecutionBlock = () => {
+    console.log("destination", destination, "selectedPace", selectedPace, "itinStartTime", 
+    itinStartTime, "itinEndTime", itinEndTime, "specificSites", specificSites, "excludedSites", 
+    excludedSites, "travelerCount", travelerCount, "ageRangeOptions", ageRangeOptions, 
+    "themeOptions", themeOptions, "userDefinedThemes", userDefinedThemes, "neighborhoods", 
+    neighborhoods, "travelDate", travelDate, "perPersonAverageBudget", perPersonAverageBudget)
+
     handleInputChange("isLoading", true);
     const baseUrl = 'http://localhost:3000';
     const selectedThemeOptions = themeOptions.filter((theme: { label: string, selected: boolean}) => theme.selected === true).map((theme)=>theme.label).join(',');
@@ -71,8 +77,8 @@ const CreateItineraryButton: React.FC<DefinedProps> = (props) => {
 
   const updateItineraryHiddenStatus = (itineraryItems: any[]) => {
     const itineraryItemsWithSelectedFalse = itineraryItems.map((itineraryItem: any) => { 
-      const startTime = new Date("1970-01-01T" + itineraryItem.startTime);
-      const endTime = new Date("1970-01-01T" + itineraryItem.endTime);                                                  
+      const startTime ={ time: new Date("1970-01-01T" + itineraryItem.startTime), beingEdited: false};
+      const endTime = {time: new Date("1970-01-01T" + itineraryItem.endTime), beingEdited: false};                                                  
       return {...itineraryItem, 
             descHidden: true, 
             id: uuidv4(), 
@@ -86,9 +92,11 @@ const CreateItineraryButton: React.FC<DefinedProps> = (props) => {
       apiExecutionBlock();
   }
 
+  let disabled = !destination ? true : false;
+
   return (
     <div className={styles.createItineraryButtonContainer}>
-      <button className={styles.createItineraryButton} onClick={handleClick}>{props.createButtonText}</button>
+      <button className={`${styles.createItineraryButton} ${disabled? styles.disabled:""}`} disabled={disabled} onClick={handleClick}>{props.createButtonText}</button>
     </div>
   );
 };

@@ -13,12 +13,13 @@ export type Neighborhoods = {
     loc?: { lat: number, lng: number }[];
     desc?: string;
     selected?: boolean;
+    descHidden?: boolean;
   }
 
   export type ItineraryItem = {
     venue?: string;
-    startTime?: Date;
-    endTime?: Date;
+    startTime?: {time: Date, beingEdited: boolean};
+    endTime?: {time: Date, beingEdited: boolean};
     description?: string;
     locationAddress?: string;
     locationWebsite?: string;
@@ -42,7 +43,9 @@ export type HandleInputChange = (key: string, value: any) => void;
 export type MultiSelectHandler = (key: string, value: any) => void;
 
 export type DefinedProps = {
-  
+      displayBudgetInput?: boolean;
+      displayDatePicker?: boolean;
+      displayTimePicker?: boolean;
       inScopeThemes?: string;
       multipleSelectOptions?:RecoilState<Array<{ label: string, selected: boolean}>>
       themeOptionsState?: RecoilState<Array<{ label: string, selected: boolean}>>
