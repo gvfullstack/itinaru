@@ -48,4 +48,4 @@ const SingleSelectButtonList: React.FC<DefinedProps> = (props) => {
   );
 };
 
-export default singleSelectButtonList;
+export default SingleSelectButtonList;
