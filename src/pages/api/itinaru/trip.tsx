@@ -32,8 +32,6 @@ async function requestItineraryFunction(
   req: NextApiRequest,
   res: NextApiResponse<any | Error>
 ) {
-  // apply the rate limiter middleware to this route
-  limiter(req, res, async () => {
     const destination = req.body.destination || '';
     if (destination.trim().length === 0) {
       res.status(400).json({
@@ -226,8 +224,16 @@ async function requestItineraryFunction(
         });
       }
     }
-  });
 }
 
 
-export default limiter(requestItineraryFunction)
+function withLimiter(handler: (req: NextApiRequest, res: NextApiResponse) => Promise<void>) {
+  return async (req: NextApiRequest, res: NextApiResponse) => {
+    limiter(req, res, () => {
+      handler(req, res);
+    });
+  };
+}
+
+
+export default withLimiter(requestItineraryFunction)
