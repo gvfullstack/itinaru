@@ -15,7 +15,7 @@ const IsLoadingPage: React.FC<Props> = (props) => {
 
     const message = useMemo(() => {
         return messages[Math.floor(Math.random() * messages.length)]
-    }, [props.isLoading]);
+    }, []);
 
   
 

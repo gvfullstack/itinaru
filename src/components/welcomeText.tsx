@@ -13,7 +13,7 @@ const WelcomeText: React.FC<DefinedProps> = (props) => {
   const [displayedIntroMessage, setDisplayedIntroMessage] = useState("");
 
   
-  const introText = [
+  const introText = useMemo(() => [
   // ARR of objects  
     {"10T":
     [
@@ -347,7 +347,7 @@ const WelcomeText: React.FC<DefinedProps> = (props) => {
   },
                                                        
   // ARR of objects  
-  ]
+  ])
 
   useEffect(() => {
     const displayIntroMessage = (pageStep: string) => {
