@@ -268,7 +268,6 @@ return (
           ))}
     {stateVariables.isLoading && (<IsLoadingPage />)}
           {props.children}
-          <button onClick={()=>consolelog(itineraryItems)}>log state</button>
   </div>
 );
           }
