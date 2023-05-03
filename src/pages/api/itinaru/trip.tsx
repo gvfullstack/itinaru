@@ -25,7 +25,7 @@ const limiter = rateLimit({
   max: 5 // limit each IP to 5 requests per windowMs
 });
 
-export async function requestItineraryFunction(
+export default async function requestItineraryFunction(
   req: NextApiRequest,
   res: NextApiResponse<any | Error>
 ) {
