@@ -10,8 +10,7 @@ import { neighborhoodsState, curStepState, destinationState,
 } from "../../src/atoms/atoms"
 import { useRecoilState } from 'recoil';
 const { v4: uuidv4 } = require('uuid');
-
-
+import getConfig from 'next/config';
 
 const CreateItineraryButton: React.FC<DefinedProps> = (props) => {
   const handleInputChange = props.handleInputChange ? props.handleInputChange : () => {};
@@ -33,7 +32,7 @@ const CreateItineraryButton: React.FC<DefinedProps> = (props) => {
 
   const [curStep, setCurStep] = useRecoilState(curStepState);
   const [itineraryItems, setItineraryItems] = useRecoilState(itineraryItemsState);
-  
+ 
 
   const apiExecutionBlock = () => {
     console.log("destination", destination, "selectedPace", selectedPace, "itinStartTime", 
@@ -43,7 +42,8 @@ const CreateItineraryButton: React.FC<DefinedProps> = (props) => {
     neighborhoods, "travelDate", travelDate, "perPersonAverageBudget", perPersonAverageBudget)
 
     handleInputChange("isLoading", true);
-    const baseUrl = 'http://localhost:3000';
+    const { publicRuntimeConfig } = getConfig();
+    const baseUrl = publicRuntimeConfig.BASE_URL;
     const selectedThemeOptions = themeOptions.filter((theme: { label: string, selected: boolean}) => theme.selected === true).map((theme)=>theme.label).join(',');
     const inScopeThemes = selectedThemeOptions + ',' + userDefinedThemes;
     const inScopeAgeRanges = ageRangeOptions.filter((ageRange: { label: string, selected: boolean}) => ageRange.selected === true).map((ageRange)=>ageRange.label).join(',');
