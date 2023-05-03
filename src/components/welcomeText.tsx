@@ -365,7 +365,7 @@ const WelcomeText: React.FC<DefinedProps> = (props) => {
     };
 
     setDisplayedIntroMessage(displayIntroMessage(pageStep));
-  }, []);
+  });
 
 
 

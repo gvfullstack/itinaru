@@ -14,7 +14,7 @@ type Option = {
 }
 
 
-const singleSelectButtonList: React.FC<DefinedProps> = (props) => {
+const SingleSelectButtonList: React.FC<DefinedProps> = (props) => {
   const [value, setValue] = useRecoilState<Option[]>(props.singleSelectOptions ??  defaultAtom);
   const [selectedPace, setSelectedPace] = useRecoilState(selectedPaceState);
 
