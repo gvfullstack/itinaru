@@ -115,6 +115,7 @@ const InitForm: React.FC<DefinedProps> = (props) => {
        <CreateItineraryButton 
           key={uuidv4()}
           createButtonText={props.createButtonText}
+          handleInputChange={props.handleInputChange} 
           />}
           
 
