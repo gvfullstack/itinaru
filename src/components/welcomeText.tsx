@@ -1,5 +1,5 @@
 import React  from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import styles from "./itinBuilderCSS/welcomeText.module.css";
 import { useRecoilState } from "recoil";
 import { DefinedProps } from "@/typeDefs";
@@ -347,7 +347,7 @@ const WelcomeText: React.FC<DefinedProps> = (props) => {
   },
                                                        
   // ARR of objects  
-  ])
+  ], [])
 
   useEffect(() => {
     const displayIntroMessage = (pageStep: string) => {
