@@ -52,7 +52,6 @@ const CreateItineraryButton: React.FC<DefinedProps> = (props) => {
     const paramItinEndTime = itinEndTime.toLocaleString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
     const paramTravelDate = travelDate ? new Date(travelDate).toISOString().substring(0, 10) : '';
 
-    console.log(`${baseUrl} + /api/itinaru/trip`)
 
     axios.post(baseUrl +'/api/itinaru/trip', 
     {
@@ -68,7 +67,11 @@ const CreateItineraryButton: React.FC<DefinedProps> = (props) => {
       neighborhoodSelections: neighborhoodSelections,
       perPersonAverageBudget: perPersonAverageBudget,
       travelDate: paramTravelDate
-    }) 
+    },
+    {
+      timeout: 10000, // Timeout in milliseconds, e.g., 10000ms = 10 seconds
+    }
+    ) 
       .then((response) => { 
         setCurStep("120T");
         console.log("success", response.data.itinaru);
