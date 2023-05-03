@@ -22,10 +22,13 @@ type Error = {
 // create a rate limiter with a maximum of 5 requests per minute
 const limiter = rateLimit({
   windowMs: 60 * 1000, // 1 minute
-  max: 5 // limit each IP to 5 requests per windowMs
+  max: 5, // limit each IP to 5 requests per windowMs
+  keyGenerator: function (req, res) {
+    return req.socket.remoteAddress;
+  },
 });
 
-export default async function requestItineraryFunction(
+async function requestItineraryFunction(
   req: NextApiRequest,
   res: NextApiResponse<any | Error>
 ) {
@@ -227,3 +230,4 @@ export default async function requestItineraryFunction(
 }
 
 
+export default limiter(requestItineraryFunction)
