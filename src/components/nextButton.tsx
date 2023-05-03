@@ -53,7 +53,7 @@ const NextButton: React.FC<DefinedProps> = (props) => {
 
   const apiExecutionBlock = () => {
     handleInputChange("isLoading", true);
-    const baseUrl = 'http://localhost:3000';
+    const baseUrl = BASE_URL;
     const selectedThemeOptions = themeOptions.filter((theme: { label: string, selected: boolean}) => theme.selected === true).map((theme)=>theme.label).join(',');
     const inScopeThemes = selectedThemeOptions + ',' + userDefinedThemes;
     const inScopeAgeRange = ageRangeOptions.filter((ageRange: { label: string, selected: boolean}) => ageRange.selected === true).map((ageRange)=>ageRange.label).join(',');
