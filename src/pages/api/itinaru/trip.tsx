@@ -174,11 +174,15 @@ async function requestItineraryFunction(
     
    
 
+    // const generatePrompt = (data: any) => {
+    //   return generateDestinationPrompt(data) + generatePacePrompt(data) +  generateSpecificSitesPrompt(data) +
+    //   generateTimePrompt(data) + generateExcludeSitesPrompt(data) 
+    //   + generateTavelerCountPrompt(data) + generateTavelerAgePrompt(data) + generateThemePrompt(data) 
+    //   + generateNeighborhoodPrompt(data) + generateBudgetPrompt (data) + generateDatePrompt(data) +
+    //   generateJSONExamplePrompt();
+    // }
     const generatePrompt = (data: any) => {
-          return generateDestinationPrompt(data) + generatePacePrompt(data) +  generateSpecificSitesPrompt(data) +
-          generateTimePrompt(data) + generateExcludeSitesPrompt(data) 
-          + generateTavelerCountPrompt(data) + generateTavelerAgePrompt(data) + generateThemePrompt(data) 
-          + generateNeighborhoodPrompt(data) + generateBudgetPrompt (data) + generateDatePrompt(data) +
+          return generateDestinationPrompt(data)  +
           generateJSONExamplePrompt();
         }
 
