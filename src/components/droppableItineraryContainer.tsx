@@ -4,7 +4,7 @@ import { useDrop } from "react-dnd";
 import DraggableItineraryItem from "./draggableItineraryItem";
 import styles from "../components/itinBuilderCSS/itinerary.module.css";
 import { useRecoilState, atom } from "recoil";
-import { itineraryItemsState } from "../atoms/atoms";
+import { itineraryItemsState, travelDateState } from "../atoms/atoms";
 import { convertCompilerOptionsFromJson } from "typescript";
 
 
@@ -18,6 +18,8 @@ const DroppableItineraryContainer: React.FC<DroppableItineraryContainerProps> = 
 }) => {
   const ref = useRef<HTMLDivElement>(null);
   const [itineraryItems, setItineraryItems] = useRecoilState(itineraryItemsState);
+  const [travelDate, setTravelDate] = useRecoilState(travelDateState);
+
 
   const dropIndexRef = useRef<number | null>(null);
 
@@ -63,24 +65,60 @@ const DroppableItineraryContainer: React.FC<DroppableItineraryContainerProps> = 
       );
       const newOrderedItems = [...itineraryItems];
       const draggedItem = newOrderedItems.splice(draggedItemIndex, 1)[0];
+      console.log("draggedItem", draggedItem)
       newOrderedItems.splice(dropIndexRef.current, 0, draggedItem);
-      const updatedItemsWithNewTimes = updateStartTimes(newOrderedItems);
+      const updatedItemsWithNewTimes = updateStartTimes(newOrderedItems, draggedItem); //steps out to update start times
       setItineraryItems(updatedItemsWithNewTimes);
     },
   }));
-
-  const updateStartTimes = (items: ItineraryItem[]) => {
+////////////////////////////////////////////update start times
+  const updateStartTimes = (items: ItineraryItem[], draggedItem: ItineraryItem) => {
     const updatedItems = [...items];
-    const dayStartTime = new Date(itineraryItems[0].startTime?.time || Date.now());
+    const dayStartTime = new Date(travelDate);
+  
+    if (itineraryItems[0]?.startTime?.time) {
+      const firstItemTime = new Date(itineraryItems[0].startTime.time);
+      dayStartTime.setHours(firstItemTime.getHours());
+      dayStartTime.setMinutes(firstItemTime.getMinutes());
+    }
+    
     for (let i = 0; i < updatedItems.length; i++) {
-      const previousItem = i===0 ? undefined : updatedItems[i - 1];
-      const previousEndTime = new Date(previousItem?.endTime?.time || Date.now());
-      const currentItemDuration = parseInt(updatedItems[i].activityDuration || "0") || 0;
-      const newStartTime = new Date(i===0 ? dayStartTime : previousEndTime.getTime() );
-      const newEndTime = new Date(newStartTime.getTime() + currentItemDuration);
-      console.log("newStartTime", newStartTime)
+      const previousEndTime = i === 0 ? undefined: new Date(
+        travelDate.getFullYear(),
+        travelDate.getMonth(),
+        travelDate.getDate(),
+        updatedItems[i-1].endTime?.time?.getHours() || 0,
+        updatedItems[i-1].endTime?.time?.getMinutes() || 0);
+      const currentItemDuration = updatedItems[i].activityDuration || 0;
+      let userDefinedRespectedTime = updatedItems[i].userDefinedRespectedTime;
+
+      let newStartTime; 
+   
+     if(updatedItems[i].id === draggedItem.id && updatedItems[i].userDefinedRespectedTime === true)
+      {
+        userDefinedRespectedTime = false;
+      }
+    
+    if (i === 0 && updatedItems[i].userDefinedRespectedTime === false) {
+        newStartTime = dayStartTime;
+    } else if (updatedItems[i].userDefinedRespectedTime === true) {
+        newStartTime = new Date(
+        travelDate.getFullYear(),
+        travelDate.getMonth(),
+        travelDate.getDate(),
+        updatedItems[i].startTime?.time?.getHours() || 0,
+        updatedItems[i].startTime?.time?.getMinutes() || 0
+      )
+    } else {
+        newStartTime = previousEndTime;
+    }
+      
+      const newEndTime = newStartTime ? new Date(newStartTime.getTime() + currentItemDuration): updatedItems[i].endTime?.time;
+
+
       updatedItems[i] = {
         ...updatedItems[i],
+        userDefinedRespectedTime: userDefinedRespectedTime,
         startTime: {...updatedItems[i].startTime, time: newStartTime, beingEdited: updatedItems[i].startTime?.beingEdited ?? false}, 
         endTime: {...updatedItems[i].startTime, time: newEndTime, beingEdited: updatedItems[i].endTime?.beingEdited ?? false}
       };

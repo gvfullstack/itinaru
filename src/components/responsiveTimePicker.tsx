@@ -21,10 +21,17 @@ const ResponsiveTimePicker = ({ itineraryItem, propertyName }: ResponsiveTimePic
   const [selectedTime, setSelectedTime] = useState<Date | null>(itineraryItem[propertyName]?.time ?? null);
 
   const handleTimeEdit = (time: Date | null) => {
+    
     if (time !== null && selectedTime !== null) {
       const index = itineraryItemsInState.findIndex(item => item.id === itineraryItem.id);
+      const startTime = propertyName==="startTime" ? Number(selectedTime) : Number(itineraryItem.startTime?.time);
+      const endTime = propertyName==="endTime" ? Number(selectedTime) : Number(itineraryItem.endTime?.time);
+      const updatedDuration = endTime - startTime;
+  
       const updatedItem = {
         ...itineraryItem,
+        activityDuration: updatedDuration,
+        userDefinedRespectedTime: true,
         [propertyName]: {
           ...itineraryItem[propertyName],
           time: selectedTime,
@@ -36,6 +43,7 @@ const ResponsiveTimePicker = ({ itineraryItem, propertyName }: ResponsiveTimePic
       setItineraryItemsInState(newItems);
     }
   };
+  
 
   const handleClose = () => {
     handleTimeEdit(selectedTime);

@@ -108,7 +108,7 @@ const DraggableItineraryItem: React.FC<DraggableItineraryItemProps> = ({
       [propertyName === "startTime" ? "endTime": "startTime"]: {
           ...itineraryItem[propertyName === "startTime" ? "endTime": "startTime"],
           beingEdited: false, 
-        }
+        },
     };
     const newItems = [...itineraryItemsInState];
     newItems[index] = updatedItem;
@@ -131,24 +131,10 @@ const DraggableItineraryItem: React.FC<DraggableItineraryItemProps> = ({
       }
       return item;
     });
+    
     setItineraryItemsInState(newItemsWithFalseBeingEdited);
   };
 
-  const handleOnBlur = (propertyName: "startTime" | "endTime") => {
-    const index = itineraryItemsInState.findIndex(item => item.id === itineraryItem.id);
-    const updatedItem = {
-      ...itineraryItem,
-      [propertyName]: {
-        ...itineraryItem[propertyName],
-        beingEdited: false, 
-      }
-    };
-
-    const newItems = [...itineraryItemsInState];
-    newItems[index] = updatedItem;
-
-    setItineraryItemsInState(newItems);
-  };
      
   return (
     <div ref={drag} style={itemStyle}  className={styles.dropDiv} >
@@ -187,7 +173,7 @@ const DraggableItineraryItem: React.FC<DraggableItineraryItemProps> = ({
                       {/* /////////////////////////////////// */}
                   <div className={styles.bottomItinContainer}>                  
                       <div className={styles.itinTitleContainer}>
-                          <h2 className={styles.itinTitle}>{itineraryItem.venue}</h2>
+                          <h2 className={styles.itinTitle}>{itineraryItem.title}</h2>
                       </div>
                       
                   </div>
@@ -241,12 +227,12 @@ const DraggableItineraryItem: React.FC<DraggableItineraryItemProps> = ({
                           </div>       
                   </div>
                   <div className={styles.expandedItinItemWebsite}>
-                        <a href={`https://www.google.com/search?q=${itineraryItem.venue ? encodeURIComponent(itineraryItem.venue):""}`}  target="_blank">Search Venue on Google</a>
+                        <a href={`https://www.google.com/search?q=${itineraryItem.title ? encodeURIComponent(itineraryItem.title):""}`}  target="_blank">Search on Google</a>
                   </div>
 
                   <div className={styles.youtubeLink}>
-                        <a href={`https://www.youtube.com/results?search_query=${itineraryItem.venue ? encodeURIComponent(itineraryItem.venue.toString()):""}`} target="_blank">
-                            Search Venue on YouTube</a>
+                        <a href={`https://www.youtube.com/results?search_query=${itineraryItem.title ? encodeURIComponent(itineraryItem.title.toString()):""}`} target="_blank">
+                            Search on YouTube</a>
                   </div>
             </div>
       </div>

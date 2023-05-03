@@ -17,9 +17,9 @@ export type Neighborhoods = {
   }
 
   export type ItineraryItem = {
-    venue?: string;
-    startTime?: {time: Date, beingEdited: boolean};
-    endTime?: {time: Date, beingEdited: boolean};
+    title?: string;
+    startTime?: {time?: Date, beingEdited?: boolean};
+    endTime?: {time?: Date, beingEdited?: boolean};
     description?: string;
     locationAddress?: string;
     locationWebsite?: string;
@@ -27,7 +27,8 @@ export type Neighborhoods = {
     descHidden?: boolean;
     id?: string;
     averageWeather?: string;
-    activityDuration?: string;
+    activityDuration?: number;
+    userDefinedRespectedTime?: boolean;
   }
 
 
@@ -43,6 +44,7 @@ export type HandleInputChange = (key: string, value: any) => void;
 export type MultiSelectHandler = (key: string, value: any) => void;
 
 export type DefinedProps = {
+      displayIntroText?: boolean;
       displayBudgetInput?: boolean;
       displayDatePicker?: boolean;
       displayTimePicker?: boolean;

@@ -48,14 +48,17 @@ const CreateItineraryButton: React.FC<DefinedProps> = (props) => {
     const inScopeThemes = selectedThemeOptions + ',' + userDefinedThemes;
     const inScopeAgeRanges = ageRangeOptions.filter((ageRange: { label: string, selected: boolean}) => ageRange.selected === true).map((ageRange)=>ageRange.label).join(',');
     const neighborhoodSelections = neighborhoods.filter((neighborhood: Neighborhoods) => neighborhood.selected === true).map((neighborhood)=>neighborhood.neighborhood).join(',');
-    
+    const paramItinStartTime = itinStartTime.toLocaleString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
+    const paramItinEndTime = itinEndTime.toLocaleString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
+    const paramTravelDate = travelDate ? new Date(travelDate).toISOString().substring(0, 10) : '';
+
 
     axios.post(baseUrl +'/api/itinaru/trip', 
     {
       destination: destination, 
       selectedPace: selectedPace,
-      itinEndTime: itinEndTime,
-      itinStartTime: itinStartTime,
+      itinStartTime: paramItinStartTime,
+      itinEndTime: paramItinEndTime,
       specificSites: specificSites,
       excludedSites: excludedSites,
       travelerCount: travelerCount,
@@ -63,7 +66,7 @@ const CreateItineraryButton: React.FC<DefinedProps> = (props) => {
       inScopeThemes: inScopeThemes, 
       neighborhoodSelections: neighborhoodSelections,
       perPersonAverageBudget: perPersonAverageBudget,
-      travelDate: travelDate
+      travelDate: paramTravelDate
     }) 
       .then((response) => { 
         setCurStep("120T");
@@ -77,13 +80,34 @@ const CreateItineraryButton: React.FC<DefinedProps> = (props) => {
 
   const updateItineraryHiddenStatus = (itineraryItems: any[]) => {
     const itineraryItemsWithSelectedFalse = itineraryItems.map((itineraryItem: any) => { 
-      const startTime ={ time: new Date("1970-01-01T" + itineraryItem.startTime), beingEdited: false};
-      const endTime = {time: new Date("1970-01-01T" + itineraryItem.endTime), beingEdited: false};                                                  
+        const sTime = new Date(travelDate);
+        if (itineraryItem.startTime) {
+          const [startHours, startMinutes] = itineraryItem.startTime.split(':');
+          sTime.setHours(startHours);
+          sTime.setMinutes(startMinutes);
+        }
+      const startTime ={ time: sTime, beingEdited: false};
+
+        const eTime = new Date(travelDate);
+        if (itineraryItem.endTime) {
+          const [endHours, endMinutes] = itineraryItem.endTime.split(':');
+          eTime.setHours(endHours);
+          eTime.setMinutes(endMinutes);
+        }
+
+      const endTime = {time: eTime, beingEdited: false}; 
+      const userDefinedRespectedTime = false;     
+      const activityDuration = endTime.time.getTime() - startTime.time.getTime();       
+
       return {...itineraryItem, 
             descHidden: true, 
             id: uuidv4(), 
             startTime: startTime,
-            endTime: endTime}
+            endTime: endTime,
+            userDefinedRespectedTime: userDefinedRespectedTime,
+            activityDuration: activityDuration,
+            travelDate: travelDate 
+          }
     })
     setItineraryItems(itineraryItemsWithSelectedFalse)
   }

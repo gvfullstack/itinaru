@@ -27,13 +27,14 @@ const InitForm: React.FC<DefinedProps> = (props) => {
 
   return (
     <div className={styles.pageComponentContainer}>
-      <WelcomeText 
+     
+     {props.displayIntroText && <WelcomeText 
           introText={props.introText}
           infoText1={props.infoText1}
           infoText2={props.infoText2}
           prompt={props.prompt}
           pageStep={props.pageStep}
-      />
+      />}
 
       {props.singleSelectOptions && 
         <SingleSelectButtonList

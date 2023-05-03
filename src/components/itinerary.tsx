@@ -14,7 +14,7 @@ const Itinerary: React.FC = () => {
   const handleShowHideDescription = (curItineraryItem: ItineraryItem) => {
     setItineraryItems(prevState => {
       const updatedNeighborhoods = prevState.map((itineraryItem) => {
-        if(curItineraryItem.venue === itineraryItem.venue) {
+        if(curItineraryItem.title === itineraryItem.title) {
           return {...itineraryItem, descHidden: !itineraryItem.descHidden}
         }
         else {       

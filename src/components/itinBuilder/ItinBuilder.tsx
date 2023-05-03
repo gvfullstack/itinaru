@@ -77,7 +77,8 @@ const ItinBuilder = (props: any) => {
           nextButtonText: "Lets customize!", 
           shouldAutoFocus: stateVariables.shouldAutoFocus,
           separatorText: "OR",
-          userInputPlaceholder: "Enter a destination"        
+          userInputPlaceholder: "Enter a destination",
+          displayIntroText: true,        
         },
         {
           pageStep: "20T",
@@ -90,7 +91,8 @@ const ItinBuilder = (props: any) => {
           shouldAutoFocus: stateVariables.shouldAutoFocus,
           destination: stateVariables.destination,
           separatorText: "OR",
-          userInputPlaceholder: "Enter a travel date"
+          userInputPlaceholder: "Enter a travel date",
+          displayIntroText: true,        
         },
           
         {   
@@ -104,7 +106,8 @@ const ItinBuilder = (props: any) => {
           shouldAutoFocus: stateVariables.shouldAutoFocus,
           separatorText: "OR",
           userInputPlaceholder: "Enter a start time",
-          userInputPlaceholder2: "Enter an end time"  
+          userInputPlaceholder2: "Enter an end time",
+          displayIntroText: true,          
         },
         {
           pageStep: "40T",
@@ -117,7 +120,8 @@ const ItinBuilder = (props: any) => {
           specificSitesBool: stateVariables.specificSitesBool,
           backButtonText: backButtonText,
           shouldAutoFocus: stateVariables.shouldAutoFocus,
-          separatorText: "OR" 
+          separatorText: "OR",
+          displayIntroText: true,         
         },
         {   
           pageStep: "50T",
@@ -131,7 +135,8 @@ const ItinBuilder = (props: any) => {
           backButtonText: backButtonText,
           shouldAutoFocus: stateVariables.shouldAutoFocus,
           separatorText: "OR",
-          userInputPlaceholder: "optional: e.g. golden gate park, louvre, etc. "
+          userInputPlaceholder: "optional: e.g. golden gate park, louvre, etc. ",
+          displayIntroText: true,        
         },
         {
           pageStep: "60T",
@@ -144,7 +149,8 @@ const ItinBuilder = (props: any) => {
           backButtonText: backButtonText,
           shouldAutoFocus: stateVariables.shouldAutoFocus,
           separatorText: "OR",
-          userInputPlaceholder: "optional: e.g. alcatraz, Pier 39, etc."
+          userInputPlaceholder: "optional: e.g. alcatraz, Pier 39, etc.",
+          displayIntroText: true,        
 
         },
         {   
@@ -159,7 +165,8 @@ const ItinBuilder = (props: any) => {
           backButtonText: backButtonText,
           shouldAutoFocus: stateVariables.shouldAutoFocus,
           separatorText: "OR",
-          userInputPlaceholder: "Custom number of sites"
+          userInputPlaceholder: "Custom number of sites",
+          displayIntroText: true,        
 
           },
           {   
@@ -173,7 +180,8 @@ const ItinBuilder = (props: any) => {
             userInput1: travelerCountState,
             keyOfStateVariable: "travelerCount",
             separatorText: "OR",
-            userInputPlaceholder: "e.g. 2"
+            userInputPlaceholder: "e.g. 2",
+            displayIntroText: true,        
 
           },
           {   
@@ -188,7 +196,8 @@ const ItinBuilder = (props: any) => {
             nextButtonText: "age range set! Next!", 
             handleMultiSelect: handleMultiSelect,
             selectedOptions: stateVariables.ageRangeSelection,
-            separatorText: "OR"
+            separatorText: "OR",
+            displayIntroText: true,        
                 },
           {
             pageStep: "100T",
@@ -209,27 +218,28 @@ const ItinBuilder = (props: any) => {
             shouldAutoFocus: stateVariables.shouldAutoFocus,
             destination: stateVariables.destination,
             separatorText: "OR",
-            userInputPlaceholder: "e.g. 'art' or 'taverns'"
+            userInputPlaceholder: "e.g. 'art' or 'taverns'",
+            displayIntroText: true,        
             }, 
             {
             pageStep: "110T",
             prevPageStep: "100T",
             nextPageStep: "120T",
-
             createButtonText: createButtonText,
             backButtonText: backButtonText,
-            // nextButtonText: "to my suggestions",
             handleMultiSelect: handleMultiSelect,
             shouldAutoFocus: stateVariables.shouldAutoFocus,
             separatorText: "OR",
             showNeighborhoods: true,
+            displayIntroText: true,        
             },
             {   
             pageStep: "120T",
             prevPageStep: "110T",
             nextPageStep: "130T",
             backButtonText: "<<<",
-            itineraryItemsState: itineraryItemsState
+            itineraryItemsState: itineraryItemsState,
+            displayIntroText: false,        
           }
       ]
 
@@ -258,7 +268,7 @@ return (
           ))}
     {stateVariables.isLoading && (<IsLoadingPage />)}
           {props.children}
-          <button onClick={()=>console.log(itineraryItems)}>log state</button>
+          <button onClick={()=>consolelog(itineraryItems)}>log state</button>
   </div>
 );
           }
