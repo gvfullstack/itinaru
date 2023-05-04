@@ -3,6 +3,10 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import cache from 'memory-cache';
 import rateLimit from 'express-rate-limit';
 
+export const config = {
+  runtime: "edge"
+};
+
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
