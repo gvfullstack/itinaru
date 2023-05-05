@@ -245,4 +245,4 @@ function withLimiter(handler: (req: NextApiRequest, res: NextApiResponse) => Pro
 }
 
 
-export default withLimiter(requestItineraryFunction)
+export default requestItineraryFunction
