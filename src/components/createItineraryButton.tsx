@@ -53,7 +53,7 @@ const CreateItineraryButton: React.FC<DefinedProps> = (props) => {
     const paramTravelDate = travelDate ? new Date(travelDate).toISOString().substring(0, 10) : '';
 
 
-    axios.post("itinaru-git-version3-itinaru.vercel.app" +'/api/itinaru/trip', 
+    axios.post('itinaru-git-version3-itinaru.vercel.app/api/itinaru/trip', 
     {
       destination: destination, 
       selectedPace: selectedPace,
