@@ -193,7 +193,13 @@ async function requestItineraryFunction(
         const prompt = generatePrompt(req.body)
         console.log(prompt)
     ////////////////////////////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
+    res.setHeader(
+      "Access-Control-Allow-Headers",
+      "Content-Type, Authorization, Content-Length, X-Requested-With"
+    );
+    
     try {
      const completion = await openai.createChatCompletion({
         model: "gpt-3.5-turbo",
