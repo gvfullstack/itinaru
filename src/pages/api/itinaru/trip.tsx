@@ -1,7 +1,7 @@
 import { Configuration, OpenAIApi } from "openai";
 import type { NextApiRequest, NextApiResponse } from 'next'
 import cache from 'memory-cache';
-import rateLimit from 'express-rate-limit';
+import rateLimit from 'micro-ratelimiter';
 
 export const config = {
   runtime: "edge"
@@ -25,11 +25,8 @@ type Error = {
 
 // create a rate limiter with a maximum of 5 requests per minute
 const limiter = rateLimit({
-  windowMs: 60 * 1000, // 1 minute
-  max: 5, // limit each IP to 5 requests per windowMs
-  keyGenerator: function (req, res) {
-    return req.socket.remoteAddress;
-  },
+  interval: 60 * 1000, // 1 minute
+  max: 5, // limit each IP to 5 requests per interval
 });
 
 async function requestItineraryFunction(
@@ -199,7 +196,7 @@ async function requestItineraryFunction(
       "Access-Control-Allow-Headers",
       "Content-Type, Authorization, Content-Length, X-Requested-With"
     );
-    
+
     try {
      const completion = await openai.createChatCompletion({
         model: "gpt-3.5-turbo",
@@ -244,11 +241,23 @@ async function requestItineraryFunction(
 
 function withLimiter(handler: (req: NextApiRequest, res: NextApiResponse) => Promise<void>) {
   return async (req: NextApiRequest, res: NextApiResponse) => {
-    limiter(req, res, () => {
-      handler(req, res);
-    });
+    try {
+      await limiter(req);
+      await handler(req, res);
+    } catch (error) {
+      if (error instanceof Error) {
+        if (error.message === 'Rate limit exceeded') {
+          res.status(429).json({ error: { message: 'Rate limit exceeded' } });
+        } else {
+          console.error(error.message);
+          res.status(500).json({ error: { message: 'Internal server error' } });
+        }
+      } else {
+        console.error(`Unexpected error: ${error}`);
+        res.status(500).json({ error: { message: 'Internal server error' } });
+      }
+    }
   };
 }
-
 
 export default withLimiter(requestItineraryFunction)

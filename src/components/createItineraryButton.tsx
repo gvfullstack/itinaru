@@ -52,8 +52,8 @@ const CreateItineraryButton: React.FC<DefinedProps> = (props) => {
     const paramItinEndTime = itinEndTime.toLocaleString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
     const paramTravelDate = travelDate ? new Date(travelDate).toISOString().substring(0, 10) : '';
 
-
-    axios.post('itinaru-git-version3-itinaru.vercel.app/api/itinaru/trip', 
+    // axios.post('http://localhost:3000/api/itinaru/trip', 
+    axios.post(baseUrl +'/api/itinaru/trip', 
     {
       destination: destination, 
       selectedPace: selectedPace,
