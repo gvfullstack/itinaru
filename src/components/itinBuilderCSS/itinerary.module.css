@@ -1,0 +1,260 @@
+/* parent */
+.itineraryArrOfItemsContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100vw;
+    height: 80vh;
+    /* cursor: pointer; */
+    margin-bottom: .1rem;
+    margin-top: .1rem;
+}
+/* /////utility section */
+.utilitySection{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: right;
+    width: 100%;
+    height: 3.2rem;
+    border: none;
+}
+.shareItineraryButton{
+    border: none;
+    color: rgb(36, 35, 35);
+    background-color: white;
+    height: 100%;
+    font-family: "roboto", sans-serif;
+    font-size: 17px;
+}
+.addItineraryItemButton{
+    border: none;
+    color: rgb(36, 35, 35);
+    background-color: white;
+    margin: 0 .5rem 0 2rem;
+    width: 3rem;
+    height: 100%;
+    font-size: 2rem;
+    font-weight: 500;
+
+}
+/* /////////////////////// */
+
+.itineraryParent{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 90vw;
+    height: 4.2rem;
+    margin-bottom: 0rem;
+    padding: .1rem;
+}
+
+/* /////////////Main Itin Item View///////////////////// */
+.itineraryItemContainerContainer{
+    display: flex;
+    flex-direction: column;
+    width: 95%;
+    justify-content: center;
+    align-items: center;
+}
+
+.mainItinItemContainer{
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: #FF7890;
+    /* cursor: pointer; */
+}
+.activityTime{
+    height: 25%;
+    width: 50%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-items: right;
+    font-family: 'Roboto', sans-serif;
+    text-align: right;
+    color: #F3EFEF;
+    padding: .25rem;
+}
+.startTime,
+.timeSeparator,
+.endTime{
+    width: fit-content;
+    font-size: 12px;
+    padding: .25rem 0 0 0 ;
+    margin: 0 .5rem;
+    line-height: 10px;
+}
+.bottomItinContainer{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 75%;
+}
+.itinTitleContainer{
+    height: 75%;
+    width: 100%;
+    text-align: center;
+    display: flex;
+    padding-top: .25rem;
+    flex-direction: column;
+    align-items: center;
+}
+.itinTitle{
+    display: flex;
+    justify-content: center;
+    font-family: 'Roboto', sans-serif;
+    font-size: 12px;
+    color: #F3EFEF;
+    font-weight: 300;
+    padding:0px;
+    margin:0px;
+    height: 75%;
+    width: 100%;
+    
+}
+.belowTitleCaretContainer{
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    width: 40%;
+    height: 35%;
+    color: #F3EFEF;
+    padding: 0px;
+    margin: 0px;
+    font-size: 20px;
+    border-style: none ;
+}
+
+.hamburgerMenuContainer{
+    height: 100%;
+    width: 5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    color: #F3EFEF;
+    border-radius: 0px 10px 10px 0px;
+}
+
+/* /////////////Expanded Itin Item View///////////////////// */ 
+
+
+.expandedItinItemContainer{
+    position: absolute;
+    top: 3rem;
+    left: 0;
+    /* z-index: 25; */
+    visibility: hidden; /*hide by default */
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    width: 0;
+    height: 0;
+    cursor: pointer;
+    font-weight: 300;
+    background-color: #FC4869;
+    opacity: .95;
+}
+
+.isShown{
+    visibility: visible;
+    width: 100%;
+    height: 100vh;
+}
+
+.expandedItinMapContainer{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 3rem;
+    color: #F3EFEF;
+    /* background-color: #FF7890; */
+    padding: 1.5rem 0rem 2rem 0rem;
+    align-items: center;
+     }
+            .expandedItinMapText{
+                padding: .5rem 0rem 0rem 2rem;
+                color: #F3EFEF;
+                font-family: "roboto", sans-serif;
+                font-size: 22px;
+                width: 80%;
+                height: 100%;
+                display: flex;
+                justify-content: left;
+                align-items: center;
+
+            }
+
+            .expandedItinMapIcon {
+                width: 3rem; /* Adjust the width */
+                height: 2rem; /* Adjust the height */  
+                display: flex;
+                justify-content: left;
+                align-items: center;
+                padding: .25rem .25rem 0rem .25rem;
+            }
+
+.expandedItinItemText,
+.expandedItinItemWebsite,
+.expandedItinBudgetContainer,
+.expandedItinAddressContainer,
+.youtubeLink a{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: fit-content;
+    padding: .5rem 2rem 1rem 2rem;
+    background-color: transparent;
+    cursor: pointer;
+    font-family: "roboto", sans-serif;
+    font-size: 22px;
+    color: #F3EFEF;
+    
+}
+.expandedMidTextWrapper{
+    display: flex;
+    flex-direction: row;
+}
+.expandedMidGroupingIndicator{
+    width: 1rem;
+    background-color: #F3EFEF;
+    border-radius: 10rem;
+}
+.expandedMidGroupingRightEmpty{
+    width: 1rem;
+}
+/* .expandedItinItemWebsite{
+    padding: 3px 27px 40px 27px;
+} */
+
+.expandedItinItemWebsite a {
+    color: #F3EFEF;
+}
+
+.expandedItinYouTubeContainer{
+    height: 45%;
+    width: 100%;
+    margin-top: 1px ;
+}
+
+/* .ytVidIntro{
+    color: rgb(46, 46, 46);
+    font-family: "roboto", sans-serif;
+    font-weight: 400;
+    padding: 5px 20px 3px 20px;
+    text-decoration: underline;
+    margin-bottom: 5px;
+
+} */
+

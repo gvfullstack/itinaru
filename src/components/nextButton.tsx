@@ -1,74 +1,78 @@
 import React from "react";
 import axios from 'axios';
+import { useRecoilState } from 'recoil';
+import { DefinedProps } from "@/typeDefs";
 import getConfig from 'next/config';
-import style from './nextButton.module.css';
+import style from './itinBuilderCSS/nextButton.module.css';
+import { neighborhoodsState, curStepState, destinationState,
+   userDefinedThemesState, themeOptionsState, ageRangeOptionsState} from "../../src/atoms/atoms"
 
 
 const {serverRuntimeConfig, publicRuntimeConfig} = getConfig();
 const { BASE_URL } = publicRuntimeConfig;
 
-type HandleInputChange = (key: string, value: string | number | Date | undefined | boolean | string[] |
-  {neighborhood: string
-   loc?: { lat: number, lng: number }[]}[]
-) => void;
+const NextButton: React.FC<DefinedProps> = (props) => {
+  const [neighborhoods, setNeighborhoods] = useRecoilState(neighborhoodsState);
+  const [userDefinedThemes, setUserDefinedThemes] = useRecoilState(userDefinedThemesState);
+  const [themeOptions, setThemeOptions] = useRecoilState(themeOptionsState);
+  const [ageRangeOptions, setAgeRangeOptions] = useRecoilState(ageRangeOptionsState);
+  const [destination, setDestinationOptions] = useRecoilState(destinationState);
+  
 
-interface Neighborhoods {
-  neighborhood: string;
-  loc: { lat: number, lng: number }[];
-}
-
-interface Props {
-
-  handleInputChange?: HandleInputChange; 
-  nextButtonText?: string;
-  nextPageStep?: string
-  nextButtonStaticValue?: string | boolean | number | readonly string[]
-  specificSitesBool?: boolean
-  nextPageStepR2?: string
-  destination?: string
-  nextButtonGenerateAPI?: boolean;
-  multipleSelectOptions?: string[] | Neighborhoods[];  
-  keyOfMultiSelectButton?: string;
-}
-
-const NextButton: React.FC<Props> = (props) => {
-
+  const [curStep, setCurStep] = useRecoilState(curStepState);
+  
   const handleInputChange = props.handleInputChange ? props.handleInputChange : () => {};
   const nextButtonGenerateAPI = props.nextButtonGenerateAPI ? props.nextButtonGenerateAPI : false;
   
 
   const normalExecutionBlock = () => {
-    if (props.nextButtonStaticValue === undefined) {
-      handleInputChange("curStep", props.nextPageStep);
-    } 
-    else if(props.nextButtonStaticValue === true){
-      handleInputChange("curStep", props.nextPageStep);
-      handleInputChange("specificSitesBool", props.nextButtonStaticValue);
-    } 
-    else if(props.nextButtonStaticValue === false){
-      handleInputChange("curStep", props.nextPageStepR2);
-      handleInputChange("specificSitesBool", props.nextButtonStaticValue);
-    } 
-  }
+    if(props.nextPageStep){
+      if (props.nextButtonStaticValue === undefined) {
+        setCurStep(props.nextPageStep);
+      } 
+      else if(props.nextButtonStaticValue === true){
+        setCurStep(props.nextPageStep);
+        handleInputChange("specificSitesBool", props.nextButtonStaticValue);
+      } 
+      else if(props.nextButtonStaticValue === false){
+        if(props.nextPageStepR2){
+          setCurStep(props.nextPageStepR2);}
+          handleInputChange("specificSitesBool", props.nextButtonStaticValue);
+      } 
+  }}
 
-  const updateNeighborhoods = (neighborhoods: {
-                                neighborhood: string
-                                loc?: { lat: number, lng: number }[]
-                              }[]) => {
-                                
-     handleInputChange("multipleSelectObjects", neighborhoods);
+  const updateNeighborhoods = (neighborhoods: any[]) => {
+     const neighborhoodsWithSelectedFalse = neighborhoods.map((neighborhood: any) => {                                                       
+        return {...neighborhood, selected: false, descHidden: true}
+      })
+    //  handleInputChange("multipleSelectObjects", neighborhoods);
+     setNeighborhoods(neighborhoodsWithSelectedFalse)
+     console.log("neighborhoods", neighborhoods)
   }
  
 
   const apiExecutionBlock = () => {
     handleInputChange("isLoading", true);
-    const baseUrl = 'http://localhost:3000';
-    axios.post(baseUrl +'/api/neighborhood/city', { city: "san fransisco" }) 
-      .then((response) => { 
-        setTimeout(()=> handleInputChange("isLoading",false), 100);
-        normalExecutionBlock();
-        updateNeighborhoods(response.data);
+    const baseUrl = BASE_URL;
+    const selectedThemeOptions = themeOptions.filter((theme: { label: string, selected: boolean}) => theme.selected === true).map((theme)=>theme.label).join(',');
+    const inScopeThemes = selectedThemeOptions + ',' + userDefinedThemes;
+    const inScopeAgeRange = ageRangeOptions.filter((ageRange: { label: string, selected: boolean}) => ageRange.selected === true).map((ageRange)=>ageRange.label).join(',');
 
+   
+    axios.post(baseUrl +'/api/neighborhood/destination', 
+    {destination: destination, 
+      inScopeThemes: inScopeThemes, 
+      inScopeAgeRange: inScopeAgeRange}) 
+
+      .then((response) => { 
+        normalExecutionBlock();
+        console.log("success", response.data.neighborhoods);
+        updateNeighborhoods(response.data.neighborhoods);
+        
+      }).catch((error) => {
+        console.log("error", error);
+      }).finally(() => {
+        handleInputChange("isLoading", false);
       })
   }
 
@@ -79,9 +83,10 @@ const NextButton: React.FC<Props> = (props) => {
       normalExecutionBlock();
     }
   }
+  let disabled = !destination ? true : false;
 
   return <div className={style.nextButtonContainer}>
-    <button className={style.nextButton}onClick={handleClick} >{props.nextButtonText}</button>
+    <button className={`${style.nextButton} ${disabled? style.disabled:""}`} onClick={handleClick} disabled={disabled}>next</button>
     </div>
 };
 

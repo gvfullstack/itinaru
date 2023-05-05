@@ -1,24 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import styles from './brandName.module.css';
+import styles from './itinBuilderCSS/brandName.module.css';
+
+
+
 
 const BrandName: React.FC = () => {
-  const [visible, setVisible] = useState(true);
+  const [animationComplete, setAnimationComplete] = useState(false);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setVisible(false);
-    }, 2000); // Match the animation duration
+  const handleAnimationEnd = () => {
+    setAnimationComplete(true);
+  };
 
-    return () => {
-      clearTimeout(timer);
-    };
-  }, []);
 
-  return visible ? (
-    <div className={styles.brandNameContainer}>
-      <h1 className={styles.brandName}>itinaru</h1>
+  return  (
+    <div className={`${styles.brandNameContainer} ${animationComplete ? styles.animationComplete : ''}`} 
+      onAnimationEnd={handleAnimationEnd}>
+    <h1 className={`${styles.brandName} ${animationComplete ? styles.animationComplete : ''}`}>itinaru</h1>
     </div>
-  ) : null;
+  ) 
+  
 };
 
 export default BrandName;

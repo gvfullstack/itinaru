@@ -1,0 +1,90 @@
+.buttonAndDescContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+}
+.multiSelectButtonContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.buttonContainer{
+    display: flex;
+    flex-direction: column;
+    background-color: #FF7890;
+    border-radius: 10px;
+    margin-bottom: .25rem;
+    font-family: 'Roboto', sans-serif;
+    width: 100%;
+    z-index: 50;
+    align-items: center;
+}
+
+.caretContainer{
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    width: 25%;
+    height: fit-content;
+    color: #F3EFEF;
+    background-color: transparent;
+    font-size: 15px;
+    border-style: none ;
+
+}
+
+.multiSelectButton{
+    background-color: transparent;
+    color: #F3EFEF;
+    width: 100%;
+    max-width: 25rem;
+    height: fit-content;
+    padding: 5px 0px 0px 0px;
+    border-style: solid;
+    border-width: 0px ;
+    font-size: 12px;
+    border-radius: 10px;
+}
+
+.selected{
+    background-color: #FC4869;
+    color: #F3EFEF;
+    
+}
+
+
+.extendedDescription {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #FC4869;
+    opacity: .95;
+    z-index: 25;
+    padding: 10rem 2rem 5rem 2rem;
+    visibility: hidden; /* hide by default */
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+    font-family: 'Roboto', sans-serif;
+    color: #F3EFEF;
+
+  }
+  
+  .isShown {
+    visibility: visible; /* display when isShown class is added */
+    z-index: 100;
+
+  }

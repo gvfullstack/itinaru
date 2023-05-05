@@ -1,55 +1,51 @@
-import React, { useState } from "react";
-import styles from "./singleSelectButton.module.css";
+import React, { useEffect, useState } from "react";
+import styles from "./itinBuilderCSS/singleSelectButton.module.css";
+import { DefinedProps } from "../../src/typeDefs";
+import { useRecoilState, RecoilState } from "recoil";
+import {defaultAtom, selectedPaceState} from "@/atoms/atoms";
+
 
 const { v4: uuidv4 } = require('uuid');
 
-type HandleInputChange = (key: string, value: string | number | Date | undefined | boolean | string[]) => void;
-
-interface PageComponentProps {
-  paceOptions: string[];
-  handleInputChange?: HandleInputChange; 
-  selectedPaceOption?: string
-  shouldAutoFocus?: boolean
+type Option = {
+  numVal: string;
+  label: string;
+  selected: boolean;
 }
 
-const singleSelectButtonList: React.FC<PageComponentProps> = (props) => {
-  
-  const handleInputChange = props.handleInputChange ? props.handleInputChange : () => {};
 
-  const handleOptionSelect = (option: string, index: number) => {
+const SingleSelectButtonList: React.FC<DefinedProps> = (props) => {
+  const [value, setValue] = useRecoilState<Option[]>(props.singleSelectOptions ??  defaultAtom);
+  const [selectedPace, setSelectedPace] = useRecoilState(selectedPaceState);
 
-    const extractedPaceNumber = index + 1
-    if (props.shouldAutoFocus) {
-      handleInputChange("shouldAutoFocus", false);
+  const handleOptionSelect = (option: Option) => {
+    if(props.keyOfStateVariable==="specificPace") {
+        setSelectedPace(option.numVal)
     }
 
-    if (props.selectedPaceOption === option) {
-      handleInputChange("pace", undefined);
-      handleInputChange("selectedPaceOption", undefined);
-    } else {
-      handleInputChange("pace", extractedPaceNumber);
-      handleInputChange("selectedPaceOption", option);
-      handleInputChange("specificPace", extractedPaceNumber);
-
-    }
-   
-
+    const newValue = value.map((item) => ({
+      ...item,
+      selected: item.label === option.label ? true : false,
+    }));
+    setValue(newValue);
   };
+
+  useEffect(() => {console.log(value)})
 
   return (
     <div className={styles.singleSelectButtonContainer}>
-      {props.paceOptions.map((option, index) => (
+      {value.map((option: Option) => (
+          <button
+          key={uuidv4()}
+          onClick={() => handleOptionSelect(option)}
+          className={`${styles.singleSelectButton} ${option.selected ? styles.selected : ""}`}
+          >
+            {option.label}
+          </button>   
 
-        <button
-        key={uuidv4()}
-        onClick={() => handleOptionSelect(option, index)}
-        className={`${styles.singleSelectButton} ${props.selectedPaceOption === option ? styles.selected : ""}`}
-        >
-          {option}
-        </button>
       ))}
     </div>
   );
 };
 
-export default singleSelectButtonList;
+export default SingleSelectButtonList;

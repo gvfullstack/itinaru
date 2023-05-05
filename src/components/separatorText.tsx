@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./separatorText.module.css";
+import styles from "./itinBuilderCSS/separatorText.module.css";
 
 type PageComponentProps = { 
   separatorText?: string;
