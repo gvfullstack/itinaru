@@ -36,6 +36,11 @@ async function requestNeighborhoodsFunction(
   req: NextApiRequest,
   res: NextApiResponse<any | Error>
 ) {
+  // Create and configure the OpenAI API client
+  const configuration = new Configuration({
+    apiKey: process.env.OPENAI_API_KEY,
+  });
+
   // apply the rate limiter middleware to this route
     const destination = req.body.destination || '';
     if (destination.trim().length === 0) {

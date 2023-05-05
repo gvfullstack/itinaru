@@ -171,17 +171,17 @@ const DraggableItineraryItem: React.FC<DraggableItineraryItemProps> = ({
                           </div>
                         </div>
                       {/* /////////////////////////////////// */}
-                  <div className={styles.bottomItinContainer}>                  
+                  <div className={styles.bottomItinContainer} onClick={()=>handleShowHideDescription(itineraryItem)}>                  
                       <div className={styles.itinTitleContainer}>
                           <h2 className={styles.itinTitle}>{itineraryItem.title}</h2>
                       </div>
                       
                   </div>
-                  <div className={styles.belowTitleCaretContainer}
+                  {/* <div className={styles.belowTitleCaretContainer}
                       onClick={()=>handleShowHideDescription(itineraryItem)}
                           >
                             {caretDown2}
-                  </div>
+                  </div> */}
               </div>
               <div className={styles.hamburgerMenuContainer}>
                           {ellipsisVertical}

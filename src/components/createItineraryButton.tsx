@@ -67,9 +67,6 @@ const CreateItineraryButton: React.FC<DefinedProps> = (props) => {
       neighborhoodSelections: neighborhoodSelections,
       perPersonAverageBudget: perPersonAverageBudget,
       travelDate: paramTravelDate
-    },
-    {
-      timeout: 1000000000, // Timeout in milliseconds, e.g., 10000ms = 10 seconds
     }
     ) 
       .then((response) => { 
