@@ -2,6 +2,7 @@
   "name": "itinarue",
   "version": "0.1.0",
   "private": true,
+  "proxy": "https://www.itinaru.com",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
