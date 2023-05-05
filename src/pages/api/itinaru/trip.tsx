@@ -36,6 +36,8 @@ async function requestItineraryFunction(
   req: NextApiRequest,
   res: NextApiResponse<any | Error>
 ) {
+  console.log(req.body); // add this line
+
     const destination = req.body.destination || '';
     if (destination.trim().length === 0) {
       res.status(400).json({
