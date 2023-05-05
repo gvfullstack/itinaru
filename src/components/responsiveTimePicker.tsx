@@ -72,10 +72,10 @@ const ResponsiveTimePicker = ({ itineraryItem, propertyName }: ResponsiveTimePic
                   maxTime={maxTime}  
                   sx={{"& .MuiOutlinedInput-root": {color: "#F3EFEF"},
                   "& .MuiInputLabel-root": {color: "#F3EFEF", fontSize: "12px"},
-                  "& .MuiOutlinedInput-input": {border: "none", height: "0px", width: "55px", padding: "7px 5px", margin: "0px"},
+                  "& .MuiOutlinedInput-input": {border: "none", height: "0px", width: "55px", padding: "5px 5px", margin: "0px"},
                 }}
                   slotProps={{
-                    layout: {sx: {fontSize: "20px"}},
+                    layout: {sx: {fontSize: "18px"}},
                   }}
                 />
             </LocalizationProvider>

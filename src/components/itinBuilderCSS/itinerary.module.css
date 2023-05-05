@@ -72,7 +72,7 @@
 }
 .activityTime{
     height: 25%;
-    width: 100%;
+    width: 50%;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -95,6 +95,8 @@
 .bottomItinContainer{
     display: flex;
     flex-direction: row;
+    width: 100%;
+    height: 75%;
 }
 .itinTitleContainer{
     height: 75%;
