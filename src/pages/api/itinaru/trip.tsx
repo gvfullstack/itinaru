@@ -3,9 +3,9 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import cache from 'memory-cache';
 import rateLimit from 'express-rate-limit';
 
-export const config = {
-  runtime: "edge"
-};
+// export const config = {
+//   runtime: "edge"
+// };
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
@@ -36,8 +36,6 @@ async function requestItineraryFunction(
   req: NextApiRequest,
   res: NextApiResponse<any | Error>
 ) {
-  console.log(req.body); // add this line
-
     const destination = req.body.destination || '';
     if (destination.trim().length === 0) {
       res.status(400).json({
@@ -247,4 +245,4 @@ function withLimiter(handler: (req: NextApiRequest, res: NextApiResponse) => Pro
 }
 
 
-export default requestItineraryFunction
+export default withLimiter(requestItineraryFunction)
