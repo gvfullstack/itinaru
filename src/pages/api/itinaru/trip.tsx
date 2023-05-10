@@ -3,10 +3,6 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import cache from 'memory-cache';
 import rateLimit from 'express-rate-limit';
 
-export const config = {
-  runtime: 'edge',
-}
-
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
@@ -28,12 +24,7 @@ const limiter = rateLimit({
   windowMs: 60 * 1000, // 1 minute
   max: 5, // limit each IP to 5 requests per windowMs
   keyGenerator: function (req, res) {
-    const remoteAddress = req.socket.remoteAddress;
-    if (remoteAddress) {
-      return remoteAddress;
-    } else {
-      return Promise.reject(new Error("Unable to determine remote address."));
-    }
+    return req.socket.remoteAddress;
   },
 });
 
@@ -83,7 +74,7 @@ async function requestItineraryFunction(
     // `````````````````````````````````````````````````````````````````````````````
     const generateDestinationPrompt = (data: any) => {
       if (!destination || destination === '') return '';
-      return `Return one itinerary for ${destination} in JSON format. `;
+      return `Return an itinerary for ${destination} in JSON format. `;
     }
     
     // const generatePacePrompt = (data: any) => {
@@ -197,35 +188,18 @@ async function requestItineraryFunction(
                 {   
                     "title": "Golden Gate Bridge Welcome Center",
                     "startTime": "09:30",
-                    
+                    "endTime": "11:35",
+                    "description": 
+                    "Begin your tour of the Golden Gate Bridge at the Welcome Center, located at the southeastern end of the bridge. Here, you can get maps, brochures, and information about the bridge's history and construction."                    
+                    "locationAddress": "501 Stanyan St, San Francisco, CA 94117",
+                    "locationWebsite": "google.com",
+                    "expectedPerPersonBudget": "$10-$15",
+                    "averageWeather": 45 F Cloudy Windy,
                 },
 
             ...
       ] `
-      ;
-    }
-    
-    // "endTime": "11:35",
-    // "description": 
-    // "Begin your tour of the Golden Gate Bridge at the Welcome Center, located at the southeastern end of the bridge. Here, you can get maps, brochures, and information about the bridge's history and construction."                    
-    // "locationAddress": "501 Stanyan St, San Francisco, CA 94117",
-    // "locationWebsite": "google.com",
-    // "expectedPerPersonBudget": "$10-$15",
-    // "averageWeather": 45 F Cloudy Windy,
 
-    // const generatePrompt = (data: any) => {
-    //   return generateDestinationPrompt(data) + generatePacePrompt(data) +  generateSpecificSitesPrompt(data) +
-    //   generateTimePrompt(data) + generateExcludeSitesPrompt(data) 
-    //   + generateTavelerCountPrompt(data) + generateTavelerAgePrompt(data) + generateThemePrompt(data) 
-    //   + generateNeighborhoodPrompt(data) + generateBudgetPrompt (data) + generateDatePrompt(data) +
-    //   generateJSONExamplePrompt();
-    // }
-    const generatePrompt = (data: any) => {
-          return generateDestinationPrompt(data)  +
-          generateJSONExamplePrompt();
-        }
-
-        const prompt = generatePrompt(req.body)
         console.log(prompt)
     ////////////////////////////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
