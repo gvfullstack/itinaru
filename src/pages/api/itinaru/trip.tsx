@@ -86,83 +86,113 @@ async function requestItineraryFunction(
       return `Return one itinerary for ${destination} in JSON format. `;
     }
     
-    const generatePacePrompt = (data: any) => {
-      if (!selectedPace || selectedPace === '' ) return '';
-      return `The itinerary should have ${selectedPace} number of recommendations, inclusive of the specific sites` }
+    // const generatePacePrompt = (data: any) => {
+    //   if (!selectedPace || selectedPace === '' ) return '';
+    //   return `The itinerary should have ${selectedPace} number of recommendations, inclusive of the specific sites` }
 
-    const generateSpecificSitesPrompt = (data: any) => {
-      if (!specificSites || specificSites === '' ) return '';
+    // const generateSpecificSitesPrompt = (data: any) => {
+    //   if (!specificSites || specificSites === '' ) return '';
     
-      return  `Include ${specificSites} as specific sites to visit. `}
+    //   return  `Include ${specificSites} as specific sites to visit. `}
         
-    const generateTimePrompt = (data: any) => {
-      if (!itinStartTime || itinStartTime === '' || !itinEndTime || itinEndTime === '') return '';
+    // const generateTimePrompt = (data: any) => {
+    //   if (!itinStartTime || itinStartTime === '' || !itinEndTime || itinEndTime === '') return '';
     
-      return `The itinerary should have a start time of ${itinStartTime} and an end of ${itinEndTime}. `;
-    }
+    //   return `The itinerary should have a start time of ${itinStartTime} and an end of ${itinEndTime}. `;
+    // }
     
-    const generateExcludeSitesPrompt = (data: any) => {
-      if (!excludedSites || excludedSites.length === 0) return '';
-      return `Please exclude ${excludedSites} from the itinerary suggestions. `;
-    }
+    // const generateExcludeSitesPrompt = (data: any) => {
+    //   if (!excludedSites || excludedSites.length === 0) return '';
+    //   return `Please exclude ${excludedSites} from the itinerary suggestions. `;
+    // }
     
-    const generateTavelerCountPrompt = (data: any) => {
-      if (!travelerCount || travelerCount === '') return '';
+    // const generateTavelerCountPrompt = (data: any) => {
+    //   if (!travelerCount || travelerCount === '') return '';
     
-      return `The itinerary suggestions should be tailored for ${travelerCount} travelers `;
-    }
+    //   return `The itinerary suggestions should be tailored for ${travelerCount} travelers `;
+    // }
     
-    const generateTavelerAgePrompt = (data: any) => {
-      if (!inScopeAgeRanges || inScopeAgeRanges.length === 0) return ''; 
+    // const generateTavelerAgePrompt = (data: any) => {
+    //   if (!inScopeAgeRanges || inScopeAgeRanges.length === 0) return ''; 
     
-      return `The itinerary suggestions should be tailored for ${inScopeAgeRanges}. `;
-    }
+    //   return `The itinerary suggestions should be tailored for ${inScopeAgeRanges}. `;
+    // }
     
-    const generateThemePrompt = (data: any) => {
-      if ((!inScopeThemes || inScopeThemes.length === 0) ) 
-      return '';
+    // const generateThemePrompt = (data: any) => {
+    //   if ((!inScopeThemes || inScopeThemes.length === 0) ) 
+    //   return '';
     
-      return `The itinerary suggestions should center around: ${inScopeThemes} `;
-    }
+    //   return `The itinerary suggestions should center around: ${inScopeThemes} `;
+    // }
     
-    const generateNeighborhoodPrompt = (data: any) => {
-      if ((!neighborhoodSelections || neighborhoodSelections.length === 0)) return "";
+    // const generateNeighborhoodPrompt = (data: any) => {
+    //   if ((!neighborhoodSelections || neighborhoodSelections.length === 0)) return "";
     
-      return `The itinerary suggestions should be in or very near these neighborhoods: ${neighborhoodSelections}. `;
+    //   return `The itinerary suggestions should be in or very near these neighborhoods: ${neighborhoodSelections}. `;
     
-    }
+    // }
     
-    const generateBudgetPrompt = (data: any) => {
-      if ((!perPersonAverageBudget || perPersonAverageBudget.length === 0)) return "";
+    // const generateBudgetPrompt = (data: any) => {
+    //   if ((!perPersonAverageBudget || perPersonAverageBudget.length === 0)) return "";
     
-      return `Total budget per person should be ${perPersonAverageBudget} or less. `;
-    }
+    //   return `Total budget per person should be ${perPersonAverageBudget} or less. `;
+    // }
     
-    const generateDatePrompt = (data: any) => {
-      const monthNames = [
-        "January", "February", "March", "April", "May", "June", "July",
-        "August", "September", "October", "November", "December"
-      ];
+    // const generateDatePrompt = (data: any) => {
+    //   const monthNames = [
+    //     "January", "February", "March", "April", "May", "June", "July",
+    //     "August", "September", "October", "November", "December"
+    //   ];
       
-      const today = new Date();
-      const currentMonthIndex = today.getMonth();
-      const currentMonthName = monthNames[currentMonthIndex];  
-      if ((!travelDate || travelDate.length === 0)){  
-        return `Also, provide average expected weather on ${currentMonthName} for each site.`}
-      else{ 
-      return `Also, provide average expected weather on ${travelDate} for each site.`};
-    }
+    //   const today = new Date();
+    //   const currentMonthIndex = today.getMonth();
+    //   const currentMonthName = monthNames[currentMonthIndex];  
+    //   if ((!travelDate || travelDate.length === 0)){  
+    //     return `Also, provide average expected weather on ${currentMonthName} for each site.`}
+    //   else{ 
+    //   return `Also, provide average expected weather on ${travelDate} for each site.`};
+    // }
     
-    const generateJSONExamplePrompt = () => {
+    // const generateJSONExamplePrompt = () => {
      
-      return `
-        Times should be in 24-hour time format with no time gaps e.g. current start time is equal to previous end time.
-        The recommendations should be of specific venues, restaurants, activities, or sites. 
-        The time allocated should be based on the average visiting time. 
-        Each item should be scheduled at popular times for that specific suggestion.  Avoid scheduling during closed or unpopular hours.
-        If a suggestion is of a street or neigborhood, split the recommendation but still count it as one, into sub recommendations of specific venues, restaurants, activities, or sites.     
+    //   return `
+    //     Times should be in 24-hour time format with no time gaps e.g. current start time is equal to previous end time.
+    //     The recommendations should be of specific venues, restaurants, activities, or sites. 
+    //     The time allocated should be based on the average visiting time. 
+    //     Each item should be scheduled at popular times for that specific suggestion.  Avoid scheduling during closed or unpopular hours.
+    //     If a suggestion is of a street or neigborhood, split the recommendation but still count it as one, into sub recommendations of specific venues, restaurants, activities, or sites.     
         
-      Example JSON format:
+    //   Example JSON format:
+    //   [
+    //             {   
+    //                 "title": "Golden Gate Bridge Welcome Center",
+    //                 "startTime": "09:30",
+    //                 "endTime": "11:35",
+    //                 "description": 
+    //                 "Begin your tour of the Golden Gate Bridge at the Welcome Center, located at the southeastern end of the bridge. Here, you can get maps, brochures, and information about the bridge's history and construction."                    
+    //                 "locationAddress": "501 Stanyan St, San Francisco, CA 94117",
+    //                 "locationWebsite": "google.com",
+    //                 "expectedPerPersonBudget": "$10-$15",
+    //                 "averageWeather": 45 F Cloudy Windy,
+    //             },
+
+    //         ...
+    //   ] `
+    //   ;
+    // }
+    
+   
+
+    // const generatePrompt = (data: any) => {
+    //       return generateDestinationPrompt(data) + generatePacePrompt(data) +  generateSpecificSitesPrompt(data) +
+    //       generateTimePrompt(data) + generateExcludeSitesPrompt(data) 
+    //       + generateTavelerCountPrompt(data) + generateTavelerAgePrompt(data) + generateThemePrompt(data) 
+    //       + generateNeighborhoodPrompt(data) + generateBudgetPrompt (data) + generateDatePrompt(data) +
+    //       generateJSONExamplePrompt();
+    //     }
+
+        const prompt = `Return an itinerary for ${destination} in JSON format. 
+        Example JSON format:
       [
                 {   
                     "title": "Golden Gate Bridge Welcome Center",
