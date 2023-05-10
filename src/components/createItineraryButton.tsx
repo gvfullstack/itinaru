@@ -69,7 +69,7 @@ const CreateItineraryButton: React.FC<DefinedProps> = (props) => {
       travelDate: paramTravelDate
     },
     {
-      timeout: 10000, // Timeout in milliseconds, e.g., 10000ms = 10 seconds
+      timeout: 1000000000, // Timeout in milliseconds, e.g., 10000ms = 10 seconds
     }
     ) 
       .then((response) => { 
