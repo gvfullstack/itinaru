@@ -17,7 +17,7 @@ const FavoriteCuisine: React.FC = (props) => {
     const { value, checked } = event.target;
     setUserPreferences(prevUserPreferences => ({
       ...prevUserPreferences,
-      favoriteCuisine: prevUserPreferences.favoriteCuisine.map(option => {
+      favoriteCuisine: prevUserPreferences.favoriteCuisine?.map(option => {
         if (option.label === value) {
           return { ...option, selected: checked };
         }
@@ -29,7 +29,7 @@ const FavoriteCuisine: React.FC = (props) => {
   return (
     <div>
       Favorite Cuisine
-      {favoriteCuisineOptions.map(option => (
+      {favoriteCuisineOptions?.map(option => (
         <label key={uuidv4()} style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
           <input
             type="checkbox"
