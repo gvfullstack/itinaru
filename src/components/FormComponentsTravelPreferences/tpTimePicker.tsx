@@ -36,7 +36,7 @@ const UserInputTimePicker = () => {
     };
 
     updateTimes();
-  }, [travelDate]);
+  }, [travelDate, tripPreferences.startTime, tripPreferences.endTime, setTripPreferences]);
 
   const handleStartTimeChange = (value: Date | null) => {
     if (value !== null) {
