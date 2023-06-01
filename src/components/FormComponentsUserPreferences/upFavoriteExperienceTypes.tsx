@@ -17,7 +17,7 @@ const FavoriteExperienceTypes: React.FC = (props) => {
     const { value, checked } = event.target;
     setUserPreferences(prevUserPreferences => ({
       ...prevUserPreferences,
-      favoriteExperienceTypes: prevUserPreferences.favoriteExperienceTypes.map(option => {
+      favoriteExperienceTypes: prevUserPreferences.favoriteExperienceTypes?.map(option => {
         if (option.label === value) {
           return { ...option, selected: checked };
         }
@@ -29,7 +29,7 @@ const FavoriteExperienceTypes: React.FC = (props) => {
   return (
     <div>
     Favorite Experience Types
-      {favoriteExperienceTypes.map(option => (
+      {favoriteExperienceTypes?.map(option => (
         <label key={uuidv4()} style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
           <input
             type="checkbox"
