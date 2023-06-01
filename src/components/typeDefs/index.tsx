@@ -87,7 +87,6 @@ export type DefinedProps = {
       shouldAutoFocus?: boolean;
       travelerCount?: string;
       keyOfMultiSelectButton?: string;
-      multipleSelectObjects?: string[] | Neighborhoods[];
       ageRangeSelection?: string[];
       handleMultiSelect?: MultiSelectHandler; 
       handleInputChange?: HandleInputChange;
