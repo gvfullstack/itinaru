@@ -5,10 +5,7 @@ import {
 } from 'recoil';
 import {
   curStepState,
-  userPreferencesAtom,
-  paceOptionsState,
-  userDefinedThemesState,
-  themeOptionsState,
+  userPreferencesAtom
 } from '../../atoms/atoms';
 const { v4: uuidv4 } = require('uuid');
 import { UserPreferences } from '../typeDefs';
