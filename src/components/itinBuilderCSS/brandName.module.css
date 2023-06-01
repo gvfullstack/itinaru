@@ -86,7 +86,11 @@
   }
 
   .brandNameContainer.animationComplete{
+    position: fixed;
+    top: 0;
+    left:0;
     height: 3rem;
+    width: 100%;
     transition: height 0.3s ease;
     background: linear-gradient(to bottom, #FC4869, #f75b78);
   }
@@ -98,3 +102,4 @@
     letter-spacing: .01em;
     text-shadow:none
   }
+

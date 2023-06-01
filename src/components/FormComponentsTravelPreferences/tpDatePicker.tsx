@@ -3,20 +3,16 @@ import Stack from "@mui/material/Stack";
 import {Box, Typography} from "@mui/material";
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker'
 import { MobileDatePicker  } from '@mui/x-date-pickers/MobileDatePicker'
-import { PickerChangeHandlerContext } from '@mui/x-date-pickers/internals/hooks/usePicker/usePickerValue.types';
-import { TimeValidationError } from '@mui/x-date-pickers/models/validation';
-import { ItineraryItem } from "../typeDefs";
-import { itineraryItemsState } from "@/atoms/atoms";
 import { useRecoilState } from "recoil";
-import {travelDateState} from "@/atoms/atoms";
-import styles from "./itinBuilderCSS/userInputTimePicker.module.css";
-import { styled } from "@mui/system";
+import { tripPreferencesAtom } from "@/atoms/atoms";
+import styles from "./tpTimePicker.module.css";
+
 
 const UserInputDatePicker = () => {
   
-  const [travelDate, setTravelDate] = useRecoilState(travelDateState)
+  const [tripPreferences, setTripPreferences] = useRecoilState(tripPreferencesAtom)
+  const travelDate = tripPreferences.travelDate;
 
   return (
     
@@ -29,7 +25,10 @@ const UserInputDatePicker = () => {
                   label="Travel Date"
                   value={travelDate}
                   disablePast={true}
-                  onChange={(value: Date | null) => {if (value !== null) { setTravelDate(value);}}}
+                  onChange={(value: Date | null) => {if (value !== null) { 
+                    setTripPreferences((prevTravelState) => ({...prevTravelState, travelDate: value}))
+                    
+                    ;}}}
                   sx={{
                     '& .MuiOutlinedInput-root': {
                     '&:hover fieldset': {

@@ -1,11 +1,11 @@
 import React from "react";
 import axios from 'axios';
 import { useRecoilState } from 'recoil';
-import { DefinedProps } from "@/typeDefs";
+import { DefinedProps } from "@/components/typeDefs";
 import getConfig from 'next/config';
 import style from './itinBuilderCSS/nextButton.module.css';
 import { neighborhoodsState, curStepState, destinationState,
-   userDefinedThemesState, themeOptionsState, ageRangeOptionsState} from "../../src/atoms/atoms"
+   userDefinedThemesState, themeOptionsState, ageRangeOptionsState, tripPreferencesAtom} from "../../src/atoms/atoms"
 
 
 const {serverRuntimeConfig, publicRuntimeConfig} = getConfig();
@@ -16,7 +16,8 @@ const NextButton: React.FC<DefinedProps> = (props) => {
   const [userDefinedThemes, setUserDefinedThemes] = useRecoilState(userDefinedThemesState);
   const [themeOptions, setThemeOptions] = useRecoilState(themeOptionsState);
   const [ageRangeOptions, setAgeRangeOptions] = useRecoilState(ageRangeOptionsState);
-  const [destination, setDestinationOptions] = useRecoilState(destinationState);
+  const [tripPreferences, setTripPreferences] = useRecoilState(tripPreferencesAtom);
+  const destination = tripPreferences.destination;
   
 
   const [curStep, setCurStep] = useRecoilState(curStepState);
@@ -45,7 +46,6 @@ const NextButton: React.FC<DefinedProps> = (props) => {
      const neighborhoodsWithSelectedFalse = neighborhoods.map((neighborhood: any) => {                                                       
         return {...neighborhood, selected: false, descHidden: true}
       })
-    //  handleInputChange("multipleSelectObjects", neighborhoods);
      setNeighborhoods(neighborhoodsWithSelectedFalse)
      console.log("neighborhoods", neighborhoods)
   }

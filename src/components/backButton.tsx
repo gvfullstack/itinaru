@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./itinBuilderCSS/backButton.module.css";
-import { DefinedProps } from "@/typeDefs";
+import { DefinedProps } from "@/components/typeDefs";
 import { useRecoilState } from "recoil";
 import { curStepState } from "../../src/atoms/atoms";
 

@@ -1,11 +1,10 @@
 import React, { useRef, useState, useEffect } from "react";
-import { ItineraryItem } from "../typeDefs";
+import { ItineraryItem } from "./typeDefs";
 import { useDrop } from "react-dnd";
 import DraggableItineraryItem from "./draggableItineraryItem";
 import styles from "../components/itinBuilderCSS/itinerary.module.css";
 import { useRecoilState, atom } from "recoil";
-import { itineraryItemsState, travelDateState } from "../atoms/atoms";
-import { convertCompilerOptionsFromJson } from "typescript";
+import { itineraryItemsState, tripPreferencesAtom } from "../atoms/atoms";
 
 
 interface DroppableItineraryContainerProps {
@@ -18,8 +17,8 @@ const DroppableItineraryContainer: React.FC<DroppableItineraryContainerProps> = 
 }) => {
   const ref = useRef<HTMLDivElement>(null);
   const [itineraryItems, setItineraryItems] = useRecoilState(itineraryItemsState);
-  const [travelDate, setTravelDate] = useRecoilState(travelDateState);
-
+  const [tripPreferences, setTravelPreferences] = useRecoilState(tripPreferencesAtom);
+  const travelDate = tripPreferences.travelDate ?? new Date();
 
   const dropIndexRef = useRef<number | null>(null);
 
@@ -96,7 +95,7 @@ const DroppableItineraryContainer: React.FC<DroppableItineraryContainerProps> = 
    
      if(updatedItems[i].id === draggedItem.id && updatedItems[i].userDefinedRespectedTime === true)
       {
-        userDefinedRespectedTime = false;
+        userDefinedRespectedTime = false
       }
     
     if (i === 0 && updatedItems[i].userDefinedRespectedTime === false) {

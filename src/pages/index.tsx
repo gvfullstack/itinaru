@@ -31,6 +31,7 @@ export default function Home() {
       <main className={styles.main}>
           <BrandName />
           <HomeComponent />  
+        
       </main>
       </RecoilRoot>
     </>

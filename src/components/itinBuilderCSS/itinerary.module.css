@@ -4,7 +4,6 @@
     flex-direction: column;
     align-items: center;
     width: 100vw;
-    height: 80vh;
     /* cursor: pointer; */
     margin-bottom: .1rem;
     margin-top: .1rem;
@@ -41,23 +40,32 @@
 /* /////////////////////// */
 
 .itineraryParent{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 90vw;
-    height: 4.2rem;
-    margin-bottom: 0rem;
-    padding: .1rem;
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 5px;
+    margin-bottom: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 2px solid #ccc;
+    width: 100%;
+    max-width: 440px;
+    min-height:4rem;
+    box-sizing: border-box;
+    font-family: 'Roboto';
+    transition: background-color 0.3s;
+
 }
+
+.itineraryParent.isShown{
+    height: fit-content;
+}
+
 
 /* /////////////Main Itin Item View///////////////////// */
 .itineraryItemContainerContainer{
     display: flex;
-    flex-direction: column;
-    width: 95%;
-    justify-content: center;
-    align-items: center;
+    flex-direction: row;
+    width: 100%;
+    height: 90%;
 }
 
 .mainItinItemContainer{
@@ -67,82 +75,110 @@
     align-items: center;
     width: 100%;
     height: 100%;
-    background-color: #FF7890;
     /* cursor: pointer; */
 }
-.activityTime{
-    height: 25%;
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    flex-wrap: wrap;
-    align-items: right;
-    font-family: 'Roboto', sans-serif;
-    text-align: right;
-    color: #F3EFEF;
-    padding: .25rem;
-}
-.startTime,
-.timeSeparator,
-.endTime{
-    width: fit-content;
-    font-size: 12px;
-    padding: .25rem 0 0 0 ;
-    margin: 0 .5rem;
-    line-height: 10px;
-}
-.bottomItinContainer{
-    display: flex;
-    flex-direction: row;
-}
+
+
 .itinTitleContainer{
-    height: 75%;
-    width: 100%;
-    text-align: center;
+    height: 100%;
+    width: 80%;
     display: flex;
+    flex-direction: column; 
     padding-top: .25rem;
-    flex-direction: column;
-    align-items: center;
-}
-.itinTitle{
-    display: flex;
-    justify-content: center;
     font-family: 'Roboto', sans-serif;
-    font-size: 12px;
-    color: #F3EFEF;
-    font-weight: 300;
-    padding:0px;
+    color: rgb(29, 29, 29);
+    font-weight: 400;  
+}
+
+.itinTitle{
+    text-align: left;
+    font-family: 'Roboto', sans-serif;
+    padding:0px 0px 0px .25rem;
     margin:0px;
-    height: 75%;
+    width: 100%; 
+    line-height: 1.2rem;
+    color: rgb(48, 48, 48);
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.ownResearchContainer,
+.expandedItinAddressContainer,
+.itinTitleDescription{
+    /* display: flex; */
+    text-align: left;
+    padding: 0 0 0 .25rem;
+    display: none;
+    font-size: 16px;
+}
+
+.rightContainer{
+    display: flex;
+    flex-direction: row;
+    width: 25%;
+    justify-content: center;
+    padding: 1px
+}
+
+.rightContainer.isShown{
+    flex-direction: column;
+    height: 4rem;
+}
+
+.activityTime{
+    height: 100%;
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+    font-family: 'Roboto', sans-serif;
+    color: rgb(5, 5, 5);
     
 }
-.belowTitleCaretContainer{
-    display: flex;
-    flex-direction: row;
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-    width: 40%;
-    height: 35%;
-    color: #F3EFEF;
-    padding: 0px;
-    margin: 0px;
-    font-size: 20px;
-    border-style: none ;
+
+
+.startTimeContainer,
+.endTimeContainer{
+    width: 100%;
+    margin-bottom: .85rem;
+    padding: 0;
+}
+.startTime,
+.endTime{
+    width: 100%;
+    font-size: 12px;
+    line-height: 12px;
+    font-weight: 400;
 }
 
 .hamburgerMenuContainer{
     height: 100%;
-    width: 5%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    width: 20%;
     font-size: 20px;
-    color: #F3EFEF;
+    text-align: right;
+    color: rgb(29, 29, 29);
     border-radius: 0px 10px 10px 0px;
+    padding: 6px 0px 0px 2px;
+}
+
+.expandedItinMapText{
+    display: none;
+    color: black;
+    width: 0;
+}
+
+.expandedItinMapText.isShown{
+    width: 100%;
+    height: 100%;
+    font-size: 20px;
+    text-align: right;
+    color: rgb(29, 29, 29);
+    border-radius: 0px 10px 10px 0px;
+    padding: 6px 0px 0px 2px;
+}
+
+.hamburgerMenuContainer.isShown{
+    width: 100%;
 }
 
 /* /////////////Expanded Itin Item View///////////////////// */ 
@@ -152,8 +188,7 @@
     position: absolute;
     top: 3rem;
     left: 0;
-    /* z-index: 25; */
-    visibility: hidden; /*hide by default */
+    visibility: none; /*hide by default */
     display: flex;
     flex-direction: column;
     align-items: left;
@@ -161,14 +196,15 @@
     height: 0;
     cursor: pointer;
     font-weight: 300;
-    background-color: #FC4869;
     opacity: .95;
 }
 
+.itinTitle.isShown{
+    line-height: 1rem;
+}
+
 .isShown{
-    visibility: visible;
-    width: 100%;
-    height: 100vh;
+    display: block;
 }
 
 .expandedItinMapContainer{
@@ -181,32 +217,12 @@
     padding: 1.5rem 0rem 2rem 0rem;
     align-items: center;
      }
-            .expandedItinMapText{
-                padding: .5rem 0rem 0rem 2rem;
-                color: #F3EFEF;
-                font-family: "roboto", sans-serif;
-                font-size: 22px;
-                width: 80%;
-                height: 100%;
-                display: flex;
-                justify-content: left;
-                align-items: center;
+         
 
-            }
-
-            .expandedItinMapIcon {
-                width: 3rem; /* Adjust the width */
-                height: 2rem; /* Adjust the height */  
-                display: flex;
-                justify-content: left;
-                align-items: center;
-                padding: .25rem .25rem 0rem .25rem;
-            }
-
+.expandedItinItemTitle,            
 .expandedItinItemText,
-.expandedItinItemWebsite,
-.expandedItinBudgetContainer,
-.expandedItinAddressContainer,
+.expandedTimeContainer,
+.expandedItinItemWebsite a,
 .youtubeLink a{
     display: flex;
     flex-direction: row;
@@ -216,10 +232,26 @@
     background-color: transparent;
     cursor: pointer;
     font-family: "roboto", sans-serif;
-    font-size: 22px;
-    color: #F3EFEF;
-    
+    font-size: 16px;
+    color: black;
+    text-decoration: none;
 }
+
+
+.expandedItinItemText{
+    text-align: left;
+}
+
+.expandedItinItemTitle{
+    font-weight: 400;
+}
+
+.GMapText,
+.youGSearchText,
+.youTubeLinkText{
+    padding-left: 1rem;
+}
+
 .expandedMidTextWrapper{
     display: flex;
     flex-direction: row;
@@ -232,13 +264,7 @@
 .expandedMidGroupingRightEmpty{
     width: 1rem;
 }
-/* .expandedItinItemWebsite{
-    padding: 3px 27px 40px 27px;
-} */
 
-.expandedItinItemWebsite a {
-    color: #F3EFEF;
-}
 
 .expandedItinYouTubeContainer{
     height: 45%;
@@ -246,6 +272,37 @@
     margin-top: 1px ;
 }
 
+.menu {
+    position: relative;
+    bottom: 2rem;
+    right: 5rem;
+    width: 5rem; /* Adjust the width as needed */
+    background-color: #fff;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    padding: 0px;
+    z-index: 9999;
+    font-size: 14px;
+    line-height: 2px;
+  }
+
+  .menu.isShown{
+    bottom: 2rem;
+    right: .25rem;
+  }
+
+  .menuItem {
+    padding: 8px;
+    width: 100%;
+    background-color: #fff;
+    color: #333;
+    cursor: pointer;
+
+  }
+  
+  .menuItem:hover {
+    background-color: #f5f5f5;
+  }
 /* .ytVidIntro{
     color: rgb(46, 46, 46);
     font-family: "roboto", sans-serif;

@@ -6,7 +6,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker'
 import { PickerChangeHandlerContext } from '@mui/x-date-pickers/internals/hooks/usePicker/usePickerValue.types';
 import { TimeValidationError } from '@mui/x-date-pickers/models/validation';
-import { ItineraryItem } from "../typeDefs";
+import { ItineraryItem } from "./typeDefs";
 import { itineraryItemsState } from "@/atoms/atoms";
 import { useRecoilState } from "recoil";
 
@@ -70,8 +70,8 @@ const ResponsiveTimePicker = ({ itineraryItem, propertyName }: ResponsiveTimePic
                   onClose={handleClose}
                   minTime={minTime}
                   maxTime={maxTime}  
-                  sx={{"& .MuiOutlinedInput-root": {color: "#F3EFEF"},
-                  "& .MuiInputLabel-root": {color: "#F3EFEF", fontSize: "12px"},
+                  sx={{"& .MuiOutlinedInput-root": {color: "rgb(29, 29, 29)", fontSize: "12px"},
+                  "& .MuiInputLabel-root": {color: "rgb(29, 29, 29)", fontSize: "12px"},
                   "& .MuiOutlinedInput-input": {border: "none", height: "0px", width: "55px", padding: "7px 5px", margin: "0px"},
                 }}
                   slotProps={{

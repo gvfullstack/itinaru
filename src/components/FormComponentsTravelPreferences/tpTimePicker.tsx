@@ -1,22 +1,66 @@
-import React, { useState, useRef } from "react";
+import React, { useEffect } from "react";
 import Stack from "@mui/material/Stack";
 import {Box, Typography} from "@mui/material";
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker'
-import { PickerChangeHandlerContext } from '@mui/x-date-pickers/internals/hooks/usePicker/usePickerValue.types';
-import { TimeValidationError } from '@mui/x-date-pickers/models/validation';
-import { ItineraryItem } from "../typeDefs";
-import { itineraryItemsState } from "@/atoms/atoms";
 import { useRecoilState } from "recoil";
-import {itinStartTimeState, itinEndTimeState} from "@/atoms/atoms";
-import styles from "./itinBuilderCSS/userInputTimePicker.module.css";
-import { styled } from "@mui/system";
+import {tripPreferencesAtom} from "@/atoms/atoms";
+import styles from "./tpTimePicker.module.css";
 
 const UserInputTimePicker = () => {
   
-  const [itinStartTime, setItinStartTime] = useRecoilState(itinStartTimeState)
-  const [itinEndTime, setItinEndTime] = useRecoilState(itinEndTimeState) 
+  const [tripPreferences, setTripPreferences] = useRecoilState(tripPreferencesAtom)
+  const travelDate = tripPreferences.travelDate;
+
+  
+  useEffect(() => {
+    const updateTimes = () => {
+      if (travelDate && tripPreferences.startTime) {
+        const updatedStartTime = new Date(travelDate);
+        updatedStartTime.setHours(tripPreferences.startTime.getHours(), tripPreferences.startTime.getMinutes());
+        setTripPreferences((prevTripPreferences) => ({
+          ...prevTripPreferences,
+          startTime: updatedStartTime,
+        }));
+      }
+
+      if (travelDate && tripPreferences.endTime) {
+        const updatedEndTime = new Date(travelDate);
+        updatedEndTime.setHours(tripPreferences.endTime.getHours(), tripPreferences.endTime.getMinutes());
+        setTripPreferences((prevTripPreferences) => ({
+          ...prevTripPreferences,
+          endTime: updatedEndTime,
+        }));
+      }
+    };
+
+    updateTimes();
+  }, [travelDate]);
+
+  const handleStartTimeChange = (value: Date | null) => {
+    if (value !== null) {
+      const startTime = new Date(travelDate? travelDate : new Date());
+      startTime.setHours(value.getHours(), value.getMinutes());
+      setTripPreferences((prevTripPreferences) => ({
+        ...prevTripPreferences,
+        startTime: startTime,
+      }));
+    }
+    console.log(tripPreferences.startTime)
+  };
+
+  const handleEndTimeChange = (value: Date | null) => {
+    if (value !== null) {
+      const endTime = new Date(travelDate? travelDate : new Date());
+      endTime.setHours(value.getHours(), value.getMinutes());
+      setTripPreferences((prevTripPreferences) => ({
+        ...prevTripPreferences,
+        endTime: endTime,
+      }));
+    }
+    console.log(tripPreferences.endTime)
+  };
 
   return (
     
@@ -27,11 +71,11 @@ const UserInputTimePicker = () => {
               <div className={styles.datePickerContainer}>
                 <MobileTimePicker
                   label="Start Time"
-                  value={itinStartTime}
+                  value={tripPreferences.startTime}
                   format="h:mm a"
                   ampmInClock = {true}
-                  onChange={(value: Date | null) => {if (value !== null) { setItinStartTime(value);}}}
-                  maxTime={itinEndTime}  
+                  onChange={handleStartTimeChange}
+                  maxTime={tripPreferences.endTime}  
                   sx={{
                     '& .MuiOutlinedInput-root': {
                     '&:hover fieldset': {
@@ -44,7 +88,7 @@ const UserInputTimePicker = () => {
                     borderColor: 'pink',
                   },
                   '& .MuiOutlinedInput-input': {
-                    fontSize: '22px',
+                    fontSize: '18px',
                     fontWeight: '400',
                     padding: '10px 10px 10px 20px',
                   },
@@ -56,11 +100,11 @@ const UserInputTimePicker = () => {
 
                 <MobileTimePicker
                   label="End Time"
-                  value={itinEndTime}
+                  value={tripPreferences.endTime}
                   format="hh:mm a"
                   ampmInClock = {true}
-                  onChange={(value: Date | null) => {if (value !== null) { setItinEndTime(value);}}}
-                  minTime={itinStartTime}
+                  onChange={handleEndTimeChange}
+                  minTime={tripPreferences.startTime}
                   sx={{
                     '& .MuiOutlinedInput-root': {
                     '&:hover fieldset': {
@@ -74,7 +118,7 @@ const UserInputTimePicker = () => {
                     borderColor: 'pink',
                   },
                   '& .MuiOutlinedInput-input': {
-                    fontSize: '22px',
+                    fontSize: '18px',
                     fontWeight: '400',
                     padding: '10px 10px 10px 20px',
                   },
@@ -89,6 +133,7 @@ const UserInputTimePicker = () => {
                 </div>
             </LocalizationProvider>
           </Stack>
+        {/* <button onClick={()=>console.log(tripPreferences.startTime, tripPreferences.endTime)}>print</button> */}
         </Typography>
       </Box>
   )

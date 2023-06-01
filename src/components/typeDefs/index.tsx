@@ -8,27 +8,23 @@ export const ItemTypes = {
   ITINERARY_ITEM: 'itineraryItem',
 };
 
-export type Neighborhoods = {
-    neighborhood?: string;
-    loc?: { lat: number, lng: number }[];
-    desc?: string;
-    selected?: boolean;
-    descHidden?: boolean;
-  }
 
   export type ItineraryItem = {
-    title?: string;
+    activityTitle?: string;
     startTime?: {time?: Date, beingEdited?: boolean};
     endTime?: {time?: Date, beingEdited?: boolean};
     description?: string;
-    locationAddress?: string;
+    location?: {latitude: number, longitude: number};
+    locationAddress: string;
+    rating?: string;
     locationWebsite?: string;
     expectedPerPersonBudget?: string;
     descHidden?: boolean;
     id?: string;
-    averageWeather?: string;
+    averageWeatherOnTravelDate?: string;
     activityDuration?: number;
     userDefinedRespectedTime?: boolean;
+    activityType?: string;
   }
 
 
@@ -44,8 +40,14 @@ export type HandleInputChange = (key: string, value: any) => void;
 export type MultiSelectHandler = (key: string, value: any) => void;
 
 export type DefinedProps = {
+      displayGetNeighborhoodsButton?: boolean;
+      displayDirectionsMap?: boolean;
+      displayItinerary?: boolean;
+      displayNeighborhoodRecommendations?: boolean;
+      displayDetailedTravelPreferences?: boolean; 
+      displayParentUPComponent?: boolean;
+      displayDestinationInput?: boolean;
       displayIntroText?: boolean;
-      displayBudgetInput?: boolean;
       displayDatePicker?: boolean;
       displayTimePicker?: boolean;
       inScopeThemes?: string;
@@ -101,3 +103,37 @@ export type DefinedProps = {
       showNeighborhoods?: boolean;
       showMap?: boolean;
     };
+////////////////////////
+export type UserPreferences = {
+  favoritePlacesPreviouslyVisited?: string[];
+  favoriteExperienceTypes?: Array<{ label: string, selected: boolean}>;
+  favoriteRestaurantsPreviouslyVisited?: string[];
+  favoriteCuisine?: Array<{ label: string, selected: boolean}>;
+  diningExperience?: Array<{ label: string, selected: boolean}>;
+  dailyBudget?: {
+    Amount?: string;
+    Currency?: string;
+  };
+  preferredPace: Array<{ label: string, selected: boolean}>;
+};
+
+export type TripPreferences = {
+  destination?: string;
+  travelDate?: Date;
+  startTime?: Date;
+  endTime?: Date;
+  specificSitesToInclude?: string[];
+  specificSitesToExclude?: string[];
+  experienceSoughtThisTrip?: string;
+  neighborhoodsToExplore?: Array<string>;
+  typeOfEateriesToIncludeInItinerary?: Array<{ label: string, selected: boolean}>;
+};
+
+export type NeighborhoodRecommendation = {
+  rating?: string;
+  title?: string;
+  description?: string;
+  location?: {latitude: number, longitude: number};
+}
+
+export type NeighborhoodRecommendationList = {neighborhoodRecommendationArray?: NeighborhoodRecommendation[]};

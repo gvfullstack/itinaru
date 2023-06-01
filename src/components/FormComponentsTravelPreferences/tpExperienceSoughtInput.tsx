@@ -1,11 +1,9 @@
 import React, { useState, useRef } from "react";
-import { useEffect } from 'react';
-import styles from "./itinBuilderCSS/userInput.module.css";
 import {TextField} from "@mui/material";
 import { styled } from '@mui/material/styles';
-import { DefinedProps, HandleInputChange } from "@/typeDefs";  
+import { TripPreferences } from "@/components/typeDefs";  
 import { useRecoilState } from "recoil";
-import { defaultAtom, paceOptionsState} from "@/atoms/atoms";
+import { tripPreferencesAtom} from "@/atoms/atoms";
 
 const PinkOutlinedTextField = styled(TextField)(({ theme }) => ({
   '& .MuiOutlinedInput-root': {
@@ -25,9 +23,9 @@ const PinkOutlinedTextField = styled(TextField)(({ theme }) => ({
   },
 }));
 
-const UserInput: React.FC<DefinedProps> = (props) => {
-    const [value, setValue] = useRecoilState(props.userInput ? props.userInput : defaultAtom);
-    const [paceOptions, setPaceOptions] = useRecoilState(paceOptionsState);
+const ExperienceSoughtThisTrip: React.FC<TripPreferences> = (props) => {
+    const [tripPreferences, setTripPreferencesAtom] = useRecoilState(tripPreferencesAtom);
+    const whatToGetFromThisTrip = tripPreferences.experienceSoughtThisTrip;
     const [inputLength, setInputLength] = useState(0);
     const maxLength = 255;
 
@@ -35,28 +33,15 @@ const UserInput: React.FC<DefinedProps> = (props) => {
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       const newValue = event.target.value;
-      setValue(newValue);
+      setTripPreferencesAtom((prevTripPreferenceState)=> ({...prevTripPreferenceState, experienceSoughtThisTrip: newValue}));
       setInputLength(newValue.length);
-  
-      if(props.keyOfStateVariable==="specificPace") {
-        const newValue = paceOptions.map((item) => ({
-          ...item,
-          selected: false,
-        }));
-        setPaceOptions(newValue);
-      }
-    };
-
-  useEffect(() => {
-    if (inputRef.current && props.shouldAutoFocus) {
-      inputRef.current.focus();
     }
-  }, [props.shouldAutoFocus]);
-  
+
+
   return (
     <PinkOutlinedTextField
-      label={props.userInputPlaceholder}
-      value={value}
+      label="desired experience"
+      value={whatToGetFromThisTrip}
       onChange={handleChange}
       fullWidth
       margin="normal"
@@ -64,8 +49,9 @@ const UserInput: React.FC<DefinedProps> = (props) => {
       size="small"
       inputRef={inputRef}
       disabled={inputLength >= maxLength}
+      helperText={`In a few words, what do you want to get from this trip?`}
     />
   );
 };
 
-export default UserInput;
+export default ExperienceSoughtThisTrip;

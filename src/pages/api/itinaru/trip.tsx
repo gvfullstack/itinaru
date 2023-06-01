@@ -11,10 +11,6 @@ const openai = new OpenAIApi(configuration);
 const CACHE_TIME = 30; // cache time in seconds
 const CACHE_KEY_PREFIX = 'destination-'; // prefix for cache key
 
-type ResponseData = {
-  neighborhood: string
-}
-
 type Error = {
   error: { message: string[]}
 } | undefined
@@ -22,7 +18,7 @@ type Error = {
 // create a rate limiter with a maximum of 5 requests per minute
 const limiter = rateLimit({
   windowMs: 60 * 1000, // 1 minute
-  max: 5, // limit each IP to 5 requests per windowMs
+  max: 10, // limit each IP to 5 requests per windowMs
   keyGenerator: function (req, res) {
     return req.socket.remoteAddress;
   },
@@ -42,7 +38,6 @@ async function requestItineraryFunction(
       return;
     }
     
-  
     // check if the response is already cached
     const cacheKey = CACHE_KEY_PREFIX + destination;
     const cachedResponse = cache.get(cacheKey);
@@ -50,7 +45,6 @@ async function requestItineraryFunction(
       res.status(200).json(cachedResponse);
       return;
     }
-    
     ////////////////////////////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     
     const validate = (data: any) => {
@@ -58,162 +52,35 @@ async function requestItineraryFunction(
     }
 
     // ``````````````````````````````````````````````````````````````````````````````
-    
-    const selectedPace = req.body.selectedPace || '';
-    const itinStartTime = req.body.itinStartTime || '';
-    const itinEndTime = req.body.itinEndTime || '';
-    const specificSites = req.body.specificSites || '';
-    const excludedSites = req.body.excludedSites || '';
-    const travelerCount = req.body.travelerCount || '';
-    const inScopeAgeRanges = req.body.inScopeAgeRanges || '';
-    const inScopeThemes = req.body.inScopeThemes || '';
-    const neighborhoodSelections = req.body.neighborhoodSelections || '';
-    const perPersonAverageBudget = req.body.perPersonAverageBudgetState || '';
-    const travelDate = req.body.travelDate || '';
+    const itinPreferences = req.body.itinPreferences || '';
+    const neighborhoods = req.body.neighborhoods || '';
+    console.log("neighborhoods in trip", neighborhoods)
+    const startTime = req.body.startTime || '';
+    const endTime = req.body.endTime || '';
 
-    // `````````````````````````````````````````````````````````````````````````````
-    const generateDestinationPrompt = (data: any) => {
-      if (!destination || destination === '') return '';
-      return `Return an itinerary for ${destination} in JSON format. `;
+    const introPrompt1 = `Provide a list of at least 7 possible sites to visit/leisure activities and places to eat (i.e. breakfast, lunch, dinner) for a traveler visiting ${neighborhoods} in ${destination}. I'd like the suggestions to be introspective of the personal preferences provided by the traveler as follows:` 
+    const endPrompt1 = `Your response should be in this exact JSON format:{"neighborhoodName": "nameOfNeighborhood", "activities": [{ "activityTitle": "Activity 1"}, { "activityTitle": "Activity2"} ], "eateries": [{"name": "Coffee at.."}, {"name": "Breakfast at.."},  {"name": "Lunch at ..."}, {"name": "Dinner at ..."}]}. Please replace 'nameOfNeighborhood' with the name of a real neighborhood and fill in the activities and eateries with real examples. For this request, please do not provide additional details beyond activity title and eatery name.` 
+    const generatePrompt = () => {
+      return introPrompt1 + itinPreferences + endPrompt1;
     }
-    
-    // const generatePacePrompt = (data: any) => {
-    //   if (!selectedPace || selectedPace === '' ) return '';
-    //   return `The itinerary should have ${selectedPace} number of recommendations, inclusive of the specific sites` }
 
-    // const generateSpecificSitesPrompt = (data: any) => {
-    //   if (!specificSites || specificSites === '' ) return '';
-    
-    //   return  `Include ${specificSites} as specific sites to visit. `}
-        
-    // const generateTimePrompt = (data: any) => {
-    //   if (!itinStartTime || itinStartTime === '' || !itinEndTime || itinEndTime === '') return '';
-    
-    //   return `The itinerary should have a start time of ${itinStartTime} and an end of ${itinEndTime}. `;
-    // }
-    
-    // const generateExcludeSitesPrompt = (data: any) => {
-    //   if (!excludedSites || excludedSites.length === 0) return '';
-    //   return `Please exclude ${excludedSites} from the itinerary suggestions. `;
-    // }
-    
-    // const generateTavelerCountPrompt = (data: any) => {
-    //   if (!travelerCount || travelerCount === '') return '';
-    
-    //   return `The itinerary suggestions should be tailored for ${travelerCount} travelers `;
-    // }
-    
-    // const generateTavelerAgePrompt = (data: any) => {
-    //   if (!inScopeAgeRanges || inScopeAgeRanges.length === 0) return ''; 
-    
-    //   return `The itinerary suggestions should be tailored for ${inScopeAgeRanges}. `;
-    // }
-    
-    // const generateThemePrompt = (data: any) => {
-    //   if ((!inScopeThemes || inScopeThemes.length === 0) ) 
-    //   return '';
-    
-    //   return `The itinerary suggestions should center around: ${inScopeThemes} `;
-    // }
-    
-    // const generateNeighborhoodPrompt = (data: any) => {
-    //   if ((!neighborhoodSelections || neighborhoodSelections.length === 0)) return "";
-    
-    //   return `The itinerary suggestions should be in or very near these neighborhoods: ${neighborhoodSelections}. `;
-    
-    // }
-    
-    // const generateBudgetPrompt = (data: any) => {
-    //   if ((!perPersonAverageBudget || perPersonAverageBudget.length === 0)) return "";
-    
-    //   return `Total budget per person should be ${perPersonAverageBudget} or less. `;
-    // }
-    
-    // const generateDatePrompt = (data: any) => {
-    //   const monthNames = [
-    //     "January", "February", "March", "April", "May", "June", "July",
-    //     "August", "September", "October", "November", "December"
-    //   ];
-      
-    //   const today = new Date();
-    //   const currentMonthIndex = today.getMonth();
-    //   const currentMonthName = monthNames[currentMonthIndex];  
-    //   if ((!travelDate || travelDate.length === 0)){  
-    //     return `Also, provide average expected weather on ${currentMonthName} for each site.`}
-    //   else{ 
-    //   return `Also, provide average expected weather on ${travelDate} for each site.`};
-    // }
-    
-    // const generateJSONExamplePrompt = () => {
-     
-    //   return `
-    //     Times should be in 24-hour time format with no time gaps e.g. current start time is equal to previous end time.
-    //     The recommendations should be of specific venues, restaurants, activities, or sites. 
-    //     The time allocated should be based on the average visiting time. 
-    //     Each item should be scheduled at popular times for that specific suggestion.  Avoid scheduling during closed or unpopular hours.
-    //     If a suggestion is of a street or neigborhood, split the recommendation but still count it as one, into sub recommendations of specific venues, restaurants, activities, or sites.     
-        
-    //   Example JSON format:
-    //   [
-    //             {   
-    //                 "title": "Golden Gate Bridge Welcome Center",
-    //                 "startTime": "09:30",
-    //                 "endTime": "11:35",
-    //                 "description": 
-    //                 "Begin your tour of the Golden Gate Bridge at the Welcome Center, located at the southeastern end of the bridge. Here, you can get maps, brochures, and information about the bridge's history and construction."                    
-    //                 "locationAddress": "501 Stanyan St, San Francisco, CA 94117",
-    //                 "locationWebsite": "google.com",
-    //                 "expectedPerPersonBudget": "$10-$15",
-    //                 "averageWeather": 45 F Cloudy Windy,
-    //             },
-
-    //         ...
-    //   ] `
-    //   ;
-    // }
-    
-   
-
-    // const generatePrompt = (data: any) => {
-    //       return generateDestinationPrompt(data) + generatePacePrompt(data) +  generateSpecificSitesPrompt(data) +
-    //       generateTimePrompt(data) + generateExcludeSitesPrompt(data) 
-    //       + generateTavelerCountPrompt(data) + generateTavelerAgePrompt(data) + generateThemePrompt(data) 
-    //       + generateNeighborhoodPrompt(data) + generateBudgetPrompt (data) + generateDatePrompt(data) +
-    //       generateJSONExamplePrompt();
-    //     }
-
-        const prompt = `Return an itinerary for ${destination} in JSON format. 
-        Example JSON format:
-      [
-                {   
-                    "title": "Golden Gate Bridge Welcome Center",
-                    "startTime": "09:30",
-                    "endTime": "11:35",
-                    "description": 
-                    "Begin your tour of the Golden Gate Bridge at the Welcome Center, located at the southeastern end of the bridge. Here, you can get maps, brochures, and information about the bridge's history and construction."                    
-                    "locationAddress": "501 Stanyan St, San Francisco, CA 94117",
-                    "locationWebsite": "google.com",
-                    "expectedPerPersonBudget": "$10-$15",
-                    "averageWeather": 45 F Cloudy Windy,
-                },
-
-            ...
-      ] `
-
+    const prompt = generatePrompt();
         console.log(prompt)
+
+    const prompt2 = `Place all of the activities and eateries into a schedule that starts at ${startTime} and ends at ${endTime}.  Where possible, order activities and eateries such that it minimizes the total distance traveled from one suggestion to the next.  The response should be in JSON format and include nothing else. Each of these fields are required and very important to include. e.g.[{"activityTitle": Visit...and do..., "description":"Based on your preferences you might enjoy...", suggestedStartTime:..., suggestedEndTime:...}, locationAddress:..., location:{latitude:...,longitude:...}, activityType: "Meal Site" or "Leisure Site", "name": "Eatery 1"},  {"name": "Eatery 2"} ]`
+
     ////////////////////////////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
     try {
      const completion = await openai.createChatCompletion({
         model: "gpt-3.5-turbo",
         messages: [
-              { role: "user", content: prompt },
+            { role: "user", content: prompt }
             ],
         temperature: 0.7,
         max_tokens: 2048,
 
     });
-
       let answer = []
       if(completion.data?.choices[0]?.message?.content){
         try {
@@ -222,11 +89,49 @@ async function requestItineraryFunction(
           answer = [completion.data.choices[0].message?.content]
         }
       }
-
+      const initialResponse = answer;
+      const initialResponseString = JSON.stringify(initialResponse) ?? "";
       // cache the response
-      cache.put(cacheKey, { itinaru: answer }, CACHE_TIME * 1000);
+      // res.status(200).json({ listOfSuggestions: answer });
+      cache.put(cacheKey, initialResponse, CACHE_TIME * 1000);
+      
+console.log({
+  model: "gpt-3.5-turbo",
+  messages: [
+    { role: "user", content: prompt },
+    { role: "assistant", content: initialResponseString }, // Use initial response as assistant's message
+    { role: "user", content: prompt2 } // Follow-up message from the user
+  ],
+  temperature: 0.7,
+  max_tokens: 2048,
+});
+    const followupCompletion = await openai.createChatCompletion({
+        model: "gpt-3.5-turbo",
+        messages: [
+          { role: "user", content: prompt },
+          { role: "assistant", content: initialResponseString }, // Use initial response as assistant's message
+          { role: "user", content: prompt2 } // Follow-up message from the user
+        ],
+        temperature: 0.7,
+        max_tokens: 2048,
+      });
 
-      res.status(200).json({ itinaru: answer });
+      let answer2 = []
+      if(followupCompletion.data?.choices[0]?.message?.content){
+        try {
+          answer2 = JSON.parse(followupCompletion.data.choices[0].message?.content)
+        } catch (error) {
+          answer2 = [completion.data.choices[0].message?.content]
+        }
+      }
+      // Get the follow-up response from OpenAI
+      const followupResponse = answer2;
+      const followupResponseString = followupResponse?.toString()??"";
+      console.log("followupResponse:", followupResponse)
+      res.status(200).json({ itinaru: followupResponse });
+      const cachedFollowupResponse = { itinaru: answer };
+      cache.put(cacheKey, cachedFollowupResponse, CACHE_TIME * 1000);
+
     } catch(error: unknown) {
       // Consider adjusting the error handling logic for your use case
       if (error instanceof Error) {

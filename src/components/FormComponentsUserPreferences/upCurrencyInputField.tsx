@@ -3,7 +3,7 @@
 import React from 'react';
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
-import {perPersonAverageBudgetState} from '../atoms/atoms';
+import {userPreferencesAtom} from '../../atoms/atoms';
 import { useRecoilState } from 'recoil'; 
 
 
@@ -15,29 +15,33 @@ interface CurrencyInputProps {
 
 const UserInputCurrencyInputField: React.FC<CurrencyInputProps> = ({
   currencySymbol = '$',
-  label = 'Amount',
+  label = 'per user daily budget',
   helperText = 'Enter the amount',
 }) => {
 
-    const [budget, setBudget] = useRecoilState(perPersonAverageBudgetState);
+    const [userPreferences, setUserPreferences] = useRecoilState(userPreferencesAtom);
+    const budget = userPreferences.dailyBudget?.Amount;
+   
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const inputValue = e.target.value;
+      const numericValue = parseFloat(inputValue);
+      const newAmount = isNaN(numericValue) ? 0 : numericValue;
+      const formattedValue = newAmount === 0 ? '' : newAmount.toString();
+      setUserPreferences((prevUserPreferences) => ({
+        ...prevUserPreferences,
+        dailyBudget: { ...prevUserPreferences.dailyBudget, Amount: formattedValue },
+      }));
+    };    
+    
 
-    const handleChange=(e: any) => {
-        const inputValue = parseFloat(e.target.value);
-        if (!isNaN(inputValue)) {
-          setBudget(inputValue);
-        } else {
-          setBudget(0);
-        }
-      }
-
+  
   return (
     <TextField
-      type="number"
-    //   inputProps={{ step: '0.01' }}
+      type="text"
       label={label}
-      helperText={helperText}
+      // helperText={helperText}
       value={budget}
-      onChange={(e)=>handleChange(e)}
+      onChange={(e:React.ChangeEvent<HTMLInputElement>)=>handleChange(e)}
       sx={{
             '& .MuiOutlinedInput-root': {
             '&:hover fieldset': {
