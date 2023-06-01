@@ -1,5 +1,4 @@
 import WelcomeText from "../welcomeText";
-import NextButton from "../nextButton";
 import CreateItineraryButton from "../createItineraryButton";
 import BackButton from "../backButton";
 import styles from "../itinBuilderCSS/itinForm.module.css";
