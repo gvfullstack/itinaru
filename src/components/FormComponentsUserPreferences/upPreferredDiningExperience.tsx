@@ -16,7 +16,7 @@ const PreferredDiningExperience: React.FC = (props) => {
     const { value, checked } = event.target;
     setUserPreferences(prevUserPreferences => ({
       ...prevUserPreferences,
-      diningExperience: prevUserPreferences.diningExperience.map(option => {
+      diningExperience: prevUserPreferences.diningExperience?.map(option => {
         if (option.label === value) {
           return { ...option, selected: checked };
         }
@@ -28,7 +28,7 @@ const PreferredDiningExperience: React.FC = (props) => {
   return (
     <div>
       Preferred Dining Experience
-      {diningExperienceSoughtOptions.map(option => (
+      {diningExperienceSoughtOptions?.map(option => (
         <label key={uuidv4()} style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
           <input
             type="checkbox"
