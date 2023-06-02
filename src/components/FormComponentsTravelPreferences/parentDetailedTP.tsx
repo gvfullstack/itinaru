@@ -20,29 +20,29 @@ const DetailedTravelPreferences = (props: any) => {
   };
 
   return (
-    <div style={{ borderTop: showPreferences?'1px solid grey':'none', borderBottom: showPreferences?'1px solid grey':'none', marginTop: '1rem', }}>      
+    <div style={{ borderTop:'none', borderBottom: 'none', margin: '0rem', maxWidth:"20rem", alignSelf: "center"}}>      
       <div style={{ padding: '10px' }}>
-        
+              <div style={{display:"flexbox", textAlign: "left", margin: "0rem"}}>
+                <a
+                  href="#"
+                  onClick={togglePreferences}
+                  style={{
+                    color: 'grey',
+                    cursor: 'pointer',
+                    textDecoration: 'none',
+                    width: '100%',
+                  }}
+                >
+                  {showPreferences ? 'collapse travel preferences' : 'travel preferences'}
+                </a>
+              </div>
         {showPreferences && (
-          <div>
-            <h4 style={{color: "grey"}}>travel preferences</h4>
+            <div>              
             <SpecificSitesToIncludeInput />
             <ExperienceSoughtThisTrip />
           </div>
         )}
-        <a
-          href="#"
-          onClick={togglePreferences}
-          style={{
-            color: 'grey',
-            cursor: 'pointer',
-            textDecoration: 'none',
-            textAlign: 'left',
-            width: '100%',
-          }}
-        >
-          {showPreferences ? 'collapse travel preferences' : 'travel preferences'}
-        </a>
+        
       </div>
     </div>
   );

@@ -2,10 +2,31 @@
 
 import React from 'react';
 import TextField from '@mui/material/TextField';
+import { styled } from '@mui/material/styles';
 import InputAdornment from '@mui/material/InputAdornment';
 import {userPreferencesAtom} from '../../atoms/atoms';
 import { useRecoilState } from 'recoil'; 
 
+const PinkOutlinedTextField = styled(TextField)(({ theme }) => ({
+  '& .MuiOutlinedInput-root': {
+    '&:hover fieldset': {
+      borderColor: theme.palette.primary.main,
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: theme.palette.primary.main,
+    },
+    borderRadius: '30px',
+    borderColor: 'pink',
+  },
+  '& .MuiOutlinedInput-input': {
+    fontSize: '18px',
+    fontWeight: '400',
+    padding: '10px 10px 10px 20px' ,
+  },
+  width: "90%",
+  maxWidth: '20rem',
+  alignSelf: 'center',
+}));
 
 interface CurrencyInputProps {
   currencySymbol?: string;
@@ -36,30 +57,12 @@ const UserInputCurrencyInputField: React.FC<CurrencyInputProps> = ({
 
   
   return (
-    <TextField
+    <PinkOutlinedTextField
       type="text"
       label={label}
       // helperText={helperText}
       value={budget}
-      onChange={(e:React.ChangeEvent<HTMLInputElement>)=>handleChange(e)}
-      sx={{
-            '& .MuiOutlinedInput-root': {
-            '&:hover fieldset': {
-            borderColor: 'theme.palette.primary.main',
-            },
-            '&.Mui-focused fieldset': {
-            borderColor: 'theme.palette.primary.main',
-            },
-            borderRadius: '30px',
-            borderColor: 'pink',
-        },
-        '& .MuiOutlinedInput-input': {
-            fontSize: '18px',
-            fontWeight: '400',
-            padding: '10px 10px 10px 20px',
-        },
-        }}
-
+      onChange={handleChange}
       InputProps={{
         startAdornment: (
           <InputAdornment position="start">{currencySymbol}</InputAdornment>

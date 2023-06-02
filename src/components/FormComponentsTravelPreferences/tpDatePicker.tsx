@@ -16,8 +16,8 @@ const UserInputDatePicker = () => {
 
   return (
     
-      <Box>
-        <Typography variant="h5" sx={{ fontWeight: "100" }}>
+      <Box sx={{ height: "4rem" }}>
+        <Typography  sx={{ fontWeight: "100", padding:"-5rem 0" }}>
           <Stack direction="row" spacing={1} alignItems="center">
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <div className={styles.datePickerContainer}>
@@ -29,26 +29,32 @@ const UserInputDatePicker = () => {
                     setTripPreferences((prevTravelState) => ({...prevTravelState, travelDate: value}))
                     
                     ;}}}
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
-                    '&:hover fieldset': {
-                      borderColor: 'theme.palette.primary.main',
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                      '&:hover fieldset': {
+                        borderColor: 'theme.palette.primary.main',
+                      },
+                      '&.Mui-focused fieldset': {
+                        borderColor: 'theme.palette.primary.main',
+                      },
+                      borderRadius: '30px',
+                      borderColor: 'pink',
                     },
-                    '&.Mui-focused fieldset': {
-                      borderColor: 'theme.palette.primary.main',
+                    '& .MuiOutlinedInput-input': {
+                      fontSize: '18px',
+                      fontWeight: '400',
+                      padding: '10px 10px 10px 20px',
                     },
-                    borderRadius: '30px',
-                    borderColor: 'pink',
-                  },
-                  '& .MuiOutlinedInput-input': {
-                    fontSize: '18px',
-                    fontWeight: '400',
-                    padding: '10px 10px 10px 20px',
-                  },
-                }}
-                  slotProps={{
-                    layout: {sx: {fontSize: "20px"}},
+                    width: "90%",
+                    maxWidth: '20rem',
+                    alignSelf: 'center',
+                    justifySelf: 'top',
+                    height: "4rem",
+                    marginTop: "-2.5rem",
                   }}
+                    slotProps={{
+                      layout: {sx: {fontSize: "20px"}},
+                    }}
                 />
                 </div>
             </LocalizationProvider>

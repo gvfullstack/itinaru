@@ -28,9 +28,11 @@ const FavoriteCuisine: React.FC = (props) => {
 
   return (
     <div>
-      Favorite Cuisine
+      <div style={{display:"flex", marginLeft:"1rem", marginBottom:'1rem'}}>
+        Favorite Cuisine
+      </div>
       {favoriteCuisineOptions?.map(option => (
-        <label key={uuidv4()} style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+        <label key={uuidv4()} style={{ display: 'flex', marginBottom: '1rem' }}>
           <input
             type="checkbox"
             value={option.label}
@@ -47,6 +49,8 @@ const FavoriteCuisine: React.FC = (props) => {
               background: option.selected ? 'green' : 'grey',
               position: 'relative',
               cursor: 'pointer',
+              marginLeft: '3rem',
+
             }}
           >
             <div

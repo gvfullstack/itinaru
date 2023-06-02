@@ -24,6 +24,9 @@ const PinkOutlinedTextField = styled(TextField)(({ theme }) => ({
     fontWeight: '400',
     padding: '10px 10px 10px 20px' ,
   },
+  width: "75%",
+  maxWidth: '17.5rem',
+  alignSelf: 'center',
 }));
 
 const FavoriteRestaurantsPreviouslyVisited: React.FC = (props) => {
@@ -77,7 +80,7 @@ const FavoriteRestaurantsPreviouslyVisited: React.FC = (props) => {
       }
       return text;
     } else {
-      return 'Add favorite restaurants previously visited.';
+      return '';
     }
   }
 
@@ -86,7 +89,7 @@ const FavoriteRestaurantsPreviouslyVisited: React.FC = (props) => {
         alignItems: 'center',
         justifyContent: 'center',
         width: '100%',
-        marginBottom: '20px'}}>
+        marginBottom: '10px'}}>
     <PinkOutlinedTextField
         label="favorite restaurant previously visited"
         value={favRestaurantsPrevVisitedInput}
@@ -103,14 +106,14 @@ const FavoriteRestaurantsPreviouslyVisited: React.FC = (props) => {
         <IconButton 
             onClick={()=>handleAddFavoriteRestaurantsPreviouslyVisited(favRestaurantsPrevVisitedInput)}
         >
-            <FontAwesomeIcon icon={faPlus} />
+            <FontAwesomeIcon icon={faPlus} size="xs"/>
         </IconButton>
     
     {showViewAllFavRestaurantsPrevVisited ? (
         <ViewAllFavRestaurantsPrevVisited handleClose={handleClose} />
     ) : (
         <IconButton onClick={handleClick}>
-            <FontAwesomeIcon icon={faEye} />
+            <FontAwesomeIcon icon={faEye} size="xs"/>
         </IconButton>
     )}
 </div>

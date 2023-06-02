@@ -27,9 +27,12 @@ const PreferredDiningExperience: React.FC = (props) => {
 
   return (
     <div>
-      Preferred Dining Experience
+      <div style={{display:"flex", marginLeft:"1rem", marginBottom:'1rem'}}>
+        Preferred Dining Experience
+      </div>
+      
       {diningExperienceSoughtOptions?.map(option => (
-        <label key={uuidv4()} style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+        <label key={uuidv4()} style={{ display: 'flex', marginBottom: '1rem' }}>
           <input
             type="checkbox"
             value={option.label}
@@ -46,6 +49,7 @@ const PreferredDiningExperience: React.FC = (props) => {
               background: option.selected ? 'green' : 'grey',
               position: 'relative',
               cursor: 'pointer',
+              marginLeft: '3rem',
             }}
           >
             <div

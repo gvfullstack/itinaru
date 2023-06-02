@@ -21,6 +21,9 @@ const PinkOutlinedTextField = styled(TextField)(({ theme }) => ({
     fontWeight: '400',
     padding: '10px 10px 10px 20px' ,
   },
+  width: "90%",
+  maxWidth: '20rem',
+  alignSelf: 'center',
 }));
 
 const ExperienceSoughtThisTrip: React.FC<TripPreferences> = (props) => {

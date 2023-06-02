@@ -25,6 +25,9 @@ const PinkOutlinedTextField = styled(TextField)(({ theme }) => ({
     fontWeight: '400',
     padding: '10px 10px 10px 20px' ,
   },
+  width: "75%",
+  maxWidth: '17.5rem',
+  alignSelf: 'center',
 }));
 
 const SpecificSitesToIncludeInput: React.FC<TripPreferences> = (props) => {
@@ -73,7 +76,7 @@ const SpecificSitesToIncludeInput: React.FC<TripPreferences> = (props) => {
         }
         return text;
       } else {
-        return 'Add specific sites to include.';
+        return '';
       }
     }      
 
@@ -95,14 +98,14 @@ const SpecificSitesToIncludeInput: React.FC<TripPreferences> = (props) => {
             <IconButton  
               onClick={()=>handleAddSpecificSitesToInclude(specificSitesToIncludeInput)}
               >
-              <FontAwesomeIcon icon={faPlus} />
+              <FontAwesomeIcon icon={faPlus} size="xs"/>
             </IconButton>
             
             {showViewAllSpecificSites ? (
                 <ViewAllSpecificSites handleClose={handleClose} />
             ) : (
                 <IconButton onClick={handleClick}>
-                  <FontAwesomeIcon icon={faEye}/>
+                  <FontAwesomeIcon icon={faEye} size="xs"/>
                 </IconButton>
             )}
         </div>

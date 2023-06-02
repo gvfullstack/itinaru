@@ -17,3 +17,14 @@
     height: 100%;
     background-color: rgb(26, 112, 187);
 }
+.mobileDatePickerInput {
+    width: 100%;
+    font-size: 18px;
+    font-weight: 400;
+    padding: 10px 10px 10px 20px;
+    border-radius: 30px;
+    border-color: pink;
+    background-color: pink;
+    max-width: 20rem; /* Added max-width */
+  }
+    

@@ -18,16 +18,26 @@ const ParentUserPreferencesComponent = (props: any) => {
   };
 
   return (
-    <div className={styles.wrapper}>
-      <div
-        className={`${styles.content} ${showPreferences ? styles.open : styles.close}`}
-        style={{
-          maxHeight: showPreferences ? '2000px' : '0',
-          transition: 'max-height 1s ease',
-        }}
-      >
+    <div style={{ borderTop:'none', borderBottom: 'none', margin: '0rem 0rem 0rem 0rem', width:"100%", maxWidth:"22rem", alignSelf: "center"}}>
+     <div style={{ padding: '10px 10px 0 0'  }}>
+            <div style={{display:"flexbox", textAlign: "left", margin: "0rem"}}>
+                <a
+                  href="#"
+                  onClick={togglePreferences}
+                  style={{
+                    color: 'grey',
+                    cursor: 'pointer',
+                    textDecoration: 'none',
+                    textAlign: 'left',
+                    width: '100%',
+                    marginLeft: showPreferences ? ".5rem": "1rem"
+                  }}
+                >
+                  {showPreferences ? 'collapse user preferences' : 'user preferences'}
+                </a>
+          </div>
         {showPreferences && (
-          <div>
+          <div style={{display: "flex", flexDirection:"column", marginTop:"1rem" }}>
             <UserInputCurrencyInputField />
             <FavoritePlacesPreviouslyVisited />
             <FavoriteRestaurantsPreviouslyVisited />
@@ -38,19 +48,6 @@ const ParentUserPreferencesComponent = (props: any) => {
           </div>
         )}
       </div>
-      <a
-        href="#"
-        onClick={togglePreferences}
-        style={{
-          color: 'grey',
-          cursor: 'pointer',
-          textDecoration: 'none',
-          textAlign: 'left',
-          width: '100%',
-        }}
-      >
-        {showPreferences ? 'hide user preferences' : 'user preferences'}
-      </a>
     </div>
   );
 };

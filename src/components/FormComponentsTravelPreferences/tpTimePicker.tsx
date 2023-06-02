@@ -92,6 +92,10 @@ const UserInputTimePicker = () => {
                     fontWeight: '400',
                     padding: '10px 10px 10px 20px',
                   },
+                  width: "90%",
+                  maxWidth: '20rem',
+                  alignSelf: 'center',
+
                 }}
                   slotProps={{
                     layout: {sx: {fontSize: "20px"}},
@@ -124,11 +128,15 @@ const UserInputTimePicker = () => {
                   },
                   "& .MuiOutlinedInput-label": {
                      color: "grey",
-                  }
+                  },
+                  width: "90%",
+                  maxWidth: '20rem',
+                  alignSelf: 'center',
                 }}
                   slotProps={{
                     layout: {sx: {fontSize: "20px"}},
                   }}
+                  
                 />
                 </div>
             </LocalizationProvider>

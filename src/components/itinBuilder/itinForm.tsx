@@ -25,7 +25,7 @@ const InitForm: React.FC<DefinedProps> = (props) => {
   const [tripPreferences, setTripPreferences] = useRecoilState(tripPreferencesAtom);
   
   return (
-    <div className={styles.pageComponentContainer}>
+    <div className={styles.pageComponentContainer} style  ={{}}>
      
         {props.displayIntroText && <WelcomeText 
               introText={props.introText}
@@ -33,16 +33,17 @@ const InitForm: React.FC<DefinedProps> = (props) => {
               infoText2={props.infoText2}
               prompt={props.prompt}
               pageStep={props.pageStep}
-        />}
-        {props.displayDestinationInput && <DestinationInput />}
+              />}
+              <div style={{margin:"10rem, 0rem"}}>
+                {props.displayDestinationInput && <DestinationInput />}
+              </div>
         {props.displayDatePicker && <UserInputDatePicker />}
         {props.displayTimePicker && <UserInputTimePicker />}
         {props.displayParentUPComponent && <ParentUPComponent />}
         {props.displayDetailedTravelPreferences && <DetailedTravelPreferences />}
         {props.displayNeighborhoodRecommendations && <NeighborhoodRecommendations />}
-    
-      {props.displayItinerary &&
-        <Itinerary />}
+
+      {props.displayItinerary && <Itinerary />}
             
       {props.backButtonText && (<BackButton
         key={uuidv4()}
