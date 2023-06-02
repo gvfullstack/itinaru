@@ -18,7 +18,7 @@ const ParentUserPreferencesComponent = (props: any) => {
   };
 
   return (
-    <div style={{ borderTop:'none', borderBottom: 'none', margin: '0rem 0rem 0rem 0rem', width:"100%", maxWidth:"22rem", alignSelf: "center"}}>
+    <div style={{ borderTop:'none', borderBottom: 'none', margin: '0rem 0rem 0rem 0rem', maxWidth:"20rem", alignSelf: "center"}}>
      <div style={{ padding: '10px 10px 0 0'  }}>
             <div style={{display:"flexbox", textAlign: "left", margin: "0rem"}}>
                 <a
@@ -28,7 +28,6 @@ const ParentUserPreferencesComponent = (props: any) => {
                     color: 'grey',
                     cursor: 'pointer',
                     textDecoration: 'none',
-                    textAlign: 'left',
                     width: '100%',
                     marginLeft: showPreferences ? ".5rem": "1rem"
                   }}

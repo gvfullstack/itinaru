@@ -15,7 +15,8 @@ import SpecificSitesToIncludeInput from './tpSpecificSitesToInclude';
 const DetailedTravelPreferences = (props: any) => {
   const [showPreferences, setShowPreferences] = useState(false);
 
-  const togglePreferences = () => {
+  const togglePreferences = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    event.preventDefault();
     setShowPreferences((prevShowPreferences) => !prevShowPreferences);
   };
 
@@ -31,6 +32,7 @@ const DetailedTravelPreferences = (props: any) => {
                     cursor: 'pointer',
                     textDecoration: 'none',
                     width: '100%',
+
                   }}
                 >
                   {showPreferences ? 'collapse travel preferences' : 'travel preferences'}
