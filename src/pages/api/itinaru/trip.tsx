@@ -72,67 +72,65 @@ async function requestItineraryFunction(
     ////////////////////////////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
     try {
-     const completion = await openai.createChatCompletion({
-        model: "gpt-3.5-turbo",
-        messages: [
-            { role: "user", content: prompt }
-            ],
-        temperature: 0.7,
-        max_tokens: 2048,
-
-    });
-      let answer = []
-      if(completion.data?.choices[0]?.message?.content){
-        try {
-          answer = JSON.parse(completion.data.choices[0].message?.content)
-        } catch (error) {
-          answer = [completion.data.choices[0].message?.content]
-        }
-      }
-      const initialResponse = answer;
-      const initialResponseString = JSON.stringify(initialResponse) ?? "";
-      // cache the response
-      // res.status(200).json({ listOfSuggestions: answer });
-      cache.put(cacheKey, initialResponse, CACHE_TIME * 1000);
-      
-console.log({
-  model: "gpt-3.5-turbo",
-  messages: [
-    { role: "user", content: prompt },
-    { role: "assistant", content: initialResponseString }, // Use initial response as assistant's message
-    { role: "user", content: prompt2 } // Follow-up message from the user
-  ],
-  temperature: 0.7,
-  max_tokens: 2048,
-});
-    const followupCompletion = await openai.createChatCompletion({
+      const response = await openai.createChatCompletion({
         model: "gpt-3.5-turbo",
         messages: [
           { role: "user", content: prompt },
-          { role: "assistant", content: initialResponseString }, // Use initial response as assistant's message
-          { role: "user", content: prompt2 } // Follow-up message from the user
         ],
         temperature: 0.7,
         max_tokens: 2048,
       });
-
-      let answer2 = []
-      if(followupCompletion.data?.choices[0]?.message?.content){
-        try {
-          answer2 = JSON.parse(followupCompletion.data.choices[0].message?.content)
-        } catch (error) {
-          answer2 = [completion.data.choices[0].message?.content]
+    
+      if (response.data && response.data.choices && response.data.choices.length > 0) {
+        const chunks = response.data.choices;
+        let initialResponseString = "";
+    
+        for (const chunk of chunks) {
+          if (chunk.message && chunk.message.content) {
+            let answer;
+            try {
+              answer = JSON.parse(chunk.message.content);
+            } catch (error) {
+              answer = [chunk.message.content];
+            }
+    
+            const initialResponse = answer;
+            initialResponseString = JSON.stringify(initialResponse) || "";
+            console.log("initialResponse:", initialResponse);
+            // Cache the response
+            cache.put(cacheKey, initialResponse, CACHE_TIME * 1000);
+          }
         }
+    
+        const followupCompletion = await openai.createChatCompletion({
+          model: "gpt-3.5-turbo",
+          messages: [
+            { role: "user", content: prompt },
+            { role: "assistant", content: initialResponseString }, // Use initial response as assistant's message
+            { role: "user", content: prompt2 }, // Follow-up message from the user
+          ],
+          temperature: 0.7,
+          max_tokens: 2048,
+        });
+    
+        let answer2 = [];
+        if (followupCompletion.data?.choices[0]?.message?.content) {
+          try {
+            answer2 = JSON.parse(followupCompletion.data.choices[0].message?.content);
+          } catch (error) {
+            answer2 = [followupCompletion.data.choices[0].message?.content];
+          }
+        }
+    
+        // Get the follow-up response from OpenAI
+        const followupResponse = answer2;
+        const followupResponseString = followupResponse?.toString() || "";
+        console.log("followupResponse:", followupResponse);
+        res.status(200).json({ itinaru: followupResponse });
+        const cachedFollowupResponse = { itinaru: answer };
+        cache.put(cacheKey, cachedFollowupResponse, CACHE_TIME * 1000);
       }
-      // Get the follow-up response from OpenAI
-      const followupResponse = answer2;
-      const followupResponseString = followupResponse?.toString()??"";
-      console.log("followupResponse:", followupResponse)
-      res.status(200).json({ itinaru: followupResponse });
-      const cachedFollowupResponse = { itinaru: answer };
-      cache.put(cacheKey, cachedFollowupResponse, CACHE_TIME * 1000);
-
-    } catch(error: unknown) {
+    } catch (error: unknown) {
       // Consider adjusting the error handling logic for your use case
       if (error instanceof Error) {
         console.error(error.message);
