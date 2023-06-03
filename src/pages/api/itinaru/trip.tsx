@@ -127,7 +127,7 @@ async function requestItineraryFunction(
         const followupResponseString = followupResponse?.toString() || "";
         console.log("followupResponse:", followupResponse);
         res.status(200).json({ itinaru: followupResponse });
-        const cachedFollowupResponse = { itinaru: answer };
+        const cachedFollowupResponse = { itinaru: answer2 };
         cache.put(cacheKey, cachedFollowupResponse, CACHE_TIME * 1000);
       }
     } catch (error: unknown) {
