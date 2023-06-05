@@ -16,11 +16,11 @@ const UserInputDatePicker = () => {
 
   return (
     
-      <Box sx={{ height: "4rem" }}>
-        <Typography  sx={{ fontWeight: "100", padding:"-5rem 0" }}>
-          <Stack direction="row" spacing={1} alignItems="center">
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <div className={styles.datePickerContainer}>
+    <Box>
+      <Typography variant="h5" sx={{ fontWeight: "100", height:"4rem" }}>
+        <Stack direction="row" spacing={1} alignItems="center">
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <div className={styles.datePickerContainer}>
                 <MobileDatePicker 
                   label="Travel Date"
                   value={travelDate}

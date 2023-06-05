@@ -14,25 +14,17 @@ import { HandleInputChange, MultiSelectHandler, DefinedProps } from "../typeDefs
 
 type StateVariables = {
   [key:string]: any;
-  specificSitesBool?: boolean;
-  nextButtonGenerateAPI?: boolean;
   isLoading?: boolean;
   }
 
 const ItinBuilder = (props: any) => {
   const [curStep, setCurStepState] = useRecoilState(curStepState);
-  const [itineraryItems, setItineraryItems] = useRecoilState(itineraryItemsState);
 
 
   const [stateVariables, setStateVariables] = useState<StateVariables>({
-    specificSitesBool: false,
-    nextButtonGenerateAPI: false,
-    isLoading: false,
-    multipleSelectObjects: [],
-    
+    isLoading: false,    
   })
 
-  const backButtonText = "Prev page please!"
   const createButtonText = "create itinerary now!";
   
 
@@ -41,24 +33,6 @@ const ItinBuilder = (props: any) => {
       console.log("state variable",{stateVariables})
   }, [stateVariables]);
 
-
-  const handleMultiSelect: MultiSelectHandler = useCallback((key, value) => {
-     if(stateVariables[key].includes(value)){
-      // console.log("item found")
-      setStateVariables((prevInputs) => ({...prevInputs, 
-        [key]:prevInputs[key].filter((selectedOption: any) => selectedOption !== value)
-      }))   
-    }
-    
-    else{
-      setStateVariables((prevInputs) => ({...prevInputs, 
-        [key]: [...prevInputs[key], value]
-      }))
-    }
-    
-    
-    // console.log(stateVariables)
-  }, [stateVariables])
 
   const pageProps: (DefinedProps[] )   =
       [
@@ -98,7 +72,6 @@ return (
         <InitForm 
               key={uuidv4()} 
               {...props} 
-              // handleCreateItinerary={handleCreateItinerary}
               handleInputChange={handleInputChange}
               />)
           ))}

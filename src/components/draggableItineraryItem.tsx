@@ -45,8 +45,12 @@ const openGoogleMapsDirection = async (destinationAddress?: string) => {
     const mapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${originLat},${originLng}&destination=${encodedDestinationAddress}&travelmode=driving`;
 
     // Open Google Maps in a new tab
-    window.open(mapsUrl, '_blank');
-  } catch (error) {
+    if (typeof window !== 'undefined') {
+      window.open(mapsUrl, '_blank');
+    } else {
+      console.error('window is not defined');
+    }
+    } catch (error) {
     console.error('Error getting user location:', error);
   }
 };

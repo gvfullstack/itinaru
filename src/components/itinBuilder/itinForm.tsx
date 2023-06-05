@@ -21,9 +21,7 @@ const apiKey = process.env.REACT_APP_GOOGLE_MAP_API??"";
 
 const InitForm: React.FC<DefinedProps> = (props) => {
   console.log("PageComponent just REDENDERED")
-  const [itineraryItems, setItineraryItems] = useRecoilState(itineraryItemsState);
-  const [tripPreferences, setTripPreferences] = useRecoilState(tripPreferencesAtom);
-  
+   
   return (
     <div className={styles.pageComponentContainer} style  ={{}}>
      
@@ -45,12 +43,6 @@ const InitForm: React.FC<DefinedProps> = (props) => {
 
       {props.displayItinerary && <Itinerary />}
             
-      {props.backButtonText && (<BackButton
-        key={uuidv4()}
-        backButtonText={props.backButtonText}
-        prevPageStep={props.prevPageStep}
-        handleInputChange={props.handleInputChange} 
-        />)}
 
       {props.displayGetNeighborhoodsButton &&   
         <GetNeighborhoodSuggestions          
