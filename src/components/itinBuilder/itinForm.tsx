@@ -37,8 +37,8 @@ const InitForm: React.FC<DefinedProps> = (props) => {
               </div>
         {props.displayDatePicker && <UserInputDatePicker />}
         {props.displayTimePicker && <UserInputTimePicker />}
-        {props.displayParentUPComponent && <ParentUPComponent />}
         {props.displayDetailedTravelPreferences && <DetailedTravelPreferences />}
+        {props.displayParentUPComponent && <ParentUPComponent />}
         {props.displayNeighborhoodRecommendations && <NeighborhoodRecommendations />}
 
       {props.displayItinerary && <Itinerary />}

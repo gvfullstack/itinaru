@@ -37,13 +37,13 @@ const ParentUserPreferencesComponent = (props: any) => {
           </div>
         {showPreferences && (
           <div style={{display: "flex", flexDirection:"column", marginTop:"1rem" }}>
-            <UserInputCurrencyInputField />
-            <FavoritePlacesPreviouslyVisited />
-            <FavoriteRestaurantsPreviouslyVisited />
+            {/* <UserInputCurrencyInputField /> */}
             <FavoriteExperienceTypes />
             <PreferredDiningExperience />
             <PreferredPace />
             <FavoriteCuisine />
+            <FavoritePlacesPreviouslyVisited />
+            <FavoriteRestaurantsPreviouslyVisited />
           </div>
         )}
       </div>
