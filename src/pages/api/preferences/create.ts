@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { serialize } from "cookie";
 const mongoose = require('mongoose');
 
-import User from "../../models/user"
+import User from "../../../models/user"
 
 async function upsertPreferences(
     req: NextApiRequest,

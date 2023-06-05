@@ -18,6 +18,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/pages/api/neighborhood/city.tx", "src/pages/models/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/pages/api/neighborhood/city.tx", "src/models/*.ts"],
   "exclude": ["node_modules"]
 }
