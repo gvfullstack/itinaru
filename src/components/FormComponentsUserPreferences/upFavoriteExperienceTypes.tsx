@@ -29,7 +29,7 @@ const FavoriteExperienceTypes: React.FC = (props) => {
   return (
     <div>
       <div style={{display:"flex", marginLeft:"1rem", marginBottom:'1rem'}}>
-        Favorite Experience Types
+        Preferred Experience Types
       </div>
       {favoriteExperienceTypes?.map(option => (
         <label key={uuidv4()} style={{ display: 'flex', marginBottom: '1rem' }}>
