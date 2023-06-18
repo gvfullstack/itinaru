@@ -10,7 +10,7 @@ export const ItemTypes = {
 
 
   export type ItineraryItem = {
-    activityTitle?: string;
+    siteName?: string;
     startTime?: {time?: Date, beingEdited?: boolean};
     endTime?: {time?: Date, beingEdited?: boolean};
     description?: string;
@@ -104,6 +104,7 @@ export type DefinedProps = {
     };
 ////////////////////////
 export type UserPreferences = {
+  showUserPreferences?: Boolean;
   favoritePlacesPreviouslyVisited?: string[];
   favoriteExperienceTypes?: Array<{ label: string, selected: boolean}>;
   favoriteRestaurantsPreviouslyVisited?: string[];
@@ -113,10 +114,11 @@ export type UserPreferences = {
     Amount?: string;
     Currency?: string;
   };
-  preferredPace: Array<{ label: string, selected: boolean}>;
+  preferredPace: Array<{ label: string, selected: string}>;
 };
 
 export type TripPreferences = {
+  showTripPreferences?: Boolean;
   destination?: string;
   travelDate?: Date;
   startTime?: Date;
@@ -132,7 +134,10 @@ export type NeighborhoodRecommendation = {
   rating?: string;
   title?: string;
   description?: string;
-  location?: {latitude: number, longitude: number};
 }
 
-export type NeighborhoodRecommendationList = {neighborhoodRecommendationArray?: NeighborhoodRecommendation[]};
+export type NeighborhoodRecommendationList = {
+  neighborhoodRecommendationArray?: NeighborhoodRecommendation[];
+  showNeighborhoodList?:Boolean;
+};
+

@@ -1,5 +1,6 @@
 .createItineraryButtonContainer{
     display: flex;
+    flex-direction: column;
     justify-content: center;
     height: 100%;
     width: 100%;
@@ -26,3 +27,20 @@
 .disabled{
     background-color: #FF7890;
 }
+
+p.styles.heading{
+    animation: typing 1s steps(1, end) infinite;
+    white-space: nowrap;
+    overflow: hidden;
+    border-right: 2px solid black;
+    width: fit-content;
+  }
+
+  @keyframes typing {
+    from {
+      width: 0;
+    }
+    to {
+      width: fit-content;
+    }
+  }

@@ -88,6 +88,7 @@ const DroppableItineraryContainer: React.FC<DroppableItineraryContainerProps> = 
         travelDate.getDate(),
         updatedItems[i-1].endTime?.time?.getHours() || 0,
         updatedItems[i-1].endTime?.time?.getMinutes() || 0);
+        console.log(updatedItems[i], "current Item duration")
       const currentItemDuration = updatedItems[i].activityDuration || 0;
       let userDefinedRespectedTime = updatedItems[i].userDefinedRespectedTime;
 

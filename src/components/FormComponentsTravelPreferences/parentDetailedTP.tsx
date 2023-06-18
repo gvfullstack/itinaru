@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
 import {
   useRecoilState,
-  RecoilState,
 } from 'recoil';
-import {
-  curStepState,
-  userPreferencesAtom
+import {tripPreferencesAtom
 } from '../../atoms/atoms';
 const { v4: uuidv4 } = require('uuid');
 import { UserPreferences } from '../typeDefs';
@@ -13,11 +10,13 @@ import ExperienceSoughtThisTrip from './tpExperienceSoughtInput';
 import SpecificSitesToIncludeInput from './tpSpecificSitesToInclude';
 
 const DetailedTravelPreferences = (props: any) => {
-  const [showPreferences, setShowPreferences] = useState(false);
+  const [tripPreferences, setTripPreferences] = useRecoilState(tripPreferencesAtom)
+  const showPreferences = tripPreferences.showTripPreferences ? tripPreferences.showTripPreferences : false
+  console.log("TP Parent just rendered")
 
   const togglePreferences = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     event.preventDefault();
-    setShowPreferences((prevShowPreferences) => !prevShowPreferences);
+    setTripPreferences(prev => ({...prev, showTripPreferences: !prev.showTripPreferences}))
   };
 
   return (

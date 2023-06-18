@@ -1,9 +1,10 @@
-import React, { useState, useRef } from "react";
-import {TextField} from "@mui/material";
+import React, { useState } from 'react';
+import { TextField, Box } from "@mui/material";
 import { styled } from '@mui/material/styles';
-import { TripPreferences } from "@/components/typeDefs";  
+import Autocomplete from '@mui/material/Autocomplete';
 import { useRecoilState } from "recoil";
-import { tripPreferencesAtom} from "@/atoms/atoms";
+import { tripPreferencesAtom } from "@/atoms/atoms";
+import cities from './cities.json';
 
 const PinkOutlinedTextField = styled(TextField)(({ theme }) => ({
   '& .MuiOutlinedInput-root': {
@@ -23,36 +24,36 @@ const PinkOutlinedTextField = styled(TextField)(({ theme }) => ({
   },
   width: "90%",
   maxWidth: '20rem',
-  alignSelf: 'center',
 }));
 
-const DestinationInput: React.FC<TripPreferences> = (props) => {
-    const [tripPreferences, setTripPreferencesAtom] = useRecoilState(tripPreferencesAtom);
-    const destination = tripPreferences.destination;
-    const [inputLength, setInputLength] = useState(0);
-    const maxLength = 255;
+function DestinationInput() {
+  const [tripPreferences, setTripPreferencesAtom] = useRecoilState(tripPreferencesAtom);
+  const selectedCity = cities.find(city => `${city.city}, ${city.state}` === tripPreferences.destination) || null;
+  const maxLength = 255;
 
-    const inputRef = useRef<HTMLInputElement>(null);
-
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const newValue = event.target.value;
-      setTripPreferencesAtom((prevTripPreferenceState)=> ({...prevTripPreferenceState, destination: newValue}));
-      setInputLength(newValue.length);
-    }
-
+  const handleChange = (_: any, newValue: { city: string; state: string } | null) => {
+    setTripPreferencesAtom((prevTripPreferenceState)=> ({...prevTripPreferenceState, destination: newValue ? `${newValue.city}, ${newValue.state}` : ''}));
+  }
 
   return (
-    <PinkOutlinedTextField
-      label="Enter your destination"
-      value={destination}
-      onChange={handleChange}
-      fullWidth
-      margin="normal"
-      variant="outlined"
-      size="small"
-      inputRef={inputRef}
-      disabled={inputLength >= maxLength}
-    />
+    <Box display="flex" justifyContent="center">
+      <Autocomplete
+        options={cities}
+        getOptionLabel={(option) => `${option.city}, ${option.state}`}
+        style={{ width: 500 }}
+        value={selectedCity}
+        onChange={handleChange}
+        renderInput={(params) => 
+          <PinkOutlinedTextField
+            {...params}
+            label="Enter your destination"
+            variant="outlined"
+            size="small"
+            disabled={!!tripPreferences.destination && tripPreferences.destination.length >= maxLength}
+            />
+        }
+      />
+    </Box>
   );
 };
 

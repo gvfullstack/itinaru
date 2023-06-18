@@ -215,20 +215,20 @@ const DraggableItineraryItem: React.FC<DraggableItineraryItemProps> = ({
                   <div className={styles.itineraryItemContainerContainer}>
                       <div className={styles.itinTitleContainer} 
                       >
-                          <h3 className={`${styles.itinTitle} ${itineraryItem.descHidden ? "" : styles.isShown }`} onClick={()=>handleShowHideDescription(itineraryItem)}>{replacementLoading ? "...processing" : itineraryItem.activityTitle}</h3>
+                          <h3 className={`${styles.itinTitle} ${itineraryItem.descHidden ? "" : styles.isShown }`} onClick={()=>handleShowHideDescription(itineraryItem)}>{replacementLoading ? "...processing" : itineraryItem.siteName}</h3>
                           <p className={`${styles.itinTitleDescription} ${itineraryItem.descHidden ? "" : styles.isShown }`}> {replacementLoading ? "" : itineraryItem.description} </p>
                           <p className={`${styles.expandedItinAddressContainer} ${itineraryItem.descHidden ? "" : styles.isShown }`}>{replacementLoading ? "" : itineraryItem.locationAddress}</p>
                           <p className={`${styles.ownResearchContainer} ${itineraryItem.descHidden ? "" : styles.isShown }`}>
                             Do your own research: 
                             <div className={styles.expandedItinItemWebsite}>
-                              <a href={`https://www.google.com/search?q=${encodeURIComponent(itineraryItem.activityTitle ? itineraryItem.activityTitle : "")} ${encodeURIComponent(tripPreferences.destination ? tripPreferences.destination : "")}`} target="_blank">
+                              <a href={`https://www.google.com/search?q=${encodeURIComponent(itineraryItem.siteName ? itineraryItem.siteName : "")} ${encodeURIComponent(tripPreferences.destination ? tripPreferences.destination : "")}`} target="_blank">
                                 {externalLink}
                                 <span className={styles.youGSearchText}>Search on Google</span>
                               </a>
                             </div>
 
                             <div className={styles.youtubeLink}>      
-                                  <a href={`https://www.youtube.com/results?search_query=${encodeURIComponent(itineraryItem.activityTitle ? itineraryItem.activityTitle : "")} ${encodeURIComponent(tripPreferences.destination ? tripPreferences.destination : "")}`} target="_blank">
+                                  <a href={`https://www.youtube.com/results?search_query=${encodeURIComponent(itineraryItem.siteName ? itineraryItem.siteName : "")} ${encodeURIComponent(tripPreferences.destination ? tripPreferences.destination : "")}`} target="_blank">
                                   {externalLink} <span className={styles.youTubeLinkText}>Search on YouTube</span></a>
                             </div>
                           </p>

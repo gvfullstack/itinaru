@@ -12,6 +12,7 @@ const WelcomeText: React.FC<DefinedProps> = (props) => {
   const pageStep = props.pageStep ?? "10T";
   const [displayedIntroMessage, setDisplayedIntroMessage] = useState("");
 
+  console.log("Welcome text just rendered")
   
   const introText = useMemo(() => [
   // ARR of objects  
@@ -61,7 +62,8 @@ const WelcomeText: React.FC<DefinedProps> = (props) => {
   useEffect(() => {
     const displayIntroMessage = (pageStep: string) => {
       let message: string = "";
-      const pageIntro: IntroObject = introText.find(intro => intro.hasOwnProperty(pageStep)) ??
+      const pageIntro: IntroObject = introText.find(intro => 
+        intro.hasOwnProperty(pageStep)) ??
         { "nullMessage": [{ message: `No intro text found for page ${pageStep}.` }] };
 
       if ('nullMessage' in pageIntro) {

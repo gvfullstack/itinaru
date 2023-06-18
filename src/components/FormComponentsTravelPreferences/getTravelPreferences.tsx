@@ -30,12 +30,10 @@ import { TripPreferences } from "../typeDefs/index";
     const selectedTypeOfEateries = typeOfEateriesToIncludeInItinerary
     .filter(e => e.selected)
     .map(e => e.label);
-  console.log('selectedTypeOfEateries', selectedTypeOfEateries)
     if (selectedTypeOfEateries.length > 0) {
       formattedPreferences.typeOfEateriesToIncludeInItinerary = selectedTypeOfEateries;
     }
   
-    
     
     if (specificSitesToInclude.length > 0) {
       formattedPreferences.specificSitesToInclude = specificSitesToInclude;
@@ -45,7 +43,6 @@ import { TripPreferences } from "../typeDefs/index";
       formattedPreferences.experienceSoughtThisTrip = experienceSoughtThisTrip;
     }
   
-   
     const tripPreferencesString = JSON.stringify(formattedPreferences, null, 2);
     console.log(tripPreferencesString)
     if (tripPreferencesString.length === 0) {
@@ -55,13 +52,10 @@ import { TripPreferences } from "../typeDefs/index";
     return tripPreferencesString;
   };
 
-
-
   export const getSelectedTripPreferencesNeighborhoods = (preferences: TripPreferences) => {
 
     const specificSitesToInclude = preferences.specificSitesToInclude ?? [];
     const experienceSoughtThisTrip = preferences.experienceSoughtThisTrip ?? '';
-  
     const formattedPreferences: {specificSitesToInclude?: any[]; experienceSoughtThisTrip?: string } = {
     
      };

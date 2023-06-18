@@ -59,33 +59,36 @@ const NeighborhoodRecommendations: React.FC<NeighborhoodRecommendationList> = ()
 
 
   return (
-    <div className={styles.container}>
-      {neighborhoodRecommendationArray?.map((recommendation: NeighborhoodRecommendation, index: number) => {
-        const isSelected = selectedIndices.includes(index);
-        const isHovered = hoverIndex === index;
-        return (
-          <div
-            key={index}
-            className={`${styles.card} ${isSelected ? styles.cardActive : ''} ${
-              isHovered ? styles.cardHover : ''
-            }`}
-            onClick={() => handleClick(index)}
-            onMouseEnter={() => handleHover(index)}
-            onMouseLeave={handleMouseLeave}
-          >
-            <h3 className={styles.rating}>
-              {recommendation.rating === 'Top Match' && (
-                <FontAwesomeIcon className={styles.icon} icon={faMedal} />
-              )}
-              {recommendation.rating}
-              {isSelected && <p className={styles.selectedText}>Selected</p>}
-            </h3>
-            <h2 className={styles.title}>{recommendation.title}</h2>
-            <p className={styles.description}>{recommendation.description}</p>
-          </div>
-        );
-      })}
-    </div>
+    <>
+      <p>*Optionally select neighborhood(s) to focus your travels.</p>
+      <div className={styles.container}>
+        {neighborhoodRecommendationArray?.map((recommendation: NeighborhoodRecommendation, index: number) => {
+          const isSelected = selectedIndices.includes(index);
+          const isHovered = hoverIndex === index;
+          return (
+            <div
+              key={index}
+              className={`${styles.card} ${isSelected ? styles.cardActive : ''} ${
+                isHovered ? styles.cardHover : ''
+              }`}
+              onClick={() => handleClick(index)}
+              onMouseEnter={() => handleHover(index)}
+              onMouseLeave={handleMouseLeave}
+            >
+              <h3 className={styles.rating}>
+                {recommendation.rating === 'Top Match' && (
+                  <FontAwesomeIcon className={styles.icon} icon={faMedal} />
+                )}
+                {recommendation.rating}
+                {isSelected && <p className={styles.selectedText}>Selected</p>}
+              </h3>
+              <h2 className={styles.title}>{recommendation.title}</h2>
+              <p className={styles.description}>{recommendation.description}</p>
+            </div>
+          );
+        })}
+      </div>
+    </>
   );
 };
 

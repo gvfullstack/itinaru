@@ -5,26 +5,26 @@ import { useRecoilState } from 'recoil';
 
 type Option = {
   label: string;
-  selected: boolean;
+  selected: string;
 }
 
 const PreferredPace: React.FC = (props) => {
-
   const [userPreferences, setUserPreferences] = useRecoilState(userPreferencesAtom);
   const preferredPaceOptions = userPreferences.preferredPace;
 
-  const handleToggleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value, checked } = event.target;
-    setUserPreferences(prevUserPreferences => ({
-      ...prevUserPreferences,
-      preferredPace: prevUserPreferences.preferredPace.map(option => {
-        if (option.label === value) {
-          return { ...option, selected: checked };
-        }
-        return option;
-      })
-    }));
-  }, [setUserPreferences]);
+  const handleToggleChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const { value, checked } = event.target;
+      setUserPreferences((prevUserPreferences) => ({
+        ...prevUserPreferences,
+        preferredPace: prevUserPreferences.preferredPace.map((option) => ({
+          ...option,
+          selected: option.label === value && checked ? value : '',
+        })),
+      }));
+    },
+    [setUserPreferences]
+  );
 
   return (
     <div>
@@ -36,7 +36,7 @@ const PreferredPace: React.FC = (props) => {
           <input
             type="checkbox"
             value={option.label}
-            checked={option.selected}
+            checked={option.selected === option.label}
             onChange={handleToggleChange}
             style={{ display: 'none' }}
           />
@@ -61,7 +61,7 @@ const PreferredPace: React.FC = (props) => {
                 background: 'white',
                 position: 'absolute',
                 top: '50%',
-                left: option.selected ? 'calc(100% - 20px)' :    '5px',
+                left: option.selected ? 'calc(100% - 20px)' : '5px',
                 transform: 'translateY(-50%)',
                 transition: 'left 0.3s ease',
               }}

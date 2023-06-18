@@ -1,5 +1,6 @@
 import {atom} from 'recoil';
-import { Itinerary, UserPreferences, TripPreferences, NeighborhoodRecommendationList  } from '@/components/typeDefs'
+import { Itinerary, UserPreferences, TripPreferences, 
+  NeighborhoodRecommendationList, DefinedProps  } from '@/components/typeDefs'
 import { startOfWeek, addDays, format, isAfter } from 'date-fns';
 
 export const itineraryItemsState = atom<Itinerary>({
@@ -24,6 +25,7 @@ export const itineraryItemsState = atom<Itinerary>({
 export const userPreferencesAtom = atom<UserPreferences>({
   key: 'userPreferences',
   default: {
+    showUserPreferences: false,
     favoritePlacesPreviouslyVisited: [],
     favoriteExperienceTypes:  [
       { 
@@ -77,9 +79,9 @@ export const userPreferencesAtom = atom<UserPreferences>({
       ],
     dailyBudget: {Amount:"", Currency:"USD"},
     preferredPace:[
-      {label:"Relaxed", selected: false},
-      {label:'Moderate', selected: false},
-      {label:"Fast-Paced", selected: false}
+      {label:"Relaxed", selected: ""},
+      {label:'Moderate', selected: ""},
+      {label:"Fast-Paced", selected: ""}
     ]
   },
 });
@@ -93,6 +95,7 @@ export const userPreferencesAtom = atom<UserPreferences>({
 export const tripPreferencesAtom = atom<TripPreferences>({
   key: 'tripPreferences',
   default: {
+    showTripPreferences: false,
     destination: "",
     travelDate: getNextFriday(), // Default travel date is the upcoming Friday
     startTime: new Date(new Date().setHours(8, 0, 0, 0)),
@@ -108,7 +111,40 @@ export const tripPreferencesAtom = atom<TripPreferences>({
 export const neighborhoodRecommendationList = atom<NeighborhoodRecommendationList>({
   key: 'neighborhoodRecommendationList',
   default:{ 
-    neighborhoodRecommendationArray:[]
+    neighborhoodRecommendationArray:[],
+    showNeighborhoodList: false
   }
 });
+
+export const pagePropsAtom = atom<DefinedProps[]>({
+  key: 'pagePropsAtom',
+  default: [
+    {
+      pageStep: "10T",
+      prevPageStep: "10T",
+      nextPageStep: "20T",
+      createButtonText: "create itinerary now!",
+      displayDestinationInput: true,
+      displayIntroText: true,       
+      displayDatePicker: true, 
+      displayTimePicker: true,
+      displayParentUPComponent: true,
+      displayDetailedTravelPreferences: true,
+      displayGetNeighborhoodsButton: true,
+      displayNeighborhoodRecommendations: true,
+    },
+    {   
+      pageStep: "20T",
+      itineraryItemsState: itineraryItemsState,
+      displayItinerary: true,
+      displayDirectionsMap: true,
+    }
+  ],
+});
+
+
+
+
+
+
 

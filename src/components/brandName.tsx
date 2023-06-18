@@ -6,6 +6,7 @@ import styles from './itinBuilderCSS/brandName.module.css';
 
 const BrandName: React.FC = () => {
   const [animationComplete, setAnimationComplete] = useState(false);
+  console.log("Brand Name just rendered")
 
   const handleAnimationEnd = () => {
     setAnimationComplete(true);

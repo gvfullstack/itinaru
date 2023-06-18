@@ -27,14 +27,7 @@ export const getSelectedUserPreferences = (preferences: UserPreferences) => {
     selectedPreferences.diningExperience = selectedDiningExperience;
   }
 
-  selectedPreferences.dailyBudget = preferences.dailyBudget?.Amount + " " + preferences.dailyBudget?.Currency;
-
-  const selectedPreferredPace = preferences.preferredPace
-    .filter(e => e.selected)
-    .map(e => e.label);
-  if (selectedPreferredPace.length > 0) {
-    selectedPreferences.preferredPace = selectedPreferredPace;
-  }
+  // selectedPreferences.dailyBudget = preferences.dailyBudget?.Amount + " " + preferences.dailyBudget?.Currency;
 
   const selectedPreferencesString = JSON.stringify(selectedPreferences, null, 2);
 

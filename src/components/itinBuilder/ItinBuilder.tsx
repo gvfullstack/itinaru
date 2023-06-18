@@ -48,14 +48,11 @@ const ItinBuilder = (props: any) => {
           displayParentUPComponent: true,
           displayDetailedTravelPreferences: true,
           displayGetNeighborhoodsButton: true,
-        },
-        {
-          pageStep: "20T",
-          createButtonText: createButtonText,
           displayNeighborhoodRecommendations: true,
-          }, 
+
+        },
         {   
-          pageStep: "30T",
+          pageStep: "20T",
           itineraryItemsState: itineraryItemsState,
           displayItinerary: true,
           displayDirectionsMap: true,

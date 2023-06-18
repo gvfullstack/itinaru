@@ -11,10 +11,12 @@ import FavoriteCuisine from './upFavoriteCuisine';
 import styles from './parentUPComponent.module.css';
 
 const ParentUserPreferencesComponent = (props: any) => {
-  const [showPreferences, setShowPreferences] = useState(false);
+  const [userPreferencesVal, setUserPreferencesVal] = useRecoilState(userPreferencesAtom)
+  const showPreferences = userPreferencesVal.showUserPreferences ? userPreferencesVal.showUserPreferences : false
+  console.log("userPreferences just rendered")
 
   const togglePreferences = () => {
-    setShowPreferences((prevShowPreferences) => !prevShowPreferences);
+    setUserPreferencesVal(prev => ({...prev, showUserPreferences: !prev.showUserPreferences}))
   };
 
   return (
