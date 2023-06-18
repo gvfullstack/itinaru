@@ -163,7 +163,7 @@ const DraggableItineraryItem: React.FC<DraggableItineraryItemProps> = ({
   const handleReplaceClick = () => {
     setTripPreferences((prevState) => ({
       ...prevState,
-      specificSitesToExclude: [...(prevState.specificSitesToExclude || []), itineraryItem.activityTitle].filter(Boolean) as string[],
+      specificSitesToExclude: [...(prevState.specificSitesToExclude || []), itineraryItem.siteName].filter(Boolean) as string[],
     }));
     setReplacementLoading(true);
     const { publicRuntimeConfig } = getConfig();
