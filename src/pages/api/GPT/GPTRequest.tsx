@@ -9,7 +9,7 @@ export const config = {
 };
 
 export default async function POST(req: Request): Promise<Response> {
-  const { prompt, functions } = (await req.json()) as {
+  const { prompt } = (await req.json()) as {
     prompt?: string;
   };
 
