@@ -178,7 +178,7 @@ const DraggableItineraryItem: React.FC<DraggableItineraryItemProps> = ({
     ) 
     .then((response) => { 
       console.log("success", response.data.replacement);
-      const index = itineraryItemsInState.findIndex(item => item.activityTitle === itineraryItem.activityTitle);
+      const index = itineraryItemsInState.findIndex(item => item.siteName === itineraryItem.siteName);
       const updatedItem = response.data.replacement[0];
       console.log("updatedItem", updatedItem);
       const updatedItems = [...itineraryItemsInState];
