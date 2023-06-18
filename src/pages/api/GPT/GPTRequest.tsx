@@ -17,7 +17,6 @@ export default async function POST(req: Request): Promise<Response> {
   if (!prompt) {
     return new Response("No prompt in the request", { status: 400 });
   }
-  const functionsString = JSON.stringify(functions);
 
   let response1:string | undefined = "";
 
