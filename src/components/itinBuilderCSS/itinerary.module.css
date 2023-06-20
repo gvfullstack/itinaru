@@ -38,21 +38,23 @@
 
 }
 /* /////////////////////// */
-
+.parentDropDiv{
+    width: 100%;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
 .itineraryParent{
-    background-color: #fff;
     border-radius: 8px;
     padding: 5px;
     margin-bottom: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border: 2px solid #ccc;
-    width: 100%;
-    max-width: 440px;
-    min-height:4rem;
     box-sizing: border-box;
     font-family: 'Roboto';
     transition: background-color 0.3s;
-
+    width: 320px;
+    max-width: 600px;
 }
 
 .itineraryParent.isShown{
@@ -115,9 +117,11 @@
 .rightContainer{
     display: flex;
     flex-direction: row;
-    width: 25%;
+    width: 40%;
     justify-content: center;
-    padding: 1px
+    padding: 1px;
+    justify-content: center;
+    align-items: center;
 }
 
 .rightContainer.isShown{
@@ -133,31 +137,27 @@
     text-align: right;
     font-family: 'Roboto', sans-serif;
     color: rgb(5, 5, 5);
-    
 }
-
 
 .startTimeContainer,
 .endTimeContainer{
     width: 100%;
-    margin-bottom: .85rem;
-    padding: 0;
+    height: 1.25rem;
 }
 .startTime,
 .endTime{
     width: 100%;
-    font-size: 12px;
+    font-size: 15px;
     line-height: 12px;
     font-weight: 400;
 }
 
 .hamburgerMenuContainer{
     height: 100%;
-    width: 20%;
+    width: 40%;
     font-size: 20px;
-    text-align: right;
+    text-align: center;
     color: rgb(29, 29, 29);
-    border-radius: 0px 10px 10px 0px;
     padding: 6px 0px 0px 2px;
 }
 
@@ -179,6 +179,7 @@
 
 .hamburgerMenuContainer.isShown{
     width: 100%;
+    text-align: right;
 }
 
 /* /////////////Expanded Itin Item View///////////////////// */ 
@@ -221,9 +222,8 @@
 
 .expandedItinItemTitle,            
 .expandedItinItemText,
-.expandedTimeContainer,
-.expandedItinItemWebsite a,
-.youtubeLink a{
+.expandedTimeContainer
+{
     display: flex;
     flex-direction: row;
     width: 100%;
@@ -236,6 +236,18 @@
     color: black;
     text-decoration: none;
 }
+.expandedItinItemWebsite a,
+.youtubeLink a{ display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: fit-content;
+    padding: .5rem 0rem .25rem .5rem;
+    background-color: transparent;
+    cursor: pointer;
+    font-family: "roboto", sans-serif;
+    font-size: 16px;
+    color: black;
+    text-decoration: none;}
 
 
 .expandedItinItemText{
@@ -272,7 +284,7 @@
     margin-top: 1px ;
 }
 
-.menu {
+.menu{
     position: relative;
     bottom: 2rem;
     right: 5rem;
@@ -284,6 +296,27 @@
     z-index: 9999;
     font-size: 14px;
     line-height: 2px;
+  }
+
+  .addMenuContainer{
+    display: flex;
+    height: 100%;
+    width: 100%;
+    justify-content:right;
+  }
+  
+  .addMenu {
+    bottom: 1rem;
+    right: 1rem;
+    width: 10rem; /* Adjust the width as needed */
+    background-color: #fff;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    padding: 3px 0;
+    z-index: 9999;
+    font-size: 16px;
+    line-height: 10px;
+    text-align: left;
   }
 
   .menu.isShown{

@@ -8,10 +8,12 @@ import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 import { faDiamondTurnRight } from '@fortawesome/free-solid-svg-icons';
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
 import { useRecoilState } from 'recoil';
-import { itineraryItemsState, tripPreferencesAtom } from '../atoms/atoms';
+import { itineraryItemsState, tripPreferencesAtom, userPreferencesAtom} from '../atoms/atoms';
 import ResponsiveTimePicker from './responsiveTimePicker';
 import axios from 'axios';
 import getConfig from 'next/config';
+import { getSelectedUserPreferences } from "./FormComponentsUserPreferences/getUserPreferences";
+import { getSelectedTripPreferences } from "./FormComponentsTravelPreferences/getTravelPreferences";
 
 
 const externalLink = <FontAwesomeIcon icon={faExternalLinkAlt} />;
@@ -90,6 +92,7 @@ const DraggableItineraryItem: React.FC<DraggableItineraryItemProps> = ({
   const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.time?? new Date());
   const formattedEndTime = formatTimeWithoutSeconds(itineraryItem.endTime?.time?? new Date());
   const [tripPreferences, setTripPreferences] = useRecoilState(tripPreferencesAtom);
+  const [userPreferences, setUserPreferences] = useRecoilState(userPreferencesAtom);
 
   const [itineraryItemsInState, setItineraryItemsInState] = useRecoilState<ItineraryItem[]>(itineraryItemsState);
 
@@ -141,6 +144,7 @@ const DraggableItineraryItem: React.FC<DraggableItineraryItemProps> = ({
 
   const [menuOpen, setMenuOpen] = useState(false);
 
+
   const handleMenuClick = () => {
     setMenuOpen(!menuOpen);
   };
@@ -155,48 +159,100 @@ const DraggableItineraryItem: React.FC<DraggableItineraryItemProps> = ({
   };
   
   const [replacementLoading, setReplacementLoading] = useState(false);
- 
-  useEffect(() => {
-    console.log(itineraryItemsInState);
-  }, [itineraryItemsInState]);
   
-  const handleReplaceClick = () => {
+  const handleReplaceClick = async () => {
+    setReplacementLoading(true);
     setTripPreferences((prevState) => ({
       ...prevState,
       specificSitesToExclude: [...(prevState.specificSitesToExclude || []), itineraryItem.siteName].filter(Boolean) as string[],
     }));
-    setReplacementLoading(true);
+    const destination = tripPreferences.destination;
+    const neighborhoodsToExplore = tripPreferences.neighborhoodsToExplore??[];
+    const neighborhoods = neighborhoodsToExplore.join(', ')
+    const itinPreferences = getSelectedTripPreferences(tripPreferences) + getSelectedUserPreferences(userPreferences);
+    const placesInItinerary = itineraryItemsInState.map(item => item.siteName).join(",");
+    const prompt = `For a tourist visiting ${neighborhoodsToExplore.length >0 ? neighborhoods: ""} in ${destination} whose itinerary already contains these sites: ${placesInItinerary} (those should not be repeated), please provide another ${itineraryItem.activityType} to replace ${itineraryItem.siteName}. The traveler preferences are as follows: ${itinPreferences}. The suggestion should in JSON object format i.e. begin with "{" and end with "}", and follow this structure exactly: {"activityType": "<Coffee Shop/Tourist Site to Visit>", "siteName": "<name>", "description": "<description>", "locationAddress": "<address>".} `;
     const { publicRuntimeConfig } = getConfig();
     const baseUrl = publicRuntimeConfig.BASE_URL;
-
-    axios.post(baseUrl +'/api/replacement/replacement', 
-    {
-      itineraryItem: itineraryItem,
-      tripPreferences: tripPreferences || [] 
-    }
-
-    ) 
-    .then((response) => { 
-      console.log("success", response.data.replacement);
-      const index = itineraryItemsInState.findIndex(item => item.siteName === itineraryItem.siteName);
-      const updatedItem = response.data.replacement[0];
-      console.log("updatedItem", updatedItem);
-      const updatedItems = [...itineraryItemsInState];
-      if (index !== -1) {
-        const { startTime, endTime } = itineraryItemsInState[index];
-        updatedItems[index] = {
-          ...updatedItem,
-          startTime,
-          endTime,
-        };
-      }
-        console.log(itineraryItemsInState)
-      setItineraryItemsInState(updatedItems);
-      }).catch((error) => {
-        console.log("error", error);
-      }).finally(() => {setReplacementLoading(false)});
   
-    };
+    const response = await fetch(baseUrl + '/api/GPT/GPTRequest', {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ prompt }),
+    });
+  
+    if (!response.ok) { 
+      throw new Error(response.statusText);
+    }
+    const data = response.body;
+    if (!data) {
+    return;
+    }
+    const reader = data.getReader();
+    const decoder = new TextDecoder();
+    let done = false;
+    let buffer = '';
+    let bracketCount = 0;
+    let completeObjectReceived = false;
+    let addBrace = true;
+  
+    while (!done) {
+      const { value, done: doneReading } = await reader.read();
+      done = doneReading;
+      let chunkValue = decoder.decode(value, {stream: !doneReading});
+        // Removing leading whitespaces
+        chunkValue = addBrace ? chunkValue.trimStart() : chunkValue;
+        // If the first character is not '{', add it
+        if (addBrace && chunkValue[0] !== "{") {
+          chunkValue = "{" + chunkValue;
+        }
+        // Set addBrace to false after the first chunk
+        addBrace = false;
+      for (const char of chunkValue) {
+        if (char === "{") {
+          buffer += char;
+          bracketCount++;
+        } else if (char === "}") {
+          buffer += char;
+          bracketCount--;
+          if (bracketCount === 0 && buffer.length > 0) {
+            // Complete object found in the buffer
+            completeObjectReceived = true;
+          }
+        } else {
+          buffer += char;
+        }
+  
+        if (completeObjectReceived && bracketCount === 0) {
+          try {
+            const newObj = JSON.parse(buffer);
+            newObj.startTime = itineraryItem.startTime;
+            newObj.endTime = itineraryItem.endTime;
+            newObj.userDefinedRespectedTime = false;
+            newObj.activityDuration = itineraryItem.activityDuration;
+            newObj.descHidden = true;
+            newObj.id = uuidv4();
+  
+            const index = itineraryItemsInState.findIndex(item => item.siteName === itineraryItem.siteName);
+            if (index !== -1) {
+              const updatedItems = [...itineraryItemsInState];
+              updatedItems[index] = newObj;
+              setItineraryItemsInState(updatedItems);
+            }
+          } catch(error) {
+            console.log("Error parsing JSON: ", error);
+          } finally {
+            setReplacementLoading(false);
+            // Clear buffer and flags for the next object
+            buffer = '';
+            completeObjectReceived = false;
+          }
+        }
+      }
+    }
+  };
 
 
   const Menu = () => {
@@ -204,9 +260,12 @@ const DraggableItineraryItem: React.FC<DraggableItineraryItemProps> = ({
       <div className={`${styles.menu} ${itineraryItem.descHidden ? "" : styles.isShown }`}>
         <div className={styles.menuItem} onClick={handleRemoveClick}>Remove</div>
         <div className={styles.menuItem} onClick = {handleReplaceClick}>Replace</div>
+        <div className={styles.menuItem} >Edit</div>
+        <div className={styles.menuItem} onClick={()=>openGoogleMapsDirection(itineraryItem.locationAddress)}>Directions</div>
       </div>
     );
   };
+
 
   return (
     <div ref={drag} style={itemStyle}  className={styles.dropDiv} >

@@ -19,7 +19,6 @@ const CreateItineraryButton2: React.FC<DefinedProps> = (props) => {
     const neighborhoods = neighborhoodsToExplore.join(', ')
     const { publicRuntimeConfig } = getConfig();
     const baseUrl = publicRuntimeConfig.BASE_URL;
-    console.log("Create Itinerary Button just rendered")
 
     function formatTime(unformattedDate:Date) {
       const date = new Date(unformattedDate);
@@ -124,24 +123,8 @@ const CreateItineraryButton2: React.FC<DefinedProps> = (props) => {
     if(includeLateEvening){promptArray.push(lateEveningPrompt)}
     const prompArrToInclude : string[] = promptArray.map((item, index, array) => index === 0? `provide ${item}`: array.length-1 === index ? `followed by ${item}.`:`followed by ${item}`)
     const sitePrompts = prompArrToInclude.join(',')
-    const prompt = `For a tourist visiting 
-    ${neighborhoodsToExplore.length >0 ? neighborhoods: ""} in ${destination}
-    , we want to generate a travel itinerary. Please provide each of the 
-    following as separate JSON objects: please 
-    ${sitePrompts}
-    Each suggestion should begin with "{" and end with "}", and follow 
-    this structure exactly:
-    "activityType": "<Coffee Shop>"
-    "siteName": "<name>", "description": "<description>", "locationAddress": "<address>"
-    This format is like a JSON object.
-    Please, do not add any extra information or labels, and do not include 
-    these suggestions in a list or a larger JSON object.
-
-    The personal preferences of the traveler are as follows: 
-        ${itinPreferences}` 
+    const prompt = `For a tourist visiting ${neighborhoodsToExplore.length >0 ? neighborhoods: ""} in ${destination}, we want to generate a travel itinerary. Please provide each of the following as separate JSON objects: please ${sitePrompts} Each suggestion should begin with "{" and end with "}", and follow this structure exactly: "activityType": "<Coffee Shop>", "siteName": "<name>", "description": "<description>", "locationAddress": "<address>" This format is like a JSON object. Please, do not add any extra information or labels, and do not include these suggestions in a list or a larger JSON object. The personal preferences of the traveler are as follows: ${itinPreferences}` 
     
-        console.log(prompt)
-
     const numberOfItinItems = prompArrToInclude.length
     const durationPerItinItem = (tpEndTime.getTime() - tpStartTime.getTime()) / numberOfItinItems
     let itinItemStartTimeTracker = tpStartTime.getTime()
@@ -167,7 +150,6 @@ const CreateItineraryButton2: React.FC<DefinedProps> = (props) => {
 
     // This data is a ReadableStream
     const data = response.body;
-        console.log(data)
         if (!data) {
         return;
         }
@@ -182,13 +164,20 @@ const CreateItineraryButton2: React.FC<DefinedProps> = (props) => {
     let skipBlanks = true;
     let bracketCount = 0;
     let completeObjectReceived = false; // Track if a complete object has been received
-    
+    let addBrace = true;
+
     while (!done) {
       const { value, done: doneReading } = await reader.read();
       done = doneReading;
-    
       let chunkValue = decoder.decode(value);
-    
+      chunkValue = addBrace ? chunkValue.trimStart() : chunkValue;
+      // If the first character is not '{', add it
+      if (addBrace && chunkValue[0] !== "{") {
+        chunkValue = "{" + chunkValue;
+      }
+      // Set addBrace to false after the first chunk
+      addBrace = false;
+
       for (const char of chunkValue) {
         if (skipBlanks && (char === " " || char === "")) {
           continue; // Skip blank characters before '{'
@@ -218,7 +207,6 @@ const CreateItineraryButton2: React.FC<DefinedProps> = (props) => {
         }
     
         if (completeObjectReceived && bracketCount === 0) {
-          console.log(char, "buffer count is 0", (buffer.length===0), "buffer is", buffer)
          try{
           const newObj = JSON.parse(buffer);
 
@@ -228,7 +216,6 @@ const CreateItineraryButton2: React.FC<DefinedProps> = (props) => {
           const endTime = { time: new Date (eTime), beingEdited: false };
           itinItemStartTimeTracker += durationPerItinItem
           
-          console.log("endTime", endTime)
           newObj.startTime = startTime;
           newObj.endTime = endTime;
           newObj.userDefinedRespectedTime = false;
@@ -260,33 +247,3 @@ const CreateItineraryButton2: React.FC<DefinedProps> = (props) => {
 
 export default CreateItineraryButton2;
 
-
-
-// const sTime = new Date(travelDate ? travelDate : new Date());
-// if (newObj.startTime) {
-//   const [startHours, startMinutes] = newObj.startTime.split(':');
-//   const [startMinutesValue, amPm] = startMinutes.split(/(?=[ap]m)/i);
-//   let hours = parseInt(startHours, 10);    
-//   if (amPm.toLowerCase() === 'pm' && hours !== 12) {
-//     hours += 12;
-//   } else if (amPm.toLowerCase() === 'am' && hours === 12) {
-//     hours = 0;
-//   }
-//   sTime.setHours(hours, parseInt(startMinutesValue, 10));
-// }
-// const startTime = { time: sTime, beingEdited: false };
-// console.log("startTime", startTime)
-
-// const eTime = new Date(travelDate ? travelDate : new Date())
-// if (newObj.endTime) {
-//   const [endHours, endMinutes] = newObj.endTime.split(':');
-//   const [endMinutesValue, amPm] = endMinutes.split(/(?=[ap]m)/i);
-//   let hours = parseInt(endHours, 10);
-//   if (amPm.toLowerCase() === 'pm' && hours !== 12) {
-//     hours += 12;
-//   } else if (amPm.toLowerCase() === 'am' && hours === 12) {
-//     hours = 0;
-//   }
-//   eTime.setHours(hours, parseInt(endMinutesValue, 10));
-// }
-// const endTime = { time: eTime, beingEdited: false };

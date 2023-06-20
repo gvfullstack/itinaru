@@ -56,6 +56,7 @@ const ItinBuilder = (props: any) => {
           itineraryItemsState: itineraryItemsState,
           displayItinerary: true,
           displayDirectionsMap: true,
+          createButtonText:"Regenerate Itinerary"
         }
       ]
 

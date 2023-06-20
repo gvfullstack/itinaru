@@ -24,7 +24,16 @@ const InitForm: React.FC<DefinedProps> = (props) => {
   const showNeighborhoodList = neighborhoodRecommendationListVal.showNeighborhoodList ? neighborhoodRecommendationListVal.showNeighborhoodList : false
   console.log("PageComponent just REDENDERED")
    
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://www.viator.com/orion/partner/widget.js';
+    script.async = true;
+    document.body.appendChild(script);
 
+    return () => {
+      document.body.removeChild(script);
+    }
+  }, []);
   
 
 
@@ -59,6 +68,11 @@ const InitForm: React.FC<DefinedProps> = (props) => {
           
         {props.displayDirectionsMap && 
         <GoogleMapIframe apiKey="AIzaSyBjW48cII6YeZGXUjCH9xNO916hhKWe_t8" />} 
+
+        <div 
+          data-vi-partner-id="P00107668" 
+          data-vi-widget-ref="W-8277e1bf-c7b3-4515-a7e8-db4561cf6a8a"
+        />  
         
    </div>
       );

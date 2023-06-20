@@ -20,9 +20,8 @@ import { TripPreferences } from "../typeDefs/index";
   export const getSelectedTripPreferences = (preferences: TripPreferences) => {
 
     const specificSitesToInclude = preferences.specificSitesToInclude ?? [];
+    const specificSitesToExclude = preferences.specificSitesToExclude ?? [];
     const experienceSoughtThisTrip = preferences.experienceSoughtThisTrip ?? '';
-    const desiredStartTime = convertDateToString(preferences.startTime);
-    const desiredEndTime = convertDateToString(preferences.endTime);
     const typeOfEateriesToIncludeInItinerary = preferences.typeOfEateriesToIncludeInItinerary ?? [];
     
     const formattedPreferences:  any = {};
@@ -38,7 +37,10 @@ import { TripPreferences } from "../typeDefs/index";
     if (specificSitesToInclude.length > 0) {
       formattedPreferences.specificSitesToInclude = specificSitesToInclude;
     }
-  
+
+    if (specificSitesToExclude.length > 0) {
+      formattedPreferences.specificSitesToExclude = specificSitesToExclude;
+    }
     if (experienceSoughtThisTrip.length > 0) {
       formattedPreferences.experienceSoughtThisTrip = experienceSoughtThisTrip;
     }

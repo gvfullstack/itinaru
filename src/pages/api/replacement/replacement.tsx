@@ -44,10 +44,6 @@ async function requestReplacementFunction(
     [{    "activityTitle": "${itineraryItem.activityTitle}",
           "description": "${itineraryItem.description}",
           "locationAddress": "${itineraryItem.locationAddress}",
-          "location": {
-            "latitude": ${itineraryItem.location.latitude},
-            "longitude": ${itineraryItem.location.longitude}
-          },
           "activityType": "${itineraryItem.activityType}"
     }]`
 
