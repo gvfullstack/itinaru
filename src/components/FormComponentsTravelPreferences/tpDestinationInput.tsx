@@ -34,7 +34,7 @@ function DestinationInput() {
   const [tripPreferences, setTripPreferencesAtom] = useRecoilState(tripPreferencesAtom);
   const selectedCity = cities.find(city => `${city.city}` === tripPreferences.destination) || null;
   const maxLength = 255;
-  const debounceDelay = 5000; // Adjust the debounce delay as per your preference
+  const debounceDelay = 3000; // Adjust the debounce delay as per your preference
   const suggestionsDelay = 3000; // Delay before showing suggestions in milliseconds
 
   const [inputValue, setInputValue] = useState('');
