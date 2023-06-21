@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Box } from "@mui/material";
+import { TextField, Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Autocomplete from '@mui/material/Autocomplete';
-import { useRecoilState } from "recoil";
-import { tripPreferencesAtom } from "@/atoms/atoms";
+import { useRecoilState } from 'recoil';
+import { tripPreferencesAtom } from '@/atoms/atoms';
 import cities from './cities.json';
 
 const PinkOutlinedTextField = styled(TextField)(({ theme }) => ({
@@ -22,7 +22,7 @@ const PinkOutlinedTextField = styled(TextField)(({ theme }) => ({
     fontWeight: '400',
     padding: '10px 10px 10px 20px',
   },
-  width: "90%",
+  width: '90%',
   maxWidth: '20rem',
 }));
 
@@ -32,7 +32,7 @@ interface City {
 
 function DestinationInput() {
   const [tripPreferences, setTripPreferencesAtom] = useRecoilState(tripPreferencesAtom);
-  const selectedCity = cities.find(city => `${city.city}` === tripPreferences.destination) || null;
+  const selectedCity = cities.find((city) => `${city.city}` === tripPreferences.destination) || null;
   const maxLength = 255;
   const debounceDelay = 3000; // Adjust the debounce delay as per your preference
   const suggestionsDelay = 3000; // Delay before showing suggestions in milliseconds
@@ -56,7 +56,7 @@ function DestinationInput() {
     // Perform the actual search operation here and update the suggestions state
     const filteredOptions = cities.filter((city) => {
       const cityName = city.city;
-      if (typeof cityName === 'string') {
+      if (cityName && typeof cityName === 'string') {
         return cityName.toLowerCase().includes(value.toLowerCase());
       }
       return false;
@@ -69,7 +69,7 @@ function DestinationInput() {
     setInputValue(destination);
     setTripPreferencesAtom((prevTripPreferenceState) => ({
       ...prevTripPreferenceState,
-      destination: destination
+      destination: destination,
     }));
   };
 
@@ -90,7 +90,6 @@ function DestinationInput() {
     return suggestions;
   };
 
-  
   return (
     <Box display="flex" justifyContent="center">
       <Autocomplete
@@ -102,7 +101,7 @@ function DestinationInput() {
         inputValue={inputValue}
         onInputChange={handleInputChange}
         onBlur={handleInputBlur}
-        renderInput={(params) =>
+        renderInput={(params) => (
           <PinkOutlinedTextField
             {...params}
             label="Enter your destination"
@@ -110,7 +109,7 @@ function DestinationInput() {
             size="small"
             disabled={!!tripPreferences.destination && tripPreferences.destination.length >= maxLength}
           />
-        }
+        )}
         loading={!showSuggestions} // Show loading indicator when suggestions are being fetched
         loadingText="Loading..."
         noOptionsText="No matching cities"
