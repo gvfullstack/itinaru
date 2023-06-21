@@ -22,13 +22,16 @@ const GetNeighborhoodSuggestions: React.FC<DefinedProps> = (props) => {
   const baseUrl = publicRuntimeConfig.BASE_URL;
   let disabled = !destination ? true : false;
   const handleInputChange = props.handleInputChange ? props.handleInputChange : () => {};
+  const neighborhoodButtonText = props.getNeigborhoodButtonText
   const itinPreferences = getSelectedTripPreferencesNeighborhoods(tripPreferences) + getSelectedUserPreferences(userPreferences)
   console.log("neighborhoodButton just rendered")
   const generateResponse = async (e: React.MouseEvent<HTMLButtonElement>): Promise<void> => {
     e.preventDefault();
     setNeighborhoodRecommendationsArr(prev => {
       let arr:NeighborhoodRecommendation[] = [];
-      return { neighborhoodRecommendationArray: arr };
+      return {showNeighborhoodSection: true, 
+        showNeighborhoodList:true,
+        neighborhoodRecommendationArray: arr };
     });
     const introPrompt = `Provide the top Neighborhoods in ${destination} for tourists to explore and how they may be able to cater to these traveler provided preferences:`;
     const endPrompt = `The AI should generate objects that includes a rating, title, and description. The rating for each neighborhood can be either "Top Match" or "Good Match" depending on compatibility. Response JSON Object Format is: {"rating": "Top Match", "title": "...", "description": "This is a great option for you because..."}; Another JSON object should follow if there are more suggestions. I will format the objects into proper JSON, only provide the objects.`;
@@ -112,7 +115,7 @@ const GetNeighborhoodSuggestions: React.FC<DefinedProps> = (props) => {
                 setNeighborhoodRecommendationsArr(prev => {
                   let arr = [...(prev.neighborhoodRecommendationArray || [])];
                   arr.push({ rating: '', title: '', description: '' });
-                  return { neighborhoodRecommendationArray: arr };
+                  return {...prev, neighborhoodRecommendationArray: arr };
                 });
               }
               setNeighborhoodRecommendationsArr(prev => {
@@ -121,7 +124,7 @@ const GetNeighborhoodSuggestions: React.FC<DefinedProps> = (props) => {
                 let obj = { ...newArray[last] }; // create a new copy of the object
                 obj[properties[propertyIndex]] = buffer; // modify the copied object
                 newArray[last] = obj; // replace the object in the copied array
-                return {
+                return {...prev,
                   neighborhoodRecommendationArray: newArray,
                 };
               });
@@ -129,7 +132,6 @@ const GetNeighborhoodSuggestions: React.FC<DefinedProps> = (props) => {
             break;
         }
       }
-      setNeighborhoodRecommendationsArr(prev => ({...prev, showNeighborhoodList:true}))
       setUserPreferences(prev => ({...prev, showUserPreferences:false}))
       setTripPreferences(prev => ({...prev, showTripPreferences:false}))
 
@@ -139,7 +141,7 @@ const GetNeighborhoodSuggestions: React.FC<DefinedProps> = (props) => {
 
   return (
     <div className={styles.createItineraryButtonContainer}>
-       <button className={`${styles.createItineraryButton} ${disabled ? styles.disabled : ""}`} disabled={disabled} onClick={generateResponse}>Recommend Neighborhoods</button>
+       <button className={`${styles.createItineraryButton} ${disabled ? styles.disabled : ""}`} disabled={disabled} onClick={generateResponse}>{neighborhoodButtonText}</button>
     </div>
   );
 };

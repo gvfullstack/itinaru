@@ -1,6 +1,6 @@
 import {atom} from 'recoil';
 import { Itinerary, UserPreferences, TripPreferences, 
-  NeighborhoodRecommendationList, DefinedProps  } from '@/components/typeDefs'
+  NeighborhoodRecommendationList, DefinedProps, Affiliates  } from '@/components/typeDefs'
 import { startOfWeek, addDays, format, isAfter } from 'date-fns';
 
 export const itineraryItemsState = atom<Itinerary>({
@@ -21,6 +21,12 @@ export const itineraryItemsState = atom<Itinerary>({
     default: "No atom found"
   });
 
+  export const affiliatesAtom = atom<Affiliates>({
+    key: 'affiliatesAtom', 
+    default: {
+      showAffiliatesLinks: false
+    }
+  });
  
 export const userPreferencesAtom = atom<UserPreferences>({
   key: 'userPreferences',
@@ -112,7 +118,10 @@ export const neighborhoodRecommendationList = atom<NeighborhoodRecommendationLis
   key: 'neighborhoodRecommendationList',
   default:{ 
     neighborhoodRecommendationArray:[],
-    showNeighborhoodList: false
+    showNeighborhoodList: false,
+    showNeighborhoodSection: false,
+    selectedIndicesAtom: [],
+    hoverIndexAtom: null
   }
 });
 

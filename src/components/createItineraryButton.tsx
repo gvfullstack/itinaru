@@ -2,7 +2,8 @@
 import React from "react";
 import styles from "./itinBuilderCSS/createItineraryButton.module.css";
 import { DefinedProps, Itinerary, ItineraryItem} from "@/components/typeDefs";
-import { userPreferencesAtom, tripPreferencesAtom, itineraryItemsState, curStepState} from "../atoms/atoms"
+import { userPreferencesAtom, tripPreferencesAtom, itineraryItemsState,
+   curStepState, neighborhoodRecommendationList} from "../atoms/atoms"
 import { useRecoilState } from 'recoil';
 const { v4: uuidv4 } = require('uuid');
 import getConfig from 'next/config';
@@ -14,6 +15,8 @@ const CreateItineraryButton2: React.FC<DefinedProps> = (props) => {
     const handleInputChange = props.handleInputChange ? props.handleInputChange : () => {};
     const [userPreferences, setUserPreferences] = useRecoilState(userPreferencesAtom);
     const [tripPreferences, setTripPreferences] = useRecoilState(tripPreferencesAtom);
+    const [neighborhoodRecommendation, setNeighborhoodRecommendation] = useRecoilState(neighborhoodRecommendationList);
+  
     const destination = tripPreferences.destination;
     const neighborhoodsToExplore = tripPreferences.neighborhoodsToExplore??[];
     const neighborhoods = neighborhoodsToExplore.join(', ')
@@ -131,6 +134,10 @@ const CreateItineraryButton2: React.FC<DefinedProps> = (props) => {
 
     const generateResponse = async (e: React.MouseEvent<HTMLButtonElement>): Promise<void> => {
         e.preventDefault();
+        setTripPreferences(prev=>({...prev, showTripPreferences: false}))
+        setUserPreferences(prev=>({...prev, showUserPreferences: false}))
+        setNeighborhoodRecommendation(prev=>({...prev, showNeighborhoodSection: false}))
+
         setItineraryItems([]);
         setCurStep("20T")
         

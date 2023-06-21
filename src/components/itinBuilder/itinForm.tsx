@@ -17,23 +17,15 @@ import { neighborhoodRecommendationList } from "@/atoms/atoms";
 import GoogleMapIframe from "@/components/directionsMap";
 import { useRecoilState } from 'recoil';
 const { v4: uuidv4 } = require('uuid');
-
+import ParentAffiliateSection from "../FormComponentsAffiliates/parentAffiliatesSection"
+import ParentNeighborhoodSection from "../FormComponentsNeighborhood/parentNeighborhoodSection"
 
 const InitForm: React.FC<DefinedProps> = (props) => {
   const [neighborhoodRecommendationListVal, setNeighborhoodRecommendationListVal] = useRecoilState(neighborhoodRecommendationList)
   const showNeighborhoodList = neighborhoodRecommendationListVal.showNeighborhoodList ? neighborhoodRecommendationListVal.showNeighborhoodList : false
   console.log("PageComponent just REDENDERED")
    
-  useEffect(() => {
-    const script = document.createElement('script');
-    script.src = 'https://www.viator.com/orion/partner/widget.js';
-    script.async = true;
-    document.body.appendChild(script);
-
-    return () => {
-      document.body.removeChild(script);
-    }
-  }, []);
+  
   
 
 
@@ -53,13 +45,17 @@ const InitForm: React.FC<DefinedProps> = (props) => {
         {props.displayTimePicker && <UserInputTimePicker />}
         {props.displayDetailedTravelPreferences && <DetailedTravelPreferences />}
         {props.displayParentUPComponent && <ParentUPComponent />}
-        {props.displayNeighborhoodRecommendations && showNeighborhoodList && <NeighborhoodRecommendations />}
-        {props.displayItinerary && <Itinerary />}
-        {props.displayGetNeighborhoodsButton &&   
+        {/* {props.displayNeighborhoodRecommendations && showNeighborhoodList && <NeighborhoodRecommendations />} */}
+        {/* {props.displayGetNeighborhoodsButton &&   
           <GetNeighborhoodSuggestions          
             handleInputChange={props.handleInputChange} 
-        />}
-
+        />} */}
+        <ParentNeighborhoodSection 
+          handleInputChange={props.handleInputChange} 
+          getNeigborhoodButtonText={props.getNeigborhoodButtonText}
+          />
+        
+        {props.displayItinerary && <Itinerary />}
         <CreateItineraryButton 
           key={uuidv4()}
           createButtonText={props.createButtonText}
@@ -69,10 +65,7 @@ const InitForm: React.FC<DefinedProps> = (props) => {
         {props.displayDirectionsMap && 
         <GoogleMapIframe apiKey="AIzaSyBjW48cII6YeZGXUjCH9xNO916hhKWe_t8" />} 
 
-        <div 
-          data-vi-partner-id="P00107668" 
-          data-vi-widget-ref="W-8277e1bf-c7b3-4515-a7e8-db4561cf6a8a"
-        />  
+        <ParentAffiliateSection />
         
    </div>
       );

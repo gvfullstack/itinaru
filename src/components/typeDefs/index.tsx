@@ -40,6 +40,7 @@ export type HandleInputChange = (key: string, value: any) => void;
 export type MultiSelectHandler = (key: string, value: any) => void;
 
 export type DefinedProps = {
+    getNeigborhoodButtonText?: string;
       displayGetNeighborhoodsButton?: boolean;
       displayDirectionsMap?: boolean;
       displayItinerary?: boolean;
@@ -139,5 +140,11 @@ export type NeighborhoodRecommendation = {
 export type NeighborhoodRecommendationList = {
   neighborhoodRecommendationArray?: NeighborhoodRecommendation[];
   showNeighborhoodList?:Boolean;
+  showNeighborhoodSection?:Boolean;
+  selectedIndicesAtom?: number[];
+  hoverIndexAtom?:number | null
 };
 
+export type Affiliates = {
+  showAffiliatesLinks?: Boolean;
+}

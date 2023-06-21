@@ -10,24 +10,33 @@ const NeighborhoodRecommendations: React.FC<NeighborhoodRecommendationList> = ()
   const [neighborhoodRecommendations, setNeighborhoodRecommendations] = useRecoilState<NeighborhoodRecommendationList>(
     neighborhoodRecommendationList
   );
+  const { selectedIndicesAtom, hoverIndexAtom } = neighborhoodRecommendations;
   const neighborhoodRecommendationArray = neighborhoodRecommendations.neighborhoodRecommendationArray?? [];
   const [tripPreferences, setTripPreferences] = useRecoilState(tripPreferencesAtom);
   
-  const [selectedIndices, setSelectedIndices] = useState<number[]>([]);
-  const [hoverIndex, setHoverIndex] = useState<number | null>(null);
+  // const [selectedIndices, setSelectedIndices] = useState<number[]>([]);
+  // const [hoverIndex, setHoverIndex] = useState<number | null>(null);
 
 
   const handleClick = (index: number) => {
-    if (selectedIndices.includes(index)) {
-      // If the index is already selected, remove it from the selectedIndices array
-      setSelectedIndices(selectedIndices.filter((i) => i !== index));
-    } else {
-      // If the index is not selected, add it to the selectedIndices array
-      setSelectedIndices([...selectedIndices, index]);
-    }
+    const selectedIndices = selectedIndicesAtom?[...selectedIndicesAtom]:[];
+  if (selectedIndices.includes(index)) {
+    // If the index is already selected, remove it from the selectedIndices array
+    const updatedIndices = selectedIndices.filter((i) => i !== index);
+    setNeighborhoodRecommendations((prevRecommendations) => ({
+      ...prevRecommendations,
+      selectedIndicesAtom: updatedIndices,
+    }));
+  } else {
+    // If the index is not selected, add it to the selectedIndices array
+    const updatedIndices = [...selectedIndices, index];
+    setNeighborhoodRecommendations((prevRecommendations) => ({
+      ...prevRecommendations,
+      selectedIndicesAtom: updatedIndices,
+    }));
+  }
 
     const recommendation = neighborhoodRecommendationArray[index];
-
     const isAlreadySelected = tripPreferences.neighborhoodsToExplore?.includes(recommendation.title?? '');
     const neighborhoodsToExplore = tripPreferences.neighborhoodsToExplore?? [];
 
@@ -50,11 +59,17 @@ const NeighborhoodRecommendations: React.FC<NeighborhoodRecommendationList> = ()
   };
 
   const handleHover = (index: number) => {
-    setHoverIndex(index);
+    setNeighborhoodRecommendations((prevRecommendations) => ({
+      ...prevRecommendations,
+      hoverIndexAtom: index,
+    }));
   };
-
+  
   const handleMouseLeave = () => {
-    setHoverIndex(null);
+    setNeighborhoodRecommendations((prevRecommendations) => ({
+      ...prevRecommendations,
+      hoverIndexAtom: null,
+    }));
   };
 
 
@@ -63,8 +78,8 @@ const NeighborhoodRecommendations: React.FC<NeighborhoodRecommendationList> = ()
       <p>*Optionally select neighborhood(s) to focus your travels.</p>
       <div className={styles.container}>
         {neighborhoodRecommendationArray?.map((recommendation: NeighborhoodRecommendation, index: number) => {
-          const isSelected = selectedIndices.includes(index);
-          const isHovered = hoverIndex === index;
+          const isSelected = selectedIndicesAtom?.includes(index);
+          const isHovered = hoverIndexAtom === index;
           return (
             <div
               key={index}

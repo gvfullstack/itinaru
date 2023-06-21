@@ -41,6 +41,7 @@ const ItinBuilder = (props: any) => {
           prevPageStep: "10T",
           nextPageStep: "20T",
           createButtonText: createButtonText,
+          getNeigborhoodButtonText:"suggest neighborhoods",
           displayDestinationInput: true,
           displayIntroText: true,       
           displayDatePicker: true, 
@@ -56,7 +57,14 @@ const ItinBuilder = (props: any) => {
           itineraryItemsState: itineraryItemsState,
           displayItinerary: true,
           displayDirectionsMap: true,
-          createButtonText:"Regenerate Itinerary"
+          createButtonText:"regenerate itinerary",
+          getNeigborhoodButtonText:"regenerate neighborhoods",
+          displayDestinationInput: true,
+          displayIntroText: false,       
+          displayDatePicker: true, 
+          displayTimePicker: true,
+          displayParentUPComponent: true,
+          displayDetailedTravelPreferences: true,
         }
       ]
 
