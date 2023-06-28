@@ -20,6 +20,7 @@ const mapMarkerAlt = <FontAwesomeIcon icon={faDiamondTurnRight} />;
 const ellipsisVertical = <FontAwesomeIcon icon={faEllipsisVertical} />;
 
 interface DraggableItineraryItemProps {
+  index: number;
   id: string;
   itineraryItem: ItineraryItem;
   handleShowHideDescription: (curItineraryItem: ItineraryItem) => void;
