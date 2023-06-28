@@ -370,4 +370,6 @@ const DraggableItineraryItem = React.forwardRef((
   ); 
 },);
 
+DraggableItineraryItem.displayName = 'DraggableItineraryItem';
+
 export default DraggableItineraryItem;
