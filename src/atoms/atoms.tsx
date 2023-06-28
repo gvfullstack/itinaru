@@ -1,6 +1,7 @@
 import {atom} from 'recoil';
 import { Itinerary, UserPreferences, TripPreferences, 
-  NeighborhoodRecommendationList, DefinedProps, Affiliates  } from '@/components/typeDefs'
+  NeighborhoodRecommendationList, DefinedProps, Affiliates,
+  BrandPageRender} from '@/components/typeDefs'
 import { startOfWeek, addDays, format, isAfter } from 'date-fns';
 
 export const itineraryItemsState = atom<Itinerary>({
@@ -151,7 +152,12 @@ export const pagePropsAtom = atom<DefinedProps[]>({
   ],
 });
 
-
+export const brandPageRender = atom<BrandPageRender>({
+  key: 'brandPageRender', 
+  default: {
+    animationComplete: false
+  }
+});
 
 
 

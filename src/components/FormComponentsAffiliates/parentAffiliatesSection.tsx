@@ -16,7 +16,7 @@ const ParentAffiliateSection = (props: any) => {
     }));
   }
   return (
-    <div style={{ borderTop: 'none', borderBottom: 'none', margin: '0rem', maxWidth: '20rem', alignSelf: 'center', height: '30rem' }}>
+    <div style={{ borderTop: 'none', borderBottom: 'none', margin: '0rem', maxWidth: '20rem', alignSelf: 'center'}}>
       <div style={{ padding: '10px' }}>
         <div style={{ display: 'flexbox', textAlign: 'left', margin: '0rem' }}>
           <a

@@ -1,7 +1,6 @@
-import React, { useRef, useState, useEffect} from 'react';
+import React, { useRef, useState, useEffect, Ref, forwardRef, useImperativeHandle } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { ItineraryItem, ItemTypes } from './typeDefs';
-import styles from '../components/itinBuilderCSS/itinerary.module.css';
 const { v4: uuidv4 } = require('uuid');
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
@@ -14,7 +13,7 @@ import axios from 'axios';
 import getConfig from 'next/config';
 import { getSelectedUserPreferences } from "./FormComponentsUserPreferences/getUserPreferences";
 import { getSelectedTripPreferences } from "./FormComponentsTravelPreferences/getTravelPreferences";
-
+import styles from '../components/itinBuilderCSS/itinerary.module.css';
 
 const externalLink = <FontAwesomeIcon icon={faExternalLinkAlt} />;
 const mapMarkerAlt = <FontAwesomeIcon icon={faDiamondTurnRight} />;
@@ -24,7 +23,9 @@ interface DraggableItineraryItemProps {
   id: string;
   itineraryItem: ItineraryItem;
   handleShowHideDescription: (curItineraryItem: ItineraryItem) => void;
+  style?: React.CSSProperties; // Add the style prop
 }
+
 
 const openGoogleMapsDirection = async (destinationAddress?: string) => {
   try {
@@ -57,10 +58,15 @@ const openGoogleMapsDirection = async (destinationAddress?: string) => {
   }
 };
 
-const DraggableItineraryItem: React.FC<DraggableItineraryItemProps> = ({ 
-  id, itineraryItem, handleShowHideDescription  }) => {
+const DraggableItineraryItem = React.forwardRef((
+  { id, itineraryItem, handleShowHideDescription, style }: DraggableItineraryItemProps,
+  forwardedRef: Ref<HTMLDivElement> // specify the type of the ref
+) => {
+  const itemStyles = {...styles, ...style}
 
-  const [{ isDragging }, drag] = useDrag(() => ({ // Add isDragging to the array
+  const localRef = useRef<HTMLDivElement>(null);
+
+  const [{ isDragging }, drag] = useDrag(() => ({
     type: ItemTypes.ITINERARY_ITEM,
     item: itineraryItem,
     beginDrag: () => ({ itineraryItem }), 
@@ -69,10 +75,13 @@ const DraggableItineraryItem: React.FC<DraggableItineraryItemProps> = ({
     }),
   }));
 
+  drag(localRef); // use the local ref with the drag function
+
+  useImperativeHandle(forwardedRef, () => localRef.current as HTMLDivElement);                    
+
   const itemStyle = {
     opacity: isDragging ? 0.5 : 1,
     zIndex: isDragging ? 100000 : 1,
-  
   };
 
   function formatTimeWithoutSeconds(date: Date): string {
@@ -140,13 +149,6 @@ const DraggableItineraryItem: React.FC<DraggableItineraryItemProps> = ({
     });
     
     setItineraryItemsInState(newItemsWithFalseBeingEdited);
-  };
-
-  const [menuOpen, setMenuOpen] = useState(false);
-
-
-  const handleMenuClick = () => {
-    setMenuOpen(!menuOpen);
   };
     
   const handleRemoveClick = () => {
@@ -266,9 +268,36 @@ const DraggableItineraryItem: React.FC<DraggableItineraryItemProps> = ({
     );
   };
 
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  const handleMenuClick = (event: React.MouseEvent) => {
+    event.stopPropagation(); 
+    setMenuOpen(!menuOpen);
+  };
+
+  const handleOutsideClick = (event: MouseEvent) => {
+    if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+      setMenuOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (menuOpen && menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setMenuOpen(false);
+      }
+    };
+  
+    document.addEventListener("click", handleOutsideClick);
+  
+    return () => {
+      document.removeEventListener("click", handleOutsideClick);
+    };
+  }, [menuOpen]);
 
   return (
-    <div ref={drag} style={itemStyle}  className={styles.dropDiv} >
+    <div ref={localRef} style={itemStyles}  className={styles.dropDiv} >
       <div key={uuidv4()} className={`${styles.itineraryParent} ${itineraryItem.descHidden ? "" : styles.isShown }`}>
              <div className={styles.mainItinItemContainer}>
                   <div className={styles.itineraryItemContainerContainer}>
@@ -277,7 +306,7 @@ const DraggableItineraryItem: React.FC<DraggableItineraryItemProps> = ({
                           <h3 className={`${styles.itinTitle} ${itineraryItem.descHidden ? "" : styles.isShown }`} onClick={()=>handleShowHideDescription(itineraryItem)}>{replacementLoading ? "...processing" : itineraryItem.siteName}</h3>
                           <p className={`${styles.itinTitleDescription} ${itineraryItem.descHidden ? "" : styles.isShown }`}> {replacementLoading ? "" : itineraryItem.description} </p>
                           <p className={`${styles.expandedItinAddressContainer} ${itineraryItem.descHidden ? "" : styles.isShown }`}>{replacementLoading ? "" : itineraryItem.locationAddress}</p>
-                          <p className={`${styles.ownResearchContainer} ${itineraryItem.descHidden ? "" : styles.isShown }`}>
+                          <div className={`${styles.ownResearchContainer} ${itineraryItem.descHidden ? "" : styles.isShown }`}>
                             Do your own research: 
                             <div className={styles.expandedItinItemWebsite}>
                               <a href={`https://www.google.com/search?q=${encodeURIComponent(itineraryItem.siteName ? itineraryItem.siteName : "")} ${encodeURIComponent(tripPreferences.destination ? tripPreferences.destination : "")}`} target="_blank">
@@ -290,7 +319,7 @@ const DraggableItineraryItem: React.FC<DraggableItineraryItemProps> = ({
                                   <a href={`https://www.youtube.com/results?search_query=${encodeURIComponent(itineraryItem.siteName ? itineraryItem.siteName : "")} ${encodeURIComponent(tripPreferences.destination ? tripPreferences.destination : "")}`} target="_blank">
                                   {externalLink} <span className={styles.youTubeLinkText}>Search on YouTube</span></a>
                             </div>
-                          </p>
+                          </div>
                       </div>
                       
                       <div className={`${styles.rightContainer} ${itineraryItem.descHidden ? "" : styles.isShown}`}>
@@ -322,7 +351,10 @@ const DraggableItineraryItem: React.FC<DraggableItineraryItemProps> = ({
                                     </div>
                                   </div>
                           </div> 
-                        <div className={`${styles.hamburgerMenuContainer} ${itineraryItem.descHidden ? "" : styles.isShown}`} onClick={handleMenuClick}>
+                        <div 
+                          className={`${styles.hamburgerMenuContainer} ${itineraryItem.descHidden ? "" : styles.isShown}`} 
+                          onClick={handleMenuClick} 
+                          ref={menuRef}>
                                     {ellipsisVertical}
                                     {menuOpen && <Menu />}
                         </div>
@@ -335,6 +367,6 @@ const DraggableItineraryItem: React.FC<DraggableItineraryItemProps> = ({
       </div>
     </div>
   ); 
-};
+},);
 
 export default DraggableItineraryItem;

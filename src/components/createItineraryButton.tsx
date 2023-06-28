@@ -216,7 +216,8 @@ const CreateItineraryButton2: React.FC<DefinedProps> = (props) => {
         if (completeObjectReceived && bracketCount === 0) {
          try{
           const newObj = JSON.parse(buffer);
-
+          console.log(newObj)
+          console.log(buffer)
           const sTime = itinItemStartTimeTracker;
           const startTime = { time: new Date(sTime), beingEdited: false };
           const eTime = itinItemStartTimeTracker + durationPerItinItem

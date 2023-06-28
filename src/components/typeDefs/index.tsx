@@ -148,3 +148,6 @@ export type NeighborhoodRecommendationList = {
 export type Affiliates = {
   showAffiliatesLinks?: Boolean;
 }
+
+export type BrandPageRender = {
+  animationComplete?: boolean;}

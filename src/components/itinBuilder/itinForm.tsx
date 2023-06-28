@@ -4,7 +4,8 @@ import CreateItineraryButton from "../createItineraryButton";
 import CreateItineraryButton2 from "../createItineraryButton";
 import BackButton from "../backButton";
 import styles from "../itinBuilderCSS/itinForm.module.css";
-import { DefinedProps,ItineraryItem, NeighborhoodRecommendationList, NeighborhoodRecommendation } from "../typeDefs" 
+import { DefinedProps,ItineraryItem, NeighborhoodRecommendationList, 
+  NeighborhoodRecommendation } from "../typeDefs" 
 import Itinerary from "../itinerary";
 import UserInputTimePicker from "../FormComponentsTravelPreferences/tpTimePicker";
 import UserInputDatePicker from "../FormComponentsTravelPreferences/tpDatePicker";
@@ -13,7 +14,7 @@ import ParentUPComponent from "../FormComponentsUserPreferences/parentUPComponen
 import DetailedTravelPreferences from "../FormComponentsTravelPreferences/parentDetailedTP";
 import NeighborhoodRecommendations from "../neighborhoodSuggestionsAndSelections";
 import GetNeighborhoodSuggestions from "../getNeighborhoodsButton";
-import { neighborhoodRecommendationList } from "@/atoms/atoms";
+import { neighborhoodRecommendationList, itineraryItemsState } from "@/atoms/atoms";
 import GoogleMapIframe from "@/components/directionsMap";
 import { useRecoilState } from 'recoil';
 const { v4: uuidv4 } = require('uuid');
@@ -21,16 +22,14 @@ import ParentAffiliateSection from "../FormComponentsAffiliates/parentAffiliates
 import ParentNeighborhoodSection from "../FormComponentsNeighborhood/parentNeighborhoodSection"
 
 const InitForm: React.FC<DefinedProps> = (props) => {
+  console.log("PageComponent just REDENDERED")   
   const [neighborhoodRecommendationListVal, setNeighborhoodRecommendationListVal] = useRecoilState(neighborhoodRecommendationList)
   const showNeighborhoodList = neighborhoodRecommendationListVal.showNeighborhoodList ? neighborhoodRecommendationListVal.showNeighborhoodList : false
-  console.log("PageComponent just REDENDERED")
-   
-  
-  
-
+  const [itinerary, setItinerary] = useRecoilState(itineraryItemsState)
 
   return (
     <div className={styles.pageComponentContainer} style  ={{}}>
+        <button onClick = {()=>console.log(itinerary)}>prompt</button>
         {props.displayIntroText && <WelcomeText 
               introText={props.introText}
               infoText1={props.infoText1}
