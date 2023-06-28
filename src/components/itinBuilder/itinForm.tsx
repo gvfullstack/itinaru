@@ -22,14 +22,12 @@ import ParentAffiliateSection from "../FormComponentsAffiliates/parentAffiliates
 import ParentNeighborhoodSection from "../FormComponentsNeighborhood/parentNeighborhoodSection"
 
 const InitForm: React.FC<DefinedProps> = (props) => {
-  console.log("PageComponent just REDENDERED")   
   const [neighborhoodRecommendationListVal, setNeighborhoodRecommendationListVal] = useRecoilState(neighborhoodRecommendationList)
   const showNeighborhoodList = neighborhoodRecommendationListVal.showNeighborhoodList ? neighborhoodRecommendationListVal.showNeighborhoodList : false
   const [itinerary, setItinerary] = useRecoilState(itineraryItemsState)
 
   return (
     <div className={styles.pageComponentContainer} style  ={{}}>
-        <button onClick = {()=>console.log(itinerary)}>prompt</button>
         {props.displayIntroText && <WelcomeText 
               introText={props.introText}
               infoText1={props.infoText1}

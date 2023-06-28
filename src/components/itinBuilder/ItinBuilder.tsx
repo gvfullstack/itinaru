@@ -30,7 +30,6 @@ const ItinBuilder = (props: any) => {
 
   const handleInputChange:HandleInputChange = useCallback((key, value) => {
       setStateVariables((prevInputs) => ({ ...prevInputs, [key]: value }));
-      console.log("state variable",{stateVariables})
   }, [stateVariables]);
 
 

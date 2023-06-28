@@ -47,7 +47,6 @@ const UserInputTimePicker = () => {
         startTime: startTime,
       }));
     }
-    console.log(tripPreferences.startTime)
   };
 
   const handleEndTimeChange = (value: Date | null) => {
@@ -59,7 +58,6 @@ const UserInputTimePicker = () => {
         endTime: endTime,
       }));
     }
-    console.log(tripPreferences.endTime)
   };
 
   return (
@@ -141,7 +139,6 @@ const UserInputTimePicker = () => {
                 </div>
             </LocalizationProvider>
           </Stack>
-        {/* <button onClick={()=>console.log(tripPreferences.startTime, tripPreferences.endTime)}>print</button> */}
         </Typography>
       </Box>
   )

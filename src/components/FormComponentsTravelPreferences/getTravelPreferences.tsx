@@ -46,7 +46,6 @@ import { TripPreferences } from "../typeDefs/index";
     }
   
     const tripPreferencesString = JSON.stringify(formattedPreferences, null, 2);
-    console.log(tripPreferencesString)
     if (tripPreferencesString.length === 0) {
       return '';
     }

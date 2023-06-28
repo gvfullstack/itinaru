@@ -13,7 +13,6 @@ import styles from './parentUPComponent.module.css';
 const ParentUserPreferencesComponent = (props: any) => {
   const [userPreferencesVal, setUserPreferencesVal] = useRecoilState(userPreferencesAtom)
   const showPreferences = userPreferencesVal.showUserPreferences ? userPreferencesVal.showUserPreferences : false
-  console.log("userPreferences just rendered")
 
   const togglePreferences = () => {
     setUserPreferencesVal(prev => ({...prev, showUserPreferences: !prev.showUserPreferences}))

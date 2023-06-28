@@ -102,7 +102,6 @@ const DroppableItineraryContainer: React.FC<DroppableItineraryContainerProps> = 
         travelDate.getDate(),
         updatedItems[i-1].endTime?.time?.getHours() || 0,
         updatedItems[i-1].endTime?.time?.getMinutes() || 0);
-        console.log(updatedItems[i].activityDuration, "current Item duration")
       const currentItemDuration = updatedItems[i].activityDuration || 0;
     let userDefinedRespectedTime = updatedItems[i].userDefinedRespectedTime;
     let newStartTime; 
@@ -142,10 +141,8 @@ const DroppableItineraryContainer: React.FC<DroppableItineraryContainerProps> = 
     if (node !== null && itemId) {
       const index = itemRefs.current.findIndex((item) => item.id === itemId);
       if (index !== -1) {
-        console.log(`Updating ref for itemId: ${itemId}`);
         itemRefs.current[index].ref = node;
       } else {
-        console.log(`Adding new ref for itemId: ${itemId}`);
         itemRefs.current.push({ id: itemId, ref: node });
       }
     }
@@ -154,9 +151,7 @@ const DroppableItineraryContainer: React.FC<DroppableItineraryContainerProps> = 
   useEffect(() => {
     itemRefs.current = itineraryItems.map(itineraryItem => {
       const ref = itemRefs.current.find((itemRef) => itemRef.id === itineraryItem.id);
-      console.log(`Existing ref for itemId ${itineraryItem.id}: ${ref}`);
       return ref || { id: itineraryItem.id, ref: null };    });
-      console.log("Current itemRefs: ", itemRefs.current);
     }, [itineraryItems]); 
   
     return (
@@ -165,7 +160,6 @@ const DroppableItineraryContainer: React.FC<DroppableItineraryContainerProps> = 
           const isDraggedDownward = !dragDirection;
           const isDraggedUpward = dragDirection;
           const isHovered = localNewDropIndex === index && draggedItemIndex !== index;
-          console.log("isHovered", isHovered)
           
           return (
             <DraggableItineraryItem

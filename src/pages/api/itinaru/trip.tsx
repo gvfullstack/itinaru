@@ -54,7 +54,6 @@ async function requestItineraryFunction(
     // ``````````````````````````````````````````````````````````````````````````````
     const itinPreferences = req.body.itinPreferences || '';
     const neighborhoods = req.body.neighborhoods || '';
-    console.log("neighborhoods in trip", neighborhoods)
     const startTime = req.body.startTime || '';
     const endTime = req.body.endTime || '';
 
@@ -65,7 +64,6 @@ async function requestItineraryFunction(
     }
 
     const prompt = generatePrompt();
-        console.log(prompt)
 
     const prompt2 = `Place all of the activities and eateries into a schedule that starts at ${startTime} and ends at ${endTime}.  Where possible, order activities and eateries such that it minimizes the total distance traveled from one suggestion to the next.  The response should be in JSON format and include nothing else. Each of these fields are required and very important to include. e.g.[{"activityTitle": Visit...and do..., "description":"Based on your preferences you might enjoy...", suggestedStartTime:..., suggestedEndTime:...}, locationAddress:..., location:{latitude:...,longitude:...}, activityType: "Meal Site" or "Leisure Site", "name": "Eatery 1"},  {"name": "Eatery 2"} ]`
 
@@ -96,7 +94,6 @@ async function requestItineraryFunction(
     
             const initialResponse = answer;
             initialResponseString = JSON.stringify(initialResponse) || "";
-            console.log("initialResponse:", initialResponse);
             // Cache the response
             cache.put(cacheKey, initialResponse, CACHE_TIME * 1000);
           }
@@ -125,7 +122,6 @@ async function requestItineraryFunction(
         // Get the follow-up response from OpenAI
         const followupResponse = answer2;
         const followupResponseString = followupResponse?.toString() || "";
-        console.log("followupResponse:", followupResponse);
         res.status(200).json({ itinaru: followupResponse });
         const cachedFollowupResponse = { itinaru: answer2 };
         cache.put(cacheKey, cachedFollowupResponse, CACHE_TIME * 1000);

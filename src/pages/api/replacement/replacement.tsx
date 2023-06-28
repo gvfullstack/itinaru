@@ -33,8 +33,6 @@ async function requestReplacementFunction(
     const itineraryItem = req.body.itineraryItem || '';
     const tripPreferences = req.body.tripPreferences || '';
     const specificSitesToExclude = tripPreferences.specificSitesToExclude || '';
-    console.log("specificSitesToExclude", specificSitesToExclude)
-    console.log("itineraryItem", itineraryItem)
     const activityType = itineraryItem.activityType || '';
     const neighborhoodsToExplore = tripPreferences.neighborhoodsToExplore || '';
     const destination = tripPreferences.destination || '';
@@ -54,7 +52,6 @@ async function requestReplacementFunction(
     }
 
     const prompt = generatePrompt();
-    console.log("generated prompt", prompt)
 
 
     ////////////////////////////////////////////////////>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>

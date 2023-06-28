@@ -55,7 +55,6 @@ const NeighborhoodRecommendations: React.FC<NeighborhoodRecommendationList> = ()
         neighborhoodsToExplore: updatedSelection as string[],
       }));
     }
-    console.log(tripPreferences);
   };
 
   const handleHover = (index: number) => {

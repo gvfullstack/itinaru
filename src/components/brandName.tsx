@@ -6,9 +6,6 @@ import { useRecoilState, atom } from "recoil";
 const BrandName: React.FC = () => {
   const [brandPage, setBrandPage] = useRecoilState(brandPageRender);
   const animationComplete = brandPage.animationComplete
-    // const [animationComplete, setAnimationComplete] = useState(false);
-  console.log("Brand Name just rendered")
-
   const handleAnimationEnd = () => {
     setBrandPage(prev => ({ ...prev, animationComplete: true }));
   };

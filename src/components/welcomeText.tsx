@@ -12,7 +12,6 @@ const WelcomeText: React.FC<DefinedProps> = (props) => {
   const pageStep = props.pageStep ?? "10T";
   const [displayedIntroMessage, setDisplayedIntroMessage] = useState("");
 
-  console.log("Welcome text just rendered")
   
   const introText = useMemo(() => [
   // ARR of objects  

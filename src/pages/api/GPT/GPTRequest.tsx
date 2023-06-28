@@ -13,7 +13,6 @@ export default async function POST(req:  Request): Promise<Response> {
     prompt?: string;
   };
 
-  console.log("prompt at GPT Request",prompt)
   if (!prompt) {
     return new Response("No prompt in the request", { status: 400 });
   }

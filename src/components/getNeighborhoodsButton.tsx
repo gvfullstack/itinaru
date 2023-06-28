@@ -24,7 +24,6 @@ const GetNeighborhoodSuggestions: React.FC<DefinedProps> = (props) => {
   const handleInputChange = props.handleInputChange ? props.handleInputChange : () => {};
   const neighborhoodButtonText = props.getNeigborhoodButtonText
   const itinPreferences = getSelectedTripPreferencesNeighborhoods(tripPreferences) + getSelectedUserPreferences(userPreferences)
-  console.log("neighborhoodButton just rendered")
   const generateResponse = async (e: React.MouseEvent<HTMLButtonElement>): Promise<void> => {
     e.preventDefault();
     setNeighborhoodRecommendationsArr(prev => {
@@ -57,7 +56,6 @@ const GetNeighborhoodSuggestions: React.FC<DefinedProps> = (props) => {
     }
     // This data is a ReadableStream
     const data = response.body;
-    console.log(data)
     if (!data) {
       return;
     }
@@ -134,8 +132,6 @@ const GetNeighborhoodSuggestions: React.FC<DefinedProps> = (props) => {
       }
       setUserPreferences(prev => ({...prev, showUserPreferences:false}))
       setTripPreferences(prev => ({...prev, showTripPreferences:false}))
-
-      console.log("buffer", buffer);
     }
 }
 
