@@ -23,10 +23,12 @@ const ParentAffiliateSection = (props: any) => {
             href="#"
             onClick={togglePreferences}
             style={{
-              color: 'grey',
+              color: showPreferences ? '#FC4869':'grey',  
               cursor: 'pointer',
               textDecoration: 'none',
               width: '100%',
+              textDecorationLine: showPreferences ? 'underline': 'none',
+
             }}
           >
             {showPreferences ? 'collapse partner links' : 'partner links'}

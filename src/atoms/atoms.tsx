@@ -102,6 +102,7 @@ export const userPreferencesAtom = atom<UserPreferences>({
 export const tripPreferencesAtom = atom<TripPreferences>({
   key: 'tripPreferences',
   default: {
+    showTripInfo: true,
     showTripPreferences: false,
     destination: "",
     travelDate: getNextFriday(), // Default travel date is the upcoming Friday

@@ -28,10 +28,11 @@ const ParentNeighborhoodSection = (props: any) => {
             href="#"
             onClick={togglePreferences}
             style={{
-              color: 'grey',
               cursor: 'pointer',
-              textDecoration: 'none',
               width: '100%',
+              color: showPreferences ? '#FC4869':'grey',  
+              textDecorationLine: showPreferences ? 'underline': 'none',
+
             }}
           >
             {showPreferences ? 'collapse neighborhood suggestions' : 'neighborhood suggestions'}

@@ -26,11 +26,13 @@ const ParentUserPreferencesComponent = (props: any) => {
                   href="#"
                   onClick={togglePreferences}
                   style={{
-                    color: 'grey',
                     cursor: 'pointer',
                     textDecoration: 'none',
                     width: '100%',
-                    marginLeft: showPreferences ? ".5rem": "1rem"
+                    marginLeft: showPreferences ? ".5rem": "1rem",
+                    textDecorationLine: showPreferences ? 'underline': 'none',
+                    color: showPreferences ? '#FC4869':'grey',  
+
                   }}
                 >
                   {showPreferences ? 'collapse user preferences' : 'user preferences'}

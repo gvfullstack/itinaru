@@ -134,7 +134,7 @@ const CreateItineraryButton2: React.FC<DefinedProps> = (props) => {
 
     const generateResponse = async (e: React.MouseEvent<HTMLButtonElement>): Promise<void> => {
         e.preventDefault();
-        setTripPreferences(prev=>({...prev, showTripPreferences: false}))
+        setTripPreferences(prev=>({...prev, showTripPreferences: false, showTripInfo: false}))
         setUserPreferences(prev=>({...prev, showUserPreferences: false}))
         setNeighborhoodRecommendation(prev=>({...prev, showNeighborhoodSection: false}))
 

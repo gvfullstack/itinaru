@@ -119,6 +119,7 @@ export type UserPreferences = {
 };
 
 export type TripPreferences = {
+  showTripInfo?: Boolean;
   showTripPreferences?: Boolean;
   destination?: string;
   travelDate?: Date;

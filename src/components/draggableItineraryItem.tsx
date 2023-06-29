@@ -27,7 +27,7 @@ interface DraggableItineraryItemProps {
 }
 
 
-const openGoogleMapsDirection = async (destinationAddress?: string) => {
+const openMapsDirection = async (destinationAddress?: string) => {
   try {
     // Request user's location
     const position = await new Promise<GeolocationPosition>((resolve, reject) =>
@@ -41,22 +41,34 @@ const openGoogleMapsDirection = async (destinationAddress?: string) => {
       console.error('Destination address is undefined');
       return;
     }
-      // Encode the destination address for use in a URL
+    
+    // Encode the destination address for use in a URL
     const encodedDestinationAddress = encodeURIComponent(destinationAddress);
 
-    // Build Google Maps directions URL
-    const mapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${originLat},${originLng}&destination=${encodedDestinationAddress}&travelmode=driving`;
+    // Determine if user is on iOS (Apple Maps) or not (Google Maps)
+    const userAgent = window.navigator.userAgent;
+    const isIOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
 
-    // Open Google Maps in a new tab
+    let mapsUrl;
+    if (isIOS) {
+      // Use Apple Maps
+      mapsUrl = `http://maps.apple.com/?saddr=${originLat},${originLng}&daddr=${encodedDestinationAddress}&dirflg=d`;
+    } else {
+      // Use Google Maps
+      mapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${originLat},${originLng}&destination=${encodedDestinationAddress}&travelmode=driving`;
+    }
+
+    // Open Maps in a new tab
     if (typeof window !== 'undefined') {
       window.open(mapsUrl, '_blank');
     } else {
       console.error('window is not defined');
     }
-    } catch (error) {
+  } catch (error) {
     console.error('Error getting user location:', error);
   }
 };
+
 
 const DraggableItineraryItem = React.forwardRef((
   { id, itineraryItem, handleShowHideDescription, style }: DraggableItineraryItemProps,

@@ -12,7 +12,6 @@ import SpecificSitesToIncludeInput from './tpSpecificSitesToInclude';
 const DetailedTravelPreferences = (props: any) => {
   const [tripPreferences, setTripPreferences] = useRecoilState(tripPreferencesAtom)
   const showPreferences = tripPreferences.showTripPreferences ? tripPreferences.showTripPreferences : false
-  console.log("TP Parent just rendered")
 
   const togglePreferences = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     event.preventDefault();
@@ -22,16 +21,15 @@ const DetailedTravelPreferences = (props: any) => {
   return (
     <div style={{ borderTop:'none', borderBottom: 'none', margin: '0rem', maxWidth:"20rem", alignSelf: "center"}}>      
       <div style={{ padding: '10px' }}>
-              <div style={{display:"flexbox", textAlign: "left", margin: "0rem"}}>
+              <div style={{display:"flexbox", textAlign: showPreferences? 'center':'left', margin: "0rem"}}>
                 <a
                   href="#"
                   onClick={togglePreferences}
                   style={{
-                    color: 'grey',
+                    color: showPreferences ? '#FC4869':'grey',  
                     cursor: 'pointer',
-                    textDecoration: 'none',
                     width: '100%',
-
+                    textDecorationLine: showPreferences ? 'underline': 'none',
                   }}
                 >
                   {showPreferences ? 'collapse travel preferences' : 'travel preferences'}

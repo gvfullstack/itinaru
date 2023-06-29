@@ -4,16 +4,11 @@ import CreateItineraryButton from "../createItineraryButton";
 import CreateItineraryButton2 from "../createItineraryButton";
 import BackButton from "../backButton";
 import styles from "../itinBuilderCSS/itinForm.module.css";
-import { DefinedProps,ItineraryItem, NeighborhoodRecommendationList, 
-  NeighborhoodRecommendation } from "../typeDefs" 
+import { DefinedProps} from "../typeDefs" 
 import Itinerary from "../itinerary";
-import UserInputTimePicker from "../FormComponentsTravelPreferences/tpTimePicker";
-import UserInputDatePicker from "../FormComponentsTravelPreferences/tpDatePicker";
-import DestinationInput from "../FormComponentsTravelPreferences/tpDestinationInput";
+import GeneralTravelPreferences from "../FormComponentsTravelPreferences/parentGeneralTP"
 import ParentUPComponent from "../FormComponentsUserPreferences/parentUPComponent";
 import DetailedTravelPreferences from "../FormComponentsTravelPreferences/parentDetailedTP";
-import NeighborhoodRecommendations from "../neighborhoodSuggestionsAndSelections";
-import GetNeighborhoodSuggestions from "../getNeighborhoodsButton";
 import { neighborhoodRecommendationList, itineraryItemsState } from "@/atoms/atoms";
 import GoogleMapIframe from "@/components/directionsMap";
 import { useRecoilState } from 'recoil';
@@ -22,9 +17,6 @@ import ParentAffiliateSection from "../FormComponentsAffiliates/parentAffiliates
 import ParentNeighborhoodSection from "../FormComponentsNeighborhood/parentNeighborhoodSection"
 
 const InitForm: React.FC<DefinedProps> = (props) => {
-  const [neighborhoodRecommendationListVal, setNeighborhoodRecommendationListVal] = useRecoilState(neighborhoodRecommendationList)
-  const showNeighborhoodList = neighborhoodRecommendationListVal.showNeighborhoodList ? neighborhoodRecommendationListVal.showNeighborhoodList : false
-  const [itinerary, setItinerary] = useRecoilState(itineraryItemsState)
 
   return (
     <div className={styles.pageComponentContainer} style  ={{}}>
@@ -35,18 +27,9 @@ const InitForm: React.FC<DefinedProps> = (props) => {
               prompt={props.prompt}
               pageStep={props.pageStep}
               />}
-        <div style={{margin:"10rem, 0rem"}}>
-          {props.displayDestinationInput && <DestinationInput />}
-        </div>
-        {props.displayDatePicker && <UserInputDatePicker />}
-        {props.displayTimePicker && <UserInputTimePicker />}
-        {props.displayDetailedTravelPreferences && <DetailedTravelPreferences />}
-        {props.displayParentUPComponent && <ParentUPComponent />}
-        {/* {props.displayNeighborhoodRecommendations && showNeighborhoodList && <NeighborhoodRecommendations />} */}
-        {/* {props.displayGetNeighborhoodsButton &&   
-          <GetNeighborhoodSuggestions          
-            handleInputChange={props.handleInputChange} 
-        />} */}
+        <GeneralTravelPreferences />
+        <DetailedTravelPreferences />
+        <ParentUPComponent />
         <ParentNeighborhoodSection 
           handleInputChange={props.handleInputChange} 
           getNeigborhoodButtonText={props.getNeigborhoodButtonText}
