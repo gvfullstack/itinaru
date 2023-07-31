@@ -35,7 +35,7 @@ const ParentUserPreferencesComponent = (props: any) => {
 
                   }}
                 >
-                  {showPreferences ? 'collapse user preferences' : 'user preferences'}
+                  {showPreferences ? 'collapse user preferences' : 'see user preferences'}
                 </a>
           </div>
         {showPreferences && (

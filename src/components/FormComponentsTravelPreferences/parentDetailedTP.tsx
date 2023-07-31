@@ -32,7 +32,7 @@ const DetailedTravelPreferences = (props: any) => {
                     textDecorationLine: showPreferences ? 'underline': 'none',
                   }}
                 >
-                  {showPreferences ? 'collapse travel preferences' : 'travel preferences'}
+                  {showPreferences ? 'collapse travel preferences' : 'see travel preferences'}
                 </a>
               </div>
         {showPreferences && (

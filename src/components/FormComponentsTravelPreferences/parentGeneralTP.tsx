@@ -32,7 +32,7 @@ const GeneralTravelPreferences = (props: any) => {
                     textAlign: showTripInfo ? "left":"center",
                   }}
                 >
-                  {showTripInfo ? 'collapse trip info' : 'trip info'}
+                  {showTripInfo ? 'collapse trip info' : 'see trip info'}
                 </a>
               </div>
               <div>

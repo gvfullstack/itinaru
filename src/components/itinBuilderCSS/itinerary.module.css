@@ -145,9 +145,16 @@
     height: 1.25rem;
 }
 .startTime,
-.endTime{
+.endTime,
+.durationContainer{
     width: 100%;
     font-size: 15px;
+    line-height: 12px;
+    font-weight: 400;
+}
+
+.durationContainer{
+    font-size: 6px;
     line-height: 12px;
     font-weight: 400;
 }

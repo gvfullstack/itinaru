@@ -40,7 +40,7 @@ const ItinBuilder = (props: any) => {
           prevPageStep: "10T",
           nextPageStep: "20T",
           createButtonText: createButtonText,
-          getNeigborhoodButtonText:"suggest neighborhoods",
+          getNeigborhoodButtonText:"generate neighborhood suggestions",
           displayDestinationInput: true,
           displayIntroText: true,       
           displayDatePicker: true, 

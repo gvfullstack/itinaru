@@ -35,7 +35,7 @@ const ParentNeighborhoodSection = (props: any) => {
 
             }}
           >
-            {showPreferences ? 'collapse neighborhood suggestions' : 'neighborhood suggestions'}
+            {showPreferences ? 'collapse neighborhood suggestions' : 'see neighborhood suggestions'}
           </a>
         </div>
         {showPreferences && (

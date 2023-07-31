@@ -15,7 +15,6 @@ import { useRecoilState } from 'recoil';
 const { v4: uuidv4 } = require('uuid');
 import ParentAffiliateSection from "../FormComponentsAffiliates/parentAffiliatesSection"
 import ParentNeighborhoodSection from "../FormComponentsNeighborhood/parentNeighborhoodSection"
-
 const InitForm: React.FC<DefinedProps> = (props) => {
 
   return (

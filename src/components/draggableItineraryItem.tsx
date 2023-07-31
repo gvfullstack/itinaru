@@ -275,7 +275,7 @@ const DraggableItineraryItem = React.forwardRef((
         <div className={styles.menuItem} onClick={handleRemoveClick}>Remove</div>
         <div className={styles.menuItem} onClick = {handleReplaceClick}>Replace</div>
         <div className={styles.menuItem} >Edit</div>
-        <div className={styles.menuItem} onClick={()=>openGoogleMapsDirection(itineraryItem.locationAddress)}>Directions</div>
+        <div className={styles.menuItem} onClick={()=>openMapsDirection(itineraryItem.locationAddress)}>Directions</div>
       </div>
     );
   };
@@ -307,6 +307,13 @@ const DraggableItineraryItem = React.forwardRef((
       document.removeEventListener("click", handleOutsideClick);
     };
   }, [menuOpen]);
+
+  function millisecondsToHoursMinutes(ms:number | undefined | null): string {
+    const totalMinutes = Math.floor(ms / 60000);
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+    return `${hours}:${minutes.toString().padStart(2, '0')}`;
+}
 
   return (
     <div ref={localRef} style={itemStyles}  className={styles.dropDiv} >
@@ -362,6 +369,14 @@ const DraggableItineraryItem = React.forwardRef((
                                           </div>}
                                     </div>
                                   </div>
+                                      <div className={styles.durationContainer}>
+                                        DURATION: {millisecondsToHoursMinutes(itineraryItem.activityDuration)}
+                                      </div>
+                                      {itineraryItem.userDefinedRespectedTime && 
+                                        <div className={styles.durationContainer}>
+                                          TIME LOCKED
+                                        </div>
+                                      }
                           </div> 
                         <div 
                           className={`${styles.hamburgerMenuContainer} ${itineraryItem.descHidden ? "" : styles.isShown}`} 
@@ -370,7 +385,7 @@ const DraggableItineraryItem = React.forwardRef((
                                     {ellipsisVertical}
                                     {menuOpen && <Menu />}
                         </div>
-                        <div className={`${styles.expandedItinMapText} ${itineraryItem.descHidden ? "" : styles.isShown}`} onClick={()=>openGoogleMapsDirection(itineraryItem.locationAddress)}>
+                        <div className={`${styles.expandedItinMapText} ${itineraryItem.descHidden ? "" : styles.isShown}`} onClick={()=>openMapsDirection(itineraryItem.locationAddress)}>
                                     {mapMarkerAlt}
                         </div>                             
                       </div>
