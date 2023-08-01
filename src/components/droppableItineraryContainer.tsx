@@ -80,10 +80,16 @@ const DroppableItineraryContainer: React.FC<DroppableItineraryContainerProps> = 
         }
       }
 
+      if (!draggedItem) {
+        // Handle the case when draggedItem is undefined (optional)
+        console.error("Dragged item not found.");
+        return;
+      }
+      
       if (draggedItemIndex < 0) return;
       const newOrderedItems = itineraryItemsRef.current.filter((item, index) => index !== draggedItemIndex);
       const updatedOrderedItems = [...newOrderedItems];
-      const indexToUse = dropIndexRef.current !== null && dropIndexRef.current !== undefined ? dropIndexRef.current : draggedItemIndex;
+      const indexToUse = dropIndexRef.current ?? draggedItemIndex;
       updatedOrderedItems.splice(indexToUse, 0, draggedItem);
       console.log("itineraryItemsRef.current", itineraryItemsRef.current)
       console.log("updatedOrderedItems", updatedOrderedItems)
