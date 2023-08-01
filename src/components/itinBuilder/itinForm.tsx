@@ -19,10 +19,6 @@ const InitForm: React.FC<DefinedProps> = (props) => {
 
   return (
     <div className={styles.pageComponentContainer} style  ={{}}>
-        <a 
-        href=
-        "https://www.google.com/maps/dir/?api=1&origin=37.3653504,-122.028032&destination=300%20Webster%20St%2C%20Oakland%2C%20CA%2094607&travelmode=driving">
-          Open Map</a>
 
         {props.displayIntroText && <WelcomeText 
               introText={props.introText}
