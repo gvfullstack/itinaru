@@ -297,6 +297,7 @@ const DraggableItineraryItem = React.forwardRef((
   }, [menuOpen]);
 
   function millisecondsToHoursMinutes(ms:number | undefined | null): string {
+    ms = ms ?? 0;
     const totalMinutes = Math.floor(ms / 60000);
     const hours = Math.floor(totalMinutes / 60);
     const minutes = totalMinutes % 60;
