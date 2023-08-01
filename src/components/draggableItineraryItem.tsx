@@ -263,7 +263,17 @@ const DraggableItineraryItem = React.forwardRef((
         <div className={styles.menuItem} onClick={handleRemoveClick}>Remove</div>
         <div className={styles.menuItem} onClick = {handleReplaceClick}>Replace</div>
         <div className={styles.menuItem} >Edit</div>
-        <div className={styles.menuItem} onClick={()=>openMapsDirection(itineraryItem.locationAddress)}>Directions</div>
+        <div className={styles.menuItem} >
+              <a
+              href={
+                `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(itineraryItem.locationAddress)
+              }`}
+              target="_blank"
+              style={{ textDecoration: 'none', color: 'black' }}
+              >
+              Directions
+              </a>  
+        </div>
       </div>
     );
   };
@@ -374,8 +384,18 @@ const DraggableItineraryItem = React.forwardRef((
                                     {ellipsisVertical}
                                     {menuOpen && <Menu />}
                         </div>
-                        <div className={`${styles.expandedItinMapText} ${itineraryItem.descHidden ? "" : styles.isShown}`} onClick={()=>openMapsDirection(itineraryItem.locationAddress)}>
-                                    {mapMarkerAlt}
+                        <div 
+                          className={`${styles.expandedItinMapText} ${itineraryItem.descHidden ? "" : styles.isShown}`} 
+                          // onClick={
+                          //   ()=>openMapsDirection
+                          //   (itineraryItem.locationAddress)}
+                            >
+                              <a
+                                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(itineraryItem.locationAddress)}`}
+                                target="_blank"
+                                style={{ textDecoration: 'none', color: 'black' }}
+                                >{mapMarkerAlt}</a>
+                                    
                         </div>                             
                       </div>
               </div>
