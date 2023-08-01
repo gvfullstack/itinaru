@@ -45,18 +45,7 @@ const openMapsDirection = async (destinationAddress?: string) => {
     // Encode the destination address for use in a URL
     const encodedDestinationAddress = encodeURIComponent(destinationAddress);
 
-    // Determine if user is on iOS (Apple Maps) or not (Google Maps)
-    const userAgent = window.navigator.userAgent;
-    const isIOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
-
-    let mapsUrl;
-    if (isIOS) {
-      // Use Apple Maps
-      mapsUrl = `http://maps.apple.com/?saddr=${originLat},${originLng}&daddr=${encodedDestinationAddress}&dirflg=d`;
-    } else {
-      // Use Google Maps
-      mapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${originLat},${originLng}&destination=${encodedDestinationAddress}&travelmode=driving`;
-    }
+    let mapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${originLat},${originLng}&destination=${encodedDestinationAddress}&travelmode=driving`;
 
     // Open Maps in a new tab
     if (typeof window !== 'undefined') {
@@ -68,7 +57,6 @@ const openMapsDirection = async (destinationAddress?: string) => {
     console.error('Error getting user location:', error);
   }
 };
-
 
 const DraggableItineraryItem = React.forwardRef((
   { id, itineraryItem, handleShowHideDescription, style }: DraggableItineraryItemProps,
