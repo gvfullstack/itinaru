@@ -46,6 +46,12 @@ const InitForm: React.FC<DefinedProps> = (props) => {
         <GoogleMapIframe apiKey="AIzaSyBjW48cII6YeZGXUjCH9xNO916hhKWe_t8" />} 
 
         <ParentAffiliateSection />
+        <div className="privacyPolicyLink">
+          <a href="https://www.itinaru.com/_privacyPolicy"
+          style={{color: "grey", textDecoration: "none"}}
+          >
+            privacy policy</a>
+        </div>
         
    </div>
       );
