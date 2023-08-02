@@ -23,23 +23,7 @@ export default function Home() {
       <Head>
         <title>itinaru privacy policy</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        {/* <link rel="icon" href="/favicon.ico" /> */}
-        <script
-          async
-          src="https://www.googletagmanager.com/gtag/js?id=G-R2FS3JTQJ5"
-        >
-        </script>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-
-              gtag('config', 'G-R2FS3JTQJ5');
-            `,
-          }}
-        ></script>
+        
       </Head>
 
       <RecoilRoot>
