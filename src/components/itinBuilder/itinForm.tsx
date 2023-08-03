@@ -47,7 +47,7 @@ const InitForm: React.FC<DefinedProps> = (props) => {
 
         <ParentAffiliateSection />
         <div className="privacyPolicyLink">
-          <a href="https://www.itinaru.com/_privacyPolicy"
+          <a href="https://www.itinaru.com/privacyPolicy"
           style={{color: "grey", textDecoration: "none"}}
           >
             privacy policy</a>
