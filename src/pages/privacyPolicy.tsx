@@ -52,7 +52,7 @@ export default function PrivacyPolicy() {
             <p>We will not share your personal information with any third parties without your consent, except:</p>
             <ul>
             <li>To comply with legal obligations or a court order</li>
-            <li>If it's necessary for a merger, acquisition, or sale of assets</li>
+            <li>If it&rsquo;s necessary for a merger, acquisition, or sale of assets</li>
             <li>To investigate or prevent suspected illegal activity</li>
             <li>To protect the safety and rights of other users</li>
             </ul>
@@ -60,8 +60,8 @@ export default function PrivacyPolicy() {
             <h2>4. THIRD-PARTY LINKS</h2>
             <p>The App may contain links to third-party websites or services. We are not responsible for their privacy practices or content. We encourage you to read the privacy policies of any third-party websites or services you visit.</p>
 
-            <h2>5. CHILDREN'S PRIVACY</h2>
-            <p>Our App does not address anyone under the age of 13 ("Children"). We do not knowingly collect personally identifiable information from Children. If you are a parent or guardian and you are aware that your child has provided us with personal information, please contact us.</p>
+            <h2>5. CHILDREN&rsquo;S PRIVACY</h2>
+            <p>Our App does not address anyone under the age of 13 (&quot;Children&quot;). We do not knowingly collect personally identifiable information from Children. If you are a parent or guardian and you are aware that your child has provided us with personal information, please contact us.</p>
 
             <h2>6. SECURITY</h2>
             <p>We strive to use commercially acceptable means to protect your personal information, but we cannot guarantee absolute security.</p>
@@ -99,7 +99,7 @@ export default function PrivacyPolicy() {
             <p>Our App provides a tool that allows users to generate itineraries using AI. These AI services, powered by OpenAI, use the inputs you provide to generate customized itineraries.</p>
 
             <h3>b. Data Usage by AI</h3>
-            <p>Please be aware that when you use our AI services, the inputs you provide are processed by OpenAI's API. As of the date of this policy, OpenAI retains this data for 30 days but does not use it to improve its models. For more information, you may refer to OpenAI's own privacy policy.</p>
+            <p>Please be aware that when you use our AI services, the inputs you provide are processed by OpenAI&rdquo;s API. As of the date of this policy, OpenAI retains this data for 30 days but does not use it to improve its models. For more information, you may refer to OpenAI's own privacy policy.</p>
 
             <h3>c. Your Consent</h3>
             <p>By using our AI services, you consent to your data being used in this way. If you do not wish your data to be processed by OpenAI, please do not use the AI services.</p>
