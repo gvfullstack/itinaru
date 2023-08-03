@@ -14,8 +14,7 @@ export default function PrivacyPolicy() {
 
           <h1 style={{textAlign: 'center'}}>Privacy Policy</h1>
             <p><strong>Effective Date: August 2, 2023</strong></p>
-            <p>This Privacy Policy applies to ITINARU ("we," "us," "our") and outlines our practices concerning the collection, use, and disclosure of your information through our social networking app. By using the App, you agree to the collection and use of information in accordance with this Privacy Policy.</p>
-
+            <p>This Privacy Policy applies to ITINARU (&quot;we,&quot; &quot;us,&quot; &quot;our&quot;) and outlines our practices concerning the collection, use, and disclosure of your information through our social networking app. By using the App, you agree to the collection and use of information in accordance with this Privacy Policy.</p>
             <h2>1. INFORMATION WE COLLECT</h2>
             <h3>a. Personal Identifiable Information (PII)</h3>
             <p>We collect PII that you voluntarily provide when you register or update your profile on the App. This information may include:</p>
