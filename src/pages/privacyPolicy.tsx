@@ -99,7 +99,7 @@ export default function PrivacyPolicy() {
             <p>Our App provides a tool that allows users to generate itineraries using AI. These AI services, powered by OpenAI, use the inputs you provide to generate customized itineraries.</p>
 
             <h3>b. Data Usage by AI</h3>
-            <p>Please be aware that when you use our AI services, the inputs you provide are processed by OpenAI&rdquo;s API. As of the date of this policy, OpenAI retains this data for 30 days but does not use it to improve its models. For more information, you may refer to OpenAI's own privacy policy.</p>
+            <p>Please be aware that when you use our AI services, the inputs you provide are processed by OpenAI&rdquo;s API. As of the date of this policy, OpenAI retains this data for 30 days but does not use it to improve its models. For more information, you may refer to OpenAIthe inputs you provide are processed by OpenAI&rdquo;s own privacy policy.</p>
 
             <h3>c. Your Consent</h3>
             <p>By using our AI services, you consent to your data being used in this way. If you do not wish your data to be processed by OpenAI, please do not use the AI services.</p>
