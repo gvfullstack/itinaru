@@ -46,13 +46,23 @@ const InitForm: React.FC<DefinedProps> = (props) => {
         <GoogleMapIframe apiKey="AIzaSyBjW48cII6YeZGXUjCH9xNO916hhKWe_t8" />} 
 
         <ParentAffiliateSection />
-        <div className="privacyPolicyLink">
-          <a href="https://www.itinaru.com/privacyPolicy"
-          style={{color: "grey", textDecoration: "none"}}
-          >
-            privacy policy</a>
+        <div className="agreementLinks"
+          style={{display: "flex", justifyContent: "center", width: "100%",
+           fontSize: "0.8rem"}}
+                      >
+            <div className="privacyPolicyLink">
+              <a href="https://www.itinaru.com/privacyPolicy"
+              style={{color: "grey", textDecoration: "none", marginRight: "1rem"}}
+              >
+                privacy policy</a>
+            </div>
+            <div className="termsOfUse">
+              <a href="https://www.itinaru.com/termsOfUse"
+              style={{color: "grey", textDecoration: "none"}}
+              >
+                terms of use</a>
+            </div>
         </div>
-        
    </div>
       );
 };
