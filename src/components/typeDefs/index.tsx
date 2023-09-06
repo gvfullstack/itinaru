@@ -1,4 +1,7 @@
 import { RecoilState } from 'recoil';
+import { Timestamp } from 'firebase/firestore';
+import dayjs, { Dayjs } from 'dayjs';
+
 
 // export interface RecoilInputField {
 //   atom: RecoilState<string>;
@@ -11,12 +14,12 @@ export const ItemTypes = {
 
   export type ItineraryItem = {
     siteName?: string;
-    startTime?: {time?: Date, beingEdited?: boolean};
-    endTime?: {time?: Date, beingEdited?: boolean};
+    startTime?: {time?: Dayjs | null, beingEdited?: boolean};
+    endTime?: {time?: Dayjs | null, beingEdited?: boolean};
     description?: string;
     location?: {latitude: number, longitude: number};
-    locationAddress: string;
-    rating?: string;
+    locationAddress?: string;
+    rating?: number;
     locationWebsite?: string;
     expectedPerPersonBudget?: string;
     descHidden?: boolean;
@@ -25,10 +28,31 @@ export const ItemTypes = {
     activityDuration?: number;
     userDefinedRespectedTime?: boolean;
     activityType?: string;
+    itineraryParentId?: string;
   }
 
 
-  export type Itinerary = ItineraryItem[];
+  export type ItineraryItems = ItineraryItem[];
+
+  export type ItinerarySettings = {
+    id?: string;
+    title: string;
+    description: string;
+    neighborhood?: string;
+    city: string;
+    state: string;
+    duration?: string;
+    imageUrl?: string;
+    visibility: 'private' | 'shared' | 'public';
+    readAccess?: string[];
+    editAccess?: string[];
+  }
+      
+  export type Itinerary = {
+    settings: ItinerarySettings;
+    items: ItineraryItems;
+  }
+
 
 
 export type PageComponentProps = {
@@ -55,7 +79,7 @@ export type DefinedProps = {
       multipleSelectOptions?:RecoilState<Array<{ label: string, selected: boolean}>>
       themeOptionsState?: RecoilState<Array<{ label: string, selected: boolean}>>
       ageRangeOptionsState?: RecoilState<Array<{ label: string, selected: boolean}>>
-      itineraryItemsState?: RecoilState<Itinerary>;
+      itineraryItemsState?: RecoilState<ItineraryItems>;
       singleSelectOptions?: RecoilState<Array<{ numVal: string, label: string, selected: boolean}>>;
       curStep?: string;
       pageStep?: string;
@@ -152,3 +176,29 @@ export type Affiliates = {
 
 export type BrandPageRender = {
   animationComplete?: boolean;}
+
+//////auth State  ///////////////
+
+export type AuthenticatedUser = {
+  accountCreationDate: Timestamp;
+  username?: string | null;
+  firstName?: string | null;
+  lastName?: string | null;
+  phoneNumber?: string | null;
+  email?: string | null;
+  bio?: string | null;
+  displayName?: string | null;
+  profilePictureUrl?: string | null;
+  uid: string | null;
+  privacySettings?: PrivacySettings
+};
+
+export type PrivacySettings = {
+  username?: boolean;
+  firstName?: boolean;
+  lastName?: boolean;
+  phoneNumber?: boolean;
+  email?: boolean;
+  bio?: boolean;
+  profilePictureUrl?: boolean;
+};

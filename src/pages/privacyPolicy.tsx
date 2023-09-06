@@ -1,19 +1,13 @@
-import { Inter } from 'next/font/google'
-import styles from '@/styles/Home.module.css'
-import BrandNameStatic from '@/components/brandNameStatic'
-
-
 export default function PrivacyPolicy() {
   return (
     <>
-          <BrandNameStatic />
           <div className="privacyPolicyContainer" 
           style={{textAlign: 'left', marginTop: "5rem", display:'flex',
-          flexDirection: 'column', width: '100%', maxWidth: '600px', padding: '0 1rem' 
+          flexDirection: 'column', width: '100%', maxWidth: '600px', padding: '0 1rem'           
           }}>
 
           <h1 style={{textAlign: 'center'}}>Privacy Policy</h1>
-            <p><strong>Effective Date: August 2, 2023</strong></p>
+            <p><strong>Effective Date: August 2, 2024</strong></p>
             <p>This Privacy Policy applies to ITINARU (&quot;we,&quot; &quot;us,&quot; &quot;our&quot;) and outlines our practices concerning the collection, use, and disclosure of your information through our social networking app. By using the App, you agree to the collection and use of information in accordance with this Privacy Policy.</p>
             <h2>1. INFORMATION WE COLLECT</h2>
             <h3>a. Personal Identifiable Information (PII)</h3>

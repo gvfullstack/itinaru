@@ -1,10 +1,10 @@
 import {atom} from 'recoil';
-import { Itinerary, UserPreferences, TripPreferences, 
+import { ItineraryItems, UserPreferences, TripPreferences, 
   NeighborhoodRecommendationList, DefinedProps, Affiliates,
-  BrandPageRender} from '@/components/typeDefs'
+  BrandPageRender, AuthenticatedUser,PrivacySettings, Itinerary} from '@/components/typeDefs'
 import { startOfWeek, addDays, format, isAfter } from 'date-fns';
 
-export const itineraryItemsState = atom<Itinerary>({
+export const itineraryItemsState = atom<ItineraryItems>({
   key: 'itineraryItemsState', 
   default: [
     ]
@@ -160,7 +160,31 @@ export const brandPageRender = atom<BrandPageRender>({
   }
 });
 
+////////auth state////////
 
+export const authUserState = atom<AuthenticatedUser | null>({
+  key: 'authState',
+  default: null,
+});
 
+export const privacySettingsState = atom<PrivacySettings | null>({
+  key: 'privacySettingsState',
+  default: null,
+});
 
+const defaultItinerary: Itinerary = {
+  settings: {
+    title: "",
+    description: "",
+    city: "",
+    state: "",
+    visibility: "private" // or any other default value
+  },
+  items: []
+};
+
+export const currentlyEditingItineraryState = atom<Itinerary>({
+  key: 'currentlyEditingItineraryState',
+  default: defaultItinerary,
+});
 
