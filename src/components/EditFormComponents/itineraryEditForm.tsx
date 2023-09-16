@@ -1,47 +1,36 @@
 import React, { useEffect, useState, FC } from 'react';
-import { Itinerary, ItinerarySettings, ItineraryItem } from '../typeDefs';
-import styles from './itineraryEditForm.module.css'
+import {ItinerarySettings, ItineraryItem } from './editFormTypeDefs';
+import styles from './EditFormCSS/itineraryEditForm.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 import dynamic from 'next/dynamic';
 import 'react-quill/dist/quill.snow.css';  // or quill.bubble.css if you're using the bubble theme
-import {currentlyEditingItineraryState} from '../../atoms/atoms';
+import {currentlyEditingItineraryState} from './editFormAtoms';
 import {useRecoilState, useRecoilCallback} from 'recoil';
 import TextField from '@mui/material/TextField';
-
 const ReactQuill = dynamic(import('react-quill'), {
     ssr: false, // This will make the component render only on the client-side
     loading: () => <p>Loading...</p>, // You can provide a loading component or text here
   });
 
-const ItineraryItemForm = dynamic(() => 
-    import('./ItineraryItemForm'), {
-    ssr: false,
-    loading: () => <p>Loading...</p>
-    });
+type Props = {
+    handleShowItemForm: () => void;
+}
 
-const DragDropSection = dynamic(() => 
-    import('./itinItemDragDropSection/editFormDroppableItineraryContainer'), {
-    ssr: false,
-    loading: () => <p>Loading...</p>
-    });
-
-const ItineraryForm = () => {
+const ItineraryEditForm: FC<Props> = ({ handleShowItemForm }) => {
 
     const [itinerary, setItinerary] = useRecoilState(currentlyEditingItineraryState);
-    const [showItemForm, setShowItemForm] = useState(false);
-  
+      
     // HOF for itinerary settings changes
     const handleSettingsChange = (field: keyof ItinerarySettings) => (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
-
-        setItinerary(currentItinerary => ({
-         
+        setItinerary(currentItinerary => ({  
             ...currentItinerary,
             settings: {
               ...currentItinerary.settings,
               [field]: value
             }}));
+
       }
 
     const handleQuillChange = (value: string) => {
@@ -53,21 +42,23 @@ const ItineraryForm = () => {
         }}))
       }
       
-    // HOF for itinerary item changes
     const handleAddItem = (item: ItineraryItem) => {
-        setItinerary(currentItinerary => ({
-            ...currentItinerary,
-            items: [...currentItinerary.items, item]
+        const updatedItems = [...itinerary.items, item];
+    
+        setItinerary(prevItinerary => ({
+            ...prevItinerary,
+            items: updatedItems
         }));
-        setShowItemForm(false);
+
+
     };
+    
     
     const [showInfoBox, setShowInfoBox] = useState<boolean>(false);
 
     return (
         <div className = {styles.itineraryEditFormContainer}>
-            <form onSubmit={(e) => e.preventDefault()}>
-                <fieldset className={styles.mainSettingsContainer} >
+                <div className={styles.mainSettingsContainer} >
                     <TextField
                     id="itineraryTitle"
                     label="Itinerary title"
@@ -77,15 +68,6 @@ const ItineraryForm = () => {
                     onChange={handleSettingsChange('title')}
                     className={styles.inputFields}
                     />
-                    <div className={styles.quillContainer}>
-                    <ReactQuill
-                    value={itinerary.settings.description}
-                    onChange={handleQuillChange}
-                    placeholder="Enter itinerary description..."
-                    className={styles.quill}
-                    />
-                    </div>
-
                     <TextField
                     id="City"
                     label="City"
@@ -95,6 +77,7 @@ const ItineraryForm = () => {
                     onChange={handleSettingsChange('city')}
                     className={styles.inputFields}
                     />
+
                     <TextField
                     id="State"
                     label="State"
@@ -104,6 +87,16 @@ const ItineraryForm = () => {
                     onChange={handleSettingsChange('state')}
                     className={styles.inputFields}
                     />
+                    <div className={styles.quillContainer}>
+                        <ReactQuill
+                        value={itinerary.settings.description}
+                        onChange={handleQuillChange}
+                        placeholder="Enter itinerary description..."
+                        className={styles.quill}
+                        />
+                    </div>
+
+                    
                     
                     <div style={{display:"flex", flexDirection:"row"}}>
                         <label title="Visible only to you">
@@ -153,27 +146,13 @@ const ItineraryForm = () => {
                             </div>
                             }
                     </div>
-
-
-                </fieldset>
-
-                {/* ItineraryItem(s) Form */}
-                <fieldset className={styles.itinItemContainer}>
-                    <legend>Itinerary Items</legend>
-                    {itinerary.items.map((item, index) => (
-                        <div key={index}>
-                            {/* Display existing items; can also add edit/delete buttons */}
-                        </div>
-                    ))}
-                    <DragDropSection />
-                    {showItemForm && <ItineraryItemForm onAddItem={handleAddItem} />}
-                    <button className={styles.addNewItemButton}type="button" onClick={() => setShowItemForm(true)}>Add New Item</button>
-                </fieldset>
-
-                <button type="submit">Save Entire Itinerary</button>
-            </form>
+                </div>
+            
         </div>
     );
   };
   
-  export default ItineraryForm;
+  export default ItineraryEditForm;
+
+
+  

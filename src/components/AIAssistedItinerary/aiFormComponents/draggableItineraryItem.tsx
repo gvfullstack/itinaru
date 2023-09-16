@@ -14,7 +14,6 @@ import getConfig from 'next/config';
 import { getSelectedUserPreferences } from "./FormComponentsUserPreferences/getUserPreferences";
 import { getSelectedTripPreferences } from "./FormComponentsTravelPreferences/getTravelPreferences";
 import styles from '../aiItinBuilderCSS/itinerary.module.css';
-
 const externalLink = <FontAwesomeIcon icon={faExternalLinkAlt} />;
 const mapMarkerAlt = <FontAwesomeIcon icon={faDiamondTurnRight} />;
 const ellipsisVertical = <FontAwesomeIcon icon={faEllipsisVertical} />;
@@ -79,10 +78,6 @@ const DraggableItineraryItem = React.forwardRef((
 
   useImperativeHandle(forwardedRef, () => localRef.current as HTMLDivElement);                    
 
-  const itemStyle = {
-    opacity: isDragging ? 0.5 : 1,
-    zIndex: isDragging ? 100000 : 1,
-  };
 
   function formatTimeWithoutSeconds(date: Date): string {
     if (isNaN(date.getTime())) {
@@ -321,7 +316,8 @@ const DraggableItineraryItem = React.forwardRef((
                   <div className={styles.itineraryItemContainerContainer}>
                       <div className={styles.itinTitleContainer} 
                       >
-                          <h3 className={`${styles.itinTitle} ${itineraryItem.descHidden ? "" : styles.isShown }`} onClick={()=>handleShowHideDescription(itineraryItem)}>{replacementLoading ? "...processing" : itineraryItem.siteName}</h3>
+                          <h3 className={`${styles.itinTitle} ${itineraryItem.descHidden ? "" : styles.isShown }`} 
+                            onClick={()=>handleShowHideDescription(itineraryItem)}>{replacementLoading ? "...processing" : itineraryItem.siteName}</h3>
                           <p className={`${styles.itinTitleDescription} ${itineraryItem.descHidden ? "" : styles.isShown }`}> {replacementLoading ? "" : itineraryItem.description} </p>
                           <p className={`${styles.expandedItinAddressContainer} ${itineraryItem.descHidden ? "" : styles.isShown }`}>{replacementLoading ? "" : itineraryItem.locationAddress}</p>
                           <div className={`${styles.ownResearchContainer} ${itineraryItem.descHidden ? "" : styles.isShown }`}>

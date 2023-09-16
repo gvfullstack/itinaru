@@ -16,7 +16,7 @@ const Menu: React.FC = () => {
   const menuRef = useRef<HTMLDivElement>(null)
 
 
-  const hamburgerIcon = <FontAwesomeIcon icon={faBars} style={{color: "#ffffff",}} />;
+  const hamburgerIcon = <FontAwesomeIcon icon={faBars} className= {styles.hamburgerIcon} />;
   
   const toggleMenu = () => {
     setMenuVisible(prevState => !prevState);

@@ -23,7 +23,8 @@ body {
 * {
   box-sizing: border-box;
 }
-Firebase UI styles
+
+/* Firebase UI styles */
 .firebaseui-container {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.05) !important;
   border-radius: 4px !important;
@@ -64,4 +65,18 @@ Firebase UI styles
   /* Your styling rules here, for example: */
   color: rgb(97, 95, 95) !important;
   font-size: 16px;
+}
+
+
+.nav-container{
+  width: 100%;
+  display: flex;
+  z-index: 100;
+}
+
+.app-container{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
 }

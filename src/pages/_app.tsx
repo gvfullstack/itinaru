@@ -9,7 +9,6 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Script from 'next/script';
 import TopNavBar from '@/components/topNavBar/topNavBar';
 
-
 const FirebaseAuthLogic = dynamic(() => import('.././components/FirebaseAuthComponents/firebaseAuthLogic'), { ssr: false });
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -31,16 +30,20 @@ export default function App({ Component, pageProps }: AppProps) {
       </Head>
 
       <RecoilRoot>
-          <> 
-            <Head>
-            </Head>
-           <TopNavBar />
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <Component {...pageProps} />
-            </LocalizationProvider>
-            <Analytics />
-            <FirebaseAuthLogic />
-          </>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <main className="app-container"> 
+                  <Head>
+                  </Head>
+                  <div className="app-container">       
+                      <div className="nav-container">
+                        <TopNavBar />
+                      </div>
+                        <Component {...pageProps} />                      
+                        <Analytics />
+                        <FirebaseAuthLogic />
+                  </div>
+                </main>
+              </LocalizationProvider>
       </RecoilRoot>
     </>
   )

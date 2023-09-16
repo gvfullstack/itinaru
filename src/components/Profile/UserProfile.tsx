@@ -317,7 +317,6 @@ const updatePrivacySettings = async () => {
 };
   return (
     <>
-    <TopNavBar />
     <div className={styles.tabsContainer}>
       <Tabs>
         <TabList>

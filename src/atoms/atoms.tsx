@@ -172,19 +172,4 @@ export const privacySettingsState = atom<PrivacySettings | null>({
   default: null,
 });
 
-const defaultItinerary: Itinerary = {
-  settings: {
-    title: "",
-    description: "",
-    city: "",
-    state: "",
-    visibility: "private" // or any other default value
-  },
-  items: []
-};
-
-export const currentlyEditingItineraryState = atom<Itinerary>({
-  key: 'currentlyEditingItineraryState',
-  default: defaultItinerary,
-});
 

@@ -5,23 +5,43 @@ import Link from 'next/link';
 import JumboPlus from '../AppContolsComponents/jumboPlus';
 
 const TopNavBar: React.FC = () => {
-  
-  return  (
-    <div 
-    className={`${styles.topNavContainer} ${styles.animationComplete}`} 
-      >
-      <div></div> {/* Empty div to create space */}
-      <div></div> {/* Empty div to create space */}
-      <Link href="/"  
-        style={{textDecoration:"none"}}> {/* Link to the home page */}
-            <h1 className={`${styles.staticAnimationComplete}`}>
-              itinaru</h1>
-      </Link> 
+  const [scrolled, setScrolled] = React.useState(false);
+  React.useEffect(() => {
+    const handleScroll = () => {
+      // This will set "scrolled" to true when the user scrolls more than 10 pixels
+      // You can adjust the value as needed
+      setScrolled(window.scrollY > 2);
+    };
 
-      <div className = {styles.rightTopNavBar} >
-        <JumboPlus />     
-        <Menu />       
-      </div> 
+    // Add the event listener when the component mounts
+    window.addEventListener("scroll", handleScroll);
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  return  (
+    <div className={styles.nav}>
+      <div 
+      className={`${styles.topNavContainer}`}>
+          <div></div>
+          <div></div>
+          <div>
+            <Link href="/"  
+              style={{textDecoration:"none"}}> {/* Link to the home page */}
+                  <h1 className={styles.title}>
+                    itinaru</h1>
+            </Link> 
+          </div>
+          <div></div>
+          <div className = {styles.rightTopNavBar} >
+            <JumboPlus />     
+            <Menu />       
+          </div> 
+      </div>
+    {scrolled && <div className={styles.navBuffer}></div>}
     </div>
   ) 
   

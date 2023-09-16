@@ -1,0 +1,420 @@
+.itineraryEditFormContainer{
+    margin-top: 2rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+}
+
+.itinItemCreatorContainer{
+  width: 100%;
+  max-width: 50rem;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-radius: 10px;
+}
+
+
+.mainSettingsContainer,
+.itinItemContainer{
+    display: flex;
+    flex-direction: column;
+    border: none;
+    width: 100%;
+}
+
+.inputFields{
+  width: 100%;
+    margin-bottom: 1rem !important;
+    border-radius: 7px;
+    border-color: #ccc;
+    border-style: solid;
+    font-size: 16px;
+    /* height: 2.5rem; */
+    line-height: 1.5;
+}
+
+.infoBox {
+    display: none;
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 15px;
+    width: 250px;
+    z-index: 10;
+    border-radius: 10px;
+  }
+  
+  .infoBoxVisible {
+    display: block;
+  }
+  
+  .infoIcon {
+    cursor: pointer;
+    color: rgb(201, 200, 200); /* Add this line */
+    width: 15px; /* Adjust the width */
+    height: 15px;
+    margin-left: 1rem;
+    align-self: center; 
+  }
+  
+  .infoBox.infoBoxVisible{
+    display: flex;
+    flex-direction: column; 
+  }
+
+  .hideButton{
+    border: none;
+    background-color: transparent;
+    text-decoration: underline;
+    text-align: right;
+  }
+
+  .sharedSettingIfo{
+    margin: 0;
+    margin-bottom: .25rem;
+    font-size: .85em;
+  }
+
+  .quillContainer{
+    display: flex;
+    width: 100%;
+    height: auto;
+    max-height: 20rem;
+    margin-bottom: 4rem;
+  }
+
+  .quill{
+    width: 100%;
+    height: auto;
+    max-height: 19rem;
+
+  }
+
+  /* .itinItemCreatorContainer{
+    border-top: solid 3px #ccc;
+    border-bottom: solid 3px #ccc;
+    padding-bottom: 1rem;
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    background-color: #ccc;
+  } */
+
+  .addNewItemButton{
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    width: 100%;
+    height: 2.5rem;
+    border-radius: 7px;
+    border-color: #ccc;
+    border-style: solid;
+    font-size: 16px;
+    background-color: #fff;
+    color: #000;
+    cursor: pointer;
+  }
+
+  .fieldRow {
+    display: flex;
+    align-items:center;
+    justify-content: left;
+    line-height-step: 0;
+    margin-bottom: 0rem;
+    margin: 0;
+    padding: 0;
+ 
+}
+
+.addressSelectSection{
+  margin-bottom: 1rem;
+}
+
+.crossHair{
+  height: 20px;
+  width: 20px;
+  margin-right: 8px;
+  margin-left: 8px;
+}
+
+
+.coordinatesDiv{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-left: 1rem;
+}
+
+.geolocationSection{
+  margin-top: -1rem;
+}
+
+.inputFieldsTimeSelectSection{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  margin-bottom: 1rem;
+  gap: 1rem;
+}
+
+.plusSignContainerEF{
+  font-size: 2rem;
+  display: flex;
+  justify-content: flex-end;
+  align-items:flex-end;
+  height: 3rem;
+  color: #bebebe;
+  width: 100%;
+  align-self:flex-end    
+}
+
+.plusSignEF{
+  cursor: pointer;
+  align-self: center;
+  justify-self: center;
+}
+
+.plusSignText{
+  font-size: 1.5rem;
+  align-self: center;
+  justify-self: center;
+
+}
+.plusSignEF:hover{
+  color: #f83c5e;
+}
+
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7); /* Black with opacity */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modalContent {
+  
+  background-color: white;
+  overflow-y: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.iconSectionContainerP{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #807f7f;
+  text-align: center;
+}
+.iconSectionContainer{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #807f7f;
+  text-align: center;
+}
+
+.formControlsIconText{
+  text-align: center  ;
+  color: #807f7f;
+}
+
+.formControlsIconContainerP{
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  display: flex;
+  min-width: 3rem;
+}
+.formControlsIconContainer{
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  display: flex;
+  min-width: 3rem;
+}
+
+.floppyDisk, 
+.cancelMark,
+.trashIcon {
+  color: #807f7f;
+  font-size: 2rem;
+  cursor: pointer;
+  align-self: center;
+}
+.floppyDisk :hover,
+.cancelMark :hover,
+.trashIcon :hover{
+  color: #f83c5e;
+}
+
+.modalCancelButton, 
+.modalSaveButton
+ { 
+  color: #fff; /* white text */
+  border: none;
+  border-radius: 10px; /* circular button */
+  width: 4rem;
+  height: 2rem;
+  text-align: center;
+  line-height: 30px;
+  cursor: pointer;
+}
+
+.saveOrCancelButtonSectionP {
+  align-self: flex-end;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: 1rem;
+  }
+.saveOrCancelButtonSection {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: 1rem;
+  }
+
+  .EFPageContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 85%;
+    align-self: center;
+    margin-top: 5rem;
+    height: fit-content;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #bebebe;
+    border-radius: 10px;
+    padding: 1rem 2rem 2rem 1rem;
+  }
+.EFFormContainer{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  align-self: center;
+  padding: 0 1rem;
+  height: fit-content;
+  padding: 0 6rem;
+}
+
+.saveOrCancelButtonSectionFormContainerT  {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    width: 100%;
+    border-bottom: solid;
+    border-width: 1px;
+    border-color: #bebebe;
+    }
+
+.saveOrCancelButtonSectionFormContainerB{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: 1rem;
+  width: 100%;
+  border-bottom: none;
+  border-top: solid;
+  border-width: 1px;
+  border-color: #bebebe;
+  margin-top: 1rem;
+}
+
+
+@media (min-width:1750px){
+  .EFPageContainer{
+    width: 65%;
+  }
+}
+
+@media (min-width:1600px){
+  .EFPageContainer{
+    width: 65%;
+  }
+
+  .EFFormContainer{
+    padding: 0 20rem;
+    width: 90%;
+
+  }
+}
+
+@media (min-width:1450px){
+  .EFPageContainer{
+    width: 75%;
+  }
+  
+.EFFormContainer{
+  padding: 0 15rem;
+}
+}
+
+@media (min-width:1300px){
+  .EFPageContainer{
+    width: 80%;
+  }
+  .EFFormContainer{
+    padding: 0 11rem;
+  }
+}
+
+@media (max-width:1100px){
+  .EFPageContainer{
+    width: 90%;
+  }
+}
+
+@media (max-width: 900px){
+.EFPageContainer{
+  width: 92.5%;
+}
+.EFFormContainer{
+  padding: 0 5rem;
+}
+}
+
+@media (max-width:790px){
+  .EFFormContainer{
+    padding: 0 4rem;
+}
+}
+
+@media (max-width:650px){
+  .EFFormContainer{
+    padding: 0 1rem;
+}
+.EFPageContainer{
+  width: 95%;
+}
+}
+
+@media (max-width:550px){
+  .EFFormContainer{
+    padding: 0 0rem;
+}
+}
+
+@media (max-width:420px){
+.inputFields.budgetInputField {
+  margin-top: 1rem;
+  
+}
+
+
+
+}

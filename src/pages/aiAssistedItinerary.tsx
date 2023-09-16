@@ -1,6 +1,5 @@
 import Head from 'next/head'
 import styles from '@/styles/Home.module.css'
-import TopNavBar from '@/components/topNavBar/topNavBar'
 import AIItinContainer from '@/components/AIAssistedItinerary/aiItinContainer' 
  
 

@@ -1,19 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import NewItineraryTitleInput from './jumboPlusFunctionality/newItineraryTItleInput';
-
-const styles = {
-  container: {
-    fontSize: '2rem',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100vh',
-    color: 'white',
-  },
-  plusSign: {
-    cursor: 'pointer',
-  }
-};
+import styles from './jumboPlus.module.css';
 
 const JumboPlus: React.FC = () => {
   const [showItineraryInput, setShowItineraryInput] = useState(false);
@@ -42,8 +29,8 @@ const JumboPlus: React.FC = () => {
 
   
   return (
-    <div style={styles.container} ref={containerRef}>
-      {!showItineraryInput && <span style={styles.plusSign} onClick={handlePlusClick}>+</span>}
+    <div className={styles.container} ref={containerRef}>
+      {!showItineraryInput && <span className={styles.plusSign} onClick={handlePlusClick}>+</span>}
       {showItineraryInput && <NewItineraryTitleInput hideBox={()=>{setShowItineraryInput(false)}} />}
     </div>
   );

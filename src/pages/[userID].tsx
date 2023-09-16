@@ -2,7 +2,6 @@ import { GetServerSideProps } from 'next';
 import { getPublicProfileWithAdminSDK } from '../server/profile';
 import PublicProfile from '../components/Profile/PublicProfile';
 import { AuthenticatedUser } from "@/components/typeDefs";
-import TopNavBar from '@/components/topNavBar/topNavBar';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const userID = context.params?.userID as string; // Extract user ID from URL

@@ -1,6 +1,9 @@
 .menuContainer {
+  display: flex;
   position: relative;
   font-family: 'Roboto', sans-serif;
+  height: 3rem;
+  width: fit-content;
 }
 
 .menuButton {
@@ -16,10 +19,6 @@
   float: right;
 }
 
-.menuButton:hover {
-  background-color: #f83c5e;
-  color: #fff;
-}
 
 .menuBar {
   position: fixed;
@@ -94,17 +93,72 @@
   object-fit: cover;
 }
 
+.hamburgerIconContainer {
+  display: none;
+}
+.hamburgerIcon{
+  color:#bebebe
+}
+
+.hamburgerIcon:hover .menuText {
+  color: #f83c5e !important;
+}
+
+
+.menuContainer{
+  width: 5.5rem;
+}
+
+.menuContainer:hover .menuText {
+  color: #f83c5e !important;
+}
+
+.menuText {
+    display: block;
+    color:#bebebe;
+}
+
+
+
 @media (max-width: 768px) {
   .profilePicImageContainer {
       border-radius: 5px; /* Adjustments for smaller screens */
   }
+  .hamburgerIconContainer {
+    display: block;
+    width: fit-content;
+
+  }
+
+  
+  .menuText {
+    display: none;
+  }
+  .menuText :hover{
+    color: #f83c5e;
+  }
+
+  .hamburgerIcon:hover {
+    color: #f83c5e !important;
+  }
+  
 }
+
+
+
 
 @media (max-width: 480px) {
   .profilePicImageContainer {
       border: none; /* More adjustments for very small screens */
   }
-}
+  
+  .menuText:hover  {
+    color: #f83c5e !important;
+  }
+  
+  .hamburgerIcon:hover {
+    color: #f83c5e !important;
+  }
 
 .profileText {
   color: rgb(136, 134, 134);
@@ -116,22 +170,8 @@
   flex-direction: column;
   margin-left: 1rem;  
 }
-
-.hamburgerIconContainer {
-  display: none;
+.menuText :hover{
+  color: #f83c5e;
 }
 
-.menuText {
-  display: block;
-}
-
-/* For screens smaller than 769px */
-@media (max-width: 768px) {
-  .hamburgerIconContainer {
-      display: block;
-  }
-
-  .menuText {
-      display: none;
-  }
 }
