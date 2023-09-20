@@ -42,7 +42,7 @@ export const ItemTypes = {
     city: string;
     state: string;
     duration?: string;
-    imageUrl?: string;
+    galleryPhotoUrl?: string;
     visibility: 'private' | 'shared' | 'public';
     readAccess?: string[];
     editAccess?: string[];

@@ -8,6 +8,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Script from 'next/script';
 import TopNavBar from '@/components/topNavBar/topNavBar';
+import { ToastContainer } from 'react-toastify';
+    <ToastContainer style={{ zIndex: 99999 }} />
 
 const FirebaseAuthLogic = dynamic(() => import('.././components/FirebaseAuthComponents/firebaseAuthLogic'), { ssr: false });
 
@@ -34,7 +36,8 @@ export default function App({ Component, pageProps }: AppProps) {
                 <main className="app-container"> 
                   <Head>
                   </Head>
-                  <div className="app-container">       
+                  <div className="app-container">     
+                      <ToastContainer style={{ zIndex: 99999 }} />
                       <div className="nav-container">
                         <TopNavBar />
                       </div>

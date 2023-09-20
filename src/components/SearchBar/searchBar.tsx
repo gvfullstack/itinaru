@@ -4,6 +4,7 @@ import ItinGalCompWrapper from '../itinGallery/itinGalCompWrapper';
 import ItinGalleryComponent from '../itinGallery/itinGalleryComponent';
 import styles from './searchBar.module.css';
 import { useState } from 'react';
+import { Itinerary } from './searchTypeDefs';
 
 const appId: string = process.env.NEXT_PUBLIC_ALGOLIA_APP_ID || '';
 if (!appId) {
@@ -30,23 +31,36 @@ const SearchBar: React.FC = () => {
         setSearchQuery(inputValue);
     };
 
+    type AlgoliaItinerary = {
+        id: string;
+        uid: string;
+        settings: {
+          title: string;
+          description: string;
+          neighborhood: string;
+          city: string;
+          state: string;
+          duration: string;
+          galleryPhotoUrl: string;
+        };
+      };
 
     function CustomHits(props:any) {
 
-        const { hits} = useHits();
+        const { hits }: { hits: AlgoliaItinerary[] } = useHits();
         console.log(hits)
         return <> {hits.map((itin, index) => (
             <ItinGalleryComponent 
                 key={index}
-                title={itin.title as string}
-                description={itin.description as string}
-                neighborhood={itin.neighborhood as string}
-                city={itin.city as string}
-                state={itin.state as string}
-                duration={itin.duration as string}
-                imageUrl={itin.imageUrl as string}
-                visibility={itin.visibility as string}
-                sharedWith={itin.sharedWith as Array<string>}
+                itinId={itin.id as string}
+                userId={itin.uid as string}
+                title={itin.settings.title as string}
+                description={itin.settings.description as string}
+                neighborhood={itin.settings.neighborhood as string}
+                city={itin.settings.city as string}
+                state={itin.settings.state as string}
+                duration={itin.settings.duration as string}
+                imageUrl={itin.settings.galleryPhotoUrl as string}
             />
         ))} </>;   
     }
@@ -58,17 +72,17 @@ const SearchBar: React.FC = () => {
                 indexName="itineraries"
             >
                 <Configure 
-                    attributesToRetrieve={[
-                        "title", 
-                        "description", 
-                        "neighborhood", 
-                        "city", 
-                        "state", 
-                        "duration", 
-                        "imageUrl", 
-                        "visibility", 
-                        "sharedWith"
-                    ]}
+                   attributesToRetrieve={[
+                    'id',
+                    "uid",
+                    "settings.title",
+                    "settings.description",
+                    "settings.neighborhood",
+                    "settings.city",
+                    "settings.state",
+                    "settings.duration",
+                    "settings.galleryPhotoUrl"
+                  ]}
                     query={searchQuery}
                 />
                  <form onSubmit={handleSearchSubmit} className={styles.searchForm}>

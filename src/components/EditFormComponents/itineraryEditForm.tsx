@@ -1,4 +1,4 @@
-import React, { useEffect, useState, FC } from 'react';
+import React, { useEffect, useState, FC, forwardRef, useImperativeHandle} from 'react';
 import {ItinerarySettings, ItineraryItem } from './editFormTypeDefs';
 import styles from './EditFormCSS/itineraryEditForm.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -8,6 +8,8 @@ import 'react-quill/dist/quill.snow.css';  // or quill.bubble.css if you're usin
 import {currentlyEditingItineraryState} from './editFormAtoms';
 import {useRecoilState, useRecoilCallback} from 'recoil';
 import TextField from '@mui/material/TextField';
+import city_names from '../../data/city_names.js';
+import state_names from '../../data/state_names.js';
 const ReactQuill = dynamic(import('react-quill'), {
     ssr: false, // This will make the component render only on the client-side
     loading: () => <p>Loading...</p>, // You can provide a loading component or text here
@@ -15,12 +17,85 @@ const ReactQuill = dynamic(import('react-quill'), {
 
 type Props = {
     handleShowItemForm: () => void;
+
 }
 
-const ItineraryEditForm: FC<Props> = ({ handleShowItemForm }) => {
+interface ChildComponentRef {
+    handleFormSubmitCheck: () => boolean;
+}
+
+const ItineraryEditForm = forwardRef<ChildComponentRef, Props>(({ handleShowItemForm }, ref) => {
 
     const [itinerary, setItinerary] = useRecoilState(currentlyEditingItineraryState);
-      
+    const [title, setTitle] = useState('');
+    const [city, setCity] = useState('');
+    const [state, setState] = useState('');
+
+    const [titleError, setTitleError] = useState(false);
+    const [cityError, setCityError] = useState(false);
+    const [stateError, setStateError] = useState(false);
+
+    const [titleHelperText, setTitleHelperText] = useState('');
+    const [cityHelperText, setCityHelperText] = useState('');
+    const [stateHelperText, setStateHelperText] = useState('');
+
+   
+
+    useImperativeHandle(ref, () => ({
+        handleFormSubmitCheck: () => {
+          const cityValid = validateCity(itinerary.settings.city);
+          const stateValid = validateState(itinerary.settings.state);
+          const titleValid = validateTitle(itinerary.settings.title);
+          
+          if (cityValid && stateValid && titleValid) {
+            console.log(titleValid, cityValid, stateValid, "true")
+            // Proceed with form submission logic
+            return true;
+          } else {
+            console.log(titleValid, cityValid, stateValid, "false")
+
+            // Possibly display a message to the user that the form is invalid
+            return false;
+          }
+        },
+      }));
+
+    const validateTitle = (value:string) => {
+        if (!value || value.trim().length < 5 || value.trim().length > 100) {
+          setTitleError(true);
+          setTitleHelperText('Title should be between 5 and 100 characters.');
+          return (false)
+
+        }
+        setTitleError(false);
+        setTitleHelperText('');
+        return (true)
+      };
+    
+      const validateCity = (value:string) => {
+        console.log("ran validateCity");
+        if (!city_names.includes(value.toUpperCase())) 
+        {
+            console.log(!city_names.includes(value.toUpperCase()));
+          setCityError(true);
+          setCityHelperText('Invalid city name.');
+          return (false)
+        }
+        setCityError(false);
+        setCityHelperText('');
+        return (true)
+      };
+    
+      const validateState = (value:string) => {
+        if (!state_names.includes(value.toUpperCase())) {
+          setStateError(true);  
+          setStateHelperText('Please enter a valid 2 character State.');
+          return (false)
+        }
+        setStateError(false);
+        setStateHelperText('');
+        return (true)
+      };
     // HOF for itinerary settings changes
     const handleSettingsChange = (field: keyof ItinerarySettings) => (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
@@ -49,10 +124,7 @@ const ItineraryEditForm: FC<Props> = ({ handleShowItemForm }) => {
             ...prevItinerary,
             items: updatedItems
         }));
-
-
     };
-    
     
     const [showInfoBox, setShowInfoBox] = useState<boolean>(false);
 
@@ -66,8 +138,12 @@ const ItineraryEditForm: FC<Props> = ({ handleShowItemForm }) => {
                     placeholder="Itinerary title"
                     value={itinerary.settings.title || ''}
                     onChange={handleSettingsChange('title')}
+                    onBlur={(e) => {validateTitle(e.target.value)}}
                     className={styles.inputFields}
+                    error={titleError}
+                    helperText={titleHelperText}
                     />
+
                     <TextField
                     id="City"
                     label="City"
@@ -75,7 +151,10 @@ const ItineraryEditForm: FC<Props> = ({ handleShowItemForm }) => {
                     placeholder="City"
                     value={itinerary.settings.city || ''}
                     onChange={handleSettingsChange('city')}
+                    onBlur={(e) => {validateCity(e.target.value)}}
                     className={styles.inputFields}
+                    error={cityError}
+                    helperText={cityHelperText}
                     />
 
                     <TextField
@@ -85,8 +164,12 @@ const ItineraryEditForm: FC<Props> = ({ handleShowItemForm }) => {
                     placeholder="State"
                     value={itinerary.settings.state || ''}
                     onChange={handleSettingsChange('state')}
+                    onBlur={(e) => {validateState(e.target.value)}}
                     className={styles.inputFields}
+                    error={stateError}
+                    helperText={stateHelperText}
                     />
+
                     <div className={styles.quillContainer}>
                         <ReactQuill
                         value={itinerary.settings.description}
@@ -96,8 +179,6 @@ const ItineraryEditForm: FC<Props> = ({ handleShowItemForm }) => {
                         />
                     </div>
 
-                    
-                    
                     <div style={{display:"flex", flexDirection:"row"}}>
                         <label title="Visible only to you">
                             <input 
@@ -150,9 +231,12 @@ const ItineraryEditForm: FC<Props> = ({ handleShowItemForm }) => {
             
         </div>
     );
-  };
+  });
   
   export default ItineraryEditForm;
+
+
+  
 
 
   

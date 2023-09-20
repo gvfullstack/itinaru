@@ -36,10 +36,6 @@ const UserProfile: React.FC = () => {
   const [profilePictureUrl, setProfilePictureUrl] = useState('');
   const [profilePictureFile, setProfilePictureFile] = useState<File | null>(null);
   const [profilePicWhileEditing, setProfilePicWhileEditing] = useState("");
-
-  
-  const [uid, setUID] = useState<any>(null);
-
   const [privacyIsEditing, setPrivacyIsEditing] = useState(false);
   const [localPrivacySettings, setLocalPrivacySettings] = useState<PrivacySettings>({
     username: false,

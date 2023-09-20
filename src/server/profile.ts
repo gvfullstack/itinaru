@@ -4,7 +4,6 @@ import { AuthenticatedUser } from "@/components/typeDefs";
 
 export async function getPublicProfileWithAdminSDK(userId: string) {
   try {
-
     const userDoc = await dbServer.collection('users').doc(userId).get();
     if (!userDoc.exists) {
       console.error('User not found');

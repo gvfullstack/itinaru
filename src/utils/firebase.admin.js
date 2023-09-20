@@ -9,4 +9,9 @@ if (!admin.apps.length) {
 }
 
 const dbServer = admin.firestore();
+
+const authServer = admin.auth();
+
+export { authServer };
+
 export default dbServer;

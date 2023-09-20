@@ -13,7 +13,9 @@
   import {currentlyEditingItineraryState, showItineraryEditForm} from '../../EditFormComponents/editFormAtoms';
   import { Itinerary, ItineraryItems} from '../../EditFormComponents/editFormTypeDefs'
   import { useRouter } from 'next/router';
-
+  import { toast } from 'react-toastify';
+  import 'react-toastify/dist/ReactToastify.css';
+  
 
   interface NewItineraryTitleInputProps {
     hideBox: () => void;
@@ -68,11 +70,13 @@
     
         // Add new itinerary data to Firestore
         const docRef = await addDoc(itinerariesRef, itineraryData);
+        toast.success("Itinerary created successfully!");
         setIsSaving(false)
       return docRef;
 
       } catch (error) {
         console.error("Error saving itinerary:", error);
+        toast.error("Error saving itinerary. Please try again.");
         return null
       }
       
@@ -114,7 +118,7 @@
         items: []
       });
       
-      router.push('/editItinerary');
+      router.push(`/editItinerary/editMyItinerary`);
 
     };
 

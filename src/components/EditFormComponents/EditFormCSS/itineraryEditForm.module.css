@@ -295,9 +295,9 @@
     align-self: center;
     margin-top: 5rem;
     height: fit-content;
-    border-style: solid;
+    /* border-style: solid;
     border-width: 1px;
-    border-color: #bebebe;
+    border-color: #bebebe; */
     border-radius: 10px;
     padding: 1rem 2rem 2rem 1rem;
   }

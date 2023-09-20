@@ -18,6 +18,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/pages/api/neighborhood/city.tx", "src/models/*.ts", "functions/src/algolia/utils.mjs"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/pages/api/neighborhood/city.tx", "src/models/*.ts", "functions/src/algolia/utils.mjs", "src/data/city_names.js"],
   "exclude": ["node_modules"]
 }
