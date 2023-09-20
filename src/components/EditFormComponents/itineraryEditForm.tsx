@@ -221,7 +221,7 @@ const ItineraryEditForm = forwardRef<ChildComponentRef, Props>(({ handleShowItem
                                 <button className={styles.hideButton} onClick={() => setShowInfoBox(false)}>Hide</button>
                                 <p className={styles.sharedSettingIfo}><strong>IMPORTANT:<strong/></strong> This setting applies to the entire itinerary.</p>
                                 <p className={styles.sharedSettingIfo}><strong>Private:</strong> Visible only to you, even if you have previously shared with other users.</p>
-                                <p className={styles.sharedSettingIfo}><strong>Shared:</strong> Visible to users you have added to the "shared-with" lists. This must be selected even if you have added users to the "shared-with" lists.</p>
+                                <p className={styles.sharedSettingIfo}><strong>Shared:</strong> Visible to users you have added to the {'"shared-with"'} lists. This must be selected even if you have added users to the {'"shared-with"'} lists.</p>
                                 <p className={styles.sharedSettingIfo}><strong>Public:</strong> Visible to everyone.</p>
                                     
                             </div>
@@ -233,6 +233,8 @@ const ItineraryEditForm = forwardRef<ChildComponentRef, Props>(({ handleShowItem
     );
   });
   
+  ItineraryEditForm.displayName = "ItineraryEditForm";
+
   export default ItineraryEditForm;
 
 

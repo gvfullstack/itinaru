@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import parse from 'html-react-parser';
 
 
-function itineraryDescriptionComponent({ description }: { description: string }) {
+function ItineraryDescriptionComponent({ description }: { description: string }) {
   const [isMounted, setIsMounted] = useState(false);
   
   useEffect(() => {
@@ -17,4 +17,4 @@ function itineraryDescriptionComponent({ description }: { description: string })
   return <div>{jsxContent}</div>;
 }
 
-export default itineraryDescriptionComponent;
+export default ItineraryDescriptionComponent;
