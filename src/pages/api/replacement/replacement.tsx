@@ -98,7 +98,7 @@ async function requestReplacementFunction(
 
 function withLimiter(handler: (req: NextApiRequest, res: NextApiResponse) => Promise<void>) {
   return async (req: NextApiRequest, res: NextApiResponse) => {
-    limiter(req, res, () => {
+    limiter(req as any, res as any, () => {
       handler(req, res);
     });
   };
