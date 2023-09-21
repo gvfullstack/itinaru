@@ -192,12 +192,12 @@ const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.tim
       <div className={styles.modalOverlay}>
         <div className={styles.modalContent}>
               {/* <GoogleMapsProvider> */}
-                <ItineraryItemForm 
+                {/* <ItineraryItemForm 
                   handleShowItemForm={handleShowItemForm} 
                   mode="edit"
                   initialItem={itineraryItem}
                   handleRemoveClick={handleRemoveClick}
-                    />
+                    /> */}
               {/* </GoogleMapsProvider> */}
         </div>
        </div> 
