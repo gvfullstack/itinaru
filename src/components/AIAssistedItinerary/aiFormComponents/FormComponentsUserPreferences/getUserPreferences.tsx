@@ -1,4 +1,4 @@
-import { UserPreferences } from "../../typeDefs/index";
+import { UserPreferences } from "../../aiItinTypeDefs";
 
 export const getSelectedUserPreferences = (preferences: UserPreferences) => {
   const selectedPreferences: any = {};
