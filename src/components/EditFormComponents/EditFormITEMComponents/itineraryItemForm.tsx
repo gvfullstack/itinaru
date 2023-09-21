@@ -75,20 +75,20 @@ const ItineraryItemForm: FC<Props> = ({ ...props }) => {
 //             });
 //         }
     
-//         const addressInput = document.getElementById('addressInput') as HTMLInputElement | null;
-//         if (addressInput) {
-//             const addressAutocomplete = new google.maps.places.Autocomplete(addressInput, {
-//                 fields: ["formatted_address"]
-//             });
+        const addressInput = document.getElementById('addressInput') as HTMLInputElement | null;
+        if (addressInput) {
+            const addressAutocomplete = new google.maps.places.Autocomplete(addressInput, {
+                fields: ["formatted_address"]
+            });
     
-//             addressAutocomplete.addListener('place_changed', () => {
-//                 const place = addressAutocomplete.getPlace();
-//                 if (place) {
-//                     setCurrentItem(prev => ({...prev, locationAddress: place.formatted_address || ''}));
-//                 }
-//             });
-//         }
-//     }
+            addressAutocomplete.addListener('place_changed', () => {
+                const place = addressAutocomplete.getPlace();
+                if (place) {
+                    setCurrentItem(prev => ({...prev, locationAddress: place.formatted_address || ''}));
+                }
+            });
+        }
+    }
   
 //     useEffect(() => {
 //   if (isGoogleMapsLoaded) {
@@ -267,7 +267,7 @@ const ItineraryItemForm: FC<Props> = ({ ...props }) => {
     onMouseLeave={() => setSiteIsHovered(false)}
     />
 
-    {/* <TextField
+    <TextField
         id="addressInput"
         label="Address"
         variant="outlined"
@@ -278,7 +278,7 @@ const ItineraryItemForm: FC<Props> = ({ ...props }) => {
         helperText={addressIsHovered ? "Address you enter will be used if no selection is made from the dropdown." : ''}
         onMouseEnter={() => setAddressIsHovered(true)}
         onMouseLeave={() => setAddressIsHovered(false)}
-    /> */}
+    />
 
 {/* Coordinates */}
 {/* <div className={styles.fieldRow + " " + styles.geolocationSection}>
