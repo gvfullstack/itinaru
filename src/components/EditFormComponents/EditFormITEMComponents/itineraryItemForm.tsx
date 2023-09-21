@@ -295,7 +295,7 @@ const ItineraryItemForm: FC<Props> = ({ ...props }) => {
     {showInfoBoxGeolocation && 
         <div className={`${styles.infoBox} ${styles.infoBoxVisible}`}>
             <button className={styles.hideButton} onClick={() => setShowInfoBoxGeolocation(false)}>Hide</button>
-            <p className={styles.sharedSettingIfo}>When using the "Use current geolocation" feature to obtain your location, please be aware that the accuracy can vary based on several factors, including your device, surrounding buildings, and signal strength. It's always a good practice to double-check and confirm your location. If you notice any discrepancies, kindly adjust manually or choose a different method to ensure precision in your itinerary.</p>
+            <p className={styles.sharedSettingIfo}>When using the {"Use current geolocation"} feature to obtain your location, please be aware that the accuracy can vary based on several factors, including your device, surrounding buildings, and signal strength. It's always a good practice to double-check and confirm your location. If you notice any discrepancies, kindly adjust manually or choose a different method to ensure precision in your itinerary.</p>
         </div>  
     }
 </div>
