@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import styles from './topNavBar.module.css';
-// import Menu from "../AppContolsComponents/mainMenuLink" 
+import Menu from "../AppContolsComponents/mainMenuLink" 
 import Link from 'next/link';
-// import JumboPlus from '../AppContolsComponents/jumboPlus';
+import JumboPlus from '../AppContolsComponents/jumboPlus';
 
 const TopNavBar: React.FC = () => {
   const [scrolled, setScrolled] = React.useState(false);
@@ -37,8 +37,8 @@ const TopNavBar: React.FC = () => {
           </div>
           <div></div>
           <div className = {styles.rightTopNavBar} >
-            {/* <JumboPlus />     
-            <Menu />        */}
+            <JumboPlus />     
+            <Menu />       
           </div> 
       </div>
     {scrolled && <div className={styles.navBuffer}></div>}
