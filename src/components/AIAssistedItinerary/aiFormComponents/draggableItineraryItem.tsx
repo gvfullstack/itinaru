@@ -394,7 +394,11 @@ const DraggableItineraryItem = React.forwardRef((
                           //   (itineraryItem.locationAddress)}
                             >
                               <a
-                                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(itineraryItem.locationAddress)}`}
+                                href={
+                                  itineraryItem.locationAddress ?
+                                  `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(itineraryItem.locationAddress)}`
+                                  :"#"
+                                }
                                 target="_blank"
                                 style={{ textDecoration: 'none', color: 'black' }}
                                 >{mapMarkerAlt}</a>
