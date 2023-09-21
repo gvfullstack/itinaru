@@ -105,12 +105,12 @@ const ItineraryItemForm: FC<Props> = ({ ...props }) => {
         }));
     };
 
-    // const handleQuillChange = (value: string) => {
-    //     setCurrentItem(prev => ({
-    //         ...prev,
-    //         description: value
-    //     }));
-    // };
+    const handleQuillChange = (value: string) => {
+        setCurrentItem(prev => ({
+            ...prev,
+            description: value
+        }));
+    };
 
   
 //get coordinates
@@ -134,22 +134,22 @@ const ItineraryItemForm: FC<Props> = ({ ...props }) => {
     };
 
  ///DURATION
-//  const calculateDuration = (start: Dayjs | null | undefined, end: Dayjs | null | undefined): number | null => {
-//     if (start && end) {
-//         const duration = end.diff(start); // No unit specified, so it defaults to milliseconds.
-//         return duration >= 0 ? duration : null;
-//     }
-//     return null;
-// }
+ const calculateDuration = (start: Dayjs | null | undefined, end: Dayjs | null | undefined): number | null => {
+    if (start && end) {
+        const duration = end.diff(start); // No unit specified, so it defaults to milliseconds.
+        return duration >= 0 ? duration : null;
+    }
+    return null;
+}
 
 
-//     useEffect(() => {
-//         const duration = calculateDuration(currentItem.startTime?.time || null, currentItem.endTime?.time || null);
-//         if (duration !== null) {
-//             setCurrentItem(prev => ({...prev, activityDuration: duration}));
-//         }
-//         console.log("duration", duration, currentItem.activityDuration)
-//     }, [currentItem.startTime, currentItem.endTime]);
+    useEffect(() => {
+        const duration = calculateDuration(currentItem.startTime?.time || null, currentItem.endTime?.time || null);
+        if (duration !== null) {
+            setCurrentItem(prev => ({...prev, activityDuration: duration}));
+        }
+        console.log("duration", duration, currentItem.activityDuration)
+    }, [currentItem.startTime, currentItem.endTime]);
     
     const cancelMark = 
         <FontAwesomeIcon 
@@ -300,7 +300,7 @@ const ItineraryItemForm: FC<Props> = ({ ...props }) => {
     }
 </div>
 
-    {/* <label htmlFor="siteDescription">Site Description:</label>
+    <label htmlFor="siteDescription">Site Description:</label>
     <div className={styles.quillContainer}>
             <ReactQuill
             id="siteDescription" // adding id to associate with the label
@@ -324,7 +324,7 @@ const ItineraryItemForm: FC<Props> = ({ ...props }) => {
             <InputAdornment position="start">$</InputAdornment>),
     }}/>
    
-   <StarRating currentItem={currentItem} setCurrentItem={setCurrentItem} /> */}
+   <StarRating currentItem={currentItem} setCurrentItem={setCurrentItem} />
    
 
 </div>
