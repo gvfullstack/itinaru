@@ -25,11 +25,11 @@ import dynamic from 'next/dynamic';
 //     ssr: false,
 //     loading: () => <p>Loading...</p>
 //     });
-const ItineraryItemForm = dynamic(() => 
-    import('../EditFormITEMComponents/itineraryItemForm'), {
-    ssr: false,
-    loading: () => <p>Loading...</p>
-    });
+// const ItineraryItemForm = dynamic(() => 
+//     import('../EditFormITEMComponents/itineraryItemForm'), {
+//     ssr: false,
+//     loading: () => <p>Loading...</p>
+//     });
 
 interface DraggableItineraryItemProps {
   id: string;
