@@ -114,24 +114,24 @@ const ItineraryItemForm: FC<Props> = ({ ...props }) => {
 
   
 //get coordinates
-    // const fetchCurrentLocation = async () => {
-    //     if (!navigator.geolocation) {
-    //         alert("Geolocation is not supported by your browser.");
-    //         return;
-    //     }
+    const fetchCurrentLocation = async () => {
+        if (!navigator.geolocation) {
+            alert("Geolocation is not supported by your browser.");
+            return;
+        }
 
-    //     navigator.geolocation.getCurrentPosition(position => {
-    //         const { latitude, longitude } = position.coords;
-    //         const coordinates = latitude + ", " + longitude;
-    //         setCurrentItem(prev => ({
-    //             ...prev,
-    //             location: { latitude: latitude, longitude:longitude, 
-    //                 locationAddress: coordinates }
-    //         }));
-    //         }, () => {
-    //         alert("Unable to retrieve your location.");
-    //     });
-    // };
+        navigator.geolocation.getCurrentPosition(position => {
+            const { latitude, longitude } = position.coords;
+            const coordinates = latitude + ", " + longitude;
+            setCurrentItem(prev => ({
+                ...prev,
+                location: { latitude: latitude, longitude:longitude, 
+                    locationAddress: coordinates }
+            }));
+            }, () => {
+            alert("Unable to retrieve your location.");
+        });
+    };
 
  ///DURATION
 //  const calculateDuration = (start: Dayjs | null | undefined, end: Dayjs | null | undefined): number | null => {
@@ -283,7 +283,7 @@ const ItineraryItemForm: FC<Props> = ({ ...props }) => {
 {/* Coordinates */}
 <div className={styles.fieldRow + " " + styles.geolocationSection}>
     <FontAwesomeIcon icon={faCrosshairs} className={styles.crossHair} 
-    // onClick={()=>fetchCurrentLocation()} 
+    onClick={()=>fetchCurrentLocation()} 
     />
 
     <h4 style={{fontSize:"15px"}}>Use current geolocation</h4>
