@@ -13,6 +13,8 @@ import { ToastContainer } from 'react-toastify';
 const FirebaseAuthLogic = dynamic(() => import('.././components/FirebaseAuthComponents/firebaseAuthLogic'), { ssr: false });
 
 export default function App({ Component, pageProps }: AppProps) {
+
+  
   return (
     <>
       <Head>
