@@ -7,10 +7,10 @@ import dynamic from 'next/dynamic';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Script from 'next/script';
-import TopNavBar from '@/components/topNavBar/topNavBar';
+// import TopNavBar from '@/components/topNavBar/topNavBar';
 import { ToastContainer } from 'react-toastify';
 
-const FirebaseAuthLogic = dynamic(() => import('.././components/FirebaseAuthComponents/firebaseAuthLogic'), { ssr: false });
+// const FirebaseAuthLogic = dynamic(() => import('.././components/FirebaseAuthComponents/firebaseAuthLogic'), { ssr: false });
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -38,11 +38,11 @@ export default function App({ Component, pageProps }: AppProps) {
             <div className="app-container">
               <ToastContainer style={{ zIndex: 99999 }} />
               <div className="nav-container">
-                <TopNavBar />
+                {/* <TopNavBar /> */}
               </div>
               <Component {...pageProps} />
               <Analytics />
-              <FirebaseAuthLogic />
+              {/* <FirebaseAuthLogic /> */}
             </div>
           </main>
         </LocalizationProvider>

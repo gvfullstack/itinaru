@@ -38,19 +38,3 @@ next-env.d.ts
 .env
 
 launch.json
-
-src/components/AIAssistedItinerary/
-src/components/itinGallery/
-src/components/Profile/
-src/components/PublicItineraryViewComponents/
-src/components/SearchBar/
-
-# pages
-src/pages/editItinerary/
-src/pages/viewPublicItinerary/
-src/pages/editItinerary/\[userID\].tsx
-src/pages/[userID].tsx
-src/pages/aiAssistedItinerary.tsx
-src/pages/loginPage.tsx
-src/pages/index.tsx
-src/pages/profileSettings.tsx
