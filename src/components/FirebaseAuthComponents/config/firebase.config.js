@@ -10,14 +10,17 @@ const firebaseConfig = {
   measurementId: "G-N8B4BB2RHJ"
 };
 
+let firebaseApp;
+
 if (typeof window !== 'undefined' && !firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
+  firebaseApp = firebase.initializeApp(firebaseConfig);
 }
 
-let isFirebaseInitialized = false;
+// let isFirebaseInitialized = false;
 
-if (!isFirebaseInitialized) {
-  firebase.initializeApp(firebaseConfig);
-  isFirebaseInitialized = true;
-}
+// if (!isFirebaseInitialized) {
+//   firebase.initializeApp(firebaseConfig);
+//   isFirebaseInitialized = true;
+// }
 
+export { firebaseApp };
