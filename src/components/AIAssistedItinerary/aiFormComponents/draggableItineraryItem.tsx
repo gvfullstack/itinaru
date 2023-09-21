@@ -261,8 +261,9 @@ const DraggableItineraryItem = React.forwardRef((
         <div className={styles.menuItem} >
               <a
               href={
+              itineraryItem.locationAddress ?
                 `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(itineraryItem.locationAddress)
-              }`}
+              }`:"#"}
               target="_blank"
               style={{ textDecoration: 'none', color: 'black' }}
               >
