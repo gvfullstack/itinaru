@@ -8,7 +8,7 @@ import { faExternalLinkAlt, faDiamondTurnRight, faEllipsisVertical,
 import { useRecoilState } from 'recoil';
 import getConfig from 'next/config';
 import styles from'.././EditFormCSS/editItineraryCSS.module.css'
-import QuillTextParserComponent from '../quillTextParserComponent';
+import ItemDescriptionStaticComponent from './itemDescriptionStaticComponent';
 import dayjs from 'dayjs'; 
 const externalLink = <FontAwesomeIcon icon={faExternalLinkAlt} />;
 const mapMarkerAlt = <FontAwesomeIcon icon={faDiamondTurnRight} />;
@@ -20,16 +20,16 @@ const editItemIcon = <FontAwesomeIcon icon={faPenToSquare} />;
 
 import { currentlyEditingItineraryState } from '../editFormAtoms';
 import dynamic from 'next/dynamic';
-const GoogleMapsProvider = dynamic(() => 
-    import('../EditFormITEMComponents/googleMapsProvider'), {
-    ssr: false,
-    loading: () => <p>Loading...</p>
-    });
-const ItineraryItemForm = dynamic(() => 
-    import('../EditFormITEMComponents/itineraryItemForm'), {
-    ssr: false,
-    loading: () => <p>Loading...</p>
-    });
+// const GoogleMapsProvider = dynamic(() => 
+//     import('../EditFormITEMComponents/googleMapsProvider'), {
+//     ssr: false,
+//     loading: () => <p>Loading...</p>
+//     });
+// const ItineraryItemForm = dynamic(() => 
+//     import('../EditFormITEMComponents/itineraryItemForm'), {
+//     ssr: false,
+//     loading: () => <p>Loading...</p>
+//     });
 
 interface DraggableItineraryItemProps {
   id: string;
@@ -191,14 +191,14 @@ const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.tim
     {showItemForm && 
       <div className={styles.modalOverlay}>
         <div className={styles.modalContent}>
-              <GoogleMapsProvider>
+              {/* <GoogleMapsProvider>
                 <ItineraryItemForm 
                   handleShowItemForm={handleShowItemForm} 
                   mode="edit"
                   initialItem={itineraryItem}
                   handleRemoveClick={handleRemoveClick}
                     />
-              </GoogleMapsProvider>
+              </GoogleMapsProvider> */}
         </div>
        </div> 
            }
@@ -216,7 +216,7 @@ const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.tim
                           
                           <div className={`${styles.itinTitleDescription} ${itineraryItem.descHidden ? "" 
                           : styles.isShown }`}>
-                            <QuillTextParserComponent description={itineraryItem.description ?? ''} />
+                            <ItemDescriptionStaticComponent description={itineraryItem.description ?? ''} />
                           </div>                       
 
                           <p className={`${styles.expandedItinAddressContainer} ${itineraryItem.descHidden ? "" : styles.isShown }`}>{itineraryItem.locationAddress}</p>
