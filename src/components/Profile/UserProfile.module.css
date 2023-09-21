@@ -1,0 +1,184 @@
+.tabsContainer {
+    max-width: 600px;
+    margin: auto;
+    margin-top: 4rem;
+    padding: 20px;
+
+  }
+  
+  .formContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .profileLabel {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: .75rem;
+  }
+  
+  .profileInput,
+  .profileTextarea {
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    resize: vertical;
+    min-width: 100%;
+    font-family: 'Roboto', sans-serif;
+    font-size: .85rem;
+  }
+
+  .profileTextarea{
+    height: 12rem;
+  }
+  
+  .profileSaveButton,
+  .profileCancelButton,
+  .profileEditButton,
+  .editPhotoButtons {
+    align-self: flex-start;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .profileSaveButton{
+    margin-top: 1rem;
+  }
+  .editPhotoButtons{
+    background-color: rgb(190, 189, 189);
+    margin-top: .3rem;
+    margin-right: .5rem;
+    width: 6rem;
+  }
+  .profileEditButton{
+    background-color: rgb(190, 189, 189);
+    margin-top: 1rem;
+  }
+
+  .profileCancelButton{
+    background-color: #dc3545;
+    margin-left: 1rem;
+  }
+  
+  .profileSaveButton:hover {
+    background-color: #0056b3;
+  }
+  
+  .profilePictureMessage{
+    margin-top: -.75rem;
+    font-family:'Roboto', sans-serif;
+    font-style: italic;
+  }
+
+  
+  
+  .profileStaticContainer{
+    
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+    background-color: #f8f8f8;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .privacyH3Static{
+    align-self:flex-start;
+    margin-bottom: .25rem;
+
+  }
+ 
+  .profileStaticFields,
+  .profileStaticFieldsBio{
+    margin-bottom: .25rem;
+    margin-left: 1rem;
+  }
+
+  .profileStaticFieldsBio {
+  margin-right: 1rem;
+  text-align: justify;
+  }
+
+
+  .profilePicImageContainer {
+    width: 100%;
+    max-width: 512px; /* Default size */
+    height: auto;
+    padding-top: 100%; /* Maintain aspect ratio */
+    position: relative;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+
+  .profilePicPreviewImageContainer{
+    max-width: 500px; /* Default size */
+    max-height: 500px;
+    position: relative;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+  
+  .profilePicturePreview{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  /* For screens smaller than 768px, reduce max-width */
+  @media (max-width: 767px) {
+    .profilePicImageContainer {
+      max-width: 512px; 
+    }
+  }
+  
+  /* For screens larger than 1200px, you can increase max-width if needed */
+  @media (min-width: 1200px) {
+    .profilePicImageContainer {
+      max-width: 512px; /* Or any other value that fits larger screens */
+    }
+  }
+
+  .profilePicture {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  /* Example media query for a tablet */
+  @media (max-width: 768px) {
+    .profilePicImageContainer {
+      border-radius: 5px; /* Adjustments for smaller screens */
+    }
+  }
+  
+  /* Example media query for a mobile phone */
+  @media (max-width: 480px) {
+    .profilePicImageContainer {
+      border: none; /* More adjustments for very small screens */
+    }
+  }
+
+  .checkBoxContainer{
+    display: flex;
+    flex-direction: column;
+    padding-left: 1rem;
+  }
+
+  .checkBoxItems{
+    margin-bottom: .25rem;
+  }
+  
+ 
