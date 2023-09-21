@@ -1,0 +1,94 @@
+import dbServer, { authServer } from '../utils/firebase.admin';
+
+// Verify the ID token to ensure it's a valid user
+const verifyIdToken = async (idToken: string) => {
+  try {
+    const decodedToken = await authServer.verifyIdToken(idToken);
+    return decodedToken.uid;
+  } catch (error) {
+    throw new Error(`ID Token verification failed: ${error}`);
+  }
+};
+
+// Fetch the itinerary from the database
+const fetchItinerary = async (itineraryId: string) => {
+  try {
+    const itineraryRef = dbServer.collection('itineraries').doc(itineraryId);
+    const itineraryDoc = await itineraryRef.get();
+    if (!itineraryDoc.exists) {
+      throw new Error('Itinerary not found');
+    }
+    return itineraryDoc.data();
+  } catch (error) {
+    throw new Error(`Fetching itinerary failed: ${error}`);
+  }
+};
+
+// Check if the user is authorized to edit the itinerary
+const authorizeUserItineraryEdit = (userId: string, itineraryData: any) => {
+  try {
+    if (itineraryData && itineraryData.userId === userId) {
+      return true;
+    } else {
+      throw new Error('Unauthorized');
+    }
+  } catch (error) {
+    throw new Error(`Authorization failed: ${error}`);
+  }
+};
+
+// Main function to authenticate and authorize user
+const authenticateAndAuthorizeItineraryEdit = async (idToken: string, itineraryId: string) => {
+  try {
+    const userId = await verifyIdToken(idToken);
+    const itineraryData = await fetchItinerary(itineraryId);
+    const isAuthorized = authorizeUserItineraryEdit(userId, itineraryData);
+    return isAuthorized;
+  } catch (error) {
+    throw new Error(`Authentication and authorization failed: ${error}`);
+  }
+};
+
+export { authenticateAndAuthorizeItineraryEdit };
+
+
+// Fetch the user from the database
+const fetchUser = async (userId: string) => {
+    try {
+      const userRef = dbServer.collection('users').doc(userId);
+      const userDoc = await userRef.get();
+      if (!userDoc.exists) {
+        throw new Error('Itinerary not found');
+      }
+      return userDoc.data();
+    } catch (error) {
+      throw new Error(`Fetching user failed: ${error}`);
+    }
+  };
+
+  // Check if the user is authorized to edit the user profile
+const authorizeUserProfileEdit = (userId: string, userData: any) => {
+    try {
+      if (userData && userData.id === userId) {
+        return true;
+      } else {
+        throw new Error('Unauthorized');
+      }
+    } catch (error) {
+      throw new Error(`Authorization failed: ${error}`);
+    }
+  };
+  
+  // Main function to authenticate and authorize user
+const authenticateAndAuthorizeUserProfileEdit = async (idToken: string, itineraryId: string) => {
+    try {
+      const userId = await verifyIdToken(idToken);
+      const userData = await fetchUser(userId);
+      const isAuthorized = authorizeUserItineraryEdit(userId, userData);
+      return isAuthorized;
+    } catch (error) {
+      throw new Error(`Authentication and authorization failed: ${error}`);
+    }
+  };
+  
+  export { authenticateAndAuthorizeUserProfileEdit };

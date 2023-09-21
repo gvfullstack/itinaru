@@ -20,7 +20,7 @@ const limiter = rateLimit({
   windowMs: 60 * 1000, // 1 minute
   max: 10, // limit each IP to 5 requests per windowMs
   keyGenerator: function (req, res) {
-    return req.socket.remoteAddress;
+    return req.socket.remoteAddress || "unknown";
   },
 });
 
@@ -98,7 +98,7 @@ async function requestReplacementFunction(
 
 function withLimiter(handler: (req: NextApiRequest, res: NextApiResponse) => Promise<void>) {
   return async (req: NextApiRequest, res: NextApiResponse) => {
-    limiter(req, res, () => {
+    limiter(req as any, res as any, () => {
       handler(req, res);
     });
   };

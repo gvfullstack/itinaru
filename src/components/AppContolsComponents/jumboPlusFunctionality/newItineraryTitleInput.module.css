@@ -1,0 +1,129 @@
+.boxContainer {
+    border: 1px solid #ddd;
+    padding: 5px;
+    border-radius: 5px;
+    width: 300px; /* adjust width as needed */
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    background-color: rgb(243, 241, 241);
+    position: fixed;
+    right: 10px;
+    top: 3rem;
+    
+  }
+  
+  .itineraryInput {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  
+  .buttonContainer {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .saveButton,
+  .goButton {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .saveButton {
+    background-color: #4c8baf;
+    color: #ffffff;
+  }
+  
+  .goButton {
+    background-color: #2196F3;
+    color: #ffffff;
+  }
+  
+  .saveButton:hover {
+    background-color: #45a049;
+  }
+  
+  .goButton:hover {
+    background-color: #0b7dda;
+  }
+  
+  .savingAlert{
+    color: #5a5a5a;
+    padding: 10px;
+    border-radius: 4px;
+    margin-top: 10px;
+    font-size: 1rem;
+  }
+
+ .saveButton:disabled, 
+.goButton:disabled {
+  background-color: #ccc;  /* Make it look greyed out or whatever color you prefer */
+  cursor: not-allowed;  /* Change the cursor to indicate it's not clickable */
+}
+
+.errorText {
+  color: red;
+  margin-top: 8px;
+  font-size: 0.8rem;
+}
+
+.heading {
+  font-size: .75rem;
+  padding: 0;
+  margin: 0;
+  color: #5a5a5a;
+  font-style: italic ;
+  margin-bottom: -.25rem;
+}
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6); /* Black with opacity */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  flex-direction: column;
+}
+
+.modal {
+  background: rgba(0, 0, 0, 0.6); /* Black with opacity */
+  padding: 10px;
+  margin: 4rem 10rem;
+  overflow-y: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+
+.formElement{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 5px;
+}
+
+.spinner {
+  border: 4px solid rgba(255, 255, 255, 0.3);  /* Light grey */
+  border-radius: 50%;                          /* Rounded */
+  border-top: 4px solid #000;                  /* Black on top */
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+

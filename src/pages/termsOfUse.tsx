@@ -1,12 +1,6 @@
-import { Inter } from 'next/font/google'
-import styles from '@/styles/Home.module.css'
-import BrandNameStatic from '@/components/brandNameStatic'
-
-
 export default function PrivacyPolicy() {
   return (
     <>
-          <BrandNameStatic />
           <div className="privacyPolicyContainer" 
           style={{textAlign: 'left', marginTop: "5rem", display:'flex',
           flexDirection: 'column', width: '100%', maxWidth: '600px', padding: '0 1rem' 
