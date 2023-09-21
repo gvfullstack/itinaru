@@ -25,11 +25,11 @@ import dynamic from 'next/dynamic';
 //     ssr: false,
 //     loading: () => <p>Loading...</p>
 //     });
-// const ItineraryItemForm = dynamic(() => 
-//     import('../EditFormITEMComponents/itineraryItemForm'), {
-//     ssr: false,
-//     loading: () => <p>Loading...</p>
-//     });
+const ItineraryItemForm = dynamic(() => 
+    import('../EditFormITEMComponents/itineraryItemForm'), {
+    ssr: false,
+    loading: () => <p>Loading...</p>
+    });
 
 interface DraggableItineraryItemProps {
   id: string;
@@ -191,14 +191,14 @@ const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.tim
     {showItemForm && 
       <div className={styles.modalOverlay}>
         <div className={styles.modalContent}>
-              {/* <GoogleMapsProvider>
+              {/* <GoogleMapsProvider> */}
                 <ItineraryItemForm 
                   handleShowItemForm={handleShowItemForm} 
                   mode="edit"
                   initialItem={itineraryItem}
                   handleRemoveClick={handleRemoveClick}
                     />
-              </GoogleMapsProvider> */}
+              {/* </GoogleMapsProvider> */}
         </div>
        </div> 
            }
