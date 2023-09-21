@@ -47,6 +47,7 @@
       setIsSaving(true);
       // Ensure there's an authenticated user
       if (!authUser || !authUser.uid) {
+        toast.error("No authenticated user found. Please log in and try again.");
         console.error("No authenticated user found.");
         return;
       }
