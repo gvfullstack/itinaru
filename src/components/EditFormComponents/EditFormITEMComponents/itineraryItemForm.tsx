@@ -60,35 +60,35 @@ const ItineraryItemForm: FC<Props> = ({ ...props }) => {
     const isGoogleMapsLoaded = useGoogleMaps();
 
 
-//     function initAutocomplete(): void {
-//         const siteInput = document.getElementById('siteNameInput') as HTMLInputElement | null;
-//         if (siteInput) {
-//             const siteAutocomplete = new google.maps.places.Autocomplete(siteInput, {
-//                 fields: ["name", "formatted_address"]
-//             });
-//             siteAutocomplete.addListener('place_changed', () => {
-//                 const place = siteAutocomplete.getPlace();
-//                 if (place) {
-//                     setCurrentItem(prev => ({...prev, siteName: place.name, 
-//                         locationAddress: place.formatted_address || ''}));
-//                 }
-//             });
-//         }
+    function initAutocomplete(): void {
+        const siteInput = document.getElementById('siteNameInput') as HTMLInputElement | null;
+        if (siteInput) {
+            const siteAutocomplete = new google.maps.places.Autocomplete(siteInput, {
+                fields: ["name", "formatted_address"]
+            });
+            siteAutocomplete.addListener('place_changed', () => {
+                const place = siteAutocomplete.getPlace();
+                if (place) {
+                    setCurrentItem(prev => ({...prev, siteName: place.name, 
+                        locationAddress: place.formatted_address || ''}));
+                }
+            });
+        }
     
-//         const addressInput = document.getElementById('addressInput') as HTMLInputElement | null;
-//         if (addressInput) {
-//             const addressAutocomplete = new google.maps.places.Autocomplete(addressInput, {
-//                 fields: ["formatted_address"]
-//             });
+        const addressInput = document.getElementById('addressInput') as HTMLInputElement | null;
+        if (addressInput) {
+            const addressAutocomplete = new google.maps.places.Autocomplete(addressInput, {
+                fields: ["formatted_address"]
+            });
     
-//             addressAutocomplete.addListener('place_changed', () => {
-//                 const place = addressAutocomplete.getPlace();
-//                 if (place) {
-//                     setCurrentItem(prev => ({...prev, locationAddress: place.formatted_address || ''}));
-//                 }
-//             });
-//         }
-//     }
+            addressAutocomplete.addListener('place_changed', () => {
+                const place = addressAutocomplete.getPlace();
+                if (place) {
+                    setCurrentItem(prev => ({...prev, locationAddress: place.formatted_address || ''}));
+                }
+            });
+        }
+    }
   
     useEffect(() => {
   if (isGoogleMapsLoaded) {
