@@ -11,7 +11,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import StarRating from './siteStarRating';
-import { useGoogleMaps } from './googleMapsProvider';
+// import { useGoogleMaps } from './googleMapsProvider';
 import 'react-quill/dist/quill.snow.css';  // or quill.bubble.css if you're using the bubble theme
 const ReactQuill = dynamic(import('react-quill'), {
     ssr: false, // This will make the component render only on the client-side
@@ -57,7 +57,7 @@ const ItineraryItemForm: FC<Props> = ({ ...props }) => {
         }));
     }
     
-    const isGoogleMapsLoaded = useGoogleMaps();
+    // const isGoogleMapsLoaded = useGoogleMaps();
 
 
     function initAutocomplete(): void {
@@ -90,11 +90,11 @@ const ItineraryItemForm: FC<Props> = ({ ...props }) => {
         }
     }
   
-    useEffect(() => {
-  if (isGoogleMapsLoaded) {
-    initAutocomplete();
-  }
-}, [isGoogleMapsLoaded]);
+//     useEffect(() => {
+//   if (isGoogleMapsLoaded) {
+//     initAutocomplete();
+//   }
+// }, [isGoogleMapsLoaded]);
 
     const handleItemChange = (field: keyof ItineraryItem) => (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault
