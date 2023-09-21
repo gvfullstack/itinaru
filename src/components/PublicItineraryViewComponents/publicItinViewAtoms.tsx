@@ -17,13 +17,9 @@ export const defaultItinerary: Itinerary = {
   
 
 export const currentlyViewingItineraryState = atom<Itinerary>({
-    key: 'currentlyEditingItineraryState',
+    key: 'currentlyViewingItineraryState',
     default: defaultItinerary,
   });
  
 
-  export const showItineraryEditForm = atom<boolean>({
-    key: 'showItineraryEditForm',
-    default: false
-  });
  
