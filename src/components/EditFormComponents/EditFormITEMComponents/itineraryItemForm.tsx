@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faQuestionCircle, faCrosshairs, faXmark, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { faFloppyDisk } from '@fortawesome/free-regular-svg-icons';
 import dynamic from 'next/dynamic';
-import ItinEditFormTimePicker from './itinEditFormTimePicker';
+// import ItinEditFormTimePicker from './itinEditFormTimePicker';
 import dayjs, { Dayjs } from 'dayjs';
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -220,7 +220,7 @@ const ItineraryItemForm: FC<Props> = ({ ...props }) => {
         <h3 className = {styles.itemSectionHeading}>New Itinerary Item Entry</h3>:
         <h3 className = {styles.itemSectionHeading}>Edit Itinerary Item</h3>
     }
-    <div className={styles.inputFieldsTimeSelectSection}>        
+    {/* <div className={styles.inputFieldsTimeSelectSection}>        
         <ItinEditFormTimePicker
                         label="Start Time"
                         value={currentItem.startTime?.time || null}
@@ -252,7 +252,7 @@ const ItineraryItemForm: FC<Props> = ({ ...props }) => {
                         });
                     }}
                 />
-    </div>
+    </div> */}
 
     <TextField
     id="siteNameInput"
