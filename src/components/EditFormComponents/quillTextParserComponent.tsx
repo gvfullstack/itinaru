@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import parse from 'html-react-parser';
+// import React, { useState, useEffect } from 'react';
+// import parse from 'html-react-parser';
 
 
-function QuillTextParserComponent({ description }: { description: string }) {
-  const [isMounted, setIsMounted] = useState(false);
+// function QuillTextParserComponent({ description }: { description: string }) {
+//   const [isMounted, setIsMounted] = useState(false);
   
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
+//   useEffect(() => {
+//     setIsMounted(true);
+//   }, []);
 
-  if (!isMounted) {
-    return null; // or some placeholder/loading state
-  }
+//   if (!isMounted) {
+//     return null; // or some placeholder/loading state
+//   }
 
-  const jsxContent = parse(description);
-  return <div>{jsxContent}</div>;
-}
+//   const jsxContent = parse(description);
+//   return <div>{jsxContent}</div>;
+// }
 
-export default QuillTextParserComponent;
+// export default QuillTextParserComponent;

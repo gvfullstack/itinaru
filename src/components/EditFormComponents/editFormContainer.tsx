@@ -33,11 +33,11 @@ const ItineraryItemForm = dynamic(() =>
     loading: () => <p>Loading...</p>
     });
 
-const DragDropSection = dynamic(() =>
-    import('./ItinItemDragDropSection/DragDropSection'), {
-    ssr: false,
-    loading: () => <p>Loading...</p>
-    });
+// const DragDropSection = dynamic(() =>
+//     import('./ItinItemDragDropSection/DragDropSection'), {
+//     ssr: false,
+//     loading: () => <p>Loading...</p>
+//     });
 
     type Props = {
       mode?: "create" | "edit";
@@ -461,7 +461,7 @@ return (
                       <span className={styles.plusSignText}> itinerary item</span> + 
                     </div>
                   </div>
-                  <DragDropSection />
+                  {/* <DragDropSection /> */}
                   <button onClick={()=>console.log(itineraryGalleryPhotoWhileEditing)}>print</button>
               </div>
     
