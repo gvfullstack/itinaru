@@ -1,0 +1,49 @@
+.createItineraryButtonContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    justify-self: center;
+    align-self: center;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    max-width: 300px;
+}
+
+.createItineraryButton{
+    background-color: #FC4869;
+    border: none;
+    color: #F3EFEF;
+    padding: 10px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    cursor: pointer;
+    border-radius: 20px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    margin: .5rem 2px;
+}
+
+.disabled{
+    background-color: #FF7890;
+}
+
+p.styles.heading{
+    animation: typing 1s steps(1, end) infinite;
+    white-space: nowrap;
+    overflow: hidden;
+    border-right: 2px solid black;
+    width: fit-content;
+  }
+
+  @keyframes typing {
+    from {
+      width: 0;
+    }
+    to {
+      width: fit-content;
+    }
+  }

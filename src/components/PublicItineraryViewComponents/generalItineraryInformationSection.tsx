@@ -1,8 +1,7 @@
-import React, { useEffect, useState, FC } from 'react';
-import {ItinerarySettings, ItineraryItem } from './publicItinViewTypeDefs';
+import React, { FC } from 'react';
 import styles from './publicItineraryView.module.css'
 import {currentlyViewingItineraryState} from './publicItinViewAtoms';
-import {useRecoilState, useRecoilCallback} from 'recoil';
+import {useRecoilState} from 'recoil';
 import ItemDescriptionStaticComponent from './itemDescriptionStaticComponent';
 
 
