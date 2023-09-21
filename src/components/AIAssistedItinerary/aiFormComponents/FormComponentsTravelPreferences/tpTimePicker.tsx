@@ -5,7 +5,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker'
 import { useRecoilState } from "recoil";
-import {tripPreferencesAtom} from "@/atoms/atoms";
+import {tripPreferencesAtom} from "../../aiItinAtoms";
 import styles from "./tpTimePicker.module.css";
 
 const UserInputTimePicker = () => {

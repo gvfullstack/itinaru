@@ -5,7 +5,7 @@ import styles from '../aiItinBuilderCSS/createItineraryButton.module.css';
 
 import { DefinedProps, NeighborhoodRecommendation } from "../aiItinTypeDefs";
 import { curStepState, userPreferencesAtom, tripPreferencesAtom, 
-  neighborhoodRecommendationList } from "../../../atoms/atoms"
+  neighborhoodRecommendationList } from "../aiItinAtoms"
 import { useRecoilState } from 'recoil';
 const { v4: uuidv4 } = require('uuid');
 import getConfig from 'next/config';

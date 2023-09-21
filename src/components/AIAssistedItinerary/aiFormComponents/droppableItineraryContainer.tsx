@@ -4,7 +4,7 @@ import { useDrop } from "react-dnd";
 import DraggableItineraryItem from "./draggableItineraryItem";
 import styles from '../aiItinBuilderCSS/itinerary.module.css';
 import { useRecoilState, atom } from "recoil";
-import { itineraryItemsState, tripPreferencesAtom } from "../../../atoms/atoms";
+import { itineraryItemsState, tripPreferencesAtom } from "../aiItinAtoms";
 
 
 interface DroppableItineraryContainerProps {

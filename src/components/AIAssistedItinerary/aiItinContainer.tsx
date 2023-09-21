@@ -7,9 +7,9 @@ import AIInitForm from "./aiItinForm";
 import IsLoadingPage from './aiFormComponents/isLoadingPage';
 import styles from '../../styles/ItinBuilder.module.css';
 import { curStepState, itineraryItemsState
-} from "../../atoms/atoms"
+} from "./aiItinAtoms"
 const { v4: uuidv4 } = require('uuid');
-import { HandleInputChange, MultiSelectHandler, DefinedProps } from "../typeDefs" 
+import { HandleInputChange, DefinedProps } from "./aiItinTypeDefs" 
 
 
 type StateVariables = {

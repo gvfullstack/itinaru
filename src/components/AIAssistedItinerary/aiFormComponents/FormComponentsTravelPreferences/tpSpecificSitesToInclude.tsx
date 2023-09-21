@@ -1,9 +1,9 @@
 import React, { useState, useRef } from "react";
 import {TextField, IconButton} from "@mui/material";
 import { styled } from '@mui/material/styles';
-import { TripPreferences } from "@/components/typeDefs";  
+import { TripPreferences } from "../../aiItinTypeDefs";  
 import { useRecoilState } from "recoil";
-import { tripPreferencesAtom} from "@/atoms/atoms";
+import { tripPreferencesAtom} from "../../aiItinAtoms";
 import styles from './tpSpecificSitesToInclude.module.css';
 import ViewAllSpecificSites from "./viewAllSpecificSites";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

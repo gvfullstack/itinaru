@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRecoilState } from 'recoil';
-import { UserPreferences } from "../../typeDefs" 
-import { userPreferencesAtom} from "@/atoms/atoms";
+import { UserPreferences } from "../../aiItinTypeDefs" 
+import { userPreferencesAtom} from "../../aiItinAtoms";
 
 const ViewAllFavRestaurantsPrevVisited = (props: any) =>{
     const [userPreferences, setUserPreferencesAtom] = useRecoilState(userPreferencesAtom);

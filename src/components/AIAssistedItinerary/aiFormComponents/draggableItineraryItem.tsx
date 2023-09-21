@@ -7,8 +7,8 @@ import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 import { faDiamondTurnRight } from '@fortawesome/free-solid-svg-icons';
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
 import { useRecoilState } from 'recoil';
-import { itineraryItemsState, tripPreferencesAtom, userPreferencesAtom} from '../../../atoms/atoms';
-import ResponsiveTimePicker from './responsiveTimePicker';
+import { itineraryItemsState, tripPreferencesAtom, userPreferencesAtom} from '../aiItinAtoms';
+// import ResponsiveTimePicker from './responsiveTimePicker';
 import axios from 'axios';
 import getConfig from 'next/config';
 import { getSelectedUserPreferences } from "./FormComponentsUserPreferences/getUserPreferences";
@@ -257,7 +257,7 @@ const DraggableItineraryItem = React.forwardRef((
       <div className={`${styles.menu} ${itineraryItem.descHidden ? "" : styles.isShown }`}>
         <div className={styles.menuItem} onClick={handleRemoveClick}>Remove</div>
         <div className={styles.menuItem} onClick = {handleReplaceClick}>Replace</div>
-        <div className={styles.menuItem} >Edit</div>
+        {/* <div className={styles.menuItem} >Edit</div> */}
         <div className={styles.menuItem} >
               <a
               href={
@@ -340,28 +340,34 @@ const DraggableItineraryItem = React.forwardRef((
                         <div className={styles.activityTime}>
                                 <div className={styles.startTimeContainer}>
                                     <div className={styles.startTime}>
-                                          {itineraryItem.startTime?.beingEdited ?
+                                          {/* {itineraryItem.startTime?.beingEdited ?
                                             <ResponsiveTimePicker
                                               propertyName="startTime"
                                               itineraryItem = {itineraryItem}
                                             />  
-                                          :
-                                          <div onClick={()=>handleTimeEditStatus("startTime")}>  
+                                          : */}
+                                          <div 
+                                          // onClick={()=>handleTimeEditStatus("startTime")}
+                                          >  
                                             {formattedStartTime}
-                                          </div>}
+                                          </div>
+                                           {/* } */}
                                     </div>
                                   </div>
                                     <div className={styles.endTimeContainer}>
                                     <div className={styles.endTime}>
-                                          {itineraryItem.endTime?.beingEdited ? 
+                                          {/* {itineraryItem.endTime?.beingEdited ? 
                                               <ResponsiveTimePicker
                                                 propertyName="endTime"
                                                 itineraryItem = {itineraryItem}
                                               /> 
-                                          :
-                                          <div onClick={()=>handleTimeEditStatus("endTime")}>
+                                          : */}
+                                          <div 
+                                          // onClick={()=>handleTimeEditStatus("endTime")}
+                                          >
                                             {formattedEndTime}
-                                          </div>}
+                                          </div>
+                                          {/* } */}
                                     </div>
                                   </div>
                                       <div className={styles.durationContainer}>

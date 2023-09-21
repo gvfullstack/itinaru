@@ -3,7 +3,7 @@ import {
   useRecoilState,
 } from 'recoil';
 import {tripPreferencesAtom
-} from '../../../../atoms/atoms';
+} from '../../aiItinAtoms';
 const { v4: uuidv4 } = require('uuid');
 import ExperienceSoughtThisTrip from './tpExperienceSoughtInput';
 import SpecificSitesToIncludeInput from './tpSpecificSitesToInclude';

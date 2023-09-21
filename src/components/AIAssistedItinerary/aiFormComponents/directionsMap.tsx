@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { useRecoilValue } from 'recoil';
-import { itineraryItemsState } from '@/atoms/atoms';
+import { itineraryItemsState } from '../aiItinAtoms';
 import { ItineraryItem } from '../aiItinTypeDefs';
 
 

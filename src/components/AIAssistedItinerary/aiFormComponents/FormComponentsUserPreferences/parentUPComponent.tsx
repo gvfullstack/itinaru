@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useRecoilState } from 'recoil';
-import { userPreferencesAtom } from '../../../../atoms/atoms';
+import { userPreferencesAtom } from '../../aiItinAtoms';
 import UserInputCurrencyInputField from './upCurrencyInputField';
 import FavoritePlacesPreviouslyVisited from './upFavoritePlacesPreviouslyVisited';
 import FavoriteExperienceTypes from './upFavoriteExperienceTypes';

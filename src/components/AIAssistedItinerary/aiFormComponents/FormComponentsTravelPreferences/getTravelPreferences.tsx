@@ -1,4 +1,4 @@
-import { TripPreferences } from "../../../typeDefs/index";
+import { TripPreferences } from "../../aiItinTypeDefs";
 
   const convertDateToString = (date?: Date): string => {
     if (!date) {

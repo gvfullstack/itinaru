@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRecoilState } from 'recoil';
-import { TripPreferences } from "../../../typeDefs" 
-import { tripPreferencesAtom} from "@/atoms/atoms";
+import { TripPreferences } from "../../aiItinTypeDefs" 
+import { tripPreferencesAtom} from "../../aiItinAtoms";
 
 const ViewAllSpecificSites = (props: any) =>{
     const [tripPreferences, setTripPreferencesAtom] = useRecoilState(tripPreferencesAtom);

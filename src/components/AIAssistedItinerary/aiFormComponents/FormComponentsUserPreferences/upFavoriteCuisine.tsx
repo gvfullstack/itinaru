@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 const { v4: uuidv4 } = require('uuid');
-import { userPreferencesAtom } from '../../../../atoms/atoms';
+import { userPreferencesAtom } from '../../aiItinAtoms';
 import { useRecoilState } from 'recoil';
 
 type Option = {

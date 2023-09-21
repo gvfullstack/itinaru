@@ -3,7 +3,7 @@ import React from "react";
 import styles from "../aiItinBuilderCSS/createItineraryButton.module.css";
 import { DefinedProps} from "../aiItinTypeDefs";
 import { userPreferencesAtom, tripPreferencesAtom, itineraryItemsState,
-   curStepState, neighborhoodRecommendationList} from "../../../atoms/atoms"
+   curStepState, neighborhoodRecommendationList} from "../aiItinAtoms"
 import { useRecoilState } from 'recoil';
 const { v4: uuidv4 } = require('uuid');
 import getConfig from 'next/config';

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import { itineraryItemsState, tripPreferencesAtom, userPreferencesAtom } from '../../../atoms/atoms';
+import { itineraryItemsState, tripPreferencesAtom, userPreferencesAtom } from '../aiItinAtoms';
 import { useRecoilState } from 'recoil';
 import styles from '../aiItinBuilderCSS/itinerary.module.css';
 import { ItineraryItem } from "../aiItinTypeDefs";

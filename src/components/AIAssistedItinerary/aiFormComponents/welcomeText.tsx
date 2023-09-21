@@ -1,7 +1,7 @@
 import React  from "react";
 import { useState, useEffect, useMemo } from "react";
 import styles from "../aiItinBuilderCSS/welcomeText.module.css";
-import { DefinedProps } from "@/components/typeDefs";
+import { DefinedProps } from "../aiItinTypeDefs";
 
 interface IntroObject {
   [key: string]: Array<{ message: string }> | undefined;

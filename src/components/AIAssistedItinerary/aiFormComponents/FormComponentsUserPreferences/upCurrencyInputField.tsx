@@ -4,7 +4,7 @@ import React from 'react';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material/styles';
 import InputAdornment from '@mui/material/InputAdornment';
-import {userPreferencesAtom} from '../../../atoms/atoms';
+import {userPreferencesAtom} from '../../aiItinAtoms';
 import { useRecoilState } from 'recoil'; 
 
 const PinkOutlinedTextField = styled(TextField)(({ theme }) => ({

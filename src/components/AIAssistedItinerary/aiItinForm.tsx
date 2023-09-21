@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import WelcomeText from "./aiFormComponents/welcomeText";
 import CreateItineraryButton from "./aiFormComponents/createItineraryButton";
 import styles from "./aiItinBuilderCSS/itinForm.module.css";
-import { DefinedProps} from "../typeDefs" 
+import { DefinedProps} from "./aiItinTypeDefs" 
 import Itinerary from "./aiFormComponents/itinerary";
 import GeneralTravelPreferences from "./aiFormComponents/FormComponentsTravelPreferences/parentGeneralTP"
 import ParentUPComponent from "./aiFormComponents/FormComponentsUserPreferences/parentUPComponent";

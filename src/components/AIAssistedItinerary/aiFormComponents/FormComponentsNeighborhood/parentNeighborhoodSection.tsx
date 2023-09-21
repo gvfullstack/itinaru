@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useRecoilState } from 'recoil';
-import { neighborhoodRecommendationList } from '../../../../atoms/atoms';
+import { neighborhoodRecommendationList } from '../../aiItinAtoms';
 import { NeighborhoodRecommendationList } from '../../aiItinTypeDefs';
 import GetNeighborhoodSuggestions from '../getNeighborhoodsButton'
 import NeighborhoodRecommendations from "../neighborhoodSuggestionsAndSelections";

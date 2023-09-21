@@ -1,9 +1,9 @@
 import React, { useState, useRef } from "react";
 import {TextField} from "@mui/material";
 import { styled } from '@mui/material/styles';
-import { TripPreferences } from "@/components/typeDefs";  
+import { TripPreferences } from "../../aiItinTypeDefs";  
 import { useRecoilState } from "recoil";
-import { tripPreferencesAtom} from "@/atoms/atoms";
+import { tripPreferencesAtom} from "../../aiItinAtoms";
 
 const PinkOutlinedTextField = styled(TextField)(({ theme }) => ({
   '& .MuiOutlinedInput-root': {

@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import {TextField, IconButton} from "@mui/material";
 import { styled } from '@mui/material/styles';
 import { useRecoilState } from "recoil";
-import { userPreferencesAtom} from "@/atoms/atoms";
+import { userPreferencesAtom} from "../../aiItinAtoms";
 import ViewAllFavRestaurantsPrevVisited from "./viewAllFavRestaurantsPrevVisited";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faPlus } from '@fortawesome/free-solid-svg-icons';

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useRecoilState } from 'recoil';
-import { affiliatesAtom } from '../../../../atoms/atoms';
+import { affiliatesAtom } from '../../aiItinAtoms';
 import { Affiliates } from '../../aiItinTypeDefs';
 const { v4: uuidv4 } = require('uuid');
 

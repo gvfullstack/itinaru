@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useRecoilState } from 'recoil';
-import { neighborhoodRecommendationList, tripPreferencesAtom } from '../../../atoms/atoms';
+import { neighborhoodRecommendationList, tripPreferencesAtom } from '../aiItinAtoms';
 import { NeighborhoodRecommendation, NeighborhoodRecommendationList} from '../aiItinTypeDefs';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMedal } from '@fortawesome/free-solid-svg-icons';
