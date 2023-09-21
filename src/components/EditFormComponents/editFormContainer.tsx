@@ -21,17 +21,17 @@ import { firebaseStorage  } from '../FirebaseAuthComponents/config/firebase.stor
 import { ref, uploadBytesResumable, getDownloadURL  } from 'firebase/storage';
 import pica from 'pica';
 
-// const GoogleMapsProvider = dynamic(() => 
-//     import('./EditFormITEMComponents/googleMapsProvider'), {
-//     ssr: false,
-//     loading: () => <p>Loading...</p>
-//     });
+const GoogleMapsProvider = dynamic(() => 
+    import('./EditFormITEMComponents/googleMapsProvider'), {
+    ssr: false,
+    loading: () => <p>Loading...</p>
+    });
 
-// const ItineraryItemForm = dynamic(() => 
-//     import('./EditFormITEMComponents/itineraryItemForm'), {
-//     ssr: false,
-//     loading: () => <p>Loading...</p>
-//     });
+const ItineraryItemForm = dynamic(() => 
+    import('./EditFormITEMComponents/itineraryItemForm'), {
+    ssr: false,
+    loading: () => <p>Loading...</p>
+    });
 
 const DragDropSection = dynamic(() =>
     import('./ItinItemDragDropSection/DragDropSection'), {
