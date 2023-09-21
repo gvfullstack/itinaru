@@ -57,7 +57,7 @@ const ItineraryItemForm: FC<Props> = ({ ...props }) => {
         }));
     }
     
-//     const isGoogleMapsLoaded = useGoogleMaps();
+    const isGoogleMapsLoaded = useGoogleMaps();
 
 
 //     function initAutocomplete(): void {
@@ -75,26 +75,26 @@ const ItineraryItemForm: FC<Props> = ({ ...props }) => {
 //             });
 //         }
     
-        const addressInput = document.getElementById('addressInput') as HTMLInputElement | null;
-        if (addressInput) {
-            const addressAutocomplete = new google.maps.places.Autocomplete(addressInput, {
-                fields: ["formatted_address"]
-            });
+//         const addressInput = document.getElementById('addressInput') as HTMLInputElement | null;
+//         if (addressInput) {
+//             const addressAutocomplete = new google.maps.places.Autocomplete(addressInput, {
+//                 fields: ["formatted_address"]
+//             });
     
-            addressAutocomplete.addListener('place_changed', () => {
-                const place = addressAutocomplete.getPlace();
-                if (place) {
-                    setCurrentItem(prev => ({...prev, locationAddress: place.formatted_address || ''}));
-                }
-            });
-        }
-    }
+//             addressAutocomplete.addListener('place_changed', () => {
+//                 const place = addressAutocomplete.getPlace();
+//                 if (place) {
+//                     setCurrentItem(prev => ({...prev, locationAddress: place.formatted_address || ''}));
+//                 }
+//             });
+//         }
+//     }
   
-//     useEffect(() => {
-//   if (isGoogleMapsLoaded) {
-//     initAutocomplete();
-//   }
-// }, [isGoogleMapsLoaded]);
+    useEffect(() => {
+  if (isGoogleMapsLoaded) {
+    initAutocomplete();
+  }
+}, [isGoogleMapsLoaded]);
 
     const handleItemChange = (field: keyof ItineraryItem) => (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault
