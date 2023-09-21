@@ -20,16 +20,16 @@ const editItemIcon = <FontAwesomeIcon icon={faPenToSquare} />;
 
 import { currentlyEditingItineraryState } from '../editFormAtoms';
 import dynamic from 'next/dynamic';
-// const GoogleMapsProvider = dynamic(() => 
-//     import('../EditFormITEMComponents/googleMapsProvider'), {
-//     ssr: false,
-//     loading: () => <p>Loading...</p>
-//     });
-// const ItineraryItemForm = dynamic(() => 
-//     import('../EditFormITEMComponents/itineraryItemForm'), {
-//     ssr: false,
-//     loading: () => <p>Loading...</p>
-//     });
+const GoogleMapsProvider = dynamic(() => 
+    import('../EditFormITEMComponents/googleMapsProvider'), {
+    ssr: false,
+    loading: () => <p>Loading...</p>
+    });
+const ItineraryItemForm = dynamic(() => 
+    import('../EditFormITEMComponents/itineraryItemForm'), {
+    ssr: false,
+    loading: () => <p>Loading...</p>
+    });
 
 interface DraggableItineraryItemProps {
   id: string;
@@ -191,14 +191,14 @@ const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.tim
     {showItemForm && 
       <div className={styles.modalOverlay}>
         <div className={styles.modalContent}>
-              {/* <GoogleMapsProvider> */}
-                {/* <ItineraryItemForm 
+              <GoogleMapsProvider>
+                <ItineraryItemForm 
                   handleShowItemForm={handleShowItemForm} 
                   mode="edit"
                   initialItem={itineraryItem}
                   handleRemoveClick={handleRemoveClick}
-                    /> */}
-              {/* </GoogleMapsProvider> */}
+                    />
+              </GoogleMapsProvider>
         </div>
        </div> 
            }
