@@ -253,7 +253,7 @@ const ItineraryItemForm: FC<Props> = ({ ...props }) => {
             }}
         />
     </div>
-{/* 
+
     <TextField
     id="siteNameInput"
     label="Site Name"
@@ -267,7 +267,7 @@ const ItineraryItemForm: FC<Props> = ({ ...props }) => {
     onMouseLeave={() => setSiteIsHovered(false)}
     />
 
-    <TextField
+    {/* <TextField
         id="addressInput"
         label="Address"
         variant="outlined"
