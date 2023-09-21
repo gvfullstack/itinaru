@@ -1,6 +1,6 @@
 import React, { useEffect, useState, FC, forwardRef, useImperativeHandle} from 'react';
 import {ItinerarySettings, ItineraryItem } from '../editFormTypeDefs';
-import styles from './EditFormCSS/itineraryEditForm.module.css'
+import styles from '../EditFormCSS/itineraryEditForm.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 import dynamic from 'next/dynamic';
