@@ -5,6 +5,8 @@ import ItinGalleryComponent from '../ItinGallery/itinGalleryComponent';
 import styles from './searchBar.module.css';
 import { useState } from 'react';
 import { Itinerary } from './searchTypeDefs';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
 const appId: string = process.env.NEXT_PUBLIC_ALGOLIA_APP_ID || '';
 if (!appId) {
@@ -30,6 +32,13 @@ const SearchBar: React.FC = () => {
         event.preventDefault();
         setSearchQuery(inputValue);
     };
+
+    const searchIcon = (
+        <FontAwesomeIcon 
+            icon={faMagnifyingGlass as any} 
+            className={styles.searchIcon} 
+        />
+    );
 
     type AlgoliaItinerary = {
         id: string;
@@ -85,21 +94,27 @@ const SearchBar: React.FC = () => {
                   ]}
                     query={searchQuery}
                 />
-                 <form onSubmit={handleSearchSubmit} className={styles.searchForm}>
-                    <input
-                        type="text"
-                        value={inputValue}
-                        onChange={handleInputChange}
-                        placeholder="Search..."
-                        className={styles.searchInput}
-                    />
-
-                    <button type="submit" className={styles.submitButton}>Search</button>
-                </form>
-                
-                <ItinGalCompWrapper>
-                    {searchQuery && <CustomHits />}
-                </ItinGalCompWrapper>
+                <div className={styles.searchAndResultsContainer}>
+                    <form onSubmit={handleSearchSubmit} className={styles.searchForm}>
+                        <input
+                            type="text"
+                            value={inputValue}
+                            onChange={handleInputChange}
+                            placeholder="Search..."
+                            className={styles.searchInput}
+                        />
+                        <div className={styles.searchIconContainer}             
+                            onClick={handleSearchSubmit}
+                            tabIndex={0}>
+                            {searchIcon}
+                        </div>
+                        {/* <button type="submit" className={styles.submitButton}>Search</button> */}
+                    </form>
+                    
+                    <ItinGalCompWrapper>
+                        {searchQuery && <CustomHits />}
+                    </ItinGalCompWrapper>
+                </div>
             </InstantSearch>
         </div>
     );
