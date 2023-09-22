@@ -248,15 +248,22 @@
 
 .floppyDisk, 
 .cancelMark,
-.trashIcon {
+.trashIcon,
+.attachIcon,
+.resetPhotoIcon,
+.deletePhotoIcon {
   color: #807f7f;
   font-size: 2rem;
   cursor: pointer;
   align-self: center;
 }
+
 .floppyDisk :hover,
 .cancelMark :hover,
-.trashIcon :hover{
+.trashIcon :hover,
+.attachIcon :hover,
+.resetPhotoIcon :hover,
+.deletePhotoIcon :hover{
   color: #f83c5e;
 }
 
@@ -287,6 +294,10 @@
   gap: 1rem;
   }
 
+  .EFPhotoAttachIconButtons{
+    display: flex;
+    gap: 1rem;
+  }
   .EFPageContainer{
     display: flex;
     flex-direction: column;
@@ -335,6 +346,85 @@
   margin-top: 1rem;
 }
 
+
+.profileLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: .75rem;
+  width: 100%;
+}
+
+.labelText{
+  margin: 1rem 0 0 0;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.profilePicPreviewImageContainer{
+  max-width: 500px; /* Default size */
+  max-height: 500px;
+  position: relative;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.profilePicturePreview{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+.profileInput{
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    resize: vertical;
+    min-width: 100%;
+    font-family: 'Roboto', sans-serif;
+    font-size: .85rem;
+  }
+  .profileSaveButton,
+  .profileCancelButton,
+  .profileEditButton,
+  .editPhotoButtons {
+    align-self: flex-start;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .profileSaveButton{
+    margin-top: 1rem;
+  }
+  .editPhotoButtons{
+    background-color: rgb(190, 189, 189);
+    margin-top: .3rem;
+    margin-right: .5rem;
+    width: 6rem;
+  }
+  .profileEditButton{
+    background-color: rgb(190, 189, 189);
+    margin-top: 1rem;
+  }
+
+  .profileCancelButton{
+    background-color: #dc3545;
+    margin-left: 1rem;
+  }
+
+  .profilePictureMessage{
+    margin-top: 0rem;
+    font-family:'Roboto', sans-serif;
+    font-style: italic;
+    font-size: 14px;
+  }
 
 @media (min-width:1750px){
   .EFPageContainer{

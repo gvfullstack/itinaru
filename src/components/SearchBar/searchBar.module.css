@@ -1,9 +1,20 @@
 .container {
-    margin-top: 2rem;
+    margin: .5rem 0;
     width: 100%;
     display: flex;
     flex-direction: column;
     z-index: inherit;
+    align-items: center;
+    justify-content: center;
+}
+
+.searchAndResultsContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+
 }
 
 .searchForm {
@@ -11,27 +22,52 @@
     display: inline-flex; /* Changed to inline-flex for aligning items */
     justify-content: center;
     align-items: center;
-    width: 100%;
+    width: 90%;
     max-width: 600px;
     align-self: center;
+    border: 1px solid #cfcece;
+    border-radius: 50px;
+    transition: border 0.3s ease;
+    outline: none;
+    /* margin: 0 2rem; */
+}
+
+.searchForm:hover {
+    box-shadow: 0 1px 2px 1px rgba(105, 105, 105, 0.5);
 }
 
 .searchInput {
     width: 100%; /* Adjusted for the X button */
-    padding: 15px 30px 15px 15px; /* Added padding for the X button inside the input */
-    border-radius: 50px;
-    border: 2px solid #cfcece;
-    font-size: 20px;
+    padding: 0.9375rem 1.875rem 0.9375rem 0.9375rem;
+    font-size: 1rem;
     outline: none;
-    transition: border 0.3s ease;
+    border: 1px solid transparent;
+    border-radius: 50px;
 }
 
-.searchInput:focus {
-    border-color: #fa8a9f;
+
+.searchIconContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 3rem;
+    width: 4rem;
+    border-style: none;
+    
 }
 
+.searchIconContainer:focus{
+    box-shadow: 0 0 0 3px rgba(81, 168, 255, 0.5);
+    outline:none;
+    border-radius: 0 50% 50% 0;
+}
+
+.searchIcon{
+    color: #a5a5a5;
+    font-size: 2rem;
+}
 .submitButton {
-    background-color: #FC4869;
+    background-color: #a5a5a5;;
     color: #fff;
     padding: 16px 20px;
     border: none;

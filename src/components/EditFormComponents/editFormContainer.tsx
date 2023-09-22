@@ -6,7 +6,7 @@ import { Itinerary, ItinerarySettings, TimeObject, TransformedItineraryItem, Tra
 import {useRecoilState, useRecoilCallback} from 'recoil';
 import styles from './EditFormCSS/itineraryEditForm.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faXmark, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { faXmark, faTrashCan, faPaperclip, faRotateLeft } from '@fortawesome/free-solid-svg-icons';
 import { faFloppyDisk } from '@fortawesome/free-regular-svg-icons';
 import { authUserState } from '../../atoms/atoms'
 // import { collection, doc, updateDoc, addDoc, deleteDoc, setDoc, Timestamp  } from 'firebase/firestore';
@@ -20,6 +20,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { firebaseStorage  } from '../FirebaseAuthComponents/config/firebase.storage';
 import { ref, uploadBytesResumable, getDownloadURL  } from 'firebase/storage';
 import pica from 'pica';
+import Image from 'next/image';
 
 const GoogleMapsProvider = dynamic(() => 
     import('./EditFormITEMComponents/googleMapsProvider'), {
@@ -225,6 +226,30 @@ const trashDelete = (
   />
 );
 
+const attachIcon = (
+  <FontAwesomeIcon 
+      icon={faPaperclip} 
+      className={styles.attachIcon} 
+      type="button" 
+      onClick={(e) => {
+        e.preventDefault();
+        inputFileRef.current?.click()
+      }}
+  />
+);
+
+const resetPhotoIcon = (
+  <FontAwesomeIcon
+      icon={faRotateLeft}
+      className={styles.resetPhotoIcon}
+      type="button"
+      onClick={(e) => {
+        e.preventDefault();
+        setItineraryGalleryPhotoWhileEditing(prev=>itineraryGalleryPhotoUrl)
+      }}
+  />
+);
+
 const handleDeleteItinerary = async (itineraryId: string) => {
   if (!itineraryId) {
     toast.warn("No itinerary ID provided.");
@@ -296,12 +321,12 @@ const imageProcessing = (e: React.ChangeEvent<HTMLInputElement>) => {
       if (resizedFile) {
         setItineraryGalleryPhotoFile(resizedFile);
       } else {
-        alert('An error occurred while processing the image.');
+        toast.warn("An error occurred while processing the image.");
       }
     });
     
   } else {
-    alert('Please select a valid image file (JPEG, PNG, or GIF).');
+    toast.warn("Please select a valid image file (JPEG, PNG, or GIF).");
     setItineraryGalleryPhotoWhileEditing(""); // Reset the URL if an invalid file type is selected
     e.target.value = '';
   }
@@ -312,7 +337,7 @@ const resizeImage = (file: File, callback: (result: File | null) => void) => {
   const reader = new FileReader();
   reader.readAsDataURL(file);
   reader.onload = (event) => {
-    const img = new Image();
+    const img = new window.Image();///used window because Image(); conflicts with next/image
     img.src = event.target?.result as string;
     img.onload = () => {
       const canvas = document.createElement('canvas');
@@ -362,7 +387,7 @@ const resizeImage = (file: File, callback: (result: File | null) => void) => {
 ////////////////////////////////////////////////////////////////////
 const inputFileRef = useRef<HTMLInputElement>(null);
 
-const removeImage = (e: React.MouseEvent<HTMLButtonElement>) => {
+const removeImage = (e: React.MouseEvent<HTMLElement | SVGSVGElement>) => {
   e.preventDefault();
   setItineraryGalleryPhotoWhileEditing("");
   setItineraryGalleryPhotoFile(null);
@@ -370,6 +395,18 @@ const removeImage = (e: React.MouseEvent<HTMLButtonElement>) => {
     inputFileRef.current.value = "";
   }
 };
+////////////////////////////
+const deletePhotoIcon = (
+  <FontAwesomeIcon
+      icon={faTrashCan}
+      className={styles.deletePhotoIcon}
+      type="button"
+      onClick={(e) => {
+        e.preventDefault();
+        removeImage(e);
+      }}
+  />
+);
 ////////////////////////////
 
 return (
@@ -417,15 +454,22 @@ return (
                     ref={childRef}
                     />
      
-                    <label className={styles.profileLabel}>
-                      <p>Gallery Photo:</p>
-                      {itineraryGalleryPhotoWhileEditing != "" &&
-                      <div>
-                        <div className={styles.profilePicPreviewImageContainer}>
-                          <img src={itineraryGalleryPhotoWhileEditing || ''} alt="No Image Selected"
-                          className={styles.profilePicturePreview} />
-                        </div>
-                      </div>}
+                  <label className={styles.profileLabel}>
+                    <p className={styles.labelText}>Gallery Photo:</p>
+                    {itineraryGalleryPhotoWhileEditing != "" &&
+                    <div>
+                      <div className={styles.profilePicPreviewImageContainer}>
+                        {/* <img src={itineraryGalleryPhotoWhileEditing || ''} alt="No Image Selected"
+                        className={styles.profilePicturePreview} /> */}
+                        <Image 
+                            src={itineraryGalleryPhotoWhileEditing || ''} 
+                            alt="No Image Selected" 
+                            width={300} // replace with actual image width
+                            height={200} // replace with actual image height
+                            className={styles.profilePicturePreview}
+                        />
+                      </div>
+                    </div>}
                       <input 
                         ref={inputFileRef}
                         className={styles.profileInput} 
@@ -434,27 +478,15 @@ return (
                         onChange={imageProcessing} 
                         style={{ display: "none" }} // Hide the input
                       />
-                      <div>
-                      {itineraryGalleryPhotoWhileEditing != "" && <button 
-                        className={styles.editPhotoButtons}
-                          onClick={removeImage}>Remove
-                        </button> }
-                        <button 
-                        className={styles.editPhotoButtons}
-                        onClick={(e) =>  {e.preventDefault();
-                            inputFileRef.current?.click()}}>
-                              Add New
-                        </button>
-                        <button 
-                        className={styles.editPhotoButtons}
-                        onClick={(e) =>  {e.preventDefault();
-                            setItineraryGalleryPhotoWhileEditing(prev=>itineraryGalleryPhotoUrl)}}>
-                              Reset
-                        </button>
-                        
-                      </div>
-                    </label>
-                    <p className={styles.profilePictureMessage}>*Image uploads must be in JPEG, PNG, or GIF format.</p>
+                    <div className= {styles.EFPhotoAttachIconButtons}>
+                        {attachIcon}
+                        {resetPhotoIcon}                      
+                        {itineraryGalleryPhotoWhileEditing != "" && 
+                          <div>{deletePhotoIcon}</div>            
+                        }
+                    </div>
+                  </label>
+                  <p className={styles.profilePictureMessage}>*Image uploads must be in JPEG, PNG, or GIF format.</p>
                   
                   <div className={styles.plusSignContainerEF}>
                     <div className={styles.plusSignEF} onClick={handleShowItemForm}>
