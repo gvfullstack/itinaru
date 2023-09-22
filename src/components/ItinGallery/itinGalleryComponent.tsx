@@ -20,6 +20,7 @@ const ItinGalleryComponent: React.FC<Props> = ({...props}) => {
   const router = useRouter();
 
   const truncateText = (text: string, maxLength: number) => {
+    if(!text) return "";
     if (text.length > maxLength) {
       // Cut the text and add ellipsis
       return text.substring(0, maxLength - 3) + "...";
