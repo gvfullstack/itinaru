@@ -378,12 +378,12 @@ return (
     {showItemForm && 
           <div className={styles.modalOverlay}>
             <div className={styles.modalContent}>
-              {/* <GoogleMapsProvider>
+              <GoogleMapsProvider>
                 <ItineraryItemForm 
                   handleShowItemForm={handleShowItemForm} 
                   mode="create"
                     />
-              </GoogleMapsProvider> */}
+              </GoogleMapsProvider>
             </div>
           </div>   
           }

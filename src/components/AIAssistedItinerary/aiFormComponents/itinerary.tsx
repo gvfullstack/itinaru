@@ -9,9 +9,11 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { getSelectedUserPreferences } from "./FormComponentsUserPreferences/getUserPreferences";
 import { getSelectedTripPreferences } from "./FormComponentsTravelPreferences/getTravelPreferences";
-
 import getConfig from 'next/config';
 import { v4 as uuidv4 } from 'uuid';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faQuestionCircle, faCrosshairs, faXmark, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { faFloppyDisk } from '@fortawesome/free-regular-svg-icons';
 
 
 const Itinerary: React.FC = () => {
@@ -19,6 +21,21 @@ const Itinerary: React.FC = () => {
   const [userPreferences, setUserPreferences] = useRecoilState(userPreferencesAtom);
   const [itineraryItems, setItineraryItems] = useRecoilState(itineraryItemsState);
 
+  const floppyDiskAddSave = (
+    <FontAwesomeIcon 
+        icon={faFloppyDisk as any} 
+        className={styles.floppyDisk} 
+        type="button" 
+    />
+);
+  
+const trashDelete = (
+    <FontAwesomeIcon 
+        icon={faTrashCan} 
+        className={styles.trashIcon} 
+        type="button" 
+    />
+);
   const handleShowHideDescription = (curItineraryItem: ItineraryItem) => {
     setItineraryItems(prevState => {
       const updatedNeighborhoods = prevState.map((itineraryItem) => {
@@ -51,7 +68,7 @@ const Itinerary: React.FC = () => {
   
     return (
       <div className={`${styles.addMenu}`}>
-        <div className={styles.menuItem} style={{fontWeight:"500"}}>Add to itinerary</div>
+        <div className={styles.menuItem} style={{}}>Add to itinerary:</div>
         {items.map(item => (
           <div 
             key={item} 
@@ -166,9 +183,9 @@ const Itinerary: React.FC = () => {
   <DndProvider backend={HTML5Backend}>
     <div className={styles.itineraryArrOfItemsContainer}>
       <div className={styles.utilitySection}>
-        <button className={styles.shareItineraryButton}>share</button>
+        {/* <button className={styles.shareItineraryButton}>share</button> */}
         <button className={styles.addItineraryItemButton} onClick={()=>setAddMenuOpen(!addMenuOpen)}>
-          {sign}
+          <span className={styles.plusSignText}> itinerary item</span> {sign}
         </button>
       </div>
       <div className = {styles.addMenuContainer}>

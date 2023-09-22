@@ -17,6 +17,7 @@
     width: 100%;
     height: 3.2rem;
     border: none;
+    background-color: ;
 }
 .shareItineraryButton{
     border: none;
@@ -28,13 +29,14 @@
 }
 .addItineraryItemButton{
     border: none;
-    color: rgb(36, 35, 35);
+    color: #bebebe;
     background-color: white;
-    margin: 0 .5rem 0 2rem;
-    width: 3rem;
+    margin: 0 2rem 0 2rem;
+    width: fit-content;
     height: 100%;
     font-size: 2rem;
     font-weight: 500;
+
 
 }
 /* /////////////////////// */
@@ -337,7 +339,7 @@
     background-color: #fff;
     color: #333;
     cursor: pointer;
-
+    /* font-weight:500 */
   }
   
   .menuItem:hover {
@@ -353,3 +355,9 @@
 
 } */
 
+.plusSignText{
+    font-size: 1.5rem;
+    align-self: center;
+    justify-self: center;
+  
+  }

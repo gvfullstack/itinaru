@@ -194,7 +194,6 @@ console.log("newEndTime", newEndTime)
             />
           );
         })}
-        <button onClick={()=> console.log(itineraryItems, itineraryItemsRef)}>print</button>
       </div>
     );
 }    
