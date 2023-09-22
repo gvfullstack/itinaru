@@ -57,9 +57,10 @@
 }
 
 .searchIconContainer:focus{
-    box-shadow: 0 0 0 3px rgba(81, 168, 255, 0.5);
+    box-shadow: 0 4px 4px 1px rgba(124, 124, 124, 0.5);
     outline:none;
     border-radius: 0 50% 50% 0;
+
 }
 
 .searchIcon{
