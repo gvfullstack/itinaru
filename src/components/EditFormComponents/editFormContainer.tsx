@@ -213,9 +213,6 @@ async function saveTransformedItinerary(downloadURL: string | null) {
       console.error("Error saving itinerary: ", error);
     });
 }
-
-
-
         
 const trashDelete = (
   <FontAwesomeIcon 

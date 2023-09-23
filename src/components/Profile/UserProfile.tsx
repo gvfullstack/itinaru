@@ -15,6 +15,9 @@ import { PrivacySettings } from '@/components/typeDefs';
 import 'react-quill/dist/quill.snow.css';
 import BioComponent from './BioComponent';
 import dynamic from 'next/dynamic';
+import Image from 'next/image';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {faTrashCan, faPaperclip, faRotateLeft } from '@fortawesome/free-solid-svg-icons';
 
 const ReactQuill = dynamic(import('react-quill'), {
   ssr: false, // This will make the component render only on the client-side
@@ -203,24 +206,39 @@ const resizeImage = (file: File, callback: (result: File | null) => void) => {
   const reader = new FileReader();
   reader.readAsDataURL(file);
   reader.onload = (event) => {
-    const img = new Image();
+    const img = new window.Image();///used window because Image(); conflicts with next/image
     img.src = event.target?.result as string;
     img.onload = () => {
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
       const picaInstance = pica();
 
-      // Set the desired size
-      const toWidth = 512;
-      const toHeight = 512;
+      // Set the max desired size
+      const maxWidth = 512; // Max width for the image
+      const maxHeight = 512; // Max height for the image
 
-      canvas.width = toWidth;
-      canvas.height = toHeight;
-      
+      let { width, height } = img;
+
+      // Maintain aspect ratio
+      if (width > height) {
+        if (width > maxWidth) {
+          height *= maxWidth / width;
+          width = maxWidth;
+        }
+      } else {
+        if (height > maxHeight) {
+          width *= maxHeight / height;
+          height = maxHeight;
+        }
+      }
+
+      canvas.width = width;
+      canvas.height = height;
+
       picaInstance.resize(img, canvas, {
-        unsharpAmount: 80,
+        unsharpAmount: 40,
         unsharpRadius: 0.6,
-        unsharpThreshold: 2,
+        unsharpThreshold: 1,
       }).then(() => {
         canvas.toBlob((blob) => {
           if (blob) {
@@ -239,7 +257,7 @@ const resizeImage = (file: File, callback: (result: File | null) => void) => {
 
 const inputFileRef = useRef<HTMLInputElement>(null);
 
-const removeImage = (e: React.MouseEvent<HTMLButtonElement>) => {
+const removeImage = (e: React.MouseEvent<HTMLElement| SVGSVGElement>) => {
   e.preventDefault();
   setProfilePicWhileEditing("");
   setProfilePictureFile(null);
@@ -292,7 +310,6 @@ const updatePrivacySettings = async () => {
   try {
     // Get a reference to the user's document
     const userRef = doc(db, 'users', authUser.uid);
-
     // Update the privacySettings field with the values from your state
     await updateDoc(userRef, {
       privacySettings: localPrivacySettings
@@ -301,7 +318,6 @@ const updatePrivacySettings = async () => {
     saveRecoilPrivacySettings()
     // If needed, you can update the authUser object here
     // ...
-
     // Handle successful update (e.g., redirect, show a success message, etc.)
     // ...
 
@@ -310,6 +326,38 @@ const updatePrivacySettings = async () => {
     console.error('Error updating privacy settings:', error);
   }
 };
+
+const trashDelete = (
+        <FontAwesomeIcon 
+            icon={faTrashCan} 
+            className={styles.trashIcon} 
+            type="button" 
+            onClick={(e) => {
+                e.preventDefault();
+                removeImage(e);
+              }
+            }
+        />
+);
+
+const resetPhotoIcon = (
+        <FontAwesomeIcon
+            icon={faRotateLeft}
+            className={styles.resetPhotoIcon}
+            type="button"
+            onClick={(e) =>  {e.preventDefault();
+              setProfilePicWhileEditing(prev=>profilePictureUrl)}}
+        />
+      );
+const attachIcon = (
+      <FontAwesomeIcon 
+          icon={faPaperclip} 
+          className={styles.attachIcon} 
+          type="button" 
+          onClick={(e) =>  {e.preventDefault();
+            inputFileRef.current?.click()}}
+      />
+    );     
   return (
     <>
     <div className={styles.tabsContainer}>
@@ -354,9 +402,15 @@ const updatePrivacySettings = async () => {
                 {profilePicWhileEditing != "" &&
                 <div>
                   <div className={styles.profilePicPreviewImageContainer}>
-                    <img src={profilePicWhileEditing || ''} alt="No Image Selected"
-                     className={styles.profilePicturePreview} />
-                  </div>
+                  <Image 
+                    src={profilePicWhileEditing || ''} 
+                    alt="Itinerary Gallery Photo" 
+                    width={512} // replace with actual image width
+                    height={512} // replace with actual image height
+                    loading='lazy'
+                    style={{ width: '100%', height: 'auto', objectFit: 'cover' }}            
+                   />
+                </div>
                 </div>}
                 <input 
                   ref={inputFileRef}
@@ -366,24 +420,13 @@ const updatePrivacySettings = async () => {
                   onChange={imageProcessing} 
                   style={{ display: "none" }} // Hide the input
                 />
-                <div>
-                {profilePicWhileEditing != "" && <button 
-                  className={styles.editPhotoButtons}
-                    onClick={removeImage}>Remove
-                  </button> }
-                  <button 
-                  className={styles.editPhotoButtons}
-                  onClick={(e) =>  {e.preventDefault();
-                      inputFileRef.current?.click()}}>
-                        Add New
-                  </button>
-                  <button 
-                  className={styles.editPhotoButtons}
-                  onClick={(e) =>  {e.preventDefault();
-                      setProfilePicWhileEditing(prev=>profilePictureUrl)}}>
-                        Reset
-                  </button>
-                  
+                <div className= {styles.UPPhotoAttachIconButtons}>                
+                  {attachIcon}
+                  {resetPhotoIcon}
+                  {profilePicWhileEditing != "" && 
+                    <div>
+                      {trashDelete}                  
+                    </div>}
                 </div>
               </label>
               <p className={styles.profilePictureMessage}>*Image uploads must be in JPEG, PNG, or GIF format.</p>
@@ -397,10 +440,14 @@ const updatePrivacySettings = async () => {
         <div className={styles.profileStaticContainer}>
           {profilePictureUrl != "" &&
           <div className={styles.profilePicImageContainer}>
-            <img src={authUser?.profilePictureUrl || ''} 
-            alt=""
-            className={styles.profilePicture}
-            />      
+              <Image 
+                    src={authUser?.profilePictureUrl || ''} 
+                    alt="user profile picture" 
+                    width={512} // replace with actual image width
+                    height={512} // replace with actual image height
+                    loading='lazy'
+                    style={{ width: '100%', height: 'auto', objectFit: 'cover' }}            
+                />
           </div>}
           <p className={styles.profileStaticFields}>Username: {authUser?.username}</p>
           <p className={styles.profileStaticFields}>First Name: {authUser?.firstName}</p>

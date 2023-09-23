@@ -37,11 +37,11 @@ const ItinGalleryComponent: React.FC<Props> = ({...props}) => {
         <Image
           src={props.imageUrl} 
           alt="No image uploaded by creator."   
-          width={320}
-          height={192}
+          width={2400}
+          height={2400}
           loading='lazy'
-          style={{ objectFit: 'cover' }}
-        />
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }}            
+          />
       </div>
       <div>
         <h5 className={styles.title}>{props.title}</h5>

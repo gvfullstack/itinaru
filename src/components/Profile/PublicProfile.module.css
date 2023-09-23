@@ -22,14 +22,12 @@
 }
 
 .profilePicImageContainer {
-  width: 512px;
-  height: 512px;
+  width: 420px;
+  height: auto;
   position: relative;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  overflow: hidden;
+  border-radius: 50%;
   margin-bottom: 20px;
-  background-color: #f8f8f8;
+  
 }
 
 /* For screens smaller than 768px, reduce max-width */

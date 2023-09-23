@@ -18,8 +18,6 @@ const GeneralItineraryInformation: FC = () => {
                     alt="Itinerary Gallery Photo" 
                     width={2400} // replace with actual image width
                     height={2400} // replace with actual image height
-                    // fill
-                    // sizes="(max-width: 320px) 50vw, (min-width: 480px) 30vw, 20vw"
                     loading='lazy'
                     style={{ width: '100%', height: 'auto', objectFit: 'cover' }}            
                 />
