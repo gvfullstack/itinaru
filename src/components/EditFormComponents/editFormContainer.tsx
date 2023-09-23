@@ -499,7 +499,6 @@ return (
                     </div>
                   </div>
                   <DragDropSection />
-                  <button onClick={()=>console.log(itineraryGalleryPhotoWhileEditing)}>print</button>
               </div>
     
 </div>
