@@ -8,6 +8,9 @@
   margin-top: 3rem;
 }
 
+.publicItinViewMain{
+  width: 100%;
+}
 
 /* Mobile */
 /* @media (max-width: 700px) {

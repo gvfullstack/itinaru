@@ -16,7 +16,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
   
   return (
-    <>
+    <div style={{ width:"100%" }}>
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
@@ -49,6 +49,6 @@ export default function App({ Component, pageProps }: AppProps) {
           </main>
         </LocalizationProvider>
       </RecoilRoot>
-    </>
+    </div>
   );
 }

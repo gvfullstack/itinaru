@@ -7,6 +7,7 @@ import {Itinerary} from '../../components/PublicItineraryViewComponents/publicIt
 import { GetServerSidePropsContext } from 'next';
 import {fetchItineraryFromDatabase} from '../../server/retrieveItinerary/retrieveItinerary';
 import dayjs, {Dayjs} from 'dayjs';
+import styles from '@/styles/Home.module.css'
 
 
 export const getServerSideProps = async (context:GetServerSidePropsContext) => {
@@ -43,9 +44,10 @@ export const getServerSideProps = async (context:GetServerSidePropsContext) => {
     }, [itinerary, setItinerary]);
 
     return (
-      <>
+      <div className={styles.publicItinViewMain}>
         <PublicItinViewContainer />
-      </>)
+      </div>
+      )
   };
   
   export default ItinPublicViewPage;
