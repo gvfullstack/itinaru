@@ -408,7 +408,7 @@ const attachIcon = (
                     width={512} // replace with actual image width
                     height={512} // replace with actual image height
                     loading='lazy'
-                    style={{ width: '100%', height: 'auto', objectFit: 'cover' }}            
+                    style={{ width: '100%', height: 'auto', objectFit: 'cover', borderRadius: '50%' }}            
                    />
                 </div>
                 </div>}
