@@ -1,5 +1,5 @@
 import React from 'react';
-import { Star, StarBorder, Clear } from '@mui/icons-material'; 
+import { Star, StarBorder, Clear, Style } from '@mui/icons-material'; 
 import { ItineraryItem } from '@/components/typeDefs/index';
 import Button from '@mui/material/Button'; // Import MUI Button
 
@@ -30,7 +30,7 @@ const StarRating: React.FC<StarRatingProps> = ({ currentItem, setCurrentItem }) 
         stars.push(
           <Star
             key={i}
-            style={{ cursor: 'pointer', color: 'yellow' }} 
+            style={{ cursor: 'pointer', color: 'yellow', fontSize: '3rem' }} 
             onClick={() => handleRating(i)}
           />
         );
@@ -38,7 +38,7 @@ const StarRating: React.FC<StarRatingProps> = ({ currentItem, setCurrentItem }) 
         stars.push(
           <StarBorder
             key={i}
-            style={{ cursor: 'pointer' }}
+            style={{ cursor: 'pointer', fontSize: '3rem' }}
             onClick={() => handleRating(i)}
           />
         );
@@ -49,14 +49,16 @@ const StarRating: React.FC<StarRatingProps> = ({ currentItem, setCurrentItem }) 
 
   return (
     <>
-    <div>Rating:</div>
-    <div style={{display: "flex", marginTop:".5rem"}}>
-      {renderStars()}
+    <div style={{display:'flex', flexDirection:"column"}}>
+      
+      <div style={{display: "flex", marginTop:".5rem", gap:".5rem", }}>
+      <p>Rating:</p>{renderStars()}
+      </div>
       <Button 
         startIcon={<Clear />} 
         onClick={clearRating}
         size="small"
-        style={{ marginLeft: '10px' }}
+        style={{ width: '8rem', padding: '0', display: "flex", gap:"0"}}
       >
         Clear Rating
       </Button>

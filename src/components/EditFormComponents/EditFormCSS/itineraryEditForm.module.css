@@ -9,7 +9,7 @@
 .itinItemCreatorContainer{
   width: 100%;
   max-width: 50rem;
-  padding: 1rem;
+  padding: .0rem .5rem .25rem .5rem;
   display: flex;
   flex-direction: column;
   background-color: white;
@@ -151,12 +151,14 @@
 .geolocationSection{
   margin-top: -1rem;
 }
-
+.itemSectionHeading{
+  margin: 0 0 .25rem;
+}
 .inputFieldsTimeSelectSection{
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
   margin-bottom: 1rem;
+  align-items: start;
   gap: 1rem;
 }
 
@@ -199,6 +201,7 @@
   align-items: center;
   justify-content: center;
   z-index: 1000;
+  overflow: auto; 
 }
 
 .modalContent {
@@ -207,6 +210,10 @@
   overflow-y: auto;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 80%; 
+  max-width: 50rem; 
+  max-height: 90vh; 
+  padding: 1rem; /* Internal spacing */
 }
 
 .iconSectionContainerP{
@@ -217,6 +224,7 @@
   color: #807f7f;
   text-align: center;
 }
+
 .iconSectionContainer{
   display: flex;
   flex-direction: column;
@@ -224,6 +232,7 @@
   align-items: center;
   color: #807f7f;
   text-align: center;
+  line-height: 0;
 }
 
 .formControlsIconText{
@@ -481,7 +490,10 @@
 @media (max-width:790px){
   .EFFormContainer{
     padding: 0 4rem;
-}
+  }
+  .modalContent {
+    width: 95%;
+  }
 }
 
 @media (max-width:650px){
@@ -497,6 +509,10 @@
   .EFFormContainer{
     padding: 0 0rem;
 }
+  .modalContent {
+    width: 100%;
+    border-radius: 0; /* Optional, make it square on very small screens */
+  }
 }
 
 @media (max-width:420px){

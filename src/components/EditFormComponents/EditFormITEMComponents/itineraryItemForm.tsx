@@ -19,6 +19,7 @@ const ReactQuill = dynamic(import('react-quill'), {
   });
 import {useRecoilState, useRecoilCallback} from 'recoil';
 import {currentlyEditingItineraryState} from '../editFormAtoms';
+import { toast } from 'react-toastify';
 
 type Props = {
     handleShowItemForm: () => void;
@@ -115,7 +116,9 @@ const ItineraryItemForm: FC<Props> = ({ ...props }) => {
   
 //get coordinates
     const fetchCurrentLocation = async () => {
+        console.log("ran fetchCurrentLocation")
         if (!navigator.geolocation) {
+            toast.error("Geolocation is not supported by your browser.");
             alert("Geolocation is not supported by your browser.");
             return;
         }
@@ -217,8 +220,8 @@ const ItineraryItemForm: FC<Props> = ({ ...props }) => {
         </div>
             
     {props.mode==="create" ?
-        <h3 className = {styles.itemSectionHeading}>New Itinerary Item Entry</h3>:
-        <h3 className = {styles.itemSectionHeading}>Edit Itinerary Item</h3>
+        <h4 className = {styles.itemSectionHeading}>New Itinerary Item Entry</h4>:
+        <h2 className = {styles.itemSectionHeading}>Edit Itinerary Item</h2>
     }
     <div className={styles.inputFieldsTimeSelectSection}>        
         <ItinEditFormTimePicker
