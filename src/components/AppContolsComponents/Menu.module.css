@@ -19,14 +19,15 @@
   float: right;
 }
 
-
 .menuBar {
   position: fixed;
   top: 0;
   right: -250px; /*Initially hidden*/
   height: 100%;
   width: 250px;
-  background-color: #333;
+  background: linear-gradient(whitesmoke, rgba(255, 255, 255, 0.5));
+
+  /* background-color: #333; */
   transition: right 0.3s ease;
   overflow-y: auto; /* Scrollable if content overflows */
 }
@@ -37,20 +38,23 @@
 
 .menuOptions {
   list-style-type: none;
-  padding-left: 1rem;
+  padding: 1rem;
   text-align: left;
 }
 
 .menuOption {
-  padding: 15px;
-  border-bottom: 1px solid #444;
+  padding: 1rem .25rem;
+
+  /* border-bottom: 1px solid #444; */
+  border-bottom: none;
+
 }
 
 .menuOption a {
   text-decoration: none;
-  color: #fff;
+  color:#bebebe;
   transition: color 0.3s ease;
-  font-size: 18px;
+  font-size: 1.25rem;
 }
 
 .menuOption a:hover {
@@ -58,14 +62,15 @@
 }
 
 .closeButton {
-  font-size: 18px; /* Heading size */
-  background-color: #333;
+  font-size: 1.25rem; /* Heading size */
+  background: linear-gradient(whitesmoke, rgba(255, 255, 255, .10));
   border: none;
-  color: #fff;
+  color: #bebebe;
   text-align: right;
   width: 100%;    
   padding-right: 1rem;
   padding-top: 1rem;
+  height:3rem
 }
 
 .menuButton.hide {
@@ -73,15 +78,10 @@
 }
 
 .profilePicImageContainer {
-  width: 100%;
-  max-width: 512px; /* Max width of the container */
+  max-width: 150px;
   height: auto;
-  padding-top: 100%; /* Keeps the aspect ratio 1:1 */
-  position: relative;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  overflow: hidden;
-  background-color: #f0f0f0;
+  border: none;
+  align-self: center;
 }
 
 .profilePicture {
@@ -93,6 +93,11 @@
   object-fit: cover;
 }
 
+.profileText {
+  color: #bebebe;
+  font-size: 1.25rem;
+  padding: 1rem .25rem;
+}
 .hamburgerIconContainer {
   display: none;
 }
@@ -116,14 +121,18 @@
 .menuText {
     display: block;
     color:#bebebe;
+    font-size: 1.25rem;
 }
 
-
+.profileInfoContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
 
 @media (max-width: 768px) {
-  .profilePicImageContainer {
-      border-radius: 5px; /* Adjustments for smaller screens */
-  }
+
   .hamburgerIconContainer {
     display: block;
     width: fit-content;
@@ -148,9 +157,6 @@
 
 
 @media (max-width: 480px) {
-  .profilePicImageContainer {
-      border: none; /* More adjustments for very small screens */
-  }
   
   .menuText:hover  {
     color: #f83c5e !important;
@@ -160,16 +166,9 @@
     color: #f83c5e !important;
   }
 
-.profileText {
-  color: rgb(136, 134, 134);
-  font-size: 18px;
-}
 
-.profileInfoContainer {
-  display: flex;
-  flex-direction: column;
-  margin-left: 1rem;  
-}
+
+
 .menuText :hover{
   color: #f83c5e;
 }

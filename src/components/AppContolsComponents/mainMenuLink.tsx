@@ -7,6 +7,7 @@ import { logout } from '../FirebaseAuthComponents/config/firebase.auth.js';
 import { useRouter } from 'next/router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
+import Image from 'next/image';
 
 
 const Menu: React.FC = () => {
@@ -40,6 +41,7 @@ const Menu: React.FC = () => {
   }, []);
 
   const handleLogout = () => {
+    toggleMenu();
     logout()
       .then(() => {
         router.push('/')
@@ -54,7 +56,7 @@ const Menu: React.FC = () => {
     event.preventDefault();
     // Store the current path.
     sessionStorage.setItem('preLoginRoute', router.asPath);
-
+    toggleMenu();
     // Navigate to login page.
     router.push('/loginPage');
   };
@@ -71,24 +73,29 @@ const Menu: React.FC = () => {
             <li className={styles.profileInfoContainer}>
               {authUser.profilePictureUrl && 
               <div className={styles.profilePicImageContainer}>
-                <img src={authUser?.profilePictureUrl || ''} 
-                alt=""
-                className={styles.profilePicture}
-                />      
+                 <Image
+                    src={authUser?.profilePictureUrl || ''} 
+                    alt=":P"   
+                    width={500}
+                    height={500}
+                    loading='lazy'
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }}            
+                  />
+
               </div>}
               <div className={styles.profileText}>
-                username: {authUser?.username}
+                {authUser?.username}
               </div>
             </li>}
           <li className={styles.menuOption}>
             <Link href="/">Home</Link>
           </li>          
           <li className={styles.menuOption}>
-            <Link href="/aiAssistedItinerary">AI Assisted Itinerary</Link>
+            <Link href="/aiAssistedItinerary" onClick={toggleMenu}>AI Assisted Itinerary</Link>
           </li>
           {authUser && 
           <li className={styles.menuOption}>
-            <Link href="/profileSettings">Account Settings</Link>
+            <Link href="/profileSettings" onClick={toggleMenu}>Account Settings</Link>
           </li>}
           <li className={styles.menuOption}>
             {authUser ? 

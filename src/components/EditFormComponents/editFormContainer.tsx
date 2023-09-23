@@ -213,9 +213,6 @@ async function saveTransformedItinerary(downloadURL: string | null) {
       console.error("Error saving itinerary: ", error);
     });
 }
-
-
-
         
 const trashDelete = (
   <FontAwesomeIcon 
@@ -293,13 +290,21 @@ function deleteItinerary(itineraryId: string): void {
 
   const itineraryRef = db.collection('itineraries').doc(itineraryId);
 
-  itineraryRef.delete()
-      .then(() => {
-          console.log("Itinerary successfully deleted!");
-      })
-      .catch((error) => {
-          console.error("Error removing itinerary: ", error);
-      });
+  const storageRef = firebase.storage().ref();
+  const imagePath = `itineraries/${authUser.uid}/${itineraryId}/itineraryGalleryPhoto`;
+
+  storageRef.child(imagePath).delete()
+    .then(() => {
+      return itineraryRef.delete(); // Delete Firestore document
+    })
+    .then(() => {
+      console.log("Itinerary successfully deleted!");
+      toast.success("Itinerary successfully deleted!");
+    })
+    .catch((error) => {
+      console.error("Error while deleting: ", error);
+      toast.error("Error while deleting itinerary. Please try again later.");
+    });
 }
 
 

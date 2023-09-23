@@ -6,7 +6,7 @@
     overflow: hidden;  
     width: 20rem; 
     height: 20rem;
-    margin: .7rem; 
+    margin: .7rem auto; 
     padding-bottom: .45rem;
   }
 
@@ -14,9 +14,16 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
   
+  .aspectRatioBox {
+    position: relative;
+    width: 20rem;
+    height: 12rem;
+    display: block;
+  }
+
   .image {
     width: 100%;
-    height: 15rem;
+    height: 12rem;
     background-size: cover;
     background-position: center;
   }
@@ -36,12 +43,12 @@
   
   /* Mobile view */
   @media (max-width: 768px) {
-    .container {
+    /* .container {
       width: 30%; 
       margin: 10px; 
       width: 90%; 
 
-    }
+    } */
   
     .title {
       font-size: 16px;

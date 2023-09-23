@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import styles from './PublicProfile.module.css';
 import { AuthenticatedUser } from "@/components/typeDefs";
 import BioComponent from './BioComponent';
+import Image from 'next/image';
 
 
 type PublicProfileProps = {
@@ -12,12 +13,21 @@ const PublicProfile: React.FC<PublicProfileProps> = ({ publicProfile }) => {
  
   return (
     <div className={styles.profileStaticContainer}>
-          {publicProfile?.profilePictureUrl && <div className={styles.profilePicImageContainer}>
-            <img src={publicProfile?.profilePictureUrl || ''} 
-            alt=""
-            className={styles.profilePicture}
-            />      
-          </div>}
+          {publicProfile?.profilePictureUrl && 
+                <div className={styles.profilePicImageContainer}>
+                  <Image 
+                          src={publicProfile?.profilePictureUrl || ''} 
+                          alt="user profile picture" 
+                          width={512} // replace with actual image width
+                          height={512} // replace with actual image height
+                          loading='lazy'
+                          style={{ width: '100%', height: 'auto', objectFit: 'cover', borderRadius: '50%' }}            
+                      />
+                  {/* <img src={publicProfile?.profilePictureUrl || ''} 
+                  alt=""
+                  className={styles.profilePicture}
+                  />       */}
+                </div>}
           {publicProfile?.username && 
           <p className={styles.profileStaticFields}>Username: {publicProfile?.username}</p>}
           {publicProfile?.firstName && 
