@@ -23,9 +23,9 @@
 
 .profilePicImageContainer {
   width: 420px;
-  height: auto;
+  height: 420px;
   position: relative;
-  border-radius: 50%;
+  /* border-radius: 50%; */
   margin-bottom: 20px;
   
 }
