@@ -176,6 +176,7 @@ const ItineraryEditForm = forwardRef<ChildComponentRef, Props>(({ handleShowItem
                         onChange={handleQuillChange}
                         placeholder="Enter itinerary description..."
                         className={styles.quill}
+                      
                         />
                     </div>
 

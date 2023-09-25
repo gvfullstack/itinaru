@@ -503,6 +503,7 @@
 .EFPageContainer{
   width: 95%;
 }
+
 }
 
 @media (max-width:550px){
@@ -518,9 +519,10 @@
 @media (max-width:420px){
 .inputFields.budgetInputField {
   margin-top: 1rem;
-  
 }
 
-
+.ql-editor {
+  font-size: 1rem !important; /* set the font size to 1.5rem (or whatever size you prefer) */
+}
 
 }
