@@ -21,12 +21,8 @@ const PublicProfile: React.FC<PublicProfileProps> = ({ publicProfile }) => {
                           width={512} // replace with actual image width
                           height={512} // replace with actual image height
                           loading='lazy'
-                          style={{ width: '100%', height: 'auto', objectFit: 'cover', borderRadius: '50%' }}            
+                          style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }}            
                       />
-                  {/* <img src={publicProfile?.profilePictureUrl || ''} 
-                  alt=""
-                  className={styles.profilePicture}
-                  />       */}
                 </div>}
           {publicProfile?.username && 
           <p className={styles.profileStaticFields}>Username: {publicProfile?.username}</p>}

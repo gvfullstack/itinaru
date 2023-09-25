@@ -503,6 +503,7 @@
 .EFPageContainer{
   width: 95%;
 }
+
 }
 
 @media (max-width:550px){
@@ -510,7 +511,7 @@
     padding: 0 0rem;
 }
   .modalContent {
-    width: 100%;
+    width: 99%;
     border-radius: 0; /* Optional, make it square on very small screens */
   }
 }
@@ -518,9 +519,7 @@
 @media (max-width:420px){
 .inputFields.budgetInputField {
   margin-top: 1rem;
-  
 }
-
 
 
 }

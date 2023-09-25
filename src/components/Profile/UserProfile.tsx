@@ -18,11 +18,33 @@ import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faTrashCan, faPaperclip, faRotateLeft } from '@fortawesome/free-solid-svg-icons';
+import Cropper from 'react-easy-crop'
+import Slider from '@mui/material/Slider'
+import Button from '@mui/material/Button'
+import Typography from '@mui/material/Typography'
+import { styled, useTheme } from '@mui/system'
+import ImgDialog from './UserProfileEditUtilityFunctions/ImgDialog'
+import getCroppedImg from './UserProfileEditUtilityFunctions/cropImage'
+import { styleSettings } from './UserProfileEditUtilityFunctions/styleSettings'
 
 const ReactQuill = dynamic(import('react-quill'), {
   ssr: false, // This will make the component render only on the client-side
   loading: () => <p>Loading...</p>, // You can provide a loading component or text here
 });
+
+interface ICroppedArea {
+  x: number
+  y: number
+  width: number
+  height: number
+}
+
+const CropContainer = styled('div')(styleSettings.cropContainer)
+const Controls = styled('div')(styleSettings.controls)
+const SliderContainer = styled('div')(styleSettings.sliderContainer)
+const SliderLabel = styled(Typography)(styleSettings.sliderLabel)
+const StyledSlider = styled(Slider)(styleSettings.slider)
+const CropButton = styled(Button)(styleSettings.cropButton)
 
 const UserProfile: React.FC = () => {
   const router = useRouter();
@@ -49,7 +71,52 @@ const UserProfile: React.FC = () => {
     profilePictureUrl: false
   });
   type PrivacyFields = 'username' | 'firstName' | 'lastName' | 'phoneNumber' | 'email' | 'bio' | 'profilePictureUrl';
+ 
+ /////////////cropper stuff//////////////////////////////
+ 
+  const [crop, setCrop] = useState<{ x: number, y: number }>({ x: 0, y: 0 })
+  const [rotation, setRotation] = useState<number>(0)
+  const [zoom, setZoom] = useState<number>(1)
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<ICroppedArea | null>(null)
+  const [croppedImage, setCroppedImage] = useState<string | null>(null)
+  
+  const onCropComplete = (croppedArea: ICroppedArea, croppedAreaPixels: ICroppedArea) => {
+    setCroppedAreaPixels(croppedAreaPixels)
+  }
 
+  const showCroppedImage = async () => {
+    try {
+      const croppedImage = await getCroppedImg(
+        // dogImg,
+        profilePicWhileEditing,
+        croppedAreaPixels!,
+        rotation
+      )
+      console.log('donee', { croppedImage })
+      if (croppedImage) {
+        setCroppedImage(croppedImage)
+        const blob = await fetch(croppedImage).then(r => r.blob());
+        const croppedFile = new File([blob], 'profile_picture.jpg', { type: 'image/jpeg' });
+        setProfilePictureFile(croppedFile);
+
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          setProfilePictureUrl(event.target?.result as string);
+        };
+        reader.readAsDataURL(blob);
+        
+        }
+    } catch (e: any) {
+      console.error(e)
+    }
+  }
+
+  const onClose = () => {
+    setCroppedImage(null)
+  }
+  /////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////
 
 
   useEffect(() => {
@@ -397,22 +464,59 @@ const attachIcon = (
                   value={bio}
                   onChange={setBio}
                 />
-              <label className={styles.profileLabel}>
+             <div>
+            <CropContainer>
+              <Cropper
+                image={profilePicWhileEditing}
+                crop={crop}
+                rotation={rotation}
+                zoom={zoom}
+                aspect={1}
+                onCropChange={setCrop}
+                onRotationChange={setRotation}
+                onCropComplete={onCropComplete}
+                onZoomChange={setZoom}
+                cropShape="round"
+              />
+            </CropContainer>
+            <Controls>
+              <SliderContainer>
+                <SliderLabel variant="overline">
+                  Zoom
+                </SliderLabel>
+                <StyledSlider
+                  value={zoom}
+                  min={1}
+                  max={3}
+                  step={0.1}
+                  aria-labelledby="Zoom"
+                  onChange={(_, newValue) => setZoom(newValue as number)}
+                />
+              </SliderContainer>
+              <SliderContainer>
+                <SliderLabel variant="overline">
+                  Rotation
+                </SliderLabel>
+                <StyledSlider
+                  value={rotation}
+                  min={0}
+                  max={360}
+                  step={1}
+                  aria-labelledby="Rotation"
+                  onChange={(_, newValue) => setRotation(newValue as number)}
+                />
+              </SliderContainer>
+              <CropButton onClick={showCroppedImage} variant="contained" color="primary">
+                Show Result
+              </CropButton>
+            </Controls>
+            <ImgDialog img={croppedImage || undefined} onClose={onClose} />
+          </div>
+             
+              <label className={styles.profileLabel} >
                 <p>Profile Picture:</p>
-                {profilePicWhileEditing != "" &&
-                <div>
-                  <div className={styles.profilePicPreviewImageContainer}>
-                  <Image 
-                    src={profilePicWhileEditing || ''} 
-                    alt="Itinerary Gallery Photo" 
-                    width={512} // replace with actual image width
-                    height={512} // replace with actual image height
-                    loading='lazy'
-                    style={{ width: '100%', height: 'auto', objectFit: 'cover', borderRadius: '50%' }}            
-                   />
-                </div>
-                </div>}
                 <input 
+                  id="profilePictureUploaded"
                   ref={inputFileRef}
                   className={styles.profileInput} 
                   type="file" 
@@ -420,6 +524,8 @@ const attachIcon = (
                   onChange={imageProcessing} 
                   style={{ display: "none" }} // Hide the input
                 />
+              </label>
+
                 <div className= {styles.UPPhotoAttachIconButtons}>                
                   {attachIcon}
                   {resetPhotoIcon}
@@ -428,7 +534,6 @@ const attachIcon = (
                       {trashDelete}                  
                     </div>}
                 </div>
-              </label>
               <p className={styles.profilePictureMessage}>*Image uploads must be in JPEG, PNG, or GIF format.</p>
               <button className={styles.profileSaveButton} type="submit">Save</button>
               <button className={styles.profileCancelButton} type="button" 
