@@ -9,7 +9,6 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Script from 'next/script';
 import TopNavBar from '@/components/TopNavBar/topNavBar';
 import { ToastContainer } from 'react-toastify';
-import Demo from '@/components/Profile/UserProfileEditUtilityFunctions/mainCropperContainer';
 
 const FirebaseAuthLogic = dynamic(() => import('.././components/FirebaseAuthComponents/firebaseAuthLogic'), { ssr: false });
 
