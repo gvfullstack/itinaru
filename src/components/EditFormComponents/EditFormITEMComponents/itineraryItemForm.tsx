@@ -42,8 +42,8 @@ const ItineraryItemForm: FC<Props> = ({ initialItem, ...props }) => {
     const [itineraryInEdit, setItineraryInEdit] = useRecoilState<Itinerary>(currentlyEditingItineraryState);
     const [myItineraries, setMyItineraries] = useRecoilState(myItinerariesResults);
     const initialItemState = initialItem || { id: uuidv4() };
-    const startTimeState = itineraryInEdit.items.find(item => item.id === initialItemState.id)?.startTime?.time || null;
-    const endTimeState = itineraryInEdit.items.find(item => item.id === initialItemState.id)?.endTime?.time || null;
+    const startTimeState = itineraryInEdit.items?.find(item => item.id === initialItemState.id)?.startTime?.time || null;
+    const endTimeState = itineraryInEdit.items?.find(item => item.id === initialItemState.id)?.endTime?.time || null;
     const [saveStatus, setSaveStatus] = useRecoilState(saveStatusDisplayedEditFormContainer); // additional state for saving status
 
    
@@ -51,7 +51,7 @@ const ItineraryItemForm: FC<Props> = ({ initialItem, ...props }) => {
 
     const updateItemInRecoilState = (updatedFields: Partial<ItineraryItem>, itemId: string) => {
         setItineraryInEdit((prevItinerary: Itinerary) => {
-          const updatedItems = prevItinerary.items.map(item => {
+          const updatedItems = prevItinerary.items?.map(item => {
             if (item.id === itemId) {
               return { ...item, ...updatedFields };
             }
@@ -109,23 +109,21 @@ const ItineraryItemForm: FC<Props> = ({ initialItem, ...props }) => {
             const itemId = initialItemState.id; // Replace with actual ID
             
             // Find the index of the item
-            const itemIndex = prevItinerary.items.findIndex(item => item.id === itemId);
-            if (itemIndex === -1) return prevItinerary; // If item not found, no changes
-        
+            const itemIndex = prevItinerary.items?.findIndex(item => item.id === itemId);
+
+            if (itemIndex === -1 || typeof itemIndex == 'undefined') return prevItinerary; // If item not found, no changes
+            const items = prevItinerary.items ?? [];
+
             // Clone the item and update the field
             const updatedItem = {
-            ...prevItinerary.items[itemIndex],
+            ...items[itemIndex],
             [field]: newValue
             };
         
             // Produce new items array
-            const updatedItems = [
-            ...prevItinerary.items.slice(0, itemIndex),
-            updatedItem,
-            ...prevItinerary.items.slice(itemIndex + 1)
-            ];
-            console.log({...prevItinerary,
-              items: updatedItems}, "updatedItems")
+            const updatedItems = [...items];
+            updatedItems[itemIndex] = updatedItem;
+
             return {
             ...prevItinerary,
             items: updatedItems
@@ -149,7 +147,7 @@ const ItineraryItemForm: FC<Props> = ({ initialItem, ...props }) => {
             const coordinates = latitude + ", " + longitude;
 
             setItineraryInEdit((prevItinerary: Itinerary) => {
-                const updatedItems = prevItinerary.items.map((item) => {
+                const updatedItems = prevItinerary.items?.map((item) => {
                   if (item.id === initialItemState.id) {  // Replace `currentItem.id` with appropriate logic if needed
                     return {
                       ...item,
@@ -219,7 +217,7 @@ const ItineraryItemForm: FC<Props> = ({ initialItem, ...props }) => {
         return (date: Dayjs | null) => {        
           // Update Recoil state
           setItineraryInEdit((prevItinerary: Itinerary) => {
-            const updatedItems = prevItinerary.items.map((item) => {
+            const updatedItems = prevItinerary.items?.map((item) => {
               if (item.id === initialItemState.id) {  // Replace `currentItem.id` with appropriate logic if needed
                 return {
                   ...item,
@@ -242,7 +240,7 @@ const ItineraryItemForm: FC<Props> = ({ initialItem, ...props }) => {
 
       const resetLatLong = () => {
         setItineraryInEdit((prevItinerary: Itinerary) => {
-          const updatedItems = prevItinerary.items.map((item) => {
+          const updatedItems = prevItinerary.items?.map((item) => {
             if (item.id === initialItemState.id) {  
               // Destructure the item to isolate the 'location' and keep the rest of the properties
               const { location, ...restOfItem } = item;
@@ -289,7 +287,7 @@ const ItineraryItemForm: FC<Props> = ({ initialItem, ...props }) => {
     label="Site Name"
     variant="outlined"
     placeholder="Site Name"
-    value={itineraryInEdit.items.find(item => item.id === initialItemState.id)?.siteName || null}
+    value={itineraryInEdit.items?.find(item => item.id === initialItemState.id)?.siteName || null}
     onChange={handleItemChange('siteName')}
     className={styles.inputFields}
     helperText={siteIsHovered ? "Site name you enter will be used if no selection is made from the dropdown." : ''}
@@ -302,7 +300,7 @@ const ItineraryItemForm: FC<Props> = ({ initialItem, ...props }) => {
     label="Address"
     variant="outlined"
     placeholder="Address"
-    value={itineraryInEdit.items.find(item => item.id === initialItemState.id)?.locationAddress || null}
+    value={itineraryInEdit.items?.find(item => item.id === initialItemState.id)?.locationAddress || null}
     onChange={handleItemChange('locationAddress')}
     className={`${styles.inputFields} ${styles.addressInputField}`}
     helperText={addressIsHovered ? "Address you enter will be used if no selection is made from the dropdown." : ''}
@@ -331,10 +329,10 @@ const ItineraryItemForm: FC<Props> = ({ initialItem, ...props }) => {
     />
     
 </div>
-{itineraryInEdit.items.find(item => item.id === initialItemState.id)?.location && 
+{itineraryInEdit.items?.find(item => item.id === initialItemState.id)?.location && 
 <div className={styles.geoDisplaySection} >
-    <p>{itineraryInEdit.items.find(item => item.id === initialItemState.id)?.location?.latitude || ""},
-    {itineraryInEdit.items.find(item => item.id === initialItemState.id)?.location?.longitude || ""}
+    <p>{itineraryInEdit.items?.find(item => item.id === initialItemState.id)?.location?.latitude || ""},
+    {itineraryInEdit.items?.find(item => item.id === initialItemState.id)?.location?.longitude || ""}
     </p>
 
     <button onClick={resetLatLong}>remove</button>
@@ -344,7 +342,7 @@ const ItineraryItemForm: FC<Props> = ({ initialItem, ...props }) => {
     <div className={styles.quillContainer}>
             <ReactQuill
                 id="siteDescription" // adding id to associate with the label
-                value={itineraryInEdit.items.find(item => item.id === initialItemState.id)?.description || ""}
+                value={itineraryInEdit.items?.find(item => item.id === initialItemState.id)?.description || ""}
                 onChange={(newContent) => {
                   // Creating a synthetic event object to match your handleItemChange function
                   const syntheticEvent = {
@@ -365,7 +363,7 @@ const ItineraryItemForm: FC<Props> = ({ initialItem, ...props }) => {
     label="Per person budget"
     variant="outlined"
     placeholder="Anticipated per person budget"
-    value={itineraryInEdit.items.find(item => item.id === initialItemState.id)?.expectedPerPersonBudget || ""}
+    value={itineraryInEdit.items?.find(item => item.id === initialItemState.id)?.expectedPerPersonBudget || ""}
     onChange={handleItemChange('expectedPerPersonBudget')}
     className={`${styles.inputFields} ${styles.budgetInputField}`}
     InputProps={{
