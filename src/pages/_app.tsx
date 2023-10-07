@@ -9,12 +9,19 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Script from 'next/script';
 import TopNavBar from '@/components/TopNavBar/topNavBar';
 import { ToastContainer } from 'react-toastify';
+import { useState, useRef, useEffect } from 'react';
+import initDB from '@/lib/db';
 
 const FirebaseAuthLogic = dynamic(() => import('.././components/FirebaseAuthComponents/firebaseAuthLogic'), { ssr: false });
 
 export default function App({ Component, pageProps }: AppProps) {
-
   
+  useEffect(() => {
+    // Initialize the IndexedDB database
+    initDB();
+  }, []);
+  
+
   return (
     <div style={{ width:"100%" }}>
       <Head>
@@ -46,6 +53,7 @@ export default function App({ Component, pageProps }: AppProps) {
               <Component {...pageProps} />
               <Analytics />
               <FirebaseAuthLogic />
+              
             </div>
           </main>
         </LocalizationProvider>

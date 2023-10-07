@@ -385,11 +385,26 @@
   }
   
   .modalContent {
+  
     background-color: white;
     overflow-y: auto;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 80%; 
+    max-width: 50rem; 
+    max-height: 90vh; 
+    padding: 1rem; /* Internal spacing */
   }
 
-
- 
+  @media (max-width:790px){
+    .modalContent {
+      width: 95%;
+    }
+  }
+  @media (max-width:550px){
+    .modalContent {
+      width: 100%;
+      border-radius: 0; /* Optional, make it square on very small screens */
+    }
+    
+  }

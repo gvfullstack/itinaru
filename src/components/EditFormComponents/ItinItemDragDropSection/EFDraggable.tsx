@@ -8,6 +8,7 @@ import { faExternalLinkAlt, faDiamondTurnRight, faEllipsisVertical,
 import { useRecoilState } from 'recoil';
 import getConfig from 'next/config';
 import styles from'.././EditFormCSS/editItineraryCSS.module.css'
+import styles2 from'.././EditFormCSS/itineraryEditForm.module.css'
 import ItemDescriptionStaticComponent from './itemDescriptionStaticComponent';
 import dayjs from 'dayjs'; 
 const externalLink = <FontAwesomeIcon icon={faExternalLinkAlt} />;
@@ -45,23 +46,27 @@ const EFDraggable = React.forwardRef((
   const [itineraryInEdit, setItineraryInEdit]= useRecoilState<Itinerary>(currentlyEditingItineraryState);
   const itemStyles = {...styles, ...style}
   const localRef = useRef<HTMLDivElement>(null);
-
+  const [showDescription, setShowDescription] = useState(false);
+  useEffect(() => {console.log(showDescription)}, [showDescription]);
   const handleShowHideDescription = () => {
-    setItineraryInEdit(prevItinerary => {
-      console.log("prevItinerary", prevItinerary)
-        const updatedItems = prevItinerary.items.map((item) => {
-            if (item.id === itineraryItem.id) {
-                return { ...item, descHidden: !item.descHidden };
-            }
-            return item;
-        });
+    setShowDescription(prev=>!showDescription);
+  }
+//   const handleShowHideDescription = () => {
+//     setItineraryInEdit(prevItinerary => {
+//       console.log("prevItinerary", prevItinerary)
+//         const updatedItems = prevItinerary.items.map((item) => {
+//             if (item.id === itineraryItem.id) {
+//                 return { ...item, descHidden: !item.descHidden };
+//             }
+//             return item;
+//         });
 
-        return {
-            ...prevItinerary,
-            items: updatedItems
-        };
-    });
-}
+//         return {
+//             ...prevItinerary,
+//             items: updatedItems
+//         };
+//     });
+// }
   
   const [{ isDragging }, drag] = useDrag(() => ({
     type: ItemTypes.ITINERARY_ITEM,
@@ -102,27 +107,18 @@ const formattedEndTime = formatTimeWithoutSeconds(itineraryItem.endTime?.time?? 
 const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.time?? new Date());
 
 
-  const handleRemoveClick = () => {
-    const index = itineraryInEdit.items.findIndex((item) => item.id === itineraryItem.id);
-    if (index !== -1) {
-      const newItems = [...itineraryInEdit.items];
-      newItems.splice(index, 1);
-      setItineraryInEdit((prev:Itinerary) => ({...prev, items:  newItems}));
-    }
-  };
-  
-  const handleEditClick = () => {
-    const index = itineraryInEdit.items.findIndex((item) => item.id === itineraryItem.id);
-    if (index !== -1) {
-      const newItems = [...itineraryInEdit.items];
-      newItems.splice(index, 1);
-      setItineraryInEdit((prev:Itinerary) => ({...prev, items:  newItems}));
-    }
-  };
+ const handleRemoveClick = () => {
+  const index = itineraryInEdit.items?.findIndex((item) => item.id === itineraryItem.id);
+  if (index !== -1 && index !== undefined) {
+    const newItems = [...(itineraryInEdit.items || [])];
+    newItems.splice(index, 1);
+    setItineraryInEdit((prev: Itinerary) => ({ ...prev, items: newItems }));
+  }
+};
   
   const Menu = () => {
     return (
-      <div className={`${styles.menu} ${itineraryItem.descHidden ? "" : styles.isShown }`}>
+      <div className={`${styles.menu} ${showDescription ? "" : styles.isShown }`}>
         <div className={styles.menuItem} onClick={handleShowItemForm}>{editItemIcon} Edit</div>
         <div className={styles.menuItem} >
               <a
@@ -188,9 +184,11 @@ const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.tim
 
   return (
     <>
+ 
+    <div ref={localRef} style={itemStyles}  className={styles.dropDiv} >
     {showItemForm && 
-      <div className={styles.modalOverlay}>
-        <div className={styles.modalContent}>
+      <div className={styles2.modalOverlay}>
+        <div className={styles2.modalContent}>
               <GoogleMapsProvider>
                 <ItineraryItemForm 
                   handleShowItemForm={handleShowItemForm} 
@@ -202,25 +200,22 @@ const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.tim
         </div>
        </div> 
            }
- 
-    <div ref={localRef} style={itemStyles}  className={styles.dropDiv} >
-      <div key={uuidv4()} className={`${styles.itineraryParent} ${itineraryItem.descHidden ? "" : styles.isShown }`}>
+      <div key={uuidv4()} className={`${styles.itineraryParent} ${showDescription ? "" : styles.isShown }`}>
              <div className={styles.mainItinItemContainer}>
                   <div className={styles.itineraryItemContainerContainer}>
                       <div className={styles.itinTitleContainer} 
                       >
-                          <h3 className={`${styles.itinTitle} ${itineraryItem.descHidden ? "" : styles.isShown }`} 
+                          <h3 className={`${styles.itinTitle} ${showDescription ? "" : styles.isShown }`} 
                             onClick={()=>handleShowHideDescription()}>
                               {itineraryItem.siteName}                           
                             </h3>
                           
-                          <div className={`${styles.itinTitleDescription} ${itineraryItem.descHidden ? "" 
-                          : styles.isShown }`}>
+                          <div className={`${styles.itinTitleDescription} ${showDescription ? styles.isShown : ""}`}>
                             <ItemDescriptionStaticComponent description={itineraryItem.description ?? ''} />
                           </div>                       
 
-                          <p className={`${styles.expandedItinAddressContainer} ${itineraryItem.descHidden ? "" : styles.isShown }`}>{itineraryItem.locationAddress}</p>
-                          <div className={`${styles.ownResearchContainer} ${itineraryItem.descHidden ? "" : styles.isShown }`}>
+                          <p className={`${styles.expandedItinAddressContainer} ${showDescription ? styles.isShown : "" }`}>{itineraryItem.locationAddress}</p>
+                          <div className={`${styles.ownResearchContainer} ${showDescription ? styles.isShown : "" }`}>
                             Do your own research: 
                             <div className={styles.expandedItinItemWebsite}>
                               <a href={`https://www.google.com/search?q=${encodeURIComponent(itineraryItem.siteName ? itineraryItem.siteName : "")}`} target="_blank">
@@ -236,7 +231,7 @@ const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.tim
                           </div>
                       </div>
                       
-                      <div className={`${styles.rightContainer} ${itineraryItem.descHidden ? "" : styles.isShown}`}>
+                      <div className={`${styles.rightContainer} ${showDescription ? "" : styles.isShown}`}>
                         <div className={styles.activityTime}>
                                 <div className={styles.startTimeContainer}>
                                     <div className={styles.startTime}>
@@ -262,7 +257,7 @@ const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.tim
                                       }
                           </div> 
                         <div 
-                          className={`${styles.hamburgerMenuContainer} ${itineraryItem.descHidden ? "" : styles.isShown}`} 
+                          className={`${styles.hamburgerMenuContainer} ${showDescription ? "" : styles.isShown}`} 
                           onClick={handleMenuClick} 
                           ref={menuRef}
                           >
@@ -271,7 +266,7 @@ const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.tim
                                     }
                         </div>
                         <div 
-                          className={`${styles.expandedItinMapText} ${itineraryItem.descHidden ? "" : styles.isShown}`} 
+                          className={`${styles.expandedItinMapText} ${showDescription ? "" : styles.isShown}`} 
                                                      >
                               <a
                                 href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(itineraryItem.locationAddress ? itineraryItem.locationAddress : '')}`}

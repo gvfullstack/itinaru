@@ -1,3 +1,4 @@
+@media (min-width: 0px) {
 .publicItinViewContainer{
     display: flex;
     flex-direction: column;
@@ -38,14 +39,73 @@
   justify-content: center;
   
 }
+.itinTitleDescription{
+  width: 100%;
+  padding: 0 1.5rem;
+  text-align: justify;
+}
 .itinGeneralInfoTextSection{
   width: 100%;
   padding: 0 1.5rem;
 }
+
 .publicItinViewTitle{
-  font-size: 1.5rem;
+  font-size: 18px;
   font-weight: bold;
   margin: 1rem 0 -1rem 0;
-
 }
 
+.itinTitleDescription,
+.itinGeneralInfoTextSection{
+  font-size: 16px;
+}
+
+.itinGeneralInfoPhoto{
+  width:100%;
+  height: auto;
+}
+}
+
+@media (min-width: 500px){
+  .publicItinViewTitle{
+    font-size: 20px;
+  }
+  .itinTitleDescription,
+  .itinGeneralInfoTextSection{
+    font-size: 18px;
+  }
+}
+
+@media (min-width: 600px) {
+
+  .publicItinViewContainer{
+    border-radius: 10px;
+    margin-top: 4rem;
+    padding: 0;
+    width: 600px;
+  }
+
+  .itinGeneralInfoPhoto{
+    border-radius: 10px;
+  } 
+}
+
+@media (min-width: 1200px) {
+
+  .publicItinViewContainer{
+    width: 800px;
+  }
+
+  .publicItinViewTitle{
+    font-size: 22px;
+  }
+  
+  .itinTitleDescription,
+  .itinGeneralInfoTextSection{
+    font-size: 20px;
+  }
+
+  .itinGeneralInfoPhoto{
+    border-radius: 10px;
+  } 
+}

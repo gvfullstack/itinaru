@@ -11,9 +11,8 @@ import styles from '@/styles/Home.module.css'
 
 
 export const getServerSideProps = async (context:GetServerSidePropsContext) => {
-    const itineraryId = context.params?.itineraryId as string; // Extracting itineraryId from context
-    console.log("itineraryId", itineraryId)
-   const itineraryData = await fetchItineraryFromDatabase(itineraryId);
+  const itineraryId = context.params?.itineraryId as string; // Extracting itineraryId from context
+  const itineraryData = await fetchItineraryFromDatabase(itineraryId);
 
     return {
       props: {

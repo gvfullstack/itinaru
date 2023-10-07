@@ -12,9 +12,6 @@ import { doc, getDoc, setDoc } from 'firebase/firestore'; // Import the required
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { useRouter } from 'next/router';
 
-
-
-
 const Login: React.FC = () => {
   const router = useRouter();
   const [authUser, setAuthUser] = useRecoilState(authUserState);

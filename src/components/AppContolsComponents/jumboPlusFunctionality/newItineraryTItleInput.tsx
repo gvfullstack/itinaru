@@ -1,7 +1,7 @@
   import React, { useEffect, useState } from 'react';
   import styles from './newItineraryTitleInput.module.css';
   import { db  } from '../../FirebaseAuthComponents/config/firebase.database';
-  import { collection, addDoc } from 'firebase/firestore';
+  import { collection, addDoc, updateDoc } from 'firebase/firestore';
   import { authUserState } from '../../../atoms/atoms'
   import { useRecoilState} from 'recoil';
   import { useForm } from 'react-hook-form';
@@ -10,7 +10,7 @@
   import { useRouter } from 'next/router';
   import { toast } from 'react-toastify';
   import 'react-toastify/dist/ReactToastify.css';
-  
+  import { openDB } from 'idb';
 
   interface NewItineraryTitleInputProps {
     hideBox: () => void;
@@ -26,7 +26,6 @@
     const title = watch("title", "");
     const [itinerary, setItinerary] = useRecoilState<Itinerary>(currentlyEditingItineraryState);
     const [showModal, setShowModal] = useState(false);
-
     const router = useRouter();
 
     function validateTitle(title: string) {
@@ -53,6 +52,7 @@
       }
     
       const itineraryData = {
+        id: "",
         uid: authUser.uid,
         settings: {
           title: title,
@@ -66,6 +66,11 @@
     
         // Add new itinerary data to Firestore
         const docRef = await addDoc(itinerariesRef, itineraryData);
+
+        itineraryData.id = docRef.id;
+
+    // Update Firestore document with the generated ID
+        await updateDoc(docRef, { id: docRef.id });
         toast.success("Itinerary created successfully!");
         setIsSaving(false)
       return docRef;
@@ -113,6 +118,12 @@
         },
         items: []
       });
+
+      const indexDB = await openDB('itinerariesDatabase');
+      const tx = indexDB.transaction('itineraries', 'readwrite');
+      const store = tx.objectStore('itineraries');
+      await store.put(itinerary, 'currentlyEditingItineraryStateEF');
+      await tx.done;
       
       router.push(`/editItinerary/editMyItinerary`);
 

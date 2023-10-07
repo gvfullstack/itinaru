@@ -4,7 +4,7 @@ import SearchBar from '../components/SearchBar/searchBar'
 import ItineraryItemForm from '../components/EditFormComponents/EditFormITEMComponents/itineraryItemForm'
 
 export default function Home() {
-
+ 
 return (
     <>
       <Head>

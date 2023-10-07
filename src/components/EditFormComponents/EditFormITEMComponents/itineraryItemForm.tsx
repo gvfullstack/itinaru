@@ -13,6 +13,12 @@ import InputAdornment from '@mui/material/InputAdornment';
 import StarRating from './siteStarRating';
 import { useGoogleMaps } from './googleMapsProvider';
 import 'react-quill/dist/quill.snow.css';  // or quill.bubble.css if you're using the bubble theme
+import {myItinerariesResults} from '../../MyItinerariesGallery/myItinerariesAtoms';
+import { db  } from '../../FirebaseAuthComponents/config/firebase.database';
+import { openDB } from 'idb';
+import firebase from 'firebase/compat/app';
+import {saveStatusDisplayedEditFormContainer} from '../editFormAtoms';
+
 const ReactQuill = dynamic(import('react-quill'), {
     ssr: false, // This will make the component render only on the client-side
     loading: () => <p>Loading...</p>, // You can provide a loading component or text here
@@ -29,91 +35,106 @@ type Props = {
 }
 
 
-const ItineraryItemForm: FC<Props> = ({ ...props }) => {
-    const [currentItem, setCurrentItem] = useState<ItineraryItem>(() => 
-        props.mode === 'edit' && props.initialItem ? props.initialItem : { id: uuidv4(), descHidden: true }
-        );   
+const ItineraryItemForm: FC<Props> = ({ initialItem, ...props }) => { 
     const [showInfoBoxGeolocation, setShowInfoBoxGeolocation] = useState<boolean>(false);
     const [siteIsHovered, setSiteIsHovered] = useState(false);
     const [addressIsHovered, setAddressIsHovered] = useState(false);
     const [itineraryInEdit, setItineraryInEdit] = useRecoilState<Itinerary>(currentlyEditingItineraryState);
+    const [myItineraries, setMyItineraries] = useRecoilState(myItinerariesResults);
+    const initialItemState = initialItem || { id: uuidv4() };
+    const startTimeState = itineraryInEdit.items.find(item => item.id === initialItemState.id)?.startTime?.time || null;
+    const endTimeState = itineraryInEdit.items.find(item => item.id === initialItemState.id)?.endTime?.time || null;
+    const [saveStatus, setSaveStatus] = useRecoilState(saveStatusDisplayedEditFormContainer); // additional state for saving status
 
-    const handleAddItem = (item: ItineraryItem) => {
-        setItineraryInEdit((prevItinerary: Itinerary) => ({
-            ...prevItinerary,
-            items: [
-                ...prevItinerary.items,
-                item
-            ]
-        }));
-    }
-
-    const handleEditItem = (item: ItineraryItem) => {
-        setItineraryInEdit((prevItinerary: Itinerary) => ({
-            ...prevItinerary,
-            items: [
-                ...prevItinerary.items.filter(prevItem => prevItem.id !== item.id),
-                item
-            ]
-        }));
-    }
-    
+   
     const isGoogleMapsLoaded = useGoogleMaps();
 
-
-    function initAutocomplete(): void {
+    const updateItemInRecoilState = (updatedFields: Partial<ItineraryItem>, itemId: string) => {
+        setItineraryInEdit((prevItinerary: Itinerary) => {
+          const updatedItems = prevItinerary.items.map(item => {
+            if (item.id === itemId) {
+              return { ...item, ...updatedFields };
+            }
+            return item;
+          });
+          return { ...prevItinerary, items: updatedItems };
+        });
+      };
+      
+      function initAutocomplete(): void {
+        if(!initialItemState || !initialItemState.id){toast.error("No data found, please close form and try again."); return }
+        const itemId = initialItemState.id; // or however you have access to the item's ID
+      
         const siteInput = document.getElementById('siteNameInput') as HTMLInputElement | null;
         if (siteInput) {
-            const siteAutocomplete = new google.maps.places.Autocomplete(siteInput, {
-                fields: ["name", "formatted_address"]
-            });
-            siteAutocomplete.addListener('place_changed', () => {
-                const place = siteAutocomplete.getPlace();
-                if (place) {
-                    setCurrentItem(prev => ({...prev, siteName: place.name, 
-                        locationAddress: place.formatted_address || ''}));
-                }
-            });
+          const siteAutocomplete = new google.maps.places.Autocomplete(siteInput, {
+            fields: ["name", "formatted_address"]
+          });
+          siteAutocomplete.addListener('place_changed', () => {
+            const place = siteAutocomplete.getPlace();
+            if (place) {
+              updateItemInRecoilState({ siteName: place.name, locationAddress: place.formatted_address || '' }, itemId);
+            }
+          });
         }
-    
+      
         const addressInput = document.getElementById('addressInput') as HTMLInputElement | null;
         if (addressInput) {
-            const addressAutocomplete = new google.maps.places.Autocomplete(addressInput, {
-                fields: ["formatted_address"]
-            });
-    
-            addressAutocomplete.addListener('place_changed', () => {
-                const place = addressAutocomplete.getPlace();
-                if (place) {
-                    setCurrentItem(prev => ({...prev, locationAddress: place.formatted_address || ''}));
-                }
-            });
+          const addressAutocomplete = new google.maps.places.Autocomplete(addressInput, {
+            fields: ["formatted_address"]
+          });
+      
+          addressAutocomplete.addListener('place_changed', () => {
+            const place = addressAutocomplete.getPlace();
+            if (place) {
+              updateItemInRecoilState({ locationAddress: place.formatted_address || '' }, itemId);
+            }
+          });
         }
-    }
+      }
+      
   
     useEffect(() => {
-  if (isGoogleMapsLoaded) {
-    initAutocomplete();
-  }
-}, [isGoogleMapsLoaded]);
+        if (isGoogleMapsLoaded) {
+            initAutocomplete();
+        }
+        }, [isGoogleMapsLoaded]);
 
-    const handleItemChange = (field: keyof ItineraryItem) => (e: React.ChangeEvent<HTMLInputElement>) => {
-        e.preventDefault
-        const value = e.target.value;
-        setCurrentItem(prev => ({
-            ...prev,
-            [field]: value
-        }));
-    };
 
-    const handleQuillChange = (value: string) => {
-        setCurrentItem(prev => ({
-            ...prev,
-            description: value
-        }));
-    };
+    const handleItemChange =  (field: string) => async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newValue = e.target.value;
+        
+        setItineraryInEdit((prevItinerary: Itinerary) => {
+            // Assuming you know the item ID you want to update
+            const itemId = initialItemState.id; // Replace with actual ID
+            
+            // Find the index of the item
+            const itemIndex = prevItinerary.items.findIndex(item => item.id === itemId);
+            if (itemIndex === -1) return prevItinerary; // If item not found, no changes
+        
+            // Clone the item and update the field
+            const updatedItem = {
+            ...prevItinerary.items[itemIndex],
+            [field]: newValue
+            };
+        
+            // Produce new items array
+            const updatedItems = [
+            ...prevItinerary.items.slice(0, itemIndex),
+            updatedItem,
+            ...prevItinerary.items.slice(itemIndex + 1)
+            ];
+            console.log({...prevItinerary,
+              items: updatedItems}, "updatedItems")
+            return {
+            ...prevItinerary,
+            items: updatedItems
+            };
+        });
 
-  
+
+        };
+   
 //get coordinates
     const fetchCurrentLocation = async () => {
         console.log("ran fetchCurrentLocation")
@@ -126,13 +147,29 @@ const ItineraryItemForm: FC<Props> = ({ ...props }) => {
         navigator.geolocation.getCurrentPosition(position => {
             const { latitude, longitude } = position.coords;
             const coordinates = latitude + ", " + longitude;
-            setCurrentItem(prev => ({
-                ...prev,
-                location: { latitude: latitude, longitude:longitude, 
-                    locationAddress: coordinates }
-            }));
-            }, () => {
-            alert("Unable to retrieve your location.");
+
+            setItineraryInEdit((prevItinerary: Itinerary) => {
+                const updatedItems = prevItinerary.items.map((item) => {
+                  if (item.id === initialItemState.id) {  // Replace `currentItem.id` with appropriate logic if needed
+                    return {
+                      ...item,
+                      location: {
+                        latitude: latitude, 
+                        longitude:longitude, 
+                        locationAddress: coordinates 
+                      }
+                    };
+                  }
+                  return item;
+                });
+                
+                return {
+                  ...prevItinerary,
+                  items: updatedItems
+                };
+              });     
+            }, 
+            () => {alert("Unable to retrieve your location.");
         });
     };
 
@@ -147,12 +184,12 @@ const ItineraryItemForm: FC<Props> = ({ ...props }) => {
 
 
     useEffect(() => {
-        const duration = calculateDuration(currentItem.startTime?.time || null, currentItem.endTime?.time || null);
+        const duration = calculateDuration(startTimeState || null, endTimeState || null);
+
         if (duration !== null) {
-            setCurrentItem(prev => ({...prev, activityDuration: duration}));
+            updateItemInRecoilState({ activityDuration: duration }, initialItemState.id ||"")
         }
-        console.log("duration", duration, currentItem.activityDuration)
-    }, [currentItem.startTime, currentItem.endTime]);
+    }, [startTimeState, endTimeState]);
     
     const cancelMark = 
         <FontAwesomeIcon 
@@ -161,24 +198,6 @@ const ItineraryItemForm: FC<Props> = ({ ...props }) => {
             onClick={props.handleShowItemForm}
         />
 
-    const floppyDiskAddSave = (
-        <FontAwesomeIcon 
-            icon={faFloppyDisk as any} 
-            className={styles.floppyDisk} 
-            type="button" 
-            onClick={() => {
-                if (props.mode === "create") {
-                    handleAddItem(currentItem);
-                    props.handleShowItemForm();
-                } else {
-                    handleEditItem(currentItem);
-                    props.handleShowItemForm();
-                    console.log("currentItem", currentItem);
-                }
-            }}
-        />
-    );
-      
     const trashDelete = (
         <FontAwesomeIcon 
             icon={faTrashCan} 
@@ -194,66 +213,74 @@ const ItineraryItemForm: FC<Props> = ({ ...props }) => {
               }}
         />
     );
+
+   
+    const handleTimeChangeWithRecoilUpdate =  (timeField: 'startTime' | 'endTime') => {
+        return (date: Dayjs | null) => {        
+          // Update Recoil state
+          setItineraryInEdit((prevItinerary: Itinerary) => {
+            const updatedItems = prevItinerary.items.map((item) => {
+              if (item.id === initialItemState.id) {  // Replace `currentItem.id` with appropriate logic if needed
+                return {
+                  ...item,
+                  [timeField]: {
+                    ...item[timeField],
+                    time: date || item[timeField]?.time
+                  }
+                };
+              }
+              return item;
+            });
+            
+            return {
+              ...prevItinerary,
+              items: updatedItems
+            };
+          });
+        };
+      };
+
+      const resetLatLong = () => {
+        setItineraryInEdit((prevItinerary: Itinerary) => {
+          const updatedItems = prevItinerary.items.map((item) => {
+            if (item.id === initialItemState.id) {  
+              // Destructure the item to isolate the 'location' and keep the rest of the properties
+              const { location, ...restOfItem } = item;
+              return restOfItem;
+            }
+            return item;
+          });
+      
+          return {
+            ...prevItinerary,
+            items: updatedItems
+          };
+        });
+      };
+      
+      
     return (
 
     <div className={styles.itinItemCreatorContainer}>
-        <div className={styles.saveOrCancelButtonSection}>
-            <div className = {styles.iconSectionContainer}>                
-                <div className = {styles.formControlsIconContainer}>                
-                    {trashDelete}
-                </div>
-                <p className = {styles.formControlsIconText}>Delete</p>
-            </div>
-            <div className = {styles.iconSectionContainer}>                
-                <div className = {styles.formControlsIconContainer}>                
-                    {floppyDiskAddSave}
-                </div>
-                <p className = {styles.formControlsIconText}>Save</p>
-            </div>
-
-            <div className = {styles.iconSectionContainer}>                
-                <div className = {styles.formControlsIconContainer}>                
-                    {cancelMark}
-                </div>
-                <p className = {styles.formControlsIconText}>Cancel</p>
-            </div>            
-        </div>
-            
+       
+   <div className={styles.itinItemHeadingContainer}>          
     {props.mode==="create" ?
         <h4 className = {styles.itemSectionHeading}>New Itinerary Item Entry</h4>:
         <h2 className = {styles.itemSectionHeading}>Edit Itinerary Item</h2>
     }
+    <p className={styles.saveStatusDisplayed}>{saveStatus}</p>
+    </div>
     <div className={styles.inputFieldsTimeSelectSection}>        
         <ItinEditFormTimePicker
-                        label="Start Time"
-                        value={currentItem.startTime?.time || null}
-                        onChange={(date: Dayjs | null) => {
-                            setCurrentItem((prev) => {
-                                return {
-                                    ...prev,
-                                    startTime: {
-                                        ...prev.startTime, 
-                                        time: date || prev.startTime?.time
-                                    }
-                                };
-                            });
-                        }}
-                    />
+                label="Start Time"
+                value={startTimeState}
+                onChange={handleTimeChangeWithRecoilUpdate('startTime')}
+            />
 
         <ItinEditFormTimePicker
             label="End Time"
-            value={currentItem.endTime?.time || null}
-            onChange={(date: Dayjs | null) => {
-                setCurrentItem((prev) => {
-                    return {
-                        ...prev,
-                        endTime: {
-                            ...prev.endTime, 
-                            time: date || prev.endTime?.time
-                        }
-                    };
-                });
-            }}
+            value={endTimeState}
+            onChange={handleTimeChangeWithRecoilUpdate('endTime')}
         />
     </div>
 
@@ -262,7 +289,7 @@ const ItineraryItemForm: FC<Props> = ({ ...props }) => {
     label="Site Name"
     variant="outlined"
     placeholder="Site Name"
-    value={currentItem.siteName || ''}
+    value={itineraryInEdit.items.find(item => item.id === initialItemState.id)?.siteName || null}
     onChange={handleItemChange('siteName')}
     className={styles.inputFields}
     helperText={siteIsHovered ? "Site name you enter will be used if no selection is made from the dropdown." : ''}
@@ -271,19 +298,26 @@ const ItineraryItemForm: FC<Props> = ({ ...props }) => {
     />
 
     <TextField
-        id="addressInput"
-        label="Address"
-        variant="outlined"
-        placeholder="Address"
-        value={currentItem.locationAddress || ''}
-        onChange={handleItemChange('locationAddress')}
-        className={`${styles.inputFields} ${styles.addressInputField}`}
-        helperText={addressIsHovered ? "Address you enter will be used if no selection is made from the dropdown." : ''}
-        onMouseEnter={() => setAddressIsHovered(true)}
-        onMouseLeave={() => setAddressIsHovered(false)}
+    id="addressInput"
+    label="Address"
+    variant="outlined"
+    placeholder="Address"
+    value={itineraryInEdit.items.find(item => item.id === initialItemState.id)?.locationAddress || null}
+    onChange={handleItemChange('locationAddress')}
+    className={`${styles.inputFields} ${styles.addressInputField}`}
+    helperText={addressIsHovered ? "Address you enter will be used if no selection is made from the dropdown." : ''}
+    onMouseEnter={() => setAddressIsHovered(true)}
+    onMouseLeave={() => setAddressIsHovered(false)}
     />
 
 {/* Coordinates */}
+{showInfoBoxGeolocation && 
+        <div className={`${styles.infoBox} ${styles.infoBoxVisible}`}>
+            <button className={styles.hideButton} onClick={() => setShowInfoBoxGeolocation(false)}>Hide</button>
+            <p className={styles.sharedSettingIfo}>When using the {"Use current geolocation"} feature to obtain your location, please be aware that the accuracy can vary based on several factors, including your device, surrounding buildings, and signal strength. It&apos;s always a good practice to double-check and confirm your location. If you notice any discrepancies, kindly adjust manually or choose a different method to ensure precision in your itinerary.</p>
+        </div>  
+    }
+    
 <div className={styles.fieldRow + " " + styles.geolocationSection}>
     <FontAwesomeIcon icon={faCrosshairs} className={styles.crossHair} 
     onClick={()=>fetchCurrentLocation()} 
@@ -295,22 +329,34 @@ const ItineraryItemForm: FC<Props> = ({ ...props }) => {
         className={styles.infoIcon}
         onClick={() => setShowInfoBoxGeolocation(true)}
     />
-    {showInfoBoxGeolocation && 
-        <div className={`${styles.infoBox} ${styles.infoBoxVisible}`}>
-            <button className={styles.hideButton} onClick={() => setShowInfoBoxGeolocation(false)}>Hide</button>
-            <p className={styles.sharedSettingIfo}>When using the {"Use current geolocation"} feature to obtain your location, please be aware that the accuracy can vary based on several factors, including your device, surrounding buildings, and signal strength. It&apos;s always a good practice to double-check and confirm your location. If you notice any discrepancies, kindly adjust manually or choose a different method to ensure precision in your itinerary.</p>
-        </div>  
-    }
+    
 </div>
+{itineraryInEdit.items.find(item => item.id === initialItemState.id)?.location && 
+<div className={styles.geoDisplaySection} >
+    <p>{itineraryInEdit.items.find(item => item.id === initialItemState.id)?.location?.latitude || ""},
+    {itineraryInEdit.items.find(item => item.id === initialItemState.id)?.location?.longitude || ""}
+    </p>
+
+    <button onClick={resetLatLong}>remove</button>
+</div>}
 
     <label htmlFor="siteDescription">Site Description:</label>
     <div className={styles.quillContainer}>
             <ReactQuill
-            id="siteDescription" // adding id to associate with the label
-            value={currentItem.description}
-            onChange={handleQuillChange}
-            placeholder="Enter site description..."
-            className={styles.quill}
+                id="siteDescription" // adding id to associate with the label
+                value={itineraryInEdit.items.find(item => item.id === initialItemState.id)?.description || ""}
+                onChange={(newContent) => {
+                  // Creating a synthetic event object to match your handleItemChange function
+                  const syntheticEvent = {
+                    target: {
+                      value: newContent
+                    }
+                  } as React.ChangeEvent<HTMLInputElement>;
+
+                  handleItemChange('description')(syntheticEvent);
+                }}
+                placeholder="Enter site description..."
+                className={styles.quill}
             />
     </div>
     
@@ -319,16 +365,32 @@ const ItineraryItemForm: FC<Props> = ({ ...props }) => {
     label="Per person budget"
     variant="outlined"
     placeholder="Anticipated per person budget"
-    value={currentItem.expectedPerPersonBudget || ''}
+    value={itineraryInEdit.items.find(item => item.id === initialItemState.id)?.expectedPerPersonBudget || ""}
     onChange={handleItemChange('expectedPerPersonBudget')}
     className={`${styles.inputFields} ${styles.budgetInputField}`}
     InputProps={{
         startAdornment: (
             <InputAdornment position="start">$</InputAdornment>),
-    }}/>
+    }}
+    />
    
-   <StarRating currentItem={currentItem} setCurrentItem={setCurrentItem} />
+   <StarRating initialItem={initialItem} updateItemInRecoilState={updateItemInRecoilState}/>
    
+   <div className={styles.saveOrCancelButtonSection}>
+            <div className = {styles.iconSectionContainer}>                
+                <div className = {styles.formControlsIconContainer}>                
+                    {trashDelete}
+                </div>
+                <p className = {styles.formControlsIconText}>Delete</p>
+            </div>
+
+            <div className = {styles.iconSectionContainer}>                
+                <div className = {styles.formControlsIconContainer}>                
+                    {cancelMark}
+                </div>
+                <p className = {styles.formControlsIconText}>Close</p>
+            </div>            
+        </div>
 
 </div>
 
@@ -336,4 +398,58 @@ const ItineraryItemForm: FC<Props> = ({ ...props }) => {
 }
 
 export default ItineraryItemForm;
+
+
+
+
+
+
+
+
+
+
+
+// *******************save to firestore operations*******************     
+
+// const itineraryRef = db.collection('itineraries').doc(initialItemState.id);
+// const [focusedValue, setFocusedValue] = useState<string | null>(null);
+
+// const handleFieldFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+//   setFocusedValue(e.target.value);
+// };
+
+  
+// // Function to update a specific field in Firestore
+// const updateFieldInFirestore = async <K extends keyof ItineraryItem> (field: K, value: ItineraryItem[K]) => {
+//   const itemId = initialItemState.id;
+//   try {
+//     // Fetch current data
+//     const doc = await itineraryRef.get();
+//     if (doc.exists) {
+//       const itineraryData = doc.data() as Itinerary;
+      
+//       // Find index of the item to update
+//       const itemIndex = itineraryData.items.findIndex(item => item.id === itemId);
+      
+//       // If item is found, update the field
+//       if (itemIndex > -1) {
+//         const updatedItems = [...itineraryData.items];
+//         updatedItems[itemIndex][field] = value;
+        
+//         // Update Firestore
+//         await itineraryRef.update({
+//           'items': updatedItems
+//         });
+        
+//         console.log(`Field ${field} updated successfully`);
+//       } else {
+//         console.log(`Item with ID ${itemId} not found`);
+//       }
+//     } else {
+//       console.log('Document does not exist');
+//     }
+//   } catch (error) {
+//     console.log(`Error updating field ${field}:`, error);
+//   }
+// };
 

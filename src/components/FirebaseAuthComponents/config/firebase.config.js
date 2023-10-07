@@ -12,12 +12,14 @@ const firebaseConfig = {
 
 let firebaseApp;
 
+////ensures firebase initializes only when run on the browser//////
 if (typeof window !== 'undefined' && !firebase.apps.length) {
   firebaseApp = firebase.initializeApp(firebaseConfig);
 }
 
 let isFirebaseInitialized = false;
 
+/////ensures firebase initializes only once//////
 if (!isFirebaseInitialized) {
   firebase.initializeApp(firebaseConfig);
   isFirebaseInitialized = true;

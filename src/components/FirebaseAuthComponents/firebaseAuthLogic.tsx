@@ -13,7 +13,7 @@ import { Timestamp } from 'firebase/firestore'; // Make sure to import Timestamp
 import { doc, getDoc, setDoc } from 'firebase/firestore'; // Import the required functions
 import { useRecoilState } from 'recoil';
 import { useRouter } from 'next/router';
-
+import { openDB } from 'idb'; 
 
 const firebaseAuth = getFirebaseAuth();
 
@@ -22,10 +22,20 @@ export default function FirebaseAuthLogic () {
     const [authUser, setAuthUser] = useRecoilState(authUserState);
     const [userPrivacySettings, setUserPrivacySettings] = useRecoilState(privacySettingsState);
 
+    // Function to save the user's ID token to IndexedDB
+    // async function saveUserIDTokenToIDB(token: string) {
+    //   const localIndexDB = await openDB('itinerariesDatabase');
+    //   const tx = localIndexDB.transaction('userAuthToken', 'readwrite');
+    //   await tx.objectStore('userAuthToken').put(token, 'userToken');
+    // }
   
     useEffect(() => {
         const unsubscribe = firebaseAuth.onAuthStateChanged(async (firebaseUser) => {
           if (firebaseUser) {
+            // const idToken = await firebaseUser.getIdToken();
+            // Save the ID token to IndexedDB
+            // await saveUserIDTokenToIDB(idToken);
+
             const uid = firebaseUser.uid;
       
             // Fetch additional user information from Firestore

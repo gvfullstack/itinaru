@@ -27,3 +27,7 @@ export const currentlyEditingItineraryState = atom<Itinerary>({
     default: false
   });
  
+  export const saveStatusDisplayedEditFormContainer = atom<string>({
+    key: 'saveStatusDisplayedEditFormContainerEF',
+    default: ""
+  });   

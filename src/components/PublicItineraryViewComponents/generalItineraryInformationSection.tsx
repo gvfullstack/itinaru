@@ -19,7 +19,8 @@ const GeneralItineraryInformation: FC = () => {
                     width={2400} // replace with actual image width
                     height={2400} // replace with actual image height
                     loading='lazy'
-                    style={{ width: '100%', height: 'auto', objectFit: 'cover' }}            
+                    className={styles.itinGeneralInfoPhoto}
+                    style={{objectFit: 'cover'}}            
                 />
             </div>
             <div className={styles.itinGeneralInfoTextSection}>

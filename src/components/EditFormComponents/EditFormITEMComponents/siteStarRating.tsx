@@ -1,32 +1,27 @@
 import React from 'react';
 import { Star, StarBorder, Clear, Style } from '@mui/icons-material'; 
-import { ItineraryItem } from '@/components/typeDefs/index';
+import { ItineraryItem } from '../editFormTypeDefs';
 import Button from '@mui/material/Button'; // Import MUI Button
 
 type StarRatingProps = {
-  currentItem: ItineraryItem;
-  setCurrentItem: React.Dispatch<React.SetStateAction<ItineraryItem>>;
+  initialItem: ItineraryItem | undefined;
+  updateItemInRecoilState: (updatedFields: Partial<ItineraryItem>, itemId: string) => void;
 };
-
-const StarRating: React.FC<StarRatingProps> = ({ currentItem, setCurrentItem }) => {
-  const handleRating = (rating: number) => {
-    setCurrentItem((prev) => ({
-      ...prev,
-      rating
-    }));
+const StarRating: React.FC<StarRatingProps> = ({ initialItem, updateItemInRecoilState }) => {
+  
+  const handleRating = (ratingValue: number) => {
+    updateItemInRecoilState({ rating: ratingValue }, initialItem?.id || '');
   };
 
   const clearRating = () => {
-    setCurrentItem((prev) => ({
-      ...prev,
-      rating: 0
-    }));
+    updateItemInRecoilState({ rating: 0 }, initialItem?.id || '');
   };
+
 
   const renderStars = () => {
     const stars = [];
     for (let i = 1; i <= 5; i++) {
-      if (i <= (currentItem.rating || 0)) {
+      if (i <= (initialItem?.rating || 0)) {
         stars.push(
           <Star
             key={i}
@@ -46,6 +41,8 @@ const StarRating: React.FC<StarRatingProps> = ({ currentItem, setCurrentItem }) 
     }
     return stars;
   };
+
+
 
   return (
     <>
