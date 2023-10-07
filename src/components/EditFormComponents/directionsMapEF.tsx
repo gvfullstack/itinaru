@@ -6,18 +6,26 @@ import { currentlyEditingItineraryState } from './editFormAtoms';
 
 const GoogleMapIframe: FC = () => {
   const itinerary = useRecoilValue(currentlyEditingItineraryState);
+  const items = itinerary.items ?? [];
 
-  if (itinerary.items.length < 2) {
+  if (items.length < 2) {
     return null;
   }
 
-  const origin = getLocationString(itinerary.items[0]);
-  const destination = getLocationString(itinerary.items[itinerary.items.length - 1]);
+  let origin;
+  if (items) {
+      origin = getLocationString(items[0]);
+  }
   
+  let destination;
+  if (items) {
+    destination = getLocationString(items[items.length - 1]);
+  }
+    
   let googleMapURL = `https://www.google.com/maps/embed/v1/directions?key=${'AIzaSyDI6tYErd_J2V4l0yQvj6ug4hYSMmeCMJ0'}&origin=${origin}&destination=${destination}`;
 
-  if (itinerary.items.length > 2) {
-    const waypoints = itinerary.items
+  if (items.length > 2) {
+    const waypoints = items
       .slice(1, -1)
       .map((item) => getLocationString(item))
       .join('|');
