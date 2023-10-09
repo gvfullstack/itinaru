@@ -10,7 +10,6 @@ import { toast } from 'react-toastify';
 import {currentlyEditingItineraryState} from '../../EditFormComponents/editFormAtoms';
 import { openDB } from 'idb';
 import dayjs, {Dayjs} from 'dayjs';
-import firebase from 'firebase/app';
 import 'firebase/firestore';
 
 type ItinGalleryComponentProps = {

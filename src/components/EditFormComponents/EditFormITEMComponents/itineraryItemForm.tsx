@@ -329,14 +329,15 @@ const ItineraryItemForm: FC<Props> = ({ initialItem, ...props }) => {
     />
     
 </div>
-{itineraryInEdit.items?.find(item => item.id === initialItemState.id)?.location && 
+{/* {itineraryInEdit.items?.find(item => item.id === initialItemState.id)?.location &&  */}
 <div className={styles.geoDisplaySection} >
     <p>{itineraryInEdit.items?.find(item => item.id === initialItemState.id)?.location?.latitude || ""},
     {itineraryInEdit.items?.find(item => item.id === initialItemState.id)?.location?.longitude || ""}
     </p>
 
     <button onClick={resetLatLong}>remove</button>
-</div>}
+</div>
+
 
     <label htmlFor="siteDescription">Site Description:</label>
     <div className={styles.quillContainer}>
