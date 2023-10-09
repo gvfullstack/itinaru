@@ -363,14 +363,14 @@ const handleDeleteItinerary = async (itineraryId: string) => {
       },
       items: []
     });
-
+  handleEdit();
   } catch (error) {
     // Handle any errors that might occur during deletion
     toast.error(`Error deleting itinerary. ${error}`);
     console.error("Error deleting itinerary:", error);
   }
-  handleEdit();
 }
+
 const deleteImage = async (itineraryId: string): Promise<void> => {
   if (!authUser || !authUser.uid) {
     toast.warn("No authenticated user found.");

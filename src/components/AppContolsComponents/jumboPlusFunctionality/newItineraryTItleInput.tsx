@@ -125,7 +125,7 @@
       await store.put(itinerary, 'currentlyEditingItineraryStateEF');
       await tx.done;
       
-      router.push(`/editItinerary/editMyItinerary`);
+      router.push(`/user/editMyItinerary`);
 
     };
 
