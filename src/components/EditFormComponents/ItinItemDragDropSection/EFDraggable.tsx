@@ -261,6 +261,12 @@ const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.tim
                             </div>                       
                           
                           <p className={`${styles.expandedItinAddressContainer} ${itineraryItem.descHidden ? "" : styles.isShown }`}>{itineraryItem.locationAddress}</p>
+                          {itineraryItem.location?.latitude && itineraryItem.location?.longitude &&
+                            <p className={`${styles.expandedItinAddressContainer} ${itineraryItem.descHidden ? "" 
+                            : styles.isShown }`}>{itineraryItem.location?.latitude}, {itineraryItem.location?.longitude}
+                            </p>
+                          }
+                         
                           <div className={`${styles.ownResearchContainer} ${itineraryItem.descHidden ? "" : styles.isShown }`}>
                             Do your own research: 
                             <div className={styles.expandedItinItemWebsite}>

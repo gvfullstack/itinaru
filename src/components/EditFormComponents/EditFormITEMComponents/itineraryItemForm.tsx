@@ -129,9 +129,41 @@ const ItineraryItemForm: FC<Props> = ({ initialItem, ...props }) => {
             items: updatedItems
             };
         });
-
-
         };
+
+        const handleLocationChange = (field: 'latitude' | 'longitude') => async (e: React.ChangeEvent<HTMLInputElement>) => {
+          const newValue = parseFloat(e.target.value);
+          
+          setItineraryInEdit((prevItinerary: Itinerary) => {
+            const itemId = initialItemState.id;
+            const itemIndex = prevItinerary.items?.findIndex(item => item.id === itemId);
+        
+            if (itemIndex === -1 || typeof itemIndex === 'undefined') return prevItinerary;
+            const items = [...(prevItinerary.items ?? [])];  // Shallow copy
+        
+            const updatedItem = { ...items[itemIndex] };  // Shallow copy of the item
+            const updatedLocation = { ...updatedItem.location };  // Deep copy of the location
+        
+            if (!updatedLocation) {
+              updatedItem.location = {
+                latitude: 0,
+                longitude: 0,
+              };
+            } else {
+              updatedLocation[field] = newValue;
+              updatedItem.location = updatedLocation;  // Assign the updated location back to the item
+            }
+        
+            items[itemIndex] = updatedItem;  // Assign the updated item back to items
+        
+            return {
+              ...prevItinerary,
+              items,
+            };
+          });
+        };
+        
+        
    
 //get coordinates
     const fetchCurrentLocation = async () => {
@@ -141,10 +173,13 @@ const ItineraryItemForm: FC<Props> = ({ initialItem, ...props }) => {
             alert("Geolocation is not supported by your browser.");
             return;
         }
+        console.log("ran navigator initial")
 
         navigator.geolocation.getCurrentPosition(position => {
+        console.log("ran navigator start")
             const { latitude, longitude } = position.coords;
             const coordinates = latitude + ", " + longitude;
+            console.log(coordinates, "coordinates")
 
             setItineraryInEdit((prevItinerary: Itinerary) => {
                 const updatedItems = prevItinerary.items?.map((item) => {
@@ -154,7 +189,6 @@ const ItineraryItemForm: FC<Props> = ({ initialItem, ...props }) => {
                       location: {
                         latitude: latitude, 
                         longitude:longitude, 
-                        locationAddress: coordinates 
                       }
                     };
                   }
@@ -167,7 +201,7 @@ const ItineraryItemForm: FC<Props> = ({ initialItem, ...props }) => {
                 };
               });     
             }, 
-            () => {alert("Unable to retrieve your location.");
+            () => {alert("Unable to retrieve your location. Please ensure your device has location services enabled or enter manually.");
         });
     };
 
@@ -312,7 +346,12 @@ const ItineraryItemForm: FC<Props> = ({ initialItem, ...props }) => {
 {showInfoBoxGeolocation && 
         <div className={`${styles.infoBox} ${styles.infoBoxVisible}`}>
             <button className={styles.hideButton} onClick={() => setShowInfoBoxGeolocation(false)}>Hide</button>
-            <p className={styles.sharedSettingIfo}>When using the {"Use current geolocation"} feature to obtain your location, please be aware that the accuracy can vary based on several factors, including your device, surrounding buildings, and signal strength. It&apos;s always a good practice to double-check and confirm your location. If you notice any discrepancies, kindly adjust manually or choose a different method to ensure precision in your itinerary.</p>
+            <p className={styles.sharedSettingIfo}>
+              <strong>Important Note: </strong> The address field takes precedence. If you would like to use coordinates for map directions, please leave the address field blank.
+              <br />
+              <br />
+              Also, when using the "Use current geolocation" feature to obtain your location, please be aware that the accuracy can vary based on several factors, including your device, surrounding buildings, and signal strength. It&apos;s always a good practice to double-check and confirm your location. If you notice any discrepancies, kindly adjust manually or choose a different method to ensure precision in your itinerary.
+            </p>
         </div>  
     }
     
@@ -321,7 +360,7 @@ const ItineraryItemForm: FC<Props> = ({ initialItem, ...props }) => {
     onClick={()=>fetchCurrentLocation()} 
     />
 
-    <h4 style={{fontSize:"15px"}}>Use current geolocation</h4>
+    <h4 style={{fontSize:"16px"}}>Use current geolocation</h4>
     <FontAwesomeIcon 
         icon={faQuestionCircle} 
         className={styles.infoIcon}
@@ -329,15 +368,33 @@ const ItineraryItemForm: FC<Props> = ({ initialItem, ...props }) => {
     />
     
 </div>
-{/* {itineraryInEdit.items?.find(item => item.id === initialItemState.id)?.location &&  */}
-<div className={styles.geoDisplaySection} >
-    <p>{itineraryInEdit.items?.find(item => item.id === initialItemState.id)?.location?.latitude || ""},
-    {itineraryInEdit.items?.find(item => item.id === initialItemState.id)?.location?.longitude || ""}
-    </p>
+{itineraryInEdit.items?.find(item => item.id === initialItemState.id)?.location && 
+  <div className={styles.geoDisplaySection} >
+      <TextField
+      id="latitudeInput"
+      label="latitude"
+      variant="outlined"
+      placeholder="e.g. 40.7128"
+      value={itineraryInEdit.items?.find(item => item.id === initialItemState.id)?.location?.latitude || null}
+      onChange={handleLocationChange('latitude')}
+      className={`${styles.inputFields} ${styles.addressInputField}`}
+      />
+      <TextField
+      id="longitudeInput"
+      label="longitude"
+      variant="outlined"
+      placeholder="e.g. 40.7128"
+      value={itineraryInEdit.items?.find(item => item.id === initialItemState.id)?.location?.longitude || null}
+      onChange={handleLocationChange('longitude')}
+      className={`${styles.inputFields} ${styles.addressInputField}`}
+      />
+      <p>{itineraryInEdit.items?.find(item => item.id === initialItemState.id)?.location?.latitude || ""},
+      {itineraryInEdit.items?.find(item => item.id === initialItemState.id)?.location?.longitude || ""}
+      </p>
 
-    <button onClick={resetLatLong}>remove</button>
-</div>
-
+      <button onClick={resetLatLong}>remove</button>
+  </div>
+}
 
     <label htmlFor="siteDescription">Site Description:</label>
     <div className={styles.quillContainer}>
