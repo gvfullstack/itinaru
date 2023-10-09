@@ -48,12 +48,12 @@ const MyItineraries: React.FC = () => {
       const cachedItineraries = await store.get('userItineraries');
       const needsRefresh = await store.get('indexDBNeedsRefresh');
   
-      if (cachedItineraries && !needsRefresh && authUser) {
-        setMyItineraries(cachedItineraries);
-      } else {
-        console.log("fetching data from server...")
-        fetchData();
-      }
+    if (cachedItineraries && !needsRefresh && authUser) {
+      setMyItineraries(cachedItineraries);
+    } else if (userId) {
+      console.log("fetching data from server...")
+      fetchData();
+    }
   
       await tx.done;
     };
@@ -62,7 +62,7 @@ const MyItineraries: React.FC = () => {
       console.log("loading from indexedDB...");
       loadFromIndexedDB();
     }
-  }, []);
+  }, [userId]);
 
 
     return(

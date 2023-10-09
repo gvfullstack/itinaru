@@ -5,6 +5,7 @@ import { TransformedItinerary } from '../myItinerariesTypeDefs';
 
 const fetchUserItineraries = async (userId: string) => {
     try {
+      console.log("Fetching itineraries for user: ", userId);
       const q = query(collection(db, 'itineraries'), where('uid', '==', userId));
       const querySnapshot = await getDocs(q); 
       const itineraries: TransformedItinerary[] = [];
