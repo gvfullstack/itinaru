@@ -15,6 +15,7 @@ const ellipsisVertical = <FontAwesomeIcon icon={faEllipsisVertical} />;
 const clock = <FontAwesomeIcon icon={faStopwatch} />;
 import {currentlyViewingItineraryState} from '../publicItinViewAtoms';
 import dynamic from 'next/dynamic';
+import { max } from 'lodash';
 
 interface DraggableItineraryItemProps {
   id: string;
@@ -33,10 +34,10 @@ const IPVDraggable = React.forwardRef((
 
   const handleShowHideDescription = () => {
     setItineraryInEdit(prevItinerary => {
-      console.log("prevItinerary", prevItinerary)
-        const updatedItems = prevItinerary.items.map((item) => {
+        const updatedItems = prevItinerary.items?.map((item) => {
             if (item.id === itineraryItem.id) {
                 return { ...item, descHidden: !item.descHidden };
+                console.log("item", item)
             }
             return item;
         });
@@ -143,24 +144,113 @@ const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.tim
 
   }
 
+  // const [shortDescription, setShortDescription] = useState<string>("");
+  // const divRef = useRef(null);
+
+  // // const shortDescription = itineraryItem.description?.substring(0, 50) + "...";
+  
+  // const updateDescription = () => {
+  //   if (divRef.current) {
+  //     const maxLength = getTruncationLength(divRef.current);
+  //     const description = itineraryItem.description || "";
+  //     setShortDescription(truncateDescription(description, maxLength));
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   const resizeObserver = new ResizeObserver(() => {
+  //     updateDescription();
+  //   });
+
+  //   if (divRef.current) {
+  //     resizeObserver.observe(divRef.current);
+  //   }
+
+  //   // Initialize once
+  //   updateDescription();
+
+  //   return () => {
+  //     if (divRef.current) {
+  //       resizeObserver.unobserve(divRef.current);
+  //     }
+  //   };
+  // }, [divRef.current]);
+  
+  // function truncateDescription(description:string, maxLength:number) {
+  // console.log("ran truncate function")
+    
+  //   if (description.length > maxLength) {
+  //     return description.substring(0, maxLength) + "...";
+  //   }
+  //   return description;
+  // }
+  
+  // function getTruncationLength(divElement: HTMLElement): number  {
+  // console.log("ran truncation length function")
+  //   const width = divElement.offsetWidth;
+  
+  //   let maxLength;
+  //   if (width <= 200) {
+  //     maxLength = 50;
+  //   } else if (width <= 600) {
+  //     maxLength = 100;
+  //   } else {
+  //     maxLength = 150;
+  //   }
+  //   console.log("maxLength", maxLength)
+  
+  //   return maxLength;
+  // }
+
+  const shortSiteName = itineraryItem.siteName?.substring(0, 50) || "untitled item" + "...";
   return (
     <>
     <div ref={localRef} style={itemStyles}  className={styles.dropDiv} >
       <div key={uuidv4()} className={`${styles.itineraryParent} ${itineraryItem.descHidden ? "" : styles.isShown }`}>
              <div className={styles.mainItinItemContainer}>
-                  <div className={styles.itineraryItemContainerContainer}>
-                      <div className={styles.itinTitleContainer} 
-                      >
-                          <h3 className={`${styles.itinTitle} ${itineraryItem.descHidden ? "" : styles.isShown }`} 
+                  <div className={`${styles.itineraryItemContainerContainer} ${itineraryItem.descHidden ? "" : styles.isShown}`}>
+                      {/* <div className={styles.itinTitleContainer}> */}
+                          <h3 className={`${styles.itinTitle} ${itineraryItem.descHidden ? "" : styles.isShown}`} 
                             onClick={()=>handleShowHideDescription()}>
-                              {itineraryItem.siteName}                           
+                              {itineraryItem.descHidden ? shortSiteName : itineraryItem.siteName}                           
                             </h3>
-                          
-                          <div className={`${styles.itinTitleDescription} ${itineraryItem.descHidden ? "" 
-                          : styles.isShown }`}>
-                            <ItemDescriptionStaticComponent description={itineraryItem.description ?? ''} />
-                          </div>                       
+                            <div className={`${styles.activityTime} ${itineraryItem.descHidden ? "" : styles.isShown}`}>
+                                    <div className={`${styles.infoBannerWords} ${itineraryItem.descHidden ? "" : styles.isShown}`}>Start:</div>
+                                    <div className={styles.startTimeContainer}>
+                                      <div className={`${styles.startTime} ${itineraryItem.descHidden ? "" : styles.isShown}`}>
+                                          <div>  
+                                            {formattedStartTime}
+                                          </div>
+                                      </div>
+                                    </div>
+                                    <div className={`${styles.infoBannerWords} ${itineraryItem.descHidden ? "" : styles.isShown}`}>End:</div>
+                                    <div className={styles.endTimeContainer}>
+                                      <div className={`${styles.endTime} ${itineraryItem.descHidden ? "" : styles.isShown}`}>
+                                            <div>
+                                              {formattedEndTime}
+                                            </div>
+                                      </div>
+                                    </div>
+                                    <div className={`${styles.infoBannerWords} ${itineraryItem.descHidden ? "" : styles.isShown}`}>Duration:</div>
 
+                                    <div className={`${styles.durationContainer} ${itineraryItem.descHidden ? "" : styles.isShown}`}>
+                                      {millisecondsToHoursMinutes(itineraryItem.activityDuration)}&nbsp;{clock}
+                                    </div>
+                                    <div 
+                                      className={`${styles.expandedItinMapText} ${itineraryItem.descHidden ? "" : styles.isShown}`} 
+                                                                >
+                                          <a
+                                            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(itineraryItem.locationAddress ? itineraryItem.locationAddress : '')}`}
+                                            target="_blank"
+                                            style={{ textDecoration: 'none', color: 'black' }}
+                                            >{mapMarkerAlt}</a>
+                                                
+                                    </div>
+                          </div> 
+                            <div className={`${styles.itinTitleDescription} ${itineraryItem.descHidden ? "" : styles.isShown}`}>  
+                               <ItemDescriptionStaticComponent description={itineraryItem.description || ""} />
+                            </div>                       
+                          
                           <p className={`${styles.expandedItinAddressContainer} ${itineraryItem.descHidden ? "" : styles.isShown }`}>{itineraryItem.locationAddress}</p>
                           <div className={`${styles.ownResearchContainer} ${itineraryItem.descHidden ? "" : styles.isShown }`}>
                             Do your own research: 
@@ -176,53 +266,18 @@ const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.tim
                                   {externalLink} <span className={styles.youTubeLinkText}>Search on YouTube</span></a>
                             </div>
                           </div>
-                      </div>
-                      
-                      <div className={`${styles.rightContainer} ${itineraryItem.descHidden ? "" : styles.isShown}`}>
-                        <div className={styles.activityTime}>
-                                <div className={styles.startTimeContainer}>
-                                    <div className={styles.startTime}>
-                                          <div>  
-                                            {formattedStartTime}
-                                          </div>
-                                    </div>
-                                  </div>
-                                    <div className={styles.endTimeContainer}>
-                                    <div className={styles.endTime}>
-                                          <div>
-                                            {formattedEndTime}
-                                          </div>
-                                    </div>
-                                  </div>
-                                      <div className={styles.durationContainer}>
-                                         {millisecondsToHoursMinutes(itineraryItem.activityDuration)}{clock} 
-                                      </div>
-                                      {itineraryItem.userDefinedRespectedTime && 
-                                        <div className={styles.durationContainer}>
-                                          TIME LOCKED
-                                        </div>
+                  
+                        
+                          <div 
+                            className={`${styles.hamburgerMenuContainer} ${itineraryItem.descHidden ? "" : styles.isShown}`} 
+                            onClick={handleMenuClick} 
+                            ref={menuRef}
+                            >
+                                      {ellipsisVertical}
+                                      {menuOpen && <Menu />
                                       }
-                          </div> 
-                        <div 
-                          className={`${styles.hamburgerMenuContainer} ${itineraryItem.descHidden ? "" : styles.isShown}`} 
-                          onClick={handleMenuClick} 
-                          ref={menuRef}
-                          >
-                                    {ellipsisVertical}
-                                    {menuOpen && <Menu />
-                                    }
-                        </div>
-                        <div 
-                          className={`${styles.expandedItinMapText} ${itineraryItem.descHidden ? "" : styles.isShown}`} 
-                                                     >
-                              <a
-                                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(itineraryItem.locationAddress ? itineraryItem.locationAddress : '')}`}
-                                target="_blank"
-                                style={{ textDecoration: 'none', color: 'black' }}
-                                >{mapMarkerAlt}</a>
-                                    
-                        </div>                             
-                      </div>
+                          </div>
+                                                       
               </div>
           </div>
       </div>

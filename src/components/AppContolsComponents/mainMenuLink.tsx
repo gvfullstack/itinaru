@@ -87,9 +87,12 @@ const Menu: React.FC = () => {
                 {authUser?.username}
               </div>
             </li>}
-          <li className={styles.menuOption}>
+          <li className={styles.menuOption} onClick={toggleMenu}>
             <Link href="/">Home</Link>
-          </li>          
+          </li>
+          {authUser &&<li className={styles.menuOption} onClick={toggleMenu}>
+            <Link href="/user/myItineraries">My Itineraries</Link>
+          </li>}          
           <li className={styles.menuOption}>
             <Link href="/aiAssistedItinerary" onClick={toggleMenu}>AI Assisted Itinerary</Link>
           </li>
@@ -104,7 +107,6 @@ const Menu: React.FC = () => {
           </li>
         </ul>
       </div>
-      {/* <button onClick={()=>console.log(authUser)}></button> */}
     </div>
   );
 };

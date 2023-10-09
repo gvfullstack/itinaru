@@ -48,7 +48,6 @@ export type ItineraryItem = {
     items?: ItineraryItems;
   }
 
-
   export type TimeObject = {
     time?: firebase.firestore.Timestamp | null;
   };
@@ -74,6 +73,7 @@ export type ItineraryItem = {
   } 
 
  export type TransformedItinerary = {
+    uid?: string;
     id?: string;
     settings: ItinerarySettings;
     items: TransformedItineraryItem[];

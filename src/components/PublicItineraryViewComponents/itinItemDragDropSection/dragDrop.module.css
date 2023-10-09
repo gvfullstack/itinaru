@@ -1,3 +1,5 @@
+@media (min-width: 0px) {
+
 /* parent */
 .itineraryArrOfItemsContainer{
     display: flex;
@@ -58,18 +60,20 @@
 }
 
 .itineraryParent{
-    border-radius: 8px;
-    padding: 5px;
+   
+    padding: 1rem 1.5rem;
     margin-bottom: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border: 2px solid #ccc;
+    border-radius: 0px;
+    border-right: none;
+    border-left: none;
     box-sizing: border-box;
     font-family: 'Roboto';
     transition: background-color 0.3s;
     width: 100%;
     display: flex;
     flex-direction: column;
-    /* width: 100%; */
 }
 
 .itineraryParent.isShown{
@@ -82,6 +86,10 @@
     flex-direction: row;
     width: 100%;
     height: 90%;
+}
+
+.itineraryItemContainerContainer.isShown{
+    flex-direction: column;
 }
 
 .mainItinItemContainer{
@@ -100,10 +108,10 @@
     width: 80%;
     display: flex;
     flex-direction: column; 
-    padding-top: .25rem;
     font-family: 'Roboto', sans-serif;
     color: rgb(29, 29, 29);
-    font-weight: 400;  
+    font-weight: 400;
+    margin: 0;  
 }
 
 .itinTitle{
@@ -115,12 +123,16 @@
     line-height: 1.2rem;
     color: rgb(48, 48, 48);
     cursor: pointer;
-    font-size: 14px;
+    font-size: 16px;
+}
+
+.itinTitle.isShown{
+    line-height: 1rem;
 }
 
 .ownResearchContainer,
-.expandedItinAddressContainer,
-.itinTitleDescription{
+.expandedItinAddressContainer
+{
     /* display: flex; */
     text-align: left;
     padding: 0 0 0 .25rem;
@@ -129,11 +141,22 @@
     
 }
 
-.mainItinItemContainer .itineraryItemContainerContainer .itinTitleContainer .itinTitleDescription.isShown{
+.itinTitleDescription.isShown{
+    display: flex;
+    /* background-color: tomato; */
+    margin-top: 0rem;
+    padding-top: 0;
+    height: 3rem;
+    width: 12rem;
+    justify-content: flex-start;
+    align-items: flex;
     text-align: justify !important;
     width: 100% !important;
     height: fit-content !important;
     overflow-wrap: break-word;
+}
+.itinTitleDescription{
+    display: none;
 }
 
 .rightContainer{
@@ -153,37 +176,56 @@
 
 .activityTime{
     height: 100%;
-    width: 100%;
     display: flex;
     flex-direction: column;
     text-align: right;
     font-family: 'Roboto', sans-serif;
     color: rgb(5, 5, 5);
+    width: 8rem;
+}
+
+.activityTime.isShown{
+    margin-left: -.25rem;
+    margin-top: .5rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 101%;
 }
 
 .startTimeContainer,
 .endTimeContainer{
     width: 100%;
-    height: 1.25rem;
 }
+
 .startTime,
 .endTime,
 .durationContainer{
     width: 100%;
-    font-size: 15px;
-    line-height: 12px;
-    font-weight: 400;
+    font-size: 16px;
+    line-height: 16px;
+}
+.infoBannerWords{
+    display: none;
 }
 
-.durationContainer{
-    font-size: 12px;
-    line-height: 12px;
-    font-weight: 400;
+.infoBannerWords.isShown,
+.startTime.isShown,
+.endTime.isShown,
+.durationContainer.isShown{
+    justify-content: flex-start;
+    display: flex;
+    align-items: flex-start;
+    text-align: left;
+    font-size: 14px;
+    line-height: 14px;
 }
+
 
 .hamburgerMenuContainer{
     height: 100%;
-    width: 40%;
+    width: 2rem;
     font-size: 20px;
     text-align: center;
     color: rgb(29, 29, 29);
@@ -197,18 +239,18 @@
 }
 
 .expandedItinMapText.isShown{
-    width: 100%;
+    width: 1rem;
     height: 100%;
     font-size: 20px;
     text-align: right;
     color: rgb(29, 29, 29);
-    border-radius: 0px 10px 10px 0px;
-    padding: 6px 0px 0px 2px;
+    padding: 0px 0px 0px 2px;
 }
 
 .hamburgerMenuContainer.isShown{
     width: 100%;
     text-align: right;
+    display: none;
 }
 
 /* /////////////Expanded Itin Item View///////////////////// */ 
@@ -229,9 +271,6 @@
     opacity: .95;
 }
 
-.itinTitle.isShown{
-    line-height: 1rem;
-}
 
 .isShown{
     display: block;
@@ -356,6 +395,7 @@
   .menu.isShown{
     bottom: 2rem;
     right: .25rem;
+
   }
 
   .menuItem {
@@ -391,5 +431,94 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
 
+}
+  @media (min-width:500px){
+    /* collapsed text settings */
+    .itinTitle
+    {
+        font-size: 18px;
+    }
+    .startTime,
+    .endTime,
+    .durationContainer {
+        font-size: 18px;
+    }
 
- 
+/* expandedTextSettings */
+    .itinTitle.isShown,
+    .infoBannerWords.isShown,
+    .startTime.isShown,
+    .endTime.isShown,
+    .itinTitleDescription.isShown,
+    .durationContainer.isShown,
+    .expandedItinAddressContainer.isShown,
+    .ownResearchContainer.isShown,
+    .youGSearchText,
+    .youTubeLinkText
+    {
+        font-size: 18px;
+        line-height: 18px;
+    }
+    .expandedItinMapText.isShown{
+        /* width: 4rem; */
+        font-size: 22px;
+    }
+    
+    .dropDiv{
+        width: 90%;
+    }
+    
+    .itineraryParent{
+        border-radius: 0;
+        border-radius: 10px;
+        padding: 1rem;
+
+    }  
+
+    
+    .activityTime.isShown{
+        margin:1rem 0 0 0;
+        width: 100%;
+    }
+    .expandedItinMapText.isShown{
+        width: 4rem;
+    }
+ }
+
+ @media (min-width:1200px){
+    .dropDiv{
+        font-size: 20px;
+    }
+    .itinTitle
+    {
+        font-size: 20px;
+    }
+
+   /* collapsed text settings */
+    .startTime,
+    .endTime,
+    .durationContainer {
+        font-size: 20px;
+    }
+
+/* expandedTextSettings */
+    .itinTitle.isShown,
+    .itinTitleDescription.isShown,
+    .startTime.isShown,
+    .endTime.isShown,
+    .infoBannerWords.isShown,
+    .durationContainer.isShown,
+    .expandedItinAddressContainer.isShown,
+    .ownResearchContainer.isShown,
+    .youGSearchText,
+    .youTubeLinkText
+    {
+        font-size: 20px;
+        line-height: 20px;
+    }
+    .expandedItinMapText.isShown{
+        /* width: 4rem; */
+        font-size: 24px;
+    }
+  
+ }

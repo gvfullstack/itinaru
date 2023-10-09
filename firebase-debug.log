@@ -1,0 +1,38 @@
+[debug] [2023-10-09T01:26:23.935Z] ----------------------------------------------------------------------
+[debug] [2023-10-09T01:26:23.938Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\lsvil\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only storage
+[debug] [2023-10-09T01:26:23.938Z] CLI Version:   12.5.2
+[debug] [2023-10-09T01:26:23.938Z] Platform:      win32
+[debug] [2023-10-09T01:26:23.939Z] Node Version:  v18.15.0
+[debug] [2023-10-09T01:26:23.941Z] Time:          Sun Oct 08 2023 18:26:23 GMT-0700 (Pacific Daylight Time)
+[debug] [2023-10-09T01:26:23.942Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-10-09T01:26:24.031Z] Object ".storage" in "firebase.json" has unknown property: {"additionalProperty":"cors"}
+[debug] [2023-10-09T01:26:24.032Z] Field ".storage" in "firebase.json" is possibly invalid: should be array
+[debug] [2023-10-09T01:26:24.032Z] Field ".storage" in "firebase.json" is possibly invalid: should match some schema in anyOf
+[debug] [2023-10-09T01:26:24.039Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-10-09T01:26:24.039Z] > authorizing via signed-in user (gvfullstack@gmail.com)
+[debug] [2023-10-09T01:26:24.040Z] [iam] checking project itinaru-6e85c for permissions ["firebase.projects.get","firebaserules.releases.create","firebaserules.releases.update","firebaserules.rulesets.create"]
+[debug] [2023-10-09T01:26:24.043Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/itinaru-6e85c:testIamPermissions [none]
+[debug] [2023-10-09T01:26:24.043Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/itinaru-6e85c:testIamPermissions x-goog-quota-user=projects/itinaru-6e85c
+[debug] [2023-10-09T01:26:24.044Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/itinaru-6e85c:testIamPermissions {"permissions":["firebase.projects.get","firebaserules.releases.create","firebaserules.releases.update","firebaserules.rulesets.create"]}
+[debug] [2023-10-09T01:26:24.260Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/itinaru-6e85c:testIamPermissions 200
+[debug] [2023-10-09T01:26:24.260Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/itinaru-6e85c:testIamPermissions {"permissions":["firebase.projects.get","firebaserules.releases.create","firebaserules.releases.update","firebaserules.rulesets.create"]}
+[info] 
+[info] === Deploying to 'itinaru-6e85c'...
+[info] 
+[info] i  deploying storage 
+[debug] [2023-10-09T01:26:24.265Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/itinaru-6e85c [none]
+[debug] [2023-10-09T01:26:24.601Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/itinaru-6e85c 200
+[debug] [2023-10-09T01:26:24.601Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/itinaru-6e85c {"projectId":"itinaru-6e85c","projectNumber":"187346303841","displayName":"itinaru","name":"projects/itinaru-6e85c","resources":{"hostingSite":"itinaru-6e85c","storageBucket":"itinaru-6e85c.appspot.com","locationId":"us-west2"},"state":"ACTIVE","etag":"1_7cad9452-5bf9-49a8-a75a-47d353fd6265"}
+[debug] [2023-10-09T01:26:24.714Z] TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string. Received undefined
+    at new NodeError (node:internal/errors:399:5)
+    at validateString (node:internal/validators:163:11)
+    at Object.join (node:path:429:7)
+    at Config.path (C:\Users\lsvil\AppData\Roaming\npm\node_modules\firebase-tools\lib\config.js:123:45)
+    at RulesDeploy.addFile (C:\Users\lsvil\AppData\Roaming\npm\node_modules\firebase-tools\lib\rulesDeploy.js:37:46)
+    at default_1 (C:\Users\lsvil\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\storage\prepare.js:39:25)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async chain (C:\Users\lsvil\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\index.js:38:9)
+    at async deploy (C:\Users\lsvil\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\index.js:95:5)
+[error] 
+[error] Error: An unexpected error has occurred.

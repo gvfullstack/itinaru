@@ -13,21 +13,22 @@ const GeneralItineraryInformation: FC = () => {
     return (
         <div className = {styles.generalItineraryInformationContainer}>
             <div className={styles.itinGeneralInfoPhotoContainer}>
-                <Image 
-                    src={itinerary.settings.galleryPhotoUrl ? itinerary.settings.galleryPhotoUrl : ''} 
+            {itinerary.settings?.galleryPhotoUrl && <Image 
+                    src={itinerary.settings?.galleryPhotoUrl ? itinerary.settings.galleryPhotoUrl : ''} 
                     alt="Itinerary Gallery Photo" 
                     width={2400} // replace with actual image width
                     height={2400} // replace with actual image height
                     loading='lazy'
-                    style={{ width: '100%', height: 'auto', objectFit: 'cover' }}            
-                />
+                    className={styles.itinGeneralInfoPhoto}
+                    style={{objectFit: 'cover'}}            
+                />}
             </div>
             <div className={styles.itinGeneralInfoTextSection}>
-                <p className={styles.publicItinViewTitle}>{itinerary.settings.title }</p>
-                <p>{itinerary.settings.city || ''}, {itinerary.settings.state || ''}</p>
+                <p className={styles.publicItinViewTitle}>{itinerary.settings?.title }</p>
+                <p>{itinerary.settings?.city || ''}, {itinerary.settings?.state || ''}</p>
             </div>
             <div className={styles.itinTitleDescription}>
-                <ItemDescriptionStaticComponent description={itinerary.settings.description ?? ''} />
+                <ItemDescriptionStaticComponent description={itinerary.settings?.description ?? ''} />
             </div>    
         </div>
     );

@@ -11,9 +11,8 @@ import styles from '@/styles/Home.module.css'
 
 
 export const getServerSideProps = async (context:GetServerSidePropsContext) => {
-    const itineraryId = context.params?.itineraryId as string; // Extracting itineraryId from context
-    console.log("itineraryId", itineraryId)
-   const itineraryData = await fetchItineraryFromDatabase(itineraryId);
+  const itineraryId = context.params?.itineraryId as string; // Extracting itineraryId from context
+  const itineraryData = await fetchItineraryFromDatabase(itineraryId);
 
     return {
       props: {
@@ -29,7 +28,7 @@ export const getServerSideProps = async (context:GetServerSidePropsContext) => {
     useEffect(() => {
         if (itinerary) {
             // Convert the startTime and endTime to Dayjs
-            const updatedItems = itinerary.items.map(item => ({
+            const updatedItems = itinerary.items?.map(item => ({
                 ...item,
                 startTime: item.startTime?.time != null ? { time: dayjs(item.startTime.time) } : undefined,
                 endTime: item.endTime?.time != null ? { time: dayjs(item.endTime.time) } : undefined

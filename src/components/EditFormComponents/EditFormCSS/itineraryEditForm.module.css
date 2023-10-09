@@ -1,5 +1,5 @@
 .itineraryEditFormContainer{
-    margin-top: 2rem;
+    margin-top: 1rem;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -31,8 +31,7 @@
     border-radius: 7px;
     border-color: #ccc;
     border-style: solid;
-    font-size: 16px;
-    /* height: 2.5rem; */
+    font-size: 18px;
     line-height: 1.5;
 }
 
@@ -45,6 +44,7 @@
     width: 250px;
     z-index: 10;
     border-radius: 10px;
+    font-size: 18px;
   }
   
   .infoBoxVisible {
@@ -65,6 +65,27 @@
     flex-direction: column; 
   }
 
+  .itinItemHeadingContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: .5rem;
+  }
+
+  .saveStatusDisplayed{
+    font-size: 18px;
+    margin:0;
+    padding: 0;
+    align-self: flex-start;
+    color: #333;
+  }
+
+  .sharedSettingContainer{
+    display: flex;
+    flex-direction: row;
+
+  }
+
   .hideButton{
     border: none;
     background-color: transparent;
@@ -75,7 +96,7 @@
   .sharedSettingIfo{
     margin: 0;
     margin-bottom: .25rem;
-    font-size: .85em;
+    font-size: 16px;
   }
 
   .quillContainer{
@@ -158,7 +179,7 @@
   display: flex;
   flex-direction: row;
   margin-bottom: 1rem;
-  align-items: start;
+  align-items: flex-start;
   gap: 1rem;
 }
 
@@ -223,6 +244,7 @@
   align-items: center;
   color: #807f7f;
   text-align: center;
+  line-height: 1px;
 }
 
 .iconSectionContainer{
@@ -295,32 +317,91 @@
   flex-direction: row;
   justify-content: flex-end;
   gap: 1rem;
+  margin-top: 3rem;
   }
 .saveOrCancelButtonSection {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
-  gap: 1rem;
+  gap: .2rem;
   }
 
   .EFPhotoAttachIconButtons{
     display: flex;
     gap: 1rem;
   }
+
+/* Style for the container div */
+.EFConfirmDeleteItinSection {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  margin: auto;
+}
+
+/* Style for the paragraph */
+.confirmQ {
+  font-size: 18px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Style for the buttons */
+.cancelButton, .deleteButton {
+  padding: 10px 20px;
+  margin: 5px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%; /* full width for small screens */
+}
+
+.cancelButton {
+  background-color: #ccc;
+  color: #fff;
+}
+
+.deleteButton {
+  background-color: #ff4d4d;
+  color: #fff;
+}
+
+
+  .saveSaveImageButton {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .saveSaveImageButton:hover {
+    background-color: #0056b3;
+  }
+  
+  .saveSaveImageButton:disabled {
+    background-color: #ccc;
+    color: #888;
+    cursor: not-allowed;
+  }
+
   .EFPageContainer{
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 85%;
     align-self: center;
-    margin-top: 5rem;
+    margin-top: 3.5rem;
     height: fit-content;
-    /* border-style: solid;
-    border-width: 1px;
-    border-color: #bebebe; */
     border-radius: 10px;
-    padding: 1rem 2rem 2rem 1rem;
+    padding: 0rem 2rem 2rem 1rem;
   }
+
 .EFFormContainer{
   display: flex;
   flex-direction: column;
@@ -362,6 +443,7 @@
   gap: 4px;
   margin-bottom: .75rem;
   width: 100%;
+  
 }
 
 .labelText{
@@ -374,10 +456,11 @@
   max-width: 500px; /* Default size */
   max-height: 500px;
   position: relative;
-  border: 1px solid #ddd;
+  border: none;
   border-radius: 10px;
   overflow: hidden;
-  margin-bottom: 10px;
+  margin: 0 0 10px 0;
+
 }
 
 .profilePicturePreview{
@@ -433,6 +516,26 @@
     font-family:'Roboto', sans-serif;
     font-style: italic;
     font-size: 14px;
+    align-self: flex-start;
+  }
+
+  .geoDisplaySection{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    /* margin-bottom: 1rem; */
+  }
+
+  .mapContainer{
+    padding: 0rem;
+    text-align: center;
+    width: 100%;
+  }
+  
+  .mapIframe{
+    max-width: 80vw;
+    height: 80vh;
   }
 
 @media (min-width:1750px){
@@ -506,20 +609,67 @@
 
 }
 
+@media (min-width: 600px) {
+  .cancelButton, .deleteButton {
+    width: auto; /* auto width for larger screens */
+  }
+  
+}
+
 @media (max-width:550px){
+  .EFPageContainer{
+    margin:4rem 0rem 1rem 0rem;
+    padding: 0;
+    width: 100%;
+  }
   .EFFormContainer{
     padding: 0 0rem;
 }
   .modalContent {
-    width: 99%;
+    width: 100%;
     border-radius: 0; /* Optional, make it square on very small screens */
   }
+  .sharedSettingContainer{
+    margin-top: 1rem;
+  }
+  .inputFieldsTimeSelectSection{
+    flex-direction: column;
+  }
+
+.sharedSettingContainer{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  margin-left: 1rem;
+
+}
+.mapContainer{
+  padding: 0rem;
+  text-align: center;
+  width: 100%;
+}
+.mapIframe{
+  max-width: 100vw;
+}
+.labelText,
+.EFPhotoAttachIconButtons,
+.profilePictureMessage{
+  margin-left: 2rem;
+}
 }
 
-@media (max-width:420px){
+@media (max-width:440px){
 .inputFields.budgetInputField {
   margin-top: 1rem;
 }
 
 
 }
+
+@media (max-width:320px){
+
+  .sharedSettingContainer{
+    margin-top: 2rem;
+  }
+  
+  }

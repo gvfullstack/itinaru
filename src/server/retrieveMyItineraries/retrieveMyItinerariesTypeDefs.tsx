@@ -1,11 +1,10 @@
 import dayjs, { Dayjs } from 'dayjs';
 import firebase from 'firebase/compat/app';
-import 'firebase/compat/firestore';
 
 export type ItineraryItem = {
     siteName?: string;
-    startTime?: {time?: Dayjs | null};
-    endTime?: {time?: Dayjs | null};
+    startTime?: { time?: number | null };
+    endTime?: { time?: number | null };
     description?: string;
     location?: {latitude: number, longitude: number};
     locationAddress?: string;
@@ -22,10 +21,6 @@ export type ItineraryItem = {
     beingEdited?: boolean
   } 
 
-  export const ItemTypes = {
-    ITINERARY_ITEM: 'itineraryItem',
-  };
-  
   export type ItineraryItems = ItineraryItem[];
 
   export type ItinerarySettings = {
@@ -35,7 +30,7 @@ export type ItineraryItem = {
     city: string;
     state: string;
     duration?: string;
-    galleryPhotoUrl?: string;
+    imageUrl?: string;
     visibility: 'private' | 'shared' | 'public';
     readAccess?: string[];
     editAccess?: string[];
@@ -43,9 +38,9 @@ export type ItineraryItem = {
       
   export type Itinerary = {
     id?: string,
-    uid?: string,
-    settings?: ItinerarySettings;
-    items?: ItineraryItems;
+    uid: string,
+    settings: ItinerarySettings;
+    items: ItineraryItems;
   }
 
 
@@ -74,6 +69,7 @@ export type ItineraryItem = {
   } 
 
  export type TransformedItinerary = {
+    uid: string;
     id?: string;
     settings: ItinerarySettings;
     items: TransformedItineraryItem[];

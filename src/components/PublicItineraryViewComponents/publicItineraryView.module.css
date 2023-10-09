@@ -1,3 +1,4 @@
+@media (min-width: 0px) {
 .publicItinViewContainer{
     display: flex;
     flex-direction: column;
@@ -9,7 +10,8 @@
     border-width: 1px;
     border-color: #bebebe; */
     border-radius: 10px;
-    padding: 1rem 0rem 2rem 0rem;
+    padding: 0rem 0rem 2rem 0rem;
+  
 }
 
 .publicItinViewContentContainer{
@@ -18,10 +20,12 @@
   align-items: center;
   width: 100%;
   height: fit-content;
+  margin-top: 3.5rem;
 }
 
 
 .generalItineraryInformationContainer{
+
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -38,14 +42,86 @@
   justify-content: center;
   
 }
+.itinTitleDescription{
+  width: 100%;
+  padding: 0 1.5rem;
+  text-align: justify;
+}
 .itinGeneralInfoTextSection{
   width: 100%;
   padding: 0 1.5rem;
 }
+
 .publicItinViewTitle{
-  font-size: 1.5rem;
+  font-size: 18px;
   font-weight: bold;
   margin: 1rem 0 -1rem 0;
-
 }
 
+.itinTitleDescription,
+.itinGeneralInfoTextSection{
+  font-size: 16px;
+}
+
+.itinGeneralInfoPhoto{
+  width:100%;
+  height: auto;
+}
+.mapContainer{
+  padding: 0rem;
+  text-align: center;
+  width: 100%;
+}
+.mapIframe{
+  max-width: 100vw;
+  height: 80vh;
+}
+}
+
+@media (min-width: 500px){
+  .publicItinViewTitle{
+    font-size: 20px;
+  }
+  .itinTitleDescription,
+  .itinGeneralInfoTextSection{
+    font-size: 18px;
+  }
+  
+}
+
+@media (min-width: 600px) {
+
+  .publicItinViewContainer{
+    border-radius: 10px;
+    padding: 0;
+    width: 600px;
+  }
+
+  .itinGeneralInfoPhoto{
+    border-radius: 10px;
+  } 
+  .mapIframe{
+    max-width: 80vw;
+  }
+}
+
+@media (min-width: 1200px) {
+
+  .publicItinViewContainer{
+    width: 800px;
+  }
+
+  .publicItinViewTitle{
+    font-size: 22px;
+  }
+  
+  .itinTitleDescription,
+  .itinGeneralInfoTextSection{
+    font-size: 20px;
+  }
+
+  .itinGeneralInfoPhoto{
+    border-radius: 10px;
+  } 
+
+}

@@ -31,17 +31,27 @@ const ItinGalleryComponent: React.FC<Props> = ({...props}) => {
 
   const truncatedDescription = truncateText(props.description, 135);
 
+  const getRandomImage = () => {
+    const images = ['dubaiShine.jpg', 'landscape.jpg', 'rainbow.jpg', 'sunflower.jpg', 'tropicalSunset.jpg'];
+    const randomIndex = Math.floor(Math.random() * images.length);
+    return `/images/homePageGalleryDefaultImages/${images[randomIndex]}`;
+  };
+  
+
   return (
     <div className={styles.container} onClick={() => router.push(`/viewPublicItinerary/${props.itinId}`)}>
-      <div className={styles.aspectRatioBox}> 
-        <Image
-          src={props.imageUrl} 
-          alt="No image uploaded by creator."   
-          width={2400}
-          height={2400}
-          loading='lazy'
-          style={{ width: '100%', height: '100%', objectFit: 'cover' }}            
-          />
+      <div className={styles.imageWrapper}>
+        <div className={styles.aspectRatioBox}> 
+            <Image
+              src={props.imageUrl || getRandomImage()} 
+              alt="No image uploaded by creator."   
+              width={2400}
+              height={2400}
+              loading='lazy'
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}            
+              />
+          {!props.imageUrl && <div className={styles.watermark}>Stock Photo</div>}
+          </div>
       </div>
       <div>
         <h5 className={styles.title}>{props.title}</h5>

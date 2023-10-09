@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { faFloppyDisk } from '@fortawesome/free-regular-svg-icons';
 import { useRouter } from 'next/router';
-
+import GoogleMapIframe from './directionsMapPV';
 
 const GeneralItineraryInformation = dynamic(() => 
     import('./generalItineraryInformationSection'), {
@@ -37,6 +37,7 @@ return (
         <div className={styles.publicItinViewContentContainer}>
             <GeneralItineraryInformation />
             <DragDropSection />
+            <GoogleMapIframe />            
         </div>
 </div>
   );
