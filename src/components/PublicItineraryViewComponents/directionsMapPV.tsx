@@ -2,22 +2,23 @@ import React, { FC } from 'react';
 import { useRecoilValue } from 'recoil';
 import { ItineraryItem } from './publicItinViewTypeDefs';
 import { currentlyViewingItineraryState } from './publicItinViewAtoms';
-
+import styles from './publicItineraryView.module.css';
 
 const GoogleMapIframe: FC = () => {
   const itinerary = useRecoilValue(currentlyViewingItineraryState);
-
-  if (itinerary.items.length < 2) {
+  const items = itinerary.items || [];
+  
+  if (items.length < 2) {
     return null;
   }
 
-  const origin = getLocationString(itinerary.items[0]);
-  const destination = getLocationString(itinerary.items[itinerary.items.length - 1]);
+  const origin = getLocationString(items[0]);
+  const destination = getLocationString(items[items.length - 1]);
   
   let googleMapURL = `https://www.google.com/maps/embed/v1/directions?key=${'AIzaSyDI6tYErd_J2V4l0yQvj6ug4hYSMmeCMJ0'}&origin=${origin}&destination=${destination}`;
 
-  if (itinerary.items.length > 2) {
-    const waypoints = itinerary.items
+  if (items.length > 2) {
+    const waypoints = items
       .slice(1, -1)
       .map((item) => getLocationString(item))
       .join('|');
@@ -26,8 +27,8 @@ const GoogleMapIframe: FC = () => {
   }
 
   return (
-    <div style={{padding: '1rem', textAlign:"center"}}>
-      <iframe style={{ maxWidth: '455px' }} width= '100%' height="450" 
+    <div className={styles.mapContainer}>
+      <iframe className={styles.mapIframe} height="100%" width="100%" 
       src={googleMapURL} allowFullScreen />
     </div>
   );

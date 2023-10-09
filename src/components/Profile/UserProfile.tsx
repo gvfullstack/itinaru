@@ -129,6 +129,7 @@ const UserProfile: React.FC = () => {
       setEmail(authUser.email || '');
       setUsername(authUser.username || '');
       setProfilePictureUrl(authUser.profilePictureUrl || '');
+      setProfilePicWhileEditing(authUser.profilePictureUrl || '');
       if (recoilPrivacySettings !== null) {
         setLocalPrivacySettings(recoilPrivacySettings);
       }
@@ -147,7 +148,21 @@ const UserProfile: React.FC = () => {
     const storage = firebaseStorage;
     const userId = authUser?.uid;
     const fileName = 'profilePicture';
-    const storageRef = ref(storage, `profilePictures/${userId}/${fileName}`);
+    let path;
+
+    if (fileName && authUser?.uid) {
+      path = `profilePictures/${userId}/${fileName}` ?? "";
+      console.log(path, "path")} 
+      else{console.error('firebaseStorage is undefined');
+      return null;
+    }
+
+    if (!firebaseStorage) {
+      console.error('firebaseStorage is undefined');
+      return null;
+    }
+
+    const storageRef = ref(storage, path);
     const uploadTask = profilePicWhileEditing !== "" ? uploadBytesResumable(storageRef, profilePictureFile!) : null;
   
     if (authUser && authUser.uid) {

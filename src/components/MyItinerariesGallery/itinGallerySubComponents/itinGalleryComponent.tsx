@@ -90,7 +90,7 @@ const handleCreateAndGo = async () => {
 
     setItineraryToEdit(newTransformedItinerary);
     
-    router.push(`/editItinerary/editMyItinerary`);
+    router.push(`/user/editMyItinerary`);
 
 };
 

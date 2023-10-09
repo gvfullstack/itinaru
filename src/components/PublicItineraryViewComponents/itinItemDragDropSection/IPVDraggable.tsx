@@ -34,7 +34,7 @@ const IPVDraggable = React.forwardRef((
 
   const handleShowHideDescription = () => {
     setItineraryInEdit(prevItinerary => {
-        const updatedItems = prevItinerary.items.map((item) => {
+        const updatedItems = prevItinerary.items?.map((item) => {
             if (item.id === itineraryItem.id) {
                 return { ...item, descHidden: !item.descHidden };
                 console.log("item", item)
@@ -202,7 +202,7 @@ const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.tim
   //   return maxLength;
   // }
 
-  const shortSiteName = itineraryItem.siteName?.substring(0, 50) + "...";
+  const shortSiteName = itineraryItem.siteName?.substring(0, 50) || "untitled item" + "...";
   return (
     <>
     <div ref={localRef} style={itemStyles}  className={styles.dropDiv} >

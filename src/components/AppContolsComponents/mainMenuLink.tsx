@@ -90,9 +90,9 @@ const Menu: React.FC = () => {
           <li className={styles.menuOption} onClick={toggleMenu}>
             <Link href="/">Home</Link>
           </li>
-          <li className={styles.menuOption} onClick={toggleMenu}>
+          {authUser &&<li className={styles.menuOption} onClick={toggleMenu}>
             <Link href="/user/myItineraries">My Itineraries</Link>
-          </li>          
+          </li>}          
           <li className={styles.menuOption}>
             <Link href="/aiAssistedItinerary" onClick={toggleMenu}>AI Assisted Itinerary</Link>
           </li>

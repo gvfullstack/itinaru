@@ -10,7 +10,8 @@
     border-width: 1px;
     border-color: #bebebe; */
     border-radius: 10px;
-    padding: 1rem 0rem 2rem 0rem;
+    padding: 0rem 0rem 2rem 0rem;
+  
 }
 
 .publicItinViewContentContainer{
@@ -19,10 +20,12 @@
   align-items: center;
   width: 100%;
   height: fit-content;
+  margin-top: 3.5rem;
 }
 
 
 .generalItineraryInformationContainer{
+
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -64,6 +67,15 @@
   width:100%;
   height: auto;
 }
+.mapContainer{
+  padding: 0rem;
+  text-align: center;
+  width: 100%;
+}
+.mapIframe{
+  max-width: 100vw;
+  height: 80vh;
+}
 }
 
 @media (min-width: 500px){
@@ -74,13 +86,13 @@
   .itinGeneralInfoTextSection{
     font-size: 18px;
   }
+  
 }
 
 @media (min-width: 600px) {
 
   .publicItinViewContainer{
     border-radius: 10px;
-    margin-top: 4rem;
     padding: 0;
     width: 600px;
   }
@@ -88,6 +100,9 @@
   .itinGeneralInfoPhoto{
     border-radius: 10px;
   } 
+  .mapIframe{
+    max-width: 80vw;
+  }
 }
 
 @media (min-width: 1200px) {
@@ -108,4 +123,5 @@
   .itinGeneralInfoPhoto{
     border-radius: 10px;
   } 
+
 }

@@ -8,11 +8,17 @@
   margin-top: 3rem;
 }
 
-.publicItinViewMain{
+.publicItinViewMain,
+.editItineraryMain{
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.editItineraryMain{
+  margin-left: 0;
+  padding: 0;
 }
 
 .myItineraryPage{

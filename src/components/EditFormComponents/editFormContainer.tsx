@@ -27,6 +27,9 @@ import { v4 as uuidv4 } from 'uuid';
 import { openDB } from 'idb';
 import { validateTitle, validateCity, validateState } from './util/index'
 import GoogleMapIframe from './directionsMapEF';
+import Link from 'next/link'; 
+import {currentlyViewingItineraryState} from '../PublicItineraryViewComponents/publicItinViewAtoms';
+import { set } from 'lodash';
 
 const GoogleMapsProvider = dynamic(() => 
     import('./EditFormITEMComponents/googleMapsProvider'), {
@@ -71,6 +74,7 @@ const [imageSaved, setImageSaved] = useState("");
 const [displayDeleteConfirmation, setDisplayDeleteConfirmation] = useState(false);
 const [saveImageDisabled, setSaveImageDisabled] = useState(false);
 const [processingImage, setProcessingImage] = useState(false);
+const [currentlyViewingItinerary, setCurrentlyViewingItinerary] = useRecoilState(currentlyViewingItineraryState);
 
 
 
@@ -128,9 +132,16 @@ function checkItineraryId(): boolean {
 
 // Upload gallery photo and return download URL
 async function uploadGalleryPhoto(): Promise<string | null> {
+  checkAuthenticatedUser()
   let downloadURL: string | null = null;
-  if (ItineraryGalleryPhotoFile) {
-    const storageRef = ref(firebaseStorage, `itineraries/${authUser?.uid}/${itinerary.id}/itineraryGalleryPhoto`);
+  if (ItineraryGalleryPhotoFile && authUser?.uid && itinerary.id) {
+    const path = `itineraries/${authUser?.uid}/${itinerary.id}/itineraryGalleryPhoto` ?? "";
+    console.log(path, "path")
+    if (!firebaseStorage) {
+      console.error('firebaseStorage is undefined');
+      return null;
+    }
+    const storageRef = ref(firebaseStorage, path);
     const uploadTask = itineraryGalleryPhotoWhileEditing !== "" ? uploadBytesResumable(storageRef, ItineraryGalleryPhotoFile) : null;
 
     if (uploadTask) {
@@ -171,6 +182,11 @@ async function uploadGalleryPhoto(): Promise<string | null> {
           );
       });
     }
+  } else {
+    // Handling the case where required conditions are not met
+    console.error("Required conditions not met for uploading gallery photo.");
+    toast.warn("Could not upload the photo due to missing information.");
+    return null;
   }
 
   return null;
@@ -355,8 +371,26 @@ const handleDeleteItinerary = async (itineraryId: string) => {
   }
   handleEdit();
 }
+const deleteImage = async (itineraryId: string): Promise<void> => {
+  if (!authUser || !authUser.uid) {
+    toast.warn("No authenticated user found.");
+    console.error("No authenticated user found.");
+    return;
+  }
 
+  const imageExistsInState = itinerary?.settings?.galleryPhotoUrl;
 
+  try {
+    if (imageExistsInState) {
+      const storageRef = firebase.storage().ref();
+      const imagePath = `itineraries/${authUser.uid}/${itineraryId}/itineraryGalleryPhoto`;
+      await storageRef.child(imagePath).delete();
+    }
+  }catch (error) {
+    console.error("Error while deleting: ", error);
+    toast.error("Error while deleting itinerary. Please try again later.");
+  }
+}
 
 const deleteItinerary = async (itineraryId: string): Promise<void> => {
   if (!authUser || !authUser.uid) {
@@ -479,13 +513,27 @@ const resizeImage = (file: File, callback: (result: File | null) => void) => {
 ////////////////////////////////////////////////////////////////////
 const inputFileRef = useRef<HTMLInputElement>(null);
 
-const removeImage = (e: React.MouseEvent<HTMLElement | SVGSVGElement>) => {
+const removeImage = async (e: React.MouseEvent<HTMLElement | SVGSVGElement>)  => {
   e.preventDefault();
   setItineraryGalleryPhotoWhileEditing("");
   setItineraryGalleryPhotoFile(null);
   if (inputFileRef.current) {
     inputFileRef.current.value = "";
   }
+
+  await deleteImage(itinerary.id?itinerary.id:"");
+  
+  setItinerary(prev => {
+    return {...prev, 
+      settings: {...prev.settings, 
+        title: prev.settings?.title || "",
+        description: prev.settings?.description ||"",
+        city: prev.settings?.city || "",
+        state: prev.settings?.state || "",
+        visibility: prev.settings?.visibility || 'private',
+        galleryPhotoUrl: ""}
+    };
+  })
 };
 ////////////////////////////
 const deletePhotoIcon = (
@@ -499,7 +547,18 @@ const deletePhotoIcon = (
       }}
   />
 );
-////////////////////////////
+///////////////preview itinerary function/////////////
+
+const handlePreviewItinerary = () => {
+  if (!checkAuthenticatedUser()) {
+    return;
+  }
+
+  if (!checkItineraryId()) {
+    return;
+  }
+ setCurrentlyViewingItinerary(itinerary);
+};
 
 return (
 <div className={styles.EFPageContainer}>
@@ -520,16 +579,15 @@ return (
           }
 
               <div className={styles.EFFormContainer}>
-                  <ItineraryEditForm />
-     
-                  <label className={styles.profileLabel}>
+              <Link href="/viewPublicItinerary/previewItinerary" onClick={handlePreviewItinerary}>Preview</Link>
+              <label className={styles.profileLabel}>
                     <p className={styles.labelText}>Gallery Photo:</p>
                     {processingImage && <p style={{fontWeight:"500"}}>Processing...</p>}
                    {itineraryGalleryPhotoWhileEditing && 
                       <p style={{ margin:"0", padding:"0", textAlign:"center"}}>{imageSaved}</p>}                 
 
                     {itineraryGalleryPhotoWhileEditing != "" &&
-                    <div>
+                    
                       <div className={styles.profilePicPreviewImageContainer}> 
                         <Image 
                             src={itineraryGalleryPhotoWhileEditing || ''} 
@@ -538,8 +596,7 @@ return (
                             height={2048} // replace with actual image height
                             className={styles.profilePicturePreview}
                         />
-                      </div>
-                    </div>}
+                      </div>}
                       <input 
                         ref={inputFileRef}
                         className={styles.profileInput} 
@@ -550,7 +607,7 @@ return (
                       />
                     <div className= {styles.EFPhotoAttachIconButtons}>
                         {attachIcon}
-                        {resetPhotoIcon}                      
+                        {/* {resetPhotoIcon}                       */}
                         {itineraryGalleryPhotoWhileEditing != "" && 
                           <div>{deletePhotoIcon}</div>            
                         }
@@ -564,6 +621,10 @@ return (
                   </div>
                   </label>
                   <p className={styles.profilePictureMessage}>*Image uploads must be in JPEG, PNG, or GIF format.</p>
+
+                  <ItineraryEditForm />
+     
+                
                   
                   <div className={styles.plusSignContainerEF}>
                     <div className={styles.plusSignEF} onClick={handleShowItemForm}>

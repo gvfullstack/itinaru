@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { useRecoilValue } from 'recoil';
 import { ItineraryItem } from './editFormTypeDefs';
 import { currentlyEditingItineraryState } from './editFormAtoms';
-
+import styles from './EditFormCSS/itineraryEditForm.module.css';
 
 const GoogleMapIframe: FC = () => {
   const itinerary = useRecoilValue(currentlyEditingItineraryState);
@@ -34,8 +34,8 @@ const GoogleMapIframe: FC = () => {
   }
 
   return (
-    <div style={{padding: '1rem', textAlign:"center"}}>
-      <iframe style={{ maxWidth: '455px' }} width= '100%' height="450" 
+    <div className={styles.mapContainer}>
+      <iframe className={styles.mapIframe} height="100%" width="100%" 
       src={googleMapURL} allowFullScreen />
     </div>
   );

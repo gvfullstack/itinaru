@@ -28,7 +28,7 @@ export const getServerSideProps = async (context:GetServerSidePropsContext) => {
     useEffect(() => {
         if (itinerary) {
             // Convert the startTime and endTime to Dayjs
-            const updatedItems = itinerary.items.map(item => ({
+            const updatedItems = itinerary.items?.map(item => ({
                 ...item,
                 startTime: item.startTime?.time != null ? { time: dayjs(item.startTime.time) } : undefined,
                 endTime: item.endTime?.time != null ? { time: dayjs(item.endTime.time) } : undefined

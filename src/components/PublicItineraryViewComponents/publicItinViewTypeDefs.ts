@@ -43,9 +43,9 @@ export type ItineraryItem = {
       
   export type Itinerary = {
     id?: string,
-    uid: string,
-    settings: ItinerarySettings;
-    items: ItineraryItems;
+    uid?: string,
+    settings?: ItinerarySettings;
+    items?: ItineraryItems;
   }
 
 

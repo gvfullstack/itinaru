@@ -27,10 +27,12 @@ const IPVDroppable: React.FC = () => {
       accept: "itineraryItem",
       hover: (item, monitor) => {
         if (!ref.current) return;
+        if (!itineraryItemsRef.current) {
+          console.error("itineraryItemsRef.current is undefined.");
+          return;
+        }
         const dragItemId = (monitor.getItem() as ItineraryItem).id;
-        const draggedItem = itineraryItemsRef.current.find(item => item.id === dragItemId);
-        console.log("draggedItem", draggedItem) 
-        console.log("itineraryItemsRef.current", itineraryItemsRef.current) 
+        const draggedItem = itineraryItemsRef.current?.find(item => item.id === dragItemId);
         for (let i = 0; i < itineraryItemsRef.current.length; i++) {
           const item = itineraryItemsRef.current[i];      
           if (item.id === draggedItem?.id) {
@@ -63,6 +65,10 @@ const IPVDroppable: React.FC = () => {
       
       drop: (item, monitor) => {
         setLocalNewDropIndex(null)
+        if (!itineraryItemsRef.current) {
+          console.error("itineraryItemsRef.current is undefined.");
+          return;
+        }
         const dragItemId = (monitor.getItem() as ItineraryItem).id;
         const draggedItem = itineraryItemsRef.current.find(item => item.id === dragItemId);
             console.log("draggedItem", draggedItem)
@@ -96,7 +102,10 @@ const IPVDroppable: React.FC = () => {
   const fixedDate = '2023-01-01';
   
   const updateStartTimes = (items: ItineraryItem[], draggedItem: ItineraryItem) => {
-  
+    if (!itineraryItemsRef.current) {
+      console.error("itineraryItemsRef.current is undefined.");
+      return;
+    }
       const updatedItems = [...items];
       const dayStartTime = itineraryItemsRef.current[0].startTime?.time;
   
@@ -162,6 +171,9 @@ const IPVDroppable: React.FC = () => {
     }, []);
       
     useEffect(() => {
+      if (!itineraryItemsState.items) {
+        return;
+      }
       itemRefs.current = itineraryItemsState.items.map(itineraryItem => {
         const ref = itemRefs.current.find((itemRef) => itemRef.id === itineraryItem.id);
         return ref || { id: itineraryItem.id, ref: null };    });
@@ -169,7 +181,7 @@ const IPVDroppable: React.FC = () => {
     
       return (
         <div ref={ref} className={styles.parentDropDiv} >
-          {itineraryItemsState.items.map((itineraryItem: ItineraryItem, index: number) => {
+          {itineraryItemsState.items?.map((itineraryItem: ItineraryItem, index: number) => {
             const isDraggedDownward = !dragDirection;
             const isDraggedUpward = dragDirection;
             const isHovered = localNewDropIndex === index && draggedItemIndex !== index;

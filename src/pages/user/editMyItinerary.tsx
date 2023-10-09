@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 import { openDB } from 'idb';
 import dayjs, {Dayjs} from 'dayjs'; 
 import { IndexDBItinerary, IndexDBItineraryItem } from '../../components/EditFormComponents/editFormTypeDefs';
+import styles from '@/styles/Home.module.css'
 
 
 const SkeletonForm = () => {
@@ -114,9 +115,9 @@ const EFEditPage: React.FC = () => {
 
   
   return (
-    <>
+    <div className={styles.editItineraryMain}>
       <EditFormContainer />
-    </>)
+    </div>)
 };
 
 export default EFEditPage;

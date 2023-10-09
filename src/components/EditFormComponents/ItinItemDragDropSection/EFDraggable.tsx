@@ -48,9 +48,23 @@ const EFDraggable = React.forwardRef((
   const localRef = useRef<HTMLDivElement>(null);
   const [showDescription, setShowDescription] = useState(false);
   useEffect(() => {console.log(showDescription)}, [showDescription]);
+  
   const handleShowHideDescription = () => {
-    setShowDescription(prev=>!showDescription);
-  }
+    setItineraryInEdit(prevItinerary => {
+        const updatedItems = prevItinerary.items?.map((item) => {
+            if (item.id === itineraryItem.id) {
+                return { ...item, descHidden: !item.descHidden };
+                console.log("item", item)
+            }
+            return item;
+        });
+
+        return {
+            ...prevItinerary,
+            items: updatedItems
+        };
+    });
+}
 //   const handleShowHideDescription = () => {
 //     setItineraryInEdit(prevItinerary => {
 //       console.log("prevItinerary", prevItinerary)
@@ -118,7 +132,7 @@ const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.tim
   
   const Menu = () => {
     return (
-      <div className={`${styles.menu} ${showDescription ? "" : styles.isShown }`}>
+      <div className={`${styles.menu} ${itineraryItem.descHidden ? "" : styles.isShown }`}>
         <div className={styles.menuItem} onClick={handleShowItemForm}>{editItemIcon} Edit</div>
         <div className={styles.menuItem} >
               <a
@@ -181,6 +195,7 @@ const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.tim
     setShowItemForm(prev=>!showItemForm);
 
   }
+  const shortSiteName = itineraryItem.siteName?.substring(0, 50) || "untitled item" + "...";
 
   return (
     <>
@@ -200,22 +215,53 @@ const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.tim
         </div>
        </div> 
            }
-      <div key={uuidv4()} className={`${styles.itineraryParent} ${showDescription ? "" : styles.isShown }`}>
+        <div key={uuidv4()} className={`${styles.itineraryParent} ${itineraryItem.descHidden ? "" : styles.isShown }`}>
              <div className={styles.mainItinItemContainer}>
-                  <div className={styles.itineraryItemContainerContainer}>
-                      <div className={styles.itinTitleContainer} 
-                      >
-                          <h3 className={`${styles.itinTitle} ${showDescription ? "" : styles.isShown }`} 
+                  <div className={`${styles.itineraryItemContainerContainer} ${itineraryItem.descHidden ? "" : styles.isShown}`}>
+                      {/* <div className={styles.itinTitleContainer}> */}
+                          <h3 className={`${styles.itinTitle} ${itineraryItem.descHidden ? "" : styles.isShown}`} 
                             onClick={()=>handleShowHideDescription()}>
-                              {itineraryItem.siteName}                           
+                              {itineraryItem.descHidden ? shortSiteName : itineraryItem.siteName}                           
                             </h3>
-                          
-                          <div className={`${styles.itinTitleDescription} ${showDescription ? styles.isShown : ""}`}>
-                            <ItemDescriptionStaticComponent description={itineraryItem.description ?? ''} />
-                          </div>                       
+                            <div className={`${styles.activityTime} ${itineraryItem.descHidden ? "" : styles.isShown}`}>
+                                    <div className={`${styles.infoBannerWords} ${itineraryItem.descHidden ? "" : styles.isShown}`}>Start:</div>
+                                    <div className={styles.startTimeContainer}>
+                                      <div className={`${styles.startTime} ${itineraryItem.descHidden ? "" : styles.isShown}`}>
+                                          <div>  
+                                            {formattedStartTime}
+                                          </div>
+                                      </div>
+                                    </div>
+                                    <div className={`${styles.infoBannerWords} ${itineraryItem.descHidden ? "" : styles.isShown}`}>End:</div>
+                                    <div className={styles.endTimeContainer}>
+                                      <div className={`${styles.endTime} ${itineraryItem.descHidden ? "" : styles.isShown}`}>
+                                            <div>
+                                              {formattedEndTime}
+                                            </div>
+                                      </div>
+                                    </div>
+                                    <div className={`${styles.infoBannerWords} ${itineraryItem.descHidden ? "" : styles.isShown}`}>Duration:</div>
 
-                          <p className={`${styles.expandedItinAddressContainer} ${showDescription ? styles.isShown : "" }`}>{itineraryItem.locationAddress}</p>
-                          <div className={`${styles.ownResearchContainer} ${showDescription ? styles.isShown : "" }`}>
+                                    <div className={`${styles.durationContainer} ${itineraryItem.descHidden ? "" : styles.isShown}`}>
+                                      {millisecondsToHoursMinutes(itineraryItem.activityDuration)}&nbsp;{clock}
+                                    </div>
+                                    <div 
+                                      className={`${styles.expandedItinMapText} ${itineraryItem.descHidden ? "" : styles.isShown}`} 
+                                                                >
+                                          <a
+                                            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(itineraryItem.locationAddress ? itineraryItem.locationAddress : '')}`}
+                                            target="_blank"
+                                            style={{ textDecoration: 'none', color: 'black' }}
+                                            >{mapMarkerAlt}</a>
+                                                
+                                    </div>
+                          </div> 
+                            <div className={`${styles.itinTitleDescription} ${itineraryItem.descHidden ? "" : styles.isShown}`}>  
+                               <ItemDescriptionStaticComponent description={itineraryItem.description || ""} />
+                            </div>                       
+                          
+                          <p className={`${styles.expandedItinAddressContainer} ${itineraryItem.descHidden ? "" : styles.isShown }`}>{itineraryItem.locationAddress}</p>
+                          <div className={`${styles.ownResearchContainer} ${itineraryItem.descHidden ? "" : styles.isShown }`}>
                             Do your own research: 
                             <div className={styles.expandedItinItemWebsite}>
                               <a href={`https://www.google.com/search?q=${encodeURIComponent(itineraryItem.siteName ? itineraryItem.siteName : "")}`} target="_blank">
@@ -228,54 +274,35 @@ const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.tim
                                   <a href={`https://www.youtube.com/results?search_query=${encodeURIComponent(itineraryItem.siteName ? itineraryItem.siteName : "")}`} target="_blank">
                                   {externalLink} <span className={styles.youTubeLinkText}>Search on YouTube</span></a>
                             </div>
+                            <div className={`${styles.expandedMenu} ${itineraryItem.descHidden ? "" : styles.isShown }`}>
+                              <div className={styles.expandedMenuItem} onClick={handleShowItemForm}>{editItemIcon} Edit</div>
+                              <div className={styles.expandedMenuItem} >
+                                    <a
+                                    href={
+                                      `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(itineraryItem.locationAddress || " ")
+                                    }`}
+                                    target="_blank"
+                                    style={{ textDecoration: 'none', color: 'black' }}
+                                    >
+                                    {mapMarkerAlt}
+                                    </a>  
+                                    Directions
+                              </div>
+                              <div className={styles.expandedMenuItem} onClick={handleRemoveClick}>{deleteItemIcon} Delete</div> 
+                            </div>
                           </div>
-                      </div>
-                      
-                      <div className={`${styles.rightContainer} ${showDescription ? "" : styles.isShown}`}>
-                        <div className={styles.activityTime}>
-                                <div className={styles.startTimeContainer}>
-                                    <div className={styles.startTime}>
-                                          <div>  
-                                            {formattedStartTime}
-                                          </div>
-                                    </div>
-                                  </div>
-                                    <div className={styles.endTimeContainer}>
-                                    <div className={styles.endTime}>
-                                          <div>
-                                            {formattedEndTime}
-                                          </div>
-                                    </div>
-                                  </div>
-                                      <div className={styles.durationContainer}>
-                                         {millisecondsToHoursMinutes(itineraryItem.activityDuration)}{clock} 
-                                      </div>
-                                      {itineraryItem.userDefinedRespectedTime && 
-                                        <div className={styles.durationContainer}>
-                                          TIME LOCKED
-                                        </div>
+                  
+                        
+                          <div 
+                            className={`${styles.hamburgerMenuContainer} ${itineraryItem.descHidden ? "" : styles.isShown}`} 
+                            onClick={handleMenuClick} 
+                            ref={menuRef}
+                            >
+                                      {ellipsisVertical}
+                                      {menuOpen && <Menu />
                                       }
-                          </div> 
-                        <div 
-                          className={`${styles.hamburgerMenuContainer} ${showDescription ? "" : styles.isShown}`} 
-                          onClick={handleMenuClick} 
-                          ref={menuRef}
-                          >
-                                    {ellipsisVertical}
-                                    {menuOpen && <Menu />
-                                    }
-                        </div>
-                        <div 
-                          className={`${styles.expandedItinMapText} ${showDescription ? "" : styles.isShown}`} 
-                                                     >
-                              <a
-                                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(itineraryItem.locationAddress ? itineraryItem.locationAddress : '')}`}
-                                target="_blank"
-                                style={{ textDecoration: 'none', color: 'black' }}
-                                >{mapMarkerAlt}</a>
-                                    
-                        </div>                             
-                      </div>
+                          </div>
+                                                       
               </div>
           </div>
       </div>
