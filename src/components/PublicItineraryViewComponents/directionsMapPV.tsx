@@ -12,19 +12,24 @@ const GoogleMapIframe: FC = () => {
     return null;
   }
 
-  const origin = getLocationString(items[0]);
-  const destination = getLocationString(items[items.length - 1]);
-  
+  if (items.length < 2) {
+    return null;
+  } 
+  const waypoints = items
+  .map((item) => getLocationString(item))
+  .filter(Boolean);
+// Set origin and destination based on the waypoints
+  const origin = waypoints[0] || getLocationString(items[0]);
+  const destination = waypoints[waypoints.length - 1] || getLocationString(items[items.length - 1]);
+
+  // Initialize Google Maps URL
   let googleMapURL = `https://www.google.com/maps/embed/v1/directions?key=${'AIzaSyDI6tYErd_J2V4l0yQvj6ug4hYSMmeCMJ0'}&origin=${origin}&destination=${destination}`;
 
-  if (items.length > 2) {
-    const waypoints = items
-      .slice(1, -1)
-      .map((item) => getLocationString(item))
-      .join('|');
-      
-    googleMapURL += `&waypoints=${waypoints}`;
+  // Add waypoints to the URL if there are more than two
+  if (waypoints.length > 1) {
+    googleMapURL += `&waypoints=${waypoints.join('|')}`;
   }
+
 
   return (
     <div className={styles.mapContainer}>
@@ -35,11 +40,16 @@ const GoogleMapIframe: FC = () => {
 };
 
 
-function getLocationString(item: ItineraryItem): string {
+function getLocationString(item: ItineraryItem): string | null {
   if (item.locationAddress) {
+    console.log(item.locationAddress, 'item.locationAddress exists', item)
     return encodeURIComponent(item.locationAddress);
+  } else if (item.location?.latitude && item.location?.longitude) {
+    console.log(item.location, 'item.location exists', item)
+    return `${item.location.latitude},${item.location.longitude}`;
   } else {
-    return `${item.location?.latitude},${item.location?.longitude}`;
+    console.log('item.locationAddress and item.location do not exist')
+    return null;
   }
 }
 
