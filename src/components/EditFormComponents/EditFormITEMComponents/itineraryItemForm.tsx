@@ -137,25 +137,25 @@ const ItineraryItemForm: FC<Props> = ({ initialItem, ...props }) => {
           setItineraryInEdit((prevItinerary: Itinerary) => {
             const itemId = initialItemState.id;
             const itemIndex = prevItinerary.items?.findIndex(item => item.id === itemId);
-        
+          
             if (itemIndex === -1 || typeof itemIndex === 'undefined') return prevItinerary;
+          
             const items = [...(prevItinerary.items ?? [])];  // Shallow copy
-        
             const updatedItem = { ...items[itemIndex] };  // Shallow copy of the item
-            const updatedLocation = { ...updatedItem.location };  // Deep copy of the location
-        
-            if (!updatedLocation) {
-              updatedItem.location = {
-                latitude: 0,
-                longitude: 0,
-              };
-            } else {
-              updatedLocation[field] = newValue;
-              updatedItem.location = updatedLocation;  // Assign the updated location back to the item
+            
+            let updatedLocation: { latitude: number; longitude: number; } = {
+              latitude: 0,  // Provide a default value
+              longitude: 0  // Provide a default value
+            };
+            
+            if (updatedItem.location) {
+              updatedLocation = { ...updatedItem.location };
             }
-        
-            items[itemIndex] = updatedItem;  // Assign the updated item back to items
-        
+          
+            updatedLocation[field] = newValue;  // newValue is already a number
+            updatedItem.location = updatedLocation;
+            items[itemIndex] = updatedItem;
+          
             return {
               ...prevItinerary,
               items,
