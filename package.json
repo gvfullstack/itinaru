@@ -39,8 +39,6 @@
     "date-fns": "^2.29.3",
     "dayjs": "^1.11.7",
     "dotenv": "^16.0.3",
-    "eslint": "8.37.0",
-    "eslint-config-next": "13.2.4",
     "eventsource-parser": "^1.0.0",
     "express-rate-limit": "^6.7.0",
     "firebase": "^10.1.0",
