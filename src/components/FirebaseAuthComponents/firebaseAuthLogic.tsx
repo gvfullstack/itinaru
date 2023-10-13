@@ -7,7 +7,7 @@ import * as firebaseui from "firebaseui";
 import { getFirebaseAuth
  } from "./config/firebase.auth";
 import { db } from './config/firebase.database';
-import { authUserState, privacySettingsState } from '../../atoms/atoms';
+import { authUserState } from '../../atoms/atoms';
 import { AuthenticatedUser } from '../typeDefs';
 import { Timestamp } from 'firebase/firestore'; // Make sure to import Timestamp
 import { doc, getDoc, setDoc } from 'firebase/firestore'; // Import the required functions
@@ -20,87 +20,68 @@ const firebaseAuth = getFirebaseAuth();
 
 export default function FirebaseAuthLogic () {
     const [authUser, setAuthUser] = useRecoilState(authUserState);
-    const [userPrivacySettings, setUserPrivacySettings] = useRecoilState(privacySettingsState);
 
-    // Function to save the user's ID token to IndexedDB
-    // async function saveUserIDTokenToIDB(token: string) {
-    //   const localIndexDB = await openDB('itinerariesDatabase');
-    //   const tx = localIndexDB.transaction('userAuthToken', 'readwrite');
-    //   await tx.objectStore('userAuthToken').put(token, 'userToken');
-    // }
-  
     useEffect(() => {
         const unsubscribe = firebaseAuth.onAuthStateChanged(async (firebaseUser) => {
-          if (firebaseUser) {
-            // const idToken = await firebaseUser.getIdToken();
-            // Save the ID token to IndexedDB
-            // await saveUserIDTokenToIDB(idToken);
-
+          if (firebaseUser) {   
+            //identify user
             const uid = firebaseUser.uid;
-      
-            // Fetch additional user information from Firestore
+            // Fetch user information from Firestore
             const userRef = doc(db, "users", uid);
             const userDoc = await getDoc(userRef);
       
             if (userDoc.exists()) {
               // Default user object
-              const defaultUser: Partial<AuthenticatedUser> = {
-                accountCreationDate: Timestamp.fromDate(new Date()),
-                bio: null,
-                firstName: null,
-                lastName: null,
-                phoneNumber: null,
-                profilePictureUrl: null,
-              };
+       
       
-              // Separate privacySettings from the rest of the user fields
-              const { privacySettings, ...userFields } = userDoc.data() || {};
+              // spread user fields from Firestore document
+              const { ...userFields } = userDoc.data() || {};
       
               // Set authentication user state
               setAuthUser({
-                uid: uid,
-                email: firebaseUser.email,
-                displayName: firebaseUser.displayName,
-                ...defaultUser,
-                ...userFields // Spread in the additional Firestore data
+                ...userFields, // Spread in the additional Firestore data,
+                
               } as AuthenticatedUser);
       
               // Set privacy settings state
-              setUserPrivacySettings(privacySettings);
       
             } else {
               // Handle case where Firestore document doesn't exist
               // Create a new document with data from Firebase auth
+              const accountCreationDate = Timestamp.fromDate(new Date());
+              const defaultUser: Partial<AuthenticatedUser> = {
+                accountCreationDate: Timestamp.fromDate(new Date()),
+                bio: null,  
+                profilePictureUrl: null,
+                privacySettings:{
+                  username: false,
+                  userFirstLastName: false,
+                  email: false,
+                  bio: false,
+                  profilePictureUrl: false
+                }   
+
+              };
               await setDoc(userRef, {
                 uid: uid,
                 email: firebaseUser.email,
-                displayName: firebaseUser.displayName,
+                userFirstLastName: firebaseUser.displayName,
+                accountCreationDate: accountCreationDate,
+                ...defaultUser
                 // Add other fields as needed
-              });
+              }, { merge: true });
       
               // Update Recoil state
-              setAuthUser({
-                uid: uid,
+              setAuthUser((prevAuthUser) => ({
+                ...defaultUser,         // Apply default values first
+                ...prevAuthUser,        // Override with existing values
+                uid: uid,               // Finally, apply new values
                 email: firebaseUser.email,
-                displayName: firebaseUser.displayName,
-                accountCreationDate: Timestamp.fromDate(new Date()),
-                bio: null,
-                firstName: null,
-                lastName: null,
-                phoneNumber: null,
+                userFirstLastName: firebaseUser.displayName,
+                accountCreationDate: accountCreationDate,
+                bio: null,               
                 profilePictureUrl: null,
-                // Set other fields to null or default values as needed
-              });
-
-              setUserPrivacySettings({
-                username: false,
-                firstName: false,
-                lastName: false,
-                phoneNumber: false,
-                email: false,
-                bio: false,
-                profilePictureUrl: false
-              })
+              }));          
             }
           } else {
             // User is signed out

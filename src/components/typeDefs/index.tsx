@@ -180,11 +180,9 @@ export type BrandPageRender = {
 //////auth State  ///////////////
 
 export type AuthenticatedUser = {
-  accountCreationDate: Timestamp;
+  accountCreationDate?: Timestamp;
+  userFirstLastName?: string | null;
   username?: string | null;
-  firstName?: string | null;
-  lastName?: string | null;
-  phoneNumber?: string | null;
   email?: string | null;
   bio?: string | null;
   displayName?: string | null;
@@ -195,9 +193,7 @@ export type AuthenticatedUser = {
 
 export type PrivacySettings = {
   username?: boolean;
-  firstName?: boolean;
-  lastName?: boolean;
-  phoneNumber?: boolean;
+  userFirstLastName?: boolean;
   email?: boolean;
   bio?: boolean;
   profilePictureUrl?: boolean;

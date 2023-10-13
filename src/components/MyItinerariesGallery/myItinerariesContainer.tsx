@@ -20,24 +20,24 @@ const MyItineraries: React.FC = () => {
   const userId = authUser?.uid as string;
 
   useEffect(() => {
-    console.log(myItineraries, "myItineraries on load")
     const fetchData = async () => {
       const itineraries = await fetchUserItineraries(userId);
       if (itineraries !== undefined) {
-        console.log("saved to indexedDB...")
         setMyItineraries(itineraries);
         await updateIndexedDB(itineraries, false);
       }
     };
   
-    const updateIndexedDB = async (itineraries:TransformedItinerary[], needsRefresh:boolean) => {
-      console.log("ran updateIndexedDB")
+    const updateIndexedDB = async (itineraries: TransformedItinerary[], needsRefresh: boolean) => {
       const db = await openDB('itinerariesDatabase');
       const tx = db.transaction('myItineraries', 'readwrite');
       const store = tx.objectStore('myItineraries');
       await store.put(itineraries, 'userItineraries');
       await store.put(needsRefresh, 'indexDBNeedsRefresh');
-      console.log(store, "store after fetch")
+      
+      // Read back the value to confirm it was saved
+      const refreshedValue = await store.get('indexDBNeedsRefresh');
+      
       await tx.done;
     };
   
@@ -50,18 +50,15 @@ const MyItineraries: React.FC = () => {
   
     if (cachedItineraries && !needsRefresh && authUser) {
       setMyItineraries(cachedItineraries);
-    } else if (userId) {
-      console.log("fetching data from server...")
+    } else if (authUser) {
       fetchData();
     }
   
       await tx.done;
     };
   
-    if (myItineraries.length === 0) {
-      console.log("loading from indexedDB...");
-      loadFromIndexedDB();
-    }
+  loadFromIndexedDB();
+
   }, [userId]);
 
 

@@ -29,7 +29,11 @@ const ItinGalleryComponent: React.FC<Props> = ({...props}) => {
     return text;
   };
 
-  const truncatedDescription = truncateText(props.description, 135);
+  const truncatedDescription = () => {
+    return props.imageUrl ? 
+      truncateText(props.description, 135) : 
+      truncateText(props.description, 700);
+  };
 
   const getRandomImage = () => {
     const images = ['dubaiShine.jpg', 'landscape.jpg', 'rainbow.jpg', 'sunflower.jpg', 'tropicalSunset.jpg'];
@@ -41,7 +45,7 @@ const ItinGalleryComponent: React.FC<Props> = ({...props}) => {
   return (
     <div className={styles.container} onClick={() => router.push(`/viewPublicItinerary/${props.itinId}`)}>
       <div className={styles.imageWrapper}>
-        <div className={styles.aspectRatioBox}> 
+      {props.imageUrl && <div className={styles.aspectRatioBox}> 
             <Image
               src={props.imageUrl || getRandomImage()} 
               alt="No image uploaded by creator."   
@@ -50,14 +54,13 @@ const ItinGalleryComponent: React.FC<Props> = ({...props}) => {
               loading='lazy'
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}            
               />
-          {!props.imageUrl && <div className={styles.watermark}>Stock Photo</div>}
-          </div>
+          </div>}
       </div>
       <div>
         <h5 className={styles.title}>{props.title}</h5>
         <p className={styles.text}>{props.city}, {props.state}</p>
         <div className={styles.text}>
-           <QuillTextParserComponent description={truncatedDescription}/>
+           <QuillTextParserComponent description={truncatedDescription()}/>
         </div>
         {/* <p className={styles.text}>{props.description}</p> */}
         {/* <p className={styles.text}><strong>Duration:</strong> {duration}</p> */}
