@@ -26,12 +26,8 @@ const PublicProfile: React.FC<PublicProfileProps> = ({ publicProfile }) => {
                 </div>}
           {publicProfile?.username && 
           <p className={styles.profileStaticFields}>Username: {publicProfile?.username}</p>}
-          {publicProfile?.firstName && 
-          <p className={styles.profileStaticFields}>First Name: {publicProfile?.firstName}</p>}
-          {publicProfile?.lastName &&
-          <p className={styles.profileStaticFields}>Last Name: {publicProfile?.lastName}</p>}
-          {publicProfile?.phoneNumber &&
-          <p className={styles.profileStaticFields}>Phone Number: {publicProfile?.phoneNumber}</p>}
+          {publicProfile?.userFirstLastName && 
+          <p className={styles.profileStaticFields}>First Name: {publicProfile?.userFirstLastName}</p>}          
           {publicProfile?.email &&
           <p className={styles.profileStaticFields}>Email: {publicProfile?.email}</p>}
           {publicProfile?.bio &&
