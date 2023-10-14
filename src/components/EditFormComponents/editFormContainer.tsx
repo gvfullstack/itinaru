@@ -13,7 +13,6 @@ import { authUserState } from '../../atoms/atoms'
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import { db  } from '../FirebaseAuthComponents/config/firebase.database';
-import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';

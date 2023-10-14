@@ -6,7 +6,7 @@
   import { useRecoilState} from 'recoil';
   import { useForm } from 'react-hook-form';
   import {currentlyEditingItineraryState} from '../../EditFormComponents/editFormAtoms';
-  import { Itinerary, ItineraryItems} from './titleInputTypeDefs'
+  import { Itinerary} from './titleInputTypeDefs'
   import { useRouter } from 'next/router';
   import { toast } from 'react-toastify';
   import 'react-toastify/dist/ReactToastify.css';

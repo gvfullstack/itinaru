@@ -1,7 +1,7 @@
 import * as functions from 'firebase-functions';
 import { index } from './algoliaConfig';
 import * as admin from 'firebase-admin';
-
+import { TransformedItinerary, TransformedItineraryItem } from './algoliaRulesTypes'; // Replace 'yourTypesFile' with the actual path to your types file
 
 export const itemUpdate = functions.firestore.document('itineraries/{itineraryId}/items/{itemId}')
   .onWrite(async (change, context) => {
@@ -15,13 +15,19 @@ export const itemUpdate = functions.firestore.document('itineraries/{itineraryId
       return null;
     }
 
-    const itineraryData = itineraryDoc.data();
+    const itineraryData = itineraryDoc.data() as TransformedItinerary; // Explicitly set the type here
+
+    // Check for visibility status
+    if (itineraryData?.settings?.visibility !== 'public') {
+      console.log(`Itinerary with ID: ${itineraryId} is not public. Skipping Algolia update.`);
+      return null;
+    }
 
     // Get items sub-collection
-    const items: any[] = [];
+    const items: TransformedItineraryItem[] = []; // Explicitly set the type here
     const itemsSnapshot = await itineraryDoc.ref.collection('items').get();
     itemsSnapshot.forEach(itemDoc => {
-      items.push(itemDoc.data());
+      items.push(itemDoc.data() as TransformedItineraryItem); // Explicitly set the type here
     });
 
     const object = {
@@ -32,4 +38,3 @@ export const itemUpdate = functions.firestore.document('itineraries/{itineraryId
 
     return index.saveObject(object);
   });
-
