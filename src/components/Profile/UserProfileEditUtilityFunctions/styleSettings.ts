@@ -17,10 +17,7 @@ export const styleSettings = {
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    @media (min-width:600px) {
-      flex-direction: row;
-      align-items: center;
-    }
+
   `,
   sliderContainer: `
     display: flex;

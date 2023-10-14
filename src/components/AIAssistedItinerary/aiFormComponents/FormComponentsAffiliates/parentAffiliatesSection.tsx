@@ -18,7 +18,7 @@ const ParentAffiliateSection = (props: any) => {
   return (
     <div style={{ borderTop: 'none', borderBottom: 'none', margin: '0rem', maxWidth: '20rem', alignSelf: 'center'}}>
       <div style={{ padding: '10px' }}>
-        <div style={{ display: 'flexbox', textAlign: 'left', margin: '0rem' }}>
+        <div style={{ display: 'flex', textAlign: 'left', margin: '0rem' }}>
           <a
             href="#"
             onClick={togglePreferences}

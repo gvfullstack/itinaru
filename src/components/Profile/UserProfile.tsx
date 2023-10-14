@@ -6,12 +6,12 @@ import styles from './UserProfile.module.css';
 import { firebaseStorage  } from '../FirebaseAuthComponents/config/firebase.storage';
 import { db  } from '../FirebaseAuthComponents/config/firebase.database';
 import { collection, doc, updateDoc } from 'firebase/firestore';
-import { authUserState, privacySettingsState } from '../../atoms/atoms'
+import { authUserState } from '../../atoms/atoms'
 import { useRecoilState } from 'recoil';
 import { useRouter } from 'next/router';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject  } from 'firebase/storage';
 import pica from 'pica';
-import { PrivacySettings } from '@/components/typeDefs';
+import { PrivacySettings, AuthenticatedUser } from '@/components/typeDefs';
 import 'react-quill/dist/quill.snow.css';
 import BioComponent from './BioComponent';
 import dynamic from 'next/dynamic';
@@ -49,12 +49,10 @@ const CropButton = styled(Button)(styleSettings.cropButton)
 const UserProfile: React.FC = () => {
   const router = useRouter();
   const [authUser, setAuthUser] = useRecoilState(authUserState);
-  const [recoilPrivacySettings, setRecoilPrivacySettings] = useRecoilState(privacySettingsState);
+  const recoilPrivacySettings= authUser?.privacySettings;
   const [editing, setEditing] = useState(false);
   const [username, setUsername] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [userFirstLastName, setUserFirstLastName] = useState('');
   const [email, setEmail] = useState('');
   const [bio, setBio] = useState('');
   const [profilePictureUrl, setProfilePictureUrl] = useState('');
@@ -63,14 +61,12 @@ const UserProfile: React.FC = () => {
   const [privacyIsEditing, setPrivacyIsEditing] = useState(false);
   const [localPrivacySettings, setLocalPrivacySettings] = useState<PrivacySettings>({
     username: false,
-    firstName: false,
-    lastName: false,
-    phoneNumber: false,
+    userFirstLastName: false,
     email: false,
     bio: false,
     profilePictureUrl: false
   });
-  type PrivacyFields = 'username' | 'firstName' | 'lastName' | 'phoneNumber' | 'email' | 'bio' | 'profilePictureUrl';
+  type PrivacyFields = 'username' | 'userFirstLastName' | 'email' | 'bio' | 'profilePictureUrl';
  
  /////////////cropper stuff//////////////////////////////
  
@@ -80,19 +76,41 @@ const UserProfile: React.FC = () => {
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<ICroppedArea | null>(null)
   const [croppedImage, setCroppedImage] = useState<string | null>(null)
   
-  const onCropComplete = (croppedArea: ICroppedArea, croppedAreaPixels: ICroppedArea) => {
-    setCroppedAreaPixels(croppedAreaPixels)
+  let latestCroppedImage: string | null = null;
+
+const onCropComplete = async (croppedArea: ICroppedArea, croppedAreaPixels: ICroppedArea) => {
+  setCroppedAreaPixels(croppedAreaPixels);
+  
+  try {
+    latestCroppedImage = await getCroppedImg(
+      profilePicWhileEditing,
+      croppedAreaPixels,
+      rotation
+    );
+
+    if (latestCroppedImage) {
+      const blob = await fetch(latestCroppedImage).then(r => r.blob());
+      const croppedFile = new File([blob], 'profile_picture.jpg', { type: 'image/jpeg' });
+      setProfilePictureFile(croppedFile);
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setProfilePictureUrl(event.target?.result as string);
+      };
+      reader.readAsDataURL(blob);
+    }
+  } catch (e: any) {
+    console.error(e);
   }
+};
 
   const showCroppedImage = async () => {
     try {
       const croppedImage = await getCroppedImg(
-        // dogImg,
         profilePicWhileEditing,
         croppedAreaPixels!,
         rotation
       )
-      console.log('donee', { croppedImage })
       if (croppedImage) {
         setCroppedImage(croppedImage)
         const blob = await fetch(croppedImage).then(r => r.blob());
@@ -122,24 +140,21 @@ const UserProfile: React.FC = () => {
   useEffect(() => {
 
     if (authUser) {
-      setFirstName(authUser.firstName || '');
-      setLastName(authUser.lastName || '');
-      setPhoneNumber(authUser.phoneNumber || '');
+      setUserFirstLastName(authUser.userFirstLastName || '');
       setBio(authUser.bio || '');
       setEmail(authUser.email || '');
       setUsername(authUser.username || '');
       setProfilePictureUrl(authUser.profilePictureUrl || '');
       setProfilePicWhileEditing(authUser.profilePictureUrl || '');
-      if (recoilPrivacySettings !== null) {
+      if (recoilPrivacySettings && recoilPrivacySettings !== null) {
         setLocalPrivacySettings(recoilPrivacySettings);
       }
-
     }
     else{
       sessionStorage.setItem('preLoginRoute', router.asPath);
       router.push('/loginPage');
     }
-  }, []);
+  }, [authUser]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -150,10 +165,10 @@ const UserProfile: React.FC = () => {
     const fileName = 'profilePicture';
     let path;
 
-    if (fileName && authUser?.uid) {
+    if (fileName && userId) {
       path = `profilePictures/${userId}/${fileName}` ?? "";
       console.log(path, "path")} 
-      else{console.error('firebaseStorage is undefined');
+      else{console.error('fileName or userId is undefined');
       return null;
     }
 
@@ -181,24 +196,22 @@ const UserProfile: React.FC = () => {
             getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
               try {
                 await updateDoc(userRef, {
-                  firstName,
-                  lastName,
-                  phoneNumber,
+                  userFirstLastName,
                   bio,
                   email,
                   username,
                   profilePictureUrl: downloadURL,
+                  privacySettings: recoilPrivacySettings
                 });
   
                 setAuthUser({
                   ...authUser,
-                  firstName,
-                  lastName,
-                  phoneNumber,
+                  userFirstLastName,
                   bio,
                   email,
                   username,
                   profilePictureUrl: downloadURL,
+                  privacySettings: recoilPrivacySettings
                 });
   
                 // Delete image from storage if profilePicWhileEditing is empty
@@ -217,24 +230,22 @@ const UserProfile: React.FC = () => {
       } else {
         // No upload task, only update the user's profile
         await updateDoc(userRef, {
-          firstName,
-          lastName,
-          phoneNumber,
+          userFirstLastName,
           bio,
           email,
           username,
-          profilePictureUrl: ''
+          profilePictureUrl: "",
+          privacySettings: recoilPrivacySettings
         });
   
         setAuthUser({
           ...authUser,
-          firstName,
-          lastName,
-          phoneNumber,
+          userFirstLastName,
           bio,
           email,
           username,
-          profilePictureUrl: ''
+          profilePictureUrl: "",
+          privacySettings: recoilPrivacySettings
         });
   
         setEditing(false);
@@ -245,11 +256,8 @@ const UserProfile: React.FC = () => {
     }
   };
   
-  
   const resetProfileForm = () => {
-    setFirstName(authUser?.firstName || '');
-    setLastName(authUser?.lastName || '');
-    setPhoneNumber(authUser?.phoneNumber || '');
+    setUserFirstLastName(authUser?.userFirstLastName || '');
     setBio(authUser?.bio || '');
     setEmail(authUser?.email || '');
     setUsername(authUser?.username || '');
@@ -356,26 +364,12 @@ const handleCheckboxChange = (field: PrivacyFields) => {
   });
 };
 
-const saveRecoilPrivacySettings = ()=>{
-  setRecoilPrivacySettings({
-    username: localPrivacySettings?.username || false,
-    firstName: localPrivacySettings?.firstName || false,
-    lastName: localPrivacySettings?.lastName || false,
-    phoneNumber: localPrivacySettings?.phoneNumber || false,
-    email: localPrivacySettings?.email || false,
-    bio: localPrivacySettings?.bio || false,
-    profilePictureUrl: localPrivacySettings?.profilePictureUrl || false
-  })
-}
-
 ////////////////////////////////////////////////
 
 const resetLocalSecurityForm = () => {
     setLocalPrivacySettings({
       username: recoilPrivacySettings?.username || false,
-      firstName: recoilPrivacySettings?.firstName || false,
-      lastName: recoilPrivacySettings?.lastName || false,
-      phoneNumber: recoilPrivacySettings?.phoneNumber || false,
+      userFirstLastName: recoilPrivacySettings?.userFirstLastName || false,
       email: recoilPrivacySettings?.email || false,
       bio: recoilPrivacySettings?.bio || false,
       profilePictureUrl: recoilPrivacySettings?.profilePictureUrl || false
@@ -397,11 +391,20 @@ const updatePrivacySettings = async () => {
       privacySettings: localPrivacySettings
     });
 
-    saveRecoilPrivacySettings()
-    // If needed, you can update the authUser object here
-    // ...
-    // Handle successful update (e.g., redirect, show a success message, etc.)
-    // ...
+    setAuthUser((prev) => {
+      if (prev === null) {
+        // Handle the case when prev is null
+        return null;
+      }
+      
+      const updatedAuthUser: AuthenticatedUser = {
+        ...prev,
+        privacySettings: localPrivacySettings || prev.privacySettings
+      };
+    
+      return updatedAuthUser;
+    });
+    
 
   } catch (error) {
     // Handle the error as appropriate for your application
@@ -459,16 +462,8 @@ const attachIcon = (
                 <input className={styles.profileInput} type="text" value={username} onChange={(e) => setUsername(e.target.value)}  />
               </label>
               <label className={styles.profileLabel}>
-                First Name:
-                <input className={styles.profileInput} type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)}  />
-              </label>
-              <label className={styles.profileLabel}>
-                Last Name:
-                <input className={styles.profileInput} type="text" value={lastName} onChange={(e) => setLastName(e.target.value)}  />
-              </label>
-              <label className={styles.profileLabel}>
-                Phone Number:
-                <input className={styles.profileInput} type="tel" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)}  />
+                First and Last Name:
+                <input className={styles.profileInput} type="text" value={userFirstLastName} onChange={(e) => setUserFirstLastName(e.target.value)}  />
               </label>
               <label className={styles.profileLabel}>
                 Email:
@@ -480,6 +475,7 @@ const attachIcon = (
                   onChange={setBio}
                 />
              <div>
+              <p className={styles.profileLabel}>Profile Picture:</p>
             <CropContainer>
               <Cropper
                 image={profilePicWhileEditing}
@@ -570,12 +566,11 @@ const attachIcon = (
                 />
           </div>}
           <p className={styles.profileStaticFields}>Username: {authUser?.username}</p>
-          <p className={styles.profileStaticFields}>First Name: {authUser?.firstName}</p>
-          <p className={styles.profileStaticFields}>Last Name: {authUser?.lastName}</p>
-          <p className={styles.profileStaticFields}>Phone Number: {authUser?.phoneNumber}</p>
+          <p className={styles.profileStaticFields}>First and Last Name: {authUser?.userFirstLastName}</p>
           <p className={styles.profileStaticFields}>Email: {authUser?.email}</p>
           {/* <p className={`${styles.profileStaticFields} ${styles.profileStaticFieldsBio}`}>Bio: {authUser?.bio}</p> */}
           <div className={styles.profileStaticFieldsBio}>
+            Bio:
              <BioComponent bio={authUser?.bio ?? ''} />
           </div>
 
@@ -603,27 +598,11 @@ const attachIcon = (
               <label className={styles.checkBoxItems}>
                 <input
                   type="checkbox"
-                  checked={localPrivacySettings.firstName}
-                  onChange={() => handleCheckboxChange('firstName')}
+                  checked={localPrivacySettings.userFirstLastName}
+                  onChange={() => handleCheckboxChange('userFirstLastName')}
                 />
-                First Name
-              </label>
-              <label className={styles.checkBoxItems}>
-                <input
-                  type="checkbox"
-                  checked={localPrivacySettings.lastName}
-                  onChange={() => handleCheckboxChange('lastName')}
-                />
-                Last Name
-              </label>
-              <label className={styles.checkBoxItems}>
-                <input
-                  type="checkbox"
-                  checked={localPrivacySettings.phoneNumber}
-                  onChange={() => handleCheckboxChange('phoneNumber')}
-                />
-                Phone Number
-              </label>
+                First and Last Name
+              </label>            
               <label className={styles.checkBoxItems}>
                 <input
                   type="checkbox"
@@ -676,9 +655,7 @@ const attachIcon = (
             <h3 className={styles.privacyH3Static}>Privacy Settings</h3>
             <h5></h5>
               <p className={styles.profileStaticFields}>Username: {localPrivacySettings.username ? "Public" : "Private"}</p>
-              <p className={styles.profileStaticFields}>First Name: {localPrivacySettings.firstName ? "Public" : "Private"}</p>
-              <p className={styles.profileStaticFields}>Last Name: {localPrivacySettings.lastName ? "Public" : "Private"}</p>
-              <p className={styles.profileStaticFields}>Phone Number: {localPrivacySettings.phoneNumber ? "Public" : "Private"}</p>
+              <p className={styles.profileStaticFields}>First and Last Name: {localPrivacySettings.userFirstLastName ? "Public" : "Private"}</p>
               <p className={styles.profileStaticFields}>E-mail: {localPrivacySettings.email ? "Public" : "Private"}</p>
               <p className={styles.profileStaticFields}>Profile Picture: {localPrivacySettings.profilePictureUrl ? "Public" : "Private"}</p>
               <p className={styles.profileStaticFields}>Bio: {localPrivacySettings.bio ? "Public" : "Private"}</p>

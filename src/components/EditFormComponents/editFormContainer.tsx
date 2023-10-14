@@ -13,7 +13,6 @@ import { authUserState } from '../../atoms/atoms'
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import { db  } from '../FirebaseAuthComponents/config/firebase.database';
-import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -203,8 +202,10 @@ const handleEdit = async () => {
   await tx.done;
 };
 
+const renderCount = useRef(0);
+
 useEffect(() => {
-  if(saveStatus === 'Restoring...') {
+  if (saveStatus === 'Restoring...') {
     setTimeout(() => {
       setSaveStatus('Session restored.');
       setTimeout(() => {
@@ -212,17 +213,23 @@ useEffect(() => {
       }, 3000);
     }, 3000);
     return;
-  }  
+  }
+  
+  if (renderCount.current<2) {
+    renderCount.current += 1;
+    return;
+  }
+
+
 
   setSaveStatus('Saving...');
-  // Clear any existing timers
   const timerId = setTimeout(() => {
-    saveTransformedItinerary(); // Call your save function
+    saveTransformedItinerary();
     handleEdit();
   }, 5000);
 
   return () => {
-    clearTimeout(timerId); // Clear the timer if 'itinerary' changes
+    clearTimeout(timerId);
   };
 }, [itinerary]);
 
