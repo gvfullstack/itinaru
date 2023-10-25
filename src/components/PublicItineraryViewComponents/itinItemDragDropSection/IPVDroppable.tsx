@@ -71,7 +71,6 @@ const IPVDroppable: React.FC = () => {
         }
         const dragItemId = (monitor.getItem() as ItineraryItem).id;
         const draggedItem = itineraryItemsRef.current.find(item => item.id === dragItemId);
-            console.log("draggedItem", draggedItem)
         let draggedItemIndex = -1;
         for (let i = 0; i < itineraryItemsRef.current.length; i++) {
           const item = itineraryItemsRef.current[i];      
@@ -110,7 +109,6 @@ const IPVDroppable: React.FC = () => {
       const dayStartTime = itineraryItemsRef.current[0].startTime?.time;
   
       for (let i = 0; i < updatedItems.length; i++) {
-          console.log("index", i);
   
           const previousEndTime = i === 0 
               ? dayStartTime 
@@ -119,7 +117,6 @@ const IPVDroppable: React.FC = () => {
                   .minute(updatedItems[i-1].endTime?.time?.minute() || 0);
   
           const currentItemDuration = updatedItems[i].activityDuration || 0;
-          console.log("duration", currentItemDuration);
   
           let userDefinedRespectedTime = updatedItems[i].userDefinedRespectedTime;
           let newStartTime; 
@@ -149,7 +146,6 @@ const IPVDroppable: React.FC = () => {
               endTime: {...updatedItems[i].startTime, time: newEndTime},
           };
   
-          console.log(updatedItems[i]);
       }
   
       return updatedItems;

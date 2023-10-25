@@ -1,7 +1,7 @@
 import { toast } from 'react-toastify';
 import { collection, query, where, getDocs } from 'firebase/firestore'; // Import Firestore methods
 import { db  } from '../../FirebaseAuthComponents/config/firebase.database';
-import { TransformedItinerary } from '../myItinerariesTypeDefs';
+import { TransformedItinerary } from '../../EditFormComponents/editFormTypeDefs';
 
 const fetchUserItineraries = async (userId: string) => {
     try {
@@ -11,8 +11,21 @@ const fetchUserItineraries = async (userId: string) => {
       const itineraries: TransformedItinerary[] = [];
       querySnapshot.forEach((doc) => {
         const data = doc.data() as TransformedItinerary;  // Cast to Itinerary type
+        if (!data.settings) {
+          data.settings = {
+            title: "",
+            description: "",
+            city: "",
+            state: "",
+            visibility: "private",
+          };
+        }
         itineraries.push(data);
-      });
+      }
+      
+      
+
+      );
       
       return itineraries; // This is an array of itineraries for the user
     } catch (error) {

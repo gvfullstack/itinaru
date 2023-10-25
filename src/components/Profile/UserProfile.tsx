@@ -1,15 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
 import 'firebase/firestore';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import 'react-tabs/style/react-tabs.css';
-import styles from './UserProfile.module.css';
+import { getFirebaseAuth} from "../FirebaseAuthComponents/config/firebase.auth";
 import { firebaseStorage  } from '../FirebaseAuthComponents/config/firebase.storage';
 import { db  } from '../FirebaseAuthComponents/config/firebase.database';
 import { collection, doc, updateDoc } from 'firebase/firestore';
+import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject  } from 'firebase/storage';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
+import styles from './UserProfile.module.css';
 import { authUserState } from '../../atoms/atoms'
 import { useRecoilState } from 'recoil';
 import { useRouter } from 'next/router';
-import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject  } from 'firebase/storage';
 import pica from 'pica';
 import { PrivacySettings, AuthenticatedUser } from '@/components/typeDefs';
 import 'react-quill/dist/quill.snow.css';
@@ -26,6 +27,9 @@ import { styled, useTheme } from '@mui/system'
 import ImgDialog from './UserProfileEditUtilityFunctions/ImgDialog'
 import getCroppedImg from './UserProfileEditUtilityFunctions/cropImage'
 import { styleSettings } from './UserProfileEditUtilityFunctions/styleSettings'
+import { ReauthModal } from './ReauthModal';
+import { useUpdateItineraryAccessUserData } from './UserProfileEditUtilityFunctions/updateUserAccessUserData';
+import { profile } from 'console';
 
 const ReactQuill = dynamic(import('react-quill'), {
   ssr: false, // This will make the component render only on the client-side
@@ -59,6 +63,7 @@ const UserProfile: React.FC = () => {
   const [profilePictureFile, setProfilePictureFile] = useState<File | null>(null);
   const [profilePicWhileEditing, setProfilePicWhileEditing] = useState("");
   const [privacyIsEditing, setPrivacyIsEditing] = useState(false);
+  const [downloadUrlState, setDownloadUrlState] = useState('');
   const [localPrivacySettings, setLocalPrivacySettings] = useState<PrivacySettings>({
     username: false,
     userFirstLastName: false,
@@ -66,7 +71,9 @@ const UserProfile: React.FC = () => {
     bio: false,
     profilePictureUrl: false
   });
-  type PrivacyFields = 'username' | 'userFirstLastName' | 'email' | 'bio' | 'profilePictureUrl';
+  const [showReauthModal, setShowReauthModal] = useState(false);
+
+  type PrivacyFields = 'username' | 'userFirstLastName' | 'email' | 'bio' | 'profilePictureUrl' | 'emailSearchable';
  
  /////////////cropper stuff//////////////////////////////
  
@@ -166,8 +173,7 @@ const onCropComplete = async (croppedArea: ICroppedArea, croppedAreaPixels: ICro
     let path;
 
     if (fileName && userId) {
-      path = `profilePictures/${userId}/${fileName}` ?? "";
-      console.log(path, "path")} 
+      path = `profilePictures/${userId}/${fileName}` ?? "";}
       else{console.error('fileName or userId is undefined');
       return null;
     }
@@ -195,6 +201,19 @@ const onCropComplete = async (croppedArea: ICroppedArea, croppedAreaPixels: ICro
           () => {
             getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
               try {
+                // Delete image from storage if profilePicWhileEditing is empty
+                if (profilePicWhileEditing === "") {
+                  deleteObject(storageRef);
+                }
+                // Check if email has changed
+                if (authUser.email !== email) {
+                  setShowReauthModal(true);
+                  setDownloadUrlState(downloadURL);
+                  return; // Exit early; the rest of the code will be handled by handleReauthentication
+                }
+
+                await useUpdateItineraryAccessUserData(email, username, profilePictureUrl, authUser)
+                
                 await updateDoc(userRef, {
                   userFirstLastName,
                   bio,
@@ -214,11 +233,6 @@ const onCropComplete = async (croppedArea: ICroppedArea, croppedAreaPixels: ICro
                   privacySettings: recoilPrivacySettings
                 });
   
-                // Delete image from storage if profilePicWhileEditing is empty
-                if (profilePicWhileEditing === "") {
-                  deleteObject(storageRef);
-                }
-  
                 setEditing(false);
                 // Redirect or handle the successful update
               } catch (error) {
@@ -228,31 +242,102 @@ const onCropComplete = async (croppedArea: ICroppedArea, croppedAreaPixels: ICro
           }
         );
       } else {
-        // No upload task, only update the user's profile
-        await updateDoc(userRef, {
-          userFirstLastName,
-          bio,
-          email,
-          username,
-          profilePictureUrl: "",
-          privacySettings: recoilPrivacySettings
-        });
-  
-        setAuthUser({
-          ...authUser,
-          userFirstLastName,
-          bio,
-          email,
-          username,
-          profilePictureUrl: "",
-          privacySettings: recoilPrivacySettings
-        });
-  
-        setEditing(false);
-        // Redirect or handle the successful update
-      }
+        try {
+           
+          // Check if email has changed
+          if (authUser.email !== email) {
+            setShowReauthModal(true);
+            // Exit early; the rest of the code will be handled by handleReauthentication
+            return;
+          }
+      
+          await useUpdateItineraryAccessUserData(email, username, profilePictureUrl, authUser);
+      
+          await updateDoc(userRef, {
+            userFirstLastName,
+            bio,
+            email,
+            username,
+            profilePictureUrl: '',
+            privacySettings: recoilPrivacySettings,
+          });
+        
+          setAuthUser({
+            ...authUser,
+            userFirstLastName,
+            bio,
+            email,
+            username,
+            profilePictureUrl: '',
+            privacySettings: recoilPrivacySettings,
+          });
+        
+          setEditing(false);
+          // Redirect or handle the successful update
+        } catch (error) {
+          console.error('Error updating profile information:', error);
+          // Handle the error appropriately
+        }
+      }   
     } else {
       router.push('/login');
+    }
+  };
+
+  const handleReauthentication = async () => {
+    // Hide the reauthentication modal
+    setShowReauthModal(false);
+    try {
+      // Assuming user and authUser are available here, either as state variables or otherwise
+      if (!authUser || !authUser.uid){return} 
+
+      const firebaseAuth = getFirebaseAuth();
+      const user = firebaseAuth.currentUser;
+      if (!user) {return}
+      const userRef = doc(db, 'users', authUser.uid);
+
+      // Update email (we know at this point it's changed)
+      if (user && authUser.email !== email) {
+        await user.updateEmail(email);
+      }
+  
+      // Check if display name has changed
+      if (authUser.displayName !== userFirstLastName) {
+        await user.updateProfile({
+          displayName: userFirstLastName,
+        });
+      }
+  
+      // Update Firestore record
+      await useUpdateItineraryAccessUserData(email, username, profilePictureUrl, authUser)
+
+      await updateDoc(userRef, {
+        userFirstLastName,
+        bio,
+        email,
+        username,
+        profilePictureUrl: downloadUrlState,
+        privacySettings: recoilPrivacySettings,
+      });
+  
+      // Update the authUser state
+      setAuthUser({
+        ...authUser,
+        userFirstLastName,
+        bio,
+        email,
+        username,
+        profilePictureUrl: downloadUrlState,
+        privacySettings: recoilPrivacySettings,
+      });
+
+      // Turn off editing mode
+      setEditing(false);
+      
+      // Redirect or handle the successful update in another way if you want
+    } catch (error) {
+      // Handle errors here
+      console.error("An error occurred:", error);
     }
   };
   
@@ -372,7 +457,8 @@ const resetLocalSecurityForm = () => {
       userFirstLastName: recoilPrivacySettings?.userFirstLastName || false,
       email: recoilPrivacySettings?.email || false,
       bio: recoilPrivacySettings?.bio || false,
-      profilePictureUrl: recoilPrivacySettings?.profilePictureUrl || false
+      profilePictureUrl: recoilPrivacySettings?.profilePictureUrl || false,
+      emailSearchable: recoilPrivacySettings?.emailSearchable || false
     })
 };
 ////////////////////////////
@@ -446,6 +532,8 @@ const attachIcon = (
   return (
     <>
     <div className={styles.tabsContainer}>
+    { showReauthModal && <ReauthModal isOpen={showReauthModal} onClose={() => setShowReauthModal(false)} onReauthenticated={handleReauthentication} /> }
+
       <Tabs>
         <TabList>
           <Tab>Personal Information</Tab>
@@ -549,7 +637,11 @@ const attachIcon = (
               <button className={styles.profileSaveButton} type="submit">Save</button>
               <button className={styles.profileCancelButton} type="button" 
               onClick={() => { resetProfileForm(); setEditing(false); }}>Cancel</button>
-
+              <button className={styles.profileCancelButton} type="button" 
+              onClick={() => {
+                
+              }}>Delete Accont</button>
+              
           </form>
           </div>
         ) : (
@@ -627,6 +719,14 @@ const attachIcon = (
                 />
                 Bio
               </label>
+              <label className={styles.checkBoxItems}>
+                <input
+                  type="checkbox"
+                  checked={localPrivacySettings.emailSearchable}
+                  onChange={() => handleCheckboxChange('emailSearchable')}
+                />
+                Allow others to find me by email when sharing itineraries.
+              </label>
               <div className={styles.securityButtonContainer}>
                
                 <button type="button" onClick={()=>{
@@ -659,6 +759,8 @@ const attachIcon = (
               <p className={styles.profileStaticFields}>E-mail: {localPrivacySettings.email ? "Public" : "Private"}</p>
               <p className={styles.profileStaticFields}>Profile Picture: {localPrivacySettings.profilePictureUrl ? "Public" : "Private"}</p>
               <p className={styles.profileStaticFields}>Bio: {localPrivacySettings.bio ? "Public" : "Private"}</p>
+              <p className={styles.profileStaticFields}>Searchable by Email: {localPrivacySettings.emailSearchable ? "Allow" : "Disallow"}</p>
+
             <button 
             className={styles.profileEditButton} 
             onClick={()=>setPrivacyIsEditing(true)}>Edit</button>

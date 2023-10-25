@@ -9,7 +9,6 @@ const validateTitle = (value:string) => {
 }
 
 const validateCity = (value:string) => {
-    console.log("ran validateCity");
     if(value == "" || value == null || value == undefined){ 
       return
     }
@@ -21,7 +20,6 @@ const validateCity = (value:string) => {
   };
 
 const validateState = (value:string) => {
-    console.log("ran validateState");
     if(value == "" || value == null || value == undefined){ 
       return
     }

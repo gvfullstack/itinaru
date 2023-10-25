@@ -16,6 +16,7 @@ const clock = <FontAwesomeIcon icon={faStopwatch} />;
 import {currentlyViewingItineraryState} from '../publicItinViewAtoms';
 import dynamic from 'next/dynamic';
 import { max } from 'lodash';
+import StarRating from '../../EditFormComponents/ItinItemDragDropSection/StaticStarRating';
 
 interface DraggableItineraryItemProps {
   id: string;
@@ -37,7 +38,6 @@ const IPVDraggable = React.forwardRef((
         const updatedItems = prevItinerary.items?.map((item) => {
             if (item.id === itineraryItem.id) {
                 return { ...item, descHidden: !item.descHidden };
-                console.log("item", item)
             }
             return item;
         });
@@ -86,21 +86,28 @@ const IPVDraggable = React.forwardRef((
 }
 const formattedEndTime = formatTimeWithoutSeconds(itineraryItem.endTime?.time?? new Date());
 const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.time?? new Date());
-  
+
+let mapsUrl: string | undefined = undefined;
+
+if (itineraryItem.locationAddress) {
+  mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${itineraryItem.siteName || ""} ${itineraryItem.locationAddress || ""}`)}`;
+} else if (itineraryItem.location && itineraryItem.location.latitude && itineraryItem.location.longitude) {
+  mapsUrl = `https://www.google.com/maps/search/?api=1&query=${itineraryItem.location.latitude},${itineraryItem.location.longitude}`;
+}  
   const Menu = () => {
     return (
       <div className={`${styles.menu} ${itineraryItem.descHidden ? "" : styles.isShown }`}>
         <div className={styles.menuItem} >
-              <a
-              href={
-                `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(itineraryItem.locationAddress || " ")
-              }`}
+          <a
+              href={mapsUrl}
               target="_blank"
+              rel="noopener noreferrer"
               style={{ textDecoration: 'none', color: 'black' }}
-              >
+            >
               {mapMarkerAlt}
-              </a>  
               Directions
+          </a>
+
         </div>
       </div>
     );
@@ -144,65 +151,11 @@ const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.tim
 
   }
 
-  // const [shortDescription, setShortDescription] = useState<string>("");
-  // const divRef = useRef(null);
-
-  // // const shortDescription = itineraryItem.description?.substring(0, 50) + "...";
-  
-  // const updateDescription = () => {
-  //   if (divRef.current) {
-  //     const maxLength = getTruncationLength(divRef.current);
-  //     const description = itineraryItem.description || "";
-  //     setShortDescription(truncateDescription(description, maxLength));
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   const resizeObserver = new ResizeObserver(() => {
-  //     updateDescription();
-  //   });
-
-  //   if (divRef.current) {
-  //     resizeObserver.observe(divRef.current);
-  //   }
-
-  //   // Initialize once
-  //   updateDescription();
-
-  //   return () => {
-  //     if (divRef.current) {
-  //       resizeObserver.unobserve(divRef.current);
-  //     }
-  //   };
-  // }, [divRef.current]);
-  
-  // function truncateDescription(description:string, maxLength:number) {
-  // console.log("ran truncate function")
-    
-  //   if (description.length > maxLength) {
-  //     return description.substring(0, maxLength) + "...";
-  //   }
-  //   return description;
-  // }
-  
-  // function getTruncationLength(divElement: HTMLElement): number  {
-  // console.log("ran truncation length function")
-  //   const width = divElement.offsetWidth;
-  
-  //   let maxLength;
-  //   if (width <= 200) {
-  //     maxLength = 50;
-  //   } else if (width <= 600) {
-  //     maxLength = 100;
-  //   } else {
-  //     maxLength = 150;
-  //   }
-  //   console.log("maxLength", maxLength)
-  
-  //   return maxLength;
-  // }
 
   const shortSiteName = itineraryItem.siteName?.substring(0, 50) || "untitled item" + "...";
+
+ 
+
   return (
     <>
     <div ref={localRef} style={itemStyles}  className={styles.dropDiv} >
@@ -240,7 +193,7 @@ const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.tim
                                       className={`${styles.expandedItinMapText} ${itineraryItem.descHidden ? "" : styles.isShown}`} 
                                                                 >
                                           <a
-                                            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(itineraryItem.locationAddress ? itineraryItem.locationAddress : '')}`}
+                                            href={mapsUrl}
                                             target="_blank"
                                             style={{ textDecoration: 'none', color: 'black' }}
                                             >{mapMarkerAlt}</a>
@@ -265,6 +218,18 @@ const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.tim
                                   <a href={`https://www.youtube.com/results?search_query=${encodeURIComponent(itineraryItem.siteName ? itineraryItem.siteName : "")}`} target="_blank">
                                   {externalLink} <span className={styles.youTubeLinkText}>Search on YouTube</span></a>
                             </div>
+
+
+                            <div className={styles.youtubeLink}>      
+                            <a href={mapsUrl} 
+                              target="_blank" 
+                              rel="noopener noreferrer">
+                              {externalLink} <span className={styles.youTubeLinkText}>Search on Maps</span>
+                            </a>
+                            </div>
+
+
+                            <StarRating starRating={itineraryItem.rating}/>
                           </div>
                   
                         

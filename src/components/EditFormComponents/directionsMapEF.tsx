@@ -23,7 +23,7 @@ const GoogleMapIframe: FC = () => {
   const destination = waypoints[waypoints.length - 1] || getLocationString(items[items.length - 1]);
 
   // Initialize Google Maps URL
-  let googleMapURL = `https://www.google.com/maps/embed/v1/directions?key=${'AIzaSyDI6tYErd_J2V4l0yQvj6ug4hYSMmeCMJ0'}&origin=${origin}&destination=${destination}`;
+  let googleMapURL = `https://www.google.com/maps/embed/v1/directions?key=${'AIzaSyDI6tYErd_J2V4l0yQvj6ug4hYSMmeCMJ0'}&origin=${origin}&destination=${destination}&zoom=14`;
 
   // Add waypoints to the URL if there are more than two
   if (waypoints.length > 1) {
@@ -41,13 +41,10 @@ const GoogleMapIframe: FC = () => {
 
 function getLocationString(item: ItineraryItem): string | null {
   if (item.locationAddress) {
-    console.log(item.locationAddress, 'item.locationAddress exists', item)
     return encodeURIComponent(item.locationAddress);
   } else if (item.location?.latitude && item.location?.longitude) {
-    console.log(item.location, 'item.location exists', item)
     return `${item.location.latitude},${item.location.longitude}`;
   } else {
-    console.log('item.locationAddress and item.location do not exist')
     return null;
   }
 }

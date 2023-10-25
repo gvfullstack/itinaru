@@ -1,0 +1,43 @@
+    /* CSS for tabs */
+.tabContainer {
+    display: flex;
+    justify-content: center;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    border-bottom: 1px solid #ccc;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .tabButton {
+    padding: 12px 16px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    outline: none;
+    border-bottom: 3px solid transparent;
+    transition: border-color 0.3s ease-in-out;
+    font-size: 1rem;
+    text-align: center;
+  }
+  
+  .tabButton.active {
+    border-bottom-color: #007bff;
+  }
+
+  .myItinerariesTitle{
+    text-align: center;
+    color:#333333;
+    font-size: 20px;
+  }
+  
+  /* Media query for larger screens */
+  @media (min-width: 768px) {
+    .tabButton {
+      padding: 16px 24px;
+      font-size: 1.2rem;
+    }
+    .myItinerariesTitle{
+        font-size: 22px;
+      }
+  }
+  

@@ -6,7 +6,7 @@
   import { useRecoilState} from 'recoil';
   import { useForm } from 'react-hook-form';
   import {currentlyEditingItineraryState} from '../../EditFormComponents/editFormAtoms';
-  import { Itinerary} from './titleInputTypeDefs'
+  import { Itinerary} from '../../EditFormComponents/editFormTypeDefs'
   import { useRouter } from 'next/router';
   import { toast } from 'react-toastify';
   import 'react-toastify/dist/ReactToastify.css';
@@ -122,7 +122,7 @@
       const indexDB = await openDB('itinerariesDatabase');
       const tx = indexDB.transaction('itineraries', 'readwrite');
       const store = tx.objectStore('itineraries');
-      await store.put(itinerary, 'currentlyEditingItineraryStateEF');
+      await store.put(itinerary, `currentlyEditingItineraryStateEF_${authUser?.uid}`);
       await tx.done;
       
       router.push(`/user/editMyItinerary`);
@@ -174,7 +174,7 @@
                       type="button"
                       onClick={handleSubmit(handleCreateAndGo)} 
                       disabled={!title || MIN_TITLE_LENGTH > title.length}
-                      className={styles.goButton}>Create and go</button>
+                      className={styles.goButton}>Create and Edit</button>
                   </>
               )}
           </div>

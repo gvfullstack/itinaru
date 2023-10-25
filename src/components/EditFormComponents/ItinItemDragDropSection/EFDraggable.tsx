@@ -11,6 +11,8 @@ import styles from'.././EditFormCSS/editItineraryCSS.module.css'
 import styles2 from'.././EditFormCSS/itineraryEditForm.module.css'
 import ItemDescriptionStaticComponent from './itemDescriptionStaticComponent';
 import dayjs from 'dayjs'; 
+import StaticStarRating from './StaticStarRating';
+
 const externalLink = <FontAwesomeIcon icon={faExternalLinkAlt} />;
 const mapMarkerAlt = <FontAwesomeIcon icon={faDiamondTurnRight} />;
 const ellipsisVertical = <FontAwesomeIcon icon={faEllipsisVertical} />;
@@ -54,7 +56,6 @@ const EFDraggable = React.forwardRef((
         const updatedItems = prevItinerary.items?.map((item) => {
             if (item.id === itineraryItem.id) {
                 return { ...item, descHidden: !item.descHidden };
-                console.log("item", item)
             }
             return item;
         });
@@ -135,16 +136,20 @@ const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.tim
       <div className={`${styles.menu} ${itineraryItem.descHidden ? "" : styles.isShown }`}>
         <div className={styles.menuItem} onClick={handleShowItemForm}>{editItemIcon} Edit</div>
         <div className={styles.menuItem} >
-              <a
-              href={
-                `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(itineraryItem.locationAddress || " ")
-              }`}
-              target="_blank"
-              style={{ textDecoration: 'none', color: 'black' }}
-              >
-              {mapMarkerAlt}
-              </a>  
-              Directions
+        <a
+          href={mapsUrl || undefined}
+          target={mapsUrl ? "_blank" : undefined}
+          rel={mapsUrl ? "noopener noreferrer" : undefined} // important for security
+          style={{ textDecoration: 'none', color: 'black' }}
+          onClick={(e) => {
+            if (!mapsUrl) {
+              e.preventDefault(); // Prevent navigation when mapsUrl is not set
+            }
+          }}
+        >
+          {mapMarkerAlt}
+          Directions
+        </a>  
         </div>
         <div className={styles.menuItem} onClick={handleRemoveClick}>{deleteItemIcon} Delete</div> 
       </div>
@@ -195,8 +200,17 @@ const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.tim
     setShowItemForm(prev=>!showItemForm);
 
   }
-  const shortSiteName = itineraryItem.siteName?.substring(0, 50) || "untitled item" + "...";
 
+  const shortSiteName = itineraryItem.siteName?.substring(0, 50) || "untitled item" + "...";
+  
+  let mapsUrl: string | null = null;
+
+  if (itineraryItem.locationAddress) {
+    mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${itineraryItem.siteName || ""} ${itineraryItem.locationAddress || ""}`)}`;
+  } else if (itineraryItem.location && itineraryItem.location.latitude && itineraryItem.location.longitude) {
+    mapsUrl = `https://www.google.com/maps/search/?api=1&query=${itineraryItem.location.latitude},${itineraryItem.location.longitude}`;
+  }
+ 
   return (
     <>
  
@@ -249,7 +263,7 @@ const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.tim
                                       className={`${styles.expandedItinMapText} ${itineraryItem.descHidden ? "" : styles.isShown}`} 
                                                                 >
                                           <a
-                                            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(itineraryItem.locationAddress ? itineraryItem.locationAddress : '')}`}
+                                            href={mapsUrl || undefined}
                                             target="_blank"
                                             style={{ textDecoration: 'none', color: 'black' }}
                                             >{mapMarkerAlt}</a>
@@ -280,19 +294,25 @@ const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.tim
                                   <a href={`https://www.youtube.com/results?search_query=${encodeURIComponent(itineraryItem.siteName ? itineraryItem.siteName : "")}`} target="_blank">
                                   {externalLink} <span className={styles.youTubeLinkText}>Search on YouTube</span></a>
                             </div>
+                            <StaticStarRating starRating={itineraryItem.rating}/>
+
                             <div className={`${styles.expandedMenu} ${itineraryItem.descHidden ? "" : styles.isShown }`}>
                               <div className={styles.expandedMenuItem} onClick={handleShowItemForm}>{editItemIcon} Edit</div>
                               <div className={styles.expandedMenuItem} >
-                                    <a
-                                    href={
-                                      `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(itineraryItem.locationAddress || " ")
-                                    }`}
-                                    target="_blank"
-                                    style={{ textDecoration: 'none', color: 'black' }}
-                                    >
-                                    {mapMarkerAlt}
-                                    </a>  
-                                    Directions
+                                <a
+                                  href={mapsUrl || undefined}
+                                  target={mapsUrl ? "_blank" : undefined}
+                                  rel={mapsUrl ? "noopener noreferrer" : undefined} // important for security
+                                  style={{ textDecoration: 'none', color: 'black' }}
+                                  onClick={(e) => {
+                                    if (!mapsUrl) {
+                                      e.preventDefault(); // Prevent navigation when mapsUrl is not set
+                                    }
+                                  }}
+                                >
+                                  {mapMarkerAlt}
+                                  Directions
+                                </a> 
                               </div>
                               <div className={styles.expandedMenuItem} onClick={handleRemoveClick}>{deleteItemIcon} Delete</div> 
                             </div>

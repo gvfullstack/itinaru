@@ -12,6 +12,7 @@ import { ToastContainer } from 'react-toastify';
 import { useState, useRef, useEffect } from 'react';
 import initDB from '@/lib/db';
 
+
 const FirebaseAuthLogic = dynamic(() => import('.././components/FirebaseAuthComponents/firebaseAuthLogic'), { ssr: false });
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -37,7 +38,7 @@ export default function App({ Component, pageProps }: AppProps) {
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-R2FS3JTQJ5');
+            gtag('config', 'G-N8B4BB2RHJ');
           `,
         }}
       />

@@ -1,5 +1,6 @@
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
+import { Timestamp } from 'firebase/firestore';
 
 
   export const ItemTypes = {
@@ -57,3 +58,28 @@ export type UnixTimeObject = {
   } | null;
 };
 
+
+export type AuthenticatedUser = {
+  objectID?: string;
+  accountCreationDate?: Timestamp;
+  username?: string | null;
+  userFirstLastName?: string | null;
+  email?: string | null;
+  bio?: string | null;
+  profilePictureUrl?: string | null;
+  displayName?: string | null;
+  uid: string | null;
+  privacySettings?: PrivacySettings
+  itinerariesSharedWithMe?: string[];
+  creatorsIamFollowing?: string[];
+  followers?: string[];
+};
+
+export type PrivacySettings = {
+  username?: boolean;
+  userFirstLastName?: boolean;
+  email?: boolean;
+  bio?: boolean;
+  profilePictureUrl?: boolean;
+  emailSearchable?: boolean;
+};

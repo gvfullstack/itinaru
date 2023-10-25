@@ -42,13 +42,10 @@ const GoogleMapIframe: FC = () => {
 
 function getLocationString(item: ItineraryItem): string | null {
   if (item.locationAddress) {
-    console.log(item.locationAddress, 'item.locationAddress exists', item)
     return encodeURIComponent(item.locationAddress);
   } else if (item.location?.latitude && item.location?.longitude) {
-    console.log(item.location, 'item.location exists', item)
     return `${item.location.latitude},${item.location.longitude}`;
   } else {
-    console.log('item.locationAddress and item.location do not exist')
     return null;
   }
 }

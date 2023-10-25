@@ -14,7 +14,7 @@ function ItemDescriptionStaticComponent({ description }: { description: string }
 
   const jsxContent = parse(description);
   
-  return <div>{jsxContent}</div>;
+  return <div style={{width:"100%"}}>{jsxContent}</div>;
 }
 
 export default ItemDescriptionStaticComponent;

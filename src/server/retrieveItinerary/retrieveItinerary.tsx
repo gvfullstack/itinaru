@@ -12,7 +12,6 @@ export async function fetchItineraryFromDatabase(itineraryId: string): Promise<I
         }
 
         const itinerary = itineraryDoc.data() as TransformedItinerary;
-        console.log('Fetched itinerary:', itinerary);
 
 
         return {

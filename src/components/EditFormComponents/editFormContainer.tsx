@@ -1,12 +1,12 @@
 import ItineraryEditForm from './EditItineraryFormComponents/itineraryEditForm';
 import React, { useRef, useState, FC, useEffect } from 'react';
 import dynamic from 'next/dynamic';
-import {currentlyEditingItineraryState} from './editFormAtoms';
+import {currentlyEditingItineraryState, itineraryAccessItinView} from './editFormAtoms';
 import { Itinerary, ItinerarySettings, TimeObject, TransformedItineraryItem, TransformedItinerary, ItineraryItem} from './editFormTypeDefs'
 import {useRecoilState, useRecoilCallback} from 'recoil';
 import styles from './EditFormCSS/itineraryEditForm.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faXmark, faTrashCan, faPaperclip, faRotateLeft } from '@fortawesome/free-solid-svg-icons';
+import { faXmark, faTrashCan, faPaperclip, faRotateLeft, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import { faFloppyDisk } from '@fortawesome/free-regular-svg-icons';
 import { authUserState } from '../../atoms/atoms'
 // import { collection, doc, updateDoc, addDoc, deleteDoc, setDoc, Timestamp  } from 'firebase/firestore';
@@ -17,7 +17,7 @@ import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { firebaseStorage  } from '../FirebaseAuthComponents/config/firebase.storage';
-import { ref, uploadBytesResumable, getDownloadURL  } from 'firebase/storage';
+import { ref, uploadBytesResumable, getDownloadURL, list  } from 'firebase/storage';
 import pica from 'pica';
 import Image from 'next/image';
 import {myItinerariesResults} from '../MyItinerariesGallery/myItinerariesAtoms';
@@ -29,6 +29,10 @@ import GoogleMapIframe from './directionsMapEF';
 import Link from 'next/link'; 
 import {currentlyViewingItineraryState} from '../PublicItineraryViewComponents/publicItinViewAtoms';
 import { set } from 'lodash';
+import SharingModal from './EditFormShareFunctionality/EFshareContainer';
+import {fetchSharedItinerariesItinView} from './EditFormShareFunctionality/utils/fetchSharedItinerariesItinView'
+import {useUpdateItineraryAccess} from './util/updateUserAccess';
+import { deleteItineraryAccessRecords } from './EditFormShareFunctionality/utils/deleteJoinAccessItinerariesRecord';
 
 const GoogleMapsProvider = dynamic(() => 
     import('./EditFormITEMComponents/googleMapsProvider'), {
@@ -74,15 +78,16 @@ const [displayDeleteConfirmation, setDisplayDeleteConfirmation] = useState(false
 const [saveImageDisabled, setSaveImageDisabled] = useState(false);
 const [processingImage, setProcessingImage] = useState(false);
 const [currentlyViewingItinerary, setCurrentlyViewingItinerary] = useRecoilState(currentlyViewingItineraryState);
-
+const [showSharingModal, setShowSharingModal] = useState(false);
+const [itinAccessList, setItinAccessList] = useRecoilState(itineraryAccessItinView);
 
 
 useEffect(() => {
-  if (authUser) {
+  
     setItineraryGalleryPhotoUrl(itinerary.settings?.galleryPhotoUrl || '');
     setItineraryGalleryPhotoWhileEditing(itinerary.settings?.galleryPhotoUrl || '');
-  }
-},[]);
+  
+},[itinerary]);
 
 
 /////handle add of new Item to the Itinerary/////////
@@ -135,7 +140,6 @@ async function uploadGalleryPhoto(): Promise<string | null> {
   let downloadURL: string | null = null;
   if (ItineraryGalleryPhotoFile && authUser?.uid && itinerary.id) {
     const path = `itineraries/${authUser?.uid}/${itinerary.id}/itineraryGalleryPhoto` ?? "";
-    console.log(path, "path")
     if (!firebaseStorage) {
       console.error('firebaseStorage is undefined');
       return null;
@@ -144,7 +148,6 @@ async function uploadGalleryPhoto(): Promise<string | null> {
     const uploadTask = itineraryGalleryPhotoWhileEditing !== "" ? uploadBytesResumable(storageRef, ItineraryGalleryPhotoFile) : null;
 
     if (uploadTask) {
-      console.log("uploadTask")
       return new Promise((resolve, reject) => {
         uploadTask.on(
           'state_changed',
@@ -156,7 +159,6 @@ async function uploadGalleryPhoto(): Promise<string | null> {
           },
           async () => {
             downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-            console.log(downloadURL, "downloadURL")
             setItinerary(prev => {
               if (typeof downloadURL === 'string') {
                 return {...prev, 
@@ -194,15 +196,17 @@ async function uploadGalleryPhoto(): Promise<string | null> {
 
 const [saveStatus, setSaveStatus] = useRecoilState(saveStatusDisplayedEditFormContainer); // additional state for saving status
 
-const handleEdit = async () => {
+const handleEdit = async () => 
+{
   const db = await openDB('itinerariesDatabase');
   const tx = db.transaction('myItineraries', 'readwrite');
   const store = tx.objectStore('myItineraries');
-  await store.put(true, 'indexDBNeedsRefresh');
+  await store.put(true, `indexDBNeedsRefresh_${authUser?.uid}`);
   await tx.done;
 };
-
 const renderCount = useRef(0);
+
+useUpdateItineraryAccess({itinerary})
 
 useEffect(() => {
   if (saveStatus === 'Restoring...') {
@@ -215,12 +219,10 @@ useEffect(() => {
     return;
   }
   
-  if (renderCount.current<2) {
+  if (renderCount.current<1) {
     renderCount.current += 1;
     return;
   }
-
-
 
   setSaveStatus('Saving...');
   const timerId = setTimeout(() => {
@@ -271,12 +273,11 @@ async function saveTransformedItinerary() {
     endTime: item.endTime?.time ? { time: firebase.firestore.Timestamp.fromDate(item.endTime.time.toDate()) } : { time: null },  
   }));
 
-  console.log(transformedItinerary, "transformedItinerary")
-  // Continue with DB logic as before
+
   const indexLocalDB = await openDB('itinerariesDatabase');
   const tx = indexLocalDB.transaction('itineraries', 'readwrite');
   const store = tx.objectStore('itineraries');
-  await store.put(transformedItinerary, 'currentlyEditingItineraryStateEF');
+  await store.put(transformedItinerary, `currentlyEditingItineraryStateEF_${authUser?.uid}`);
   await tx.done;
 
   await db.collection('itineraries').doc(transformedItinerary.id).set(transformedItinerary);
@@ -295,6 +296,17 @@ const trashDelete = (
       onClick={()=>setDisplayDeleteConfirmation(true)}
   />
 );
+const floppySave = (
+  <FontAwesomeIcon 
+      icon={faFloppyDisk} 
+      className={styles.floppyDisk} 
+      type="button" 
+      onClick={()=> {saveTransformedItinerary();
+        handleEdit();}
+        }
+  />
+);
+
 
 const attachIcon = (
   <FontAwesomeIcon 
@@ -320,6 +332,18 @@ const resetPhotoIcon = (
   />
 );
 
+const addContributorIcon = (
+  <FontAwesomeIcon
+      icon={faUserPlus}
+      className={styles.addContributorIcon}
+      type="button"
+      onClick={(e) => {
+        e.preventDefault();
+        handleShowSharingModal();
+      }}
+  />
+)
+
 async function checkDatabaseState(key: string) {
   // Get a handle to the already opened database
   const db = await openDB('itinerariesDatabase');
@@ -328,8 +352,6 @@ async function checkDatabaseState(key: string) {
   const tx = db.transaction('itineraries', 'readonly');
   const store = tx.objectStore('itineraries');
   const record = await store.get(key);
-
-  console.log("Current state of the record:", record);
 
   await tx.done;
 }
@@ -355,7 +377,6 @@ const handleDeleteItinerary = async (itineraryId: string) => {
       await store.delete('currentlyEditingItineraryStateEF');
     }
     await tx.done;
-    console.log(checkDatabaseState('currentlyEditingItineraryStateEF'))
     // If everything went well, show success message and reset state.
     
     setItinerary({
@@ -417,11 +438,16 @@ const deleteItinerary = async (itineraryId: string): Promise<void> => {
     }
     
     await itineraryRef.delete();
+
+    try {
+      await deleteItineraryAccessRecords(itineraryId);
+    } catch (error) {
+      console.error("Error while deleting ItineraryAccess records: ", error);
+      toast.error("Error while deleting associated records. Please try again later.");
+    }
     
-    console.log("Itinerary successfully deleted!");
     toast.success("Itinerary successfully deleted!");
   } catch (error) {
-    console.error("Error while deleting: ", error);
     toast.error("Error while deleting itinerary. Please try again later.");
   }
 };
@@ -567,6 +593,33 @@ const handlePreviewItinerary = () => {
  setCurrentlyViewingItinerary(itinerary);
 };
 
+/////////sharing modal functions/////////////////////
+const handleShowSharingModal = () => {
+  setShowSharingModal(prev => true);
+
+  const fetchData = async () => {
+    const fetchedAccessList = await fetchSharedItinerariesItinView(itinerary.id);
+
+    if (fetchedAccessList !== undefined) {
+      setItinAccessList(prevList => {
+        const newItems = fetchedAccessList.filter(fetchedItem =>
+          !prevList.some(prevItem => prevItem.itineraryId === fetchedItem.itineraryId && prevItem.uid === fetchedItem.uid)
+        );
+        return [...prevList, ...newItems];
+      });
+    }
+  };
+  // Fetch data only if the condition is not met
+  if (!itinAccessList.some(item => item.itineraryId === itinerary.id)) {
+    fetchData();
+  }
+
+};
+
+const handleCloseModal = () => {
+  setShowSharingModal(prev => false);}
+
+
 return (
 <div className={styles.EFPageContainer}>
   <p className={styles.saveStatusDisplayed}>{saveStatus}</p>
@@ -584,9 +637,19 @@ return (
             </div>
           </div>   
           }
+      {showSharingModal && 
+          <SharingModal viewHideModal={handleCloseModal}/>
+          }
 
               <div className={styles.EFFormContainer}>
-              <Link href="/viewPublicItinerary/previewItinerary" onClick={handlePreviewItinerary}>Preview</Link>
+              <div className={styles.EFpageTopNav}>
+                 <div className={styles.topNavGenericDiv}></div>
+                  <Link className={styles.previewLink} href="/viewPublicItinerary/previewItinerary" 
+                  onClick={handlePreviewItinerary}>Preview</Link>
+                  <div className={styles.addContributorIconContainer} >
+                    {addContributorIcon}          
+                  </div>
+              </div>
               <label className={styles.profileLabel}>
                     <p className={styles.labelText}>Gallery Photo:</p>
                     {processingImage && <p style={{fontWeight:"500"}}>Processing...</p>}
@@ -603,7 +666,7 @@ return (
                             height={2048} // replace with actual image height
                             className={styles.profilePicturePreview}
                         />
-                      </div>}
+              </div>}
                       <input 
                         ref={inputFileRef}
                         className={styles.profileInput} 
@@ -642,12 +705,18 @@ return (
               </div>
               <GoogleMapIframe />
               <div className={styles.saveOrCancelButtonSectionP}>
-                  <div className = {styles.iconSectionContainerP}>                
+                  <div className = {styles.iconSectionContainerP}>                                      
                       <div className = {styles.formControlsIconContainerP}>                
                           {trashDelete}
                       </div>
                       <p className = {styles.formControlsIconTextP}>Delete Itinerary</p>
-                  </div>            
+                  </div>
+                  <div className = {styles.iconSectionContainerP}>                                      
+                      <div className = {styles.formControlsIconContainerP}>                
+                          {floppySave}
+                      </div>
+                      <p className = {styles.formControlsIconTextP}>Save Itinerary</p>
+                  </div>        
               </div>
 
               {displayDeleteConfirmation &&
