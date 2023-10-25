@@ -173,7 +173,7 @@ const onCropComplete = async (croppedArea: ICroppedArea, croppedAreaPixels: ICro
     let path;
 
     if (fileName && userId) {
-      path = `profilePictures/${userId}/${fileName}` ?? "";
+      path = `profilePictures/${userId}/${fileName}` ?? "";}
       else{console.error('fileName or userId is undefined');
       return null;
     }
