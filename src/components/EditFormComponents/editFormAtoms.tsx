@@ -1,5 +1,5 @@
 import {atom} from 'recoil';
-import { Itinerary, ItineraryItems, ItineraryItem} from './editFormTypeDefs'
+import { Itinerary, ItineraryAccess, ItineraryItem,AlgoliaUser} from './editFormTypeDefs'
 import { startOfWeek, addDays, format, isAfter } from 'date-fns';
 
 export const defaultItinerary: Itinerary = {
@@ -31,3 +31,25 @@ export const currentlyEditingItineraryState = atom<Itinerary>({
     key: 'saveStatusDisplayedEditFormContainerEF',
     default: ""
   });   
+
+ 
+
+  export const searchUserResultsState = atom<AlgoliaUser[]>({
+    key: 'searchUserResultsState', // unique ID (with respect to other atoms/selectors)
+    default: [], // default value (aka initial value)
+  });
+
+  export const searchUserQueryState = atom<string>({
+    key: 'searchUserQueryState', // unique ID (with respect to other atoms/selectors)
+    default: '', // default value (aka initial value)
+  });
+
+  export const itineraryAccess = atom<ItineraryAccess>({
+    key: 'itineraryAccessState', // unique ID (with respect to other atoms/selectors)
+    default: [], // default value (aka initial value)
+  });
+
+  export const itineraryAccessItinView = atom<ItineraryAccess>({
+    key: 'itineraryAccessItinViewState', // unique ID (with respect to other atoms/selectors)
+    default: [], // default value (aka initial value)
+  });

@@ -143,14 +143,13 @@
 
 .itinTitleDescription.isShown{
     display: flex;
-    /* background-color: tomato; */
     margin-top: 0rem;
     padding-top: 0;
     height: 3rem;
     width: 12rem;
     justify-content: flex-start;
     align-items: flex;
-    text-align: justify !important;
+    text-align: left !important;
     width: 100% !important;
     height: fit-content !important;
     overflow-wrap: break-word;

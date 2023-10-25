@@ -5,3 +5,5 @@ const algoliaConfig = functions.config().algolia;
 
 export const client = algoliasearch(algoliaConfig.app_id, algoliaConfig.admin_key);
 export const index = client.initIndex('itineraries');
+export const userIndex = client.initIndex('users');
+

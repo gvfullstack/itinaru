@@ -54,11 +54,12 @@ export default function FirebaseAuthLogic () {
                 bio: null,  
                 profilePictureUrl: null,
                 privacySettings:{
-                  username: false,
+                  username: true,
                   userFirstLastName: false,
                   email: false,
                   bio: false,
-                  profilePictureUrl: false
+                  profilePictureUrl: false,
+                  emailSearchable: false
                 }   
 
               };

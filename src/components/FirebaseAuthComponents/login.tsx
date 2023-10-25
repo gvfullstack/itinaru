@@ -30,7 +30,6 @@ const Login: React.FC = () => {
         callbacks: {
           signInSuccessWithAuthResult: () => {            
           const postLoginRoute = sessionStorage.getItem('preLoginRoute');
-          console.log("postLoginRoute: ", postLoginRoute);
           if (postLoginRoute) {
             router.push(postLoginRoute);
           } else {

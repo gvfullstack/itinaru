@@ -54,10 +54,8 @@ const ItineraryEditForm: FC<Props> = () => {
       };
     
       const validateCity = (value:string) => {
-        console.log("ran validateCity");
         if (!city_names.includes(value.toUpperCase())) 
         {
-            console.log(!city_names.includes(value.toUpperCase()));
           setCityError(true);
           setCityHelperText('Invalid city name.');
           return (false)

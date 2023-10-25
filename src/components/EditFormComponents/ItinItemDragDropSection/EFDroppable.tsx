@@ -30,8 +30,6 @@ const EFDroppable: React.FC = () => {
         if (!ref.current) return;
         const dragItemId = (monitor.getItem() as ItineraryItem).id;
         const draggedItem = itineraryItemsRef.current?.find(item => item.id === dragItemId);
-        console.log("draggedItem", draggedItem) 
-        console.log("itineraryItemsRef.current", itineraryItemsRef.current) 
         for (let i = 0; i < itineraryItemsRef.current.length; i++) {
           const item = itineraryItemsRef.current[i];      
           if (item.id === draggedItem?.id) {
@@ -66,7 +64,6 @@ const EFDroppable: React.FC = () => {
         setLocalNewDropIndex(null)
         const dragItemId = (monitor.getItem() as ItineraryItem).id;
         const draggedItem = itineraryItemsRef.current.find(item => item.id === dragItemId);
-            console.log("draggedItem", draggedItem)
         let draggedItemIndex = -1;
         for (let i = 0; i < itineraryItemsRef.current.length; i++) {
           const item = itineraryItemsRef.current[i];      

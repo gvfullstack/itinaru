@@ -77,15 +77,15 @@ const SearchBar: React.FC = () => {
         return <> {savedHits.map((itin: AlgoliaItinerary, index: number) => (
             <ItinGalleryComponent 
                 key={index}
-                itinId={itin.id as string}
-                userId={itin.uid as string}
-                title={itin.settings.title as string}
-                description={itin.settings.description as string}
-                neighborhood={itin.settings.neighborhood as string}
-                city={itin.settings.city as string}
-                state={itin.settings.state as string}
-                duration={itin.settings.duration as string}
-                imageUrl={itin.settings.galleryPhotoUrl as string}
+                itinId={itin.id || ''}
+                userId={itin.uid || ''}
+                title={itin.settings?.title || ''}
+                description={itin.settings?.description || ''}
+                neighborhood={itin.settings?.neighborhood || ''}
+                city={itin.settings?.city || ''}
+                state={itin.settings?.state || ''}
+                duration={itin.settings?.duration || ''}
+                imageUrl={itin.settings?.galleryPhotoUrl || ''}
             />
         ))} </>;   
     }

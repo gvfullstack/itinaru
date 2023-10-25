@@ -34,8 +34,6 @@ const DroppableItineraryContainer: React.FC<DroppableItineraryContainerProps> = 
       if (!ref.current) return;
       const dragItemId = (monitor.getItem() as ItineraryItem).id;
       const draggedItem = itineraryItemsRef.current.find(item => item.id === dragItemId);
-      console.log("draggedItem", draggedItem) 
-      console.log("itineraryItemsRef.current", itineraryItemsRef.current) 
       for (let i = 0; i < itineraryItemsRef.current.length; i++) {
         const item = itineraryItemsRef.current[i];      
         if (item.id === draggedItem?.id) {
@@ -70,7 +68,6 @@ const DroppableItineraryContainer: React.FC<DroppableItineraryContainerProps> = 
       setLocalNewDropIndex(null)
       const dragItemId = (monitor.getItem() as ItineraryItem).id;
       const draggedItem = itineraryItemsRef.current.find(item => item.id === dragItemId);
-          console.log("draggedItem", draggedItem)
       let draggedItemIndex = -1;
       for (let i = 0; i < itineraryItemsRef.current.length; i++) {
         const item = itineraryItemsRef.current[i];      
@@ -91,8 +88,6 @@ const DroppableItineraryContainer: React.FC<DroppableItineraryContainerProps> = 
       const updatedOrderedItems = [...newOrderedItems];
       const indexToUse = dropIndexRef.current ?? draggedItemIndex;
       updatedOrderedItems.splice(indexToUse, 0, draggedItem);
-      console.log("itineraryItemsRef.current", itineraryItemsRef.current)
-      console.log("updatedOrderedItems", updatedOrderedItems)
       const updatedItemsWithNewTimes = updateStartTimes(updatedOrderedItems, draggedItem); //steps out to update start times
       setItineraryItems(updatedItemsWithNewTimes);
     },
@@ -100,12 +95,10 @@ const DroppableItineraryContainer: React.FC<DroppableItineraryContainerProps> = 
   
 ////////////////////////////////////////////update start times
     const updateStartTimes = (items: ItineraryItem[], draggedItem: ItineraryItem) => {
-  console.log("itin items ", itineraryItems)
 
     const updatedItems = [...items];
     const dayStartTime = itineraryItemsRef.current[0].startTime?.time;
     for (let i = 0; i < updatedItems.length; i++) {
-      console.log("index", i)
       const previousEndTime = i === 0 ? dayStartTime: new Date(  
         travelDate.getFullYear(),
         travelDate.getMonth(),
@@ -113,7 +106,6 @@ const DroppableItineraryContainer: React.FC<DroppableItineraryContainerProps> = 
         updatedItems[i-1].endTime?.time?.getHours() || 0,
         updatedItems[i-1].endTime?.time?.getMinutes() || 0);
       const currentItemDuration = updatedItems[i].activityDuration || 0;
-        console.log("duration", currentItemDuration)
     let userDefinedRespectedTime = updatedItems[i].userDefinedRespectedTime;
     let newStartTime; 
     if(updatedItems[i].id === draggedItem.id && updatedItems[i].userDefinedRespectedTime === true)
@@ -131,21 +123,17 @@ const DroppableItineraryContainer: React.FC<DroppableItineraryContainerProps> = 
         updatedItems[i].startTime?.time?.getHours() || 0,
         updatedItems[i].startTime?.time?.getMinutes() || 0
       )
-    console.log("newStartTime", newStartTime, previousEndTime, dayStartTime)
 
     } else {
         newStartTime = previousEndTime ? previousEndTime: dayStartTime;
-      console.log("newStartTime", newStartTime, previousEndTime, dayStartTime)
       }     
     const newEndTime = newStartTime ? new Date(newStartTime.getTime() + currentItemDuration): updatedItems[i].endTime?.time;
-console.log("newEndTime", newEndTime)    
     updatedItems[i] = {
       ...updatedItems[i],
       userDefinedRespectedTime: userDefinedRespectedTime,
       startTime: {...updatedItems[i].startTime, time: newStartTime, beingEdited: updatedItems[i].startTime?.beingEdited ?? false}, 
       endTime: {...updatedItems[i].startTime, time: newEndTime, beingEdited: updatedItems[i].endTime?.beingEdited ?? false},
     };
-    console.log(updatedItems[i])
     }
     return updatedItems;
   };

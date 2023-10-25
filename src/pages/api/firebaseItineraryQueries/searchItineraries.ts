@@ -11,8 +11,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 .startAt(searchTerm)
                 .endAt(searchTerm + "\uf8ff")
                 .limit(6);
-            console.log(query)
-            console.log(searchTerm)
+          
             // If there's a lastDocId, adjust the query to start after it
             if (lastDocId) {
                 const lastDoc = await dbServer.collection("itineraries").doc(lastDocId).get();

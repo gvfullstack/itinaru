@@ -28,6 +28,27 @@ export type ItineraryItem = {
   };
   
   export type ItineraryItems = ItineraryItem[];
+  
+  export type UserAccess = {
+    uid: string;
+    email?: string;
+    username?: string;
+    profilePictureUrl?: string;
+    itineraryId: string;
+    title?: string;
+    neighborhood?: string;
+    city?: string;
+    state?: string;
+    galleryPhotoUrl?: string;
+    role: 'editor' | 'viewer' | 'delete';
+    visibility: 'private' | 'shared' | 'public';
+  };
+
+  export type ItineraryAccess = UserAccessWithDocId[];
+
+  export type UserAccessWithDocId = UserAccess & {
+    docId?: string;
+  };
 
   export type ItinerarySettings = {
     title: string;
@@ -38,13 +59,12 @@ export type ItineraryItem = {
     duration?: string;
     galleryPhotoUrl?: string;
     visibility: 'private' | 'shared' | 'public';
-    readAccess?: string[];
-    editAccess?: string[];
+
   }
       
   export type Itinerary = {
-    id?: string,
-    uid?: string,
+    id: string,
+    uid: string,
     settings?: ItinerarySettings;
     items?: ItineraryItems;
   }
@@ -109,8 +129,26 @@ export type IndexDBItineraryItem   = {
 } 
 
 export type IndexDBItinerary = {
-  id?: string;
+  id: string;
   uid: string,
-  settings: ItinerarySettings;
-  items: IndexDBItineraryItem[];
+  settings?: ItinerarySettings;
+  items?: IndexDBItineraryItem[];
+}
+
+export type AlgoliaUser = {
+  objectID: string;
+  email?: string;
+  username?: string;
+  profilePictureUrl?: string;
+  [key: string]: any;
+}
+
+export type UpdateItineraryAccessProps = {
+  itineraryId: string;
+  title?: string;
+  neighborhood?: string;
+  city?: string;
+  state?: string;
+  galleryPhotoUrl?: string;
+  visibility: 'private' | 'shared' | 'public';
 }

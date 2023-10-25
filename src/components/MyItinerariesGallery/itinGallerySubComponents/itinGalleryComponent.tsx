@@ -3,7 +3,7 @@ import styles from './itinGalleryComponent.module.css';
 import {useRouter} from 'next/router';
 import QuillTextParserComponent from '../../AppContolsComponents/quillTextParserComponent';
 import Image from 'next/image';
-import { Itinerary, TransformedItinerary, TransformedItineraryItem, ItineraryItem } from './itinGalTypeDefs';
+import { Itinerary, TransformedItinerary, TransformedItineraryItem, ItineraryItem, ItinerarySettings } from '../../EditFormComponents/editFormTypeDefs';
 import { authUserState } from '../../../atoms/atoms'
 import { useRecoilState} from 'recoil';
 import { toast } from 'react-toastify';
@@ -11,6 +11,8 @@ import {currentlyEditingItineraryState} from '../../EditFormComponents/editFormA
 import { openDB } from 'idb';
 import dayjs, {Dayjs} from 'dayjs';
 import 'firebase/firestore';
+import { useEffect, useState } from 'react';
+
 
 type ItinGalleryComponentProps = {
   itinerary: TransformedItinerary;
@@ -18,8 +20,30 @@ type ItinGalleryComponentProps = {
 
 const ItinGalleryComponent: React.FC<ItinGalleryComponentProps> = ({itinerary}) => {
   const router = useRouter();
-  const { id, uid, settings } = itinerary;
-  const { title, description, neighborhood, city, state, duration, galleryPhotoUrl } = settings;
+  const [checkedItinerary, setCheckedItinerary] = useState<TransformedItinerary>(itinerary);
+
+  useEffect(() => {
+    const defaultSettings: ItinerarySettings = {
+      title: "",
+      description: "",
+      city: "",
+      state: "",
+      visibility: "private",
+    };
+
+    setCheckedItinerary({
+      ...itinerary,
+      settings: {
+        ...defaultSettings,
+        ...itinerary.settings,
+      },
+    });
+  }, [itinerary]);
+
+  const { id, uid, settings } = checkedItinerary;
+  const { title, description, city, state, duration, galleryPhotoUrl } = settings!; // settings should now exist
+
+
   const [authUser, setAuthUser] = useRecoilState(authUserState);
   const [itineraryToEdit, setItineraryToEdit] = useRecoilState<Itinerary>(currentlyEditingItineraryState);
 
@@ -42,7 +66,7 @@ const ItinGalleryComponent: React.FC<ItinGalleryComponentProps> = ({itinerary}) 
   
 ////////////////////////////////
 
-const handleCreateAndGo = async () => {
+const handleOpenEditView = async () => {
   
     if (!authUser || !authUser.uid) {
       toast.error("No authenticated user found. Please log in and try again.");
@@ -54,40 +78,13 @@ const handleCreateAndGo = async () => {
       throw new Error("UID is not a string or is missing");
   }
 
-    let oldTransformedItinerary: TransformedItinerary = JSON.parse(JSON.stringify(itinerary))  
-    
-    oldTransformedItinerary.id = itinerary.id || "",
-    oldTransformedItinerary.uid= itinerary.uid || "",
-    oldTransformedItinerary.settings.title = itinerary.settings.title || "",
-    oldTransformedItinerary.settings.description = itinerary.settings.description || "",
-    oldTransformedItinerary.settings.city = itinerary.settings.city || "",
-    oldTransformedItinerary.settings.state = itinerary.settings.state || "",
-    oldTransformedItinerary.settings.visibility = itinerary.settings.visibility || "private",
-    oldTransformedItinerary.settings.galleryPhotoUrl = itinerary.settings.galleryPhotoUrl || ""
-    oldTransformedItinerary.items =  itinerary.items || []
-
-    let newTransformedItinerary: Itinerary = {
-      ...oldTransformedItinerary,
-      items: oldTransformedItinerary.items.map(item => {
-        console.log('Initial startTime:', item.startTime?.time);  // Debugging line
-        console.log('Initial endTime:', item.endTime?.time);  // Debugging line
-    
-        return {
-          ...item,
-          startTime: item.startTime?.time ? { time: dayjs.unix(item.startTime.time.seconds) } : undefined,
-          endTime: item.endTime?.time ? { time: dayjs.unix(item.endTime.time.seconds) } : undefined,
-        };
-      }),
-    };
-    console.log('New itinerary:', newTransformedItinerary);  // Debugging line
+   
     const indexDB = await openDB('itinerariesDatabase');
     const tx = indexDB.transaction('itineraries', 'readwrite');
     const store = tx.objectStore('itineraries');
-    await store.put(newTransformedItinerary, 'currentlyEditingItineraryStateEF');
-   console.log(store, 'store')
+    await store.put(checkedItinerary, `currentlyEditingItineraryStateEF_${authUser?.uid}`);
     await tx.done;
 
-    setItineraryToEdit(newTransformedItinerary);
     
     router.push(`/user/editMyItinerary`);
 
@@ -95,7 +92,7 @@ const handleCreateAndGo = async () => {
 
 //////////////////////////////
   return (
-    <div className={styles.container} onClick={handleCreateAndGo}>
+    <div className={styles.container} onClick={handleOpenEditView}>
       <div className={styles.imageWrapper}>
         <div className={styles.aspectRatioBox}> 
             <Image

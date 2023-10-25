@@ -167,16 +167,13 @@ const ItineraryItemForm: FC<Props> = ({ initialItem, ...props }) => {
    
 //get coordinates
     const fetchCurrentLocation = async () => {
-        console.log("ran fetchCurrentLocation")
         if (!navigator.geolocation) {
             toast.error("Geolocation is not supported by your browser.");
             alert("Geolocation is not supported by your browser.");
             return;
         }
-        console.log("ran navigator initial")
 
         navigator.geolocation.getCurrentPosition(position => {
-        console.log("ran navigator start")
             const { latitude, longitude } = position.coords;
             const coordinates = latitude + ", " + longitude;
             console.log(coordinates, "coordinates")

@@ -9,12 +9,14 @@ import { openDB } from 'idb';
 import dayjs, {Dayjs} from 'dayjs'; 
 import { IndexDBItinerary, IndexDBItineraryItem } from '../../components/EditFormComponents/editFormTypeDefs';
 import styles from '@/styles/Home.module.css'
-
+import { authUserState } from '../../atoms/atoms'
+import { getFirebaseAuth
+} from "../../components/FirebaseAuthComponents/config/firebase.auth";
 
 const SkeletonForm = () => {
 
   return (
-    <div style={{ opacity: 0.5, marginTop: "4rem", padding: "2rem 15rem"}}>
+    <div style={{ opacity: 0.5, marginTop: "4rem", padding: "2rem ", width:"25rem"}}>
       {/* Adjust the skeleton form as needed */}
       <div style={{ width: '100%', height: '40px', backgroundColor: 'grey', marginBottom: '10px', borderRadius: "10px" }}></div>
       <div style={{ width: '100%', height: '80px', backgroundColor: 'grey', marginBottom: '10px', borderRadius: "10px" }}></div>
@@ -42,15 +44,26 @@ const EFEditPage: React.FC = () => {
   const toastShownRef = useRef(false);
   const [loadingData, setLoadingData] = useState(true); // State to track loading
   const [saveStatus, setSaveStatus] = useRecoilState(saveStatusDisplayedEditFormContainer); // additional state for saving status
+  const [authUser, setAuthUser] = useRecoilState(authUserState);
 
   useEffect(() => {
-    const loadDataFromIndexedDB = async () => {
+    const firebaseAuth = getFirebaseAuth();
+  
+    // This observer gets called whenever the user's sign-in state changes.
+    const unsubscribe = firebaseAuth.onAuthStateChanged(async (user) => {
+      if (!user) {
+        router.push('/');
+        toast.error('You need to be logged in to edit an itinerary.');
+        return;
+      }
+  
       try {
+        const userId = user.uid; // Get uid directly from the Firebase user object
         const indexLocalDB = await openDB('itinerariesDatabase');
         const tx = indexLocalDB.transaction('itineraries', 'readonly');
         const store = tx.objectStore('itineraries');
-        const data: IndexDBItinerary | undefined = await store.get('currentlyEditingItineraryStateEF');
-    
+        const data = await store.get(`currentlyEditingItineraryStateEF_${userId}`);
+  
         if (data && data.items) {
           // Map over items to transform time data
           const transformedItems = data.items.map((item: IndexDBItineraryItem) => {
@@ -64,6 +77,7 @@ const EFEditPage: React.FC = () => {
                 startTime = dayjs.unix(seconds);
               }
             }
+  
             // Transform endTime to Dayjs if it's UnixTimeObject
             if (item.endTime?.time && 'seconds' in item.endTime.time) {
               const seconds = item.endTime.time.seconds;
@@ -71,20 +85,20 @@ const EFEditPage: React.FC = () => {
                 endTime = dayjs.unix(seconds);
               }
             }
-    
+  
             return {
               ...item,
               startTime: { time: startTime },
               endTime: { time: endTime },
             };
           });
-    
+  
           // Update itinerary state
           setItinerary({
             ...data,
             items: transformedItems,
           });
-    
+  
           // Update save status
           setSaveStatus("Restoring...");
         }
@@ -93,15 +107,12 @@ const EFEditPage: React.FC = () => {
       } finally {
         setLoadingData(false);  // Update loading status
       }
-    };
-    
-    // Load data only if itinerary is not already set
-    if (!itinerary.id) {
-      loadDataFromIndexedDB();
-    } else {
-      setLoadingData(false);  // Update loading status if `itinerary` is already set
-    }
+    });
+  
+    // Clean up subscription on component unmount
+    return () => unsubscribe();
   }, []);
+  
 
   useEffect(() => {
     if (!loadingData) {
@@ -111,7 +122,7 @@ const EFEditPage: React.FC = () => {
         toastShownRef.current = true;
       }
     }
-  }, [loadingData, itinerary]);
+  }, [itinerary, loadingData]);
 
   
   return (
