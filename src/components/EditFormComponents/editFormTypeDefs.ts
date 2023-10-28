@@ -3,8 +3,27 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 
 
+export type ItinerarySettings = {
+  title: string;
+  description: string;
+  neighborhood?: string;
+  city: string;
+  state: string;
+  duration?: string;
+  galleryPhotoUrl?: string;
+  visibility: 'private' | 'shared' | 'public';
+
+}
+    
+export type Itinerary = {
+  id: string,
+  uid: string,
+  settings?: ItinerarySettings;
+  items?: ItineraryItems;
+}
+
 export type ItineraryItem = {
-    siteName?: string;
+    itemTitle?: string;
     startTime?: {time?: Dayjs | null} ;
     endTime?: {time?: Dayjs | null} ;
     description?: string;
@@ -23,12 +42,11 @@ export type ItineraryItem = {
     beingEdited?: boolean
   } 
 
+  export type ItineraryItems = ItineraryItem[];
+
   export const ItemTypes = {
     ITINERARY_ITEM: 'itineraryItem',
   };
-  
-  export type ItineraryItems = ItineraryItem[];
-  
   export type UserAccess = {
     uid: string;
     email?: string;
@@ -50,24 +68,6 @@ export type ItineraryItem = {
     docId?: string;
   };
 
-  export type ItinerarySettings = {
-    title: string;
-    description: string;
-    neighborhood?: string;
-    city: string;
-    state: string;
-    duration?: string;
-    galleryPhotoUrl?: string;
-    visibility: 'private' | 'shared' | 'public';
-
-  }
-      
-  export type Itinerary = {
-    id: string,
-    uid: string,
-    settings?: ItinerarySettings;
-    items?: ItineraryItems;
-  }
 
 
   export type TimeObject = {
@@ -75,7 +75,7 @@ export type ItineraryItem = {
   };
   
   export type TransformedItineraryItem   = {
-    siteName?: string;
+    itemTitle?: string;
     startTime?: TimeObject;
     endTime?: TimeObject;
     description?: string;
@@ -109,7 +109,7 @@ export type UnixTimeObject = {
 };
 
 export type IndexDBItineraryItem   = {
-  siteName?: string;
+  itemTitle?: string;
   startTime?: UnixTimeObject;
   endTime?: UnixTimeObject;
   description?: string;

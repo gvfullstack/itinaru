@@ -13,7 +13,7 @@ export const ItemTypes = {
 
 
   export type ItineraryItem = {
-    siteName?: string;
+    itemTitle?: string;
     startTime?: {time?: Dayjs | null, beingEdited?: boolean};
     endTime?: {time?: Dayjs | null, beingEdited?: boolean};
     description?: string;

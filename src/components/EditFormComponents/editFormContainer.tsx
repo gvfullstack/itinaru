@@ -83,10 +83,10 @@ const [itinAccessList, setItinAccessList] = useRecoilState(itineraryAccessItinVi
 
 
 useEffect(() => {
-  
+  if(authUser && authUser.uid ) {
     setItineraryGalleryPhotoUrl(itinerary.settings?.galleryPhotoUrl || '');
     setItineraryGalleryPhotoWhileEditing(itinerary.settings?.galleryPhotoUrl || '');
-  
+  }
 },[itinerary]);
 
 
@@ -204,6 +204,7 @@ const handleEdit = async () =>
   await store.put(true, `indexDBNeedsRefresh_${authUser?.uid}`);
   await tx.done;
 };
+
 const renderCount = useRef(0);
 
 useUpdateItineraryAccess({itinerary})
@@ -365,16 +366,15 @@ const handleDeleteItinerary = async (itineraryId: string) => {
   try {
     // First, attempt to delete the data in the external database.
     await deleteItinerary(itineraryId);
-    toast.success("Itinerary deleted successfully!");
     router.push('/');
     // If successful, proceed to delete local IndexedDB data.
     const db = await openDB('itinerariesDatabase');
     const tx = db.transaction('itineraries', 'readwrite');
     const store = tx.objectStore('itineraries');
 
-    const existingData = await store.get('currentlyEditingItineraryStateEF');
+    const existingData = await store.get(`currentlyEditingItineraryStateEF_${authUser?.uid}`);
     if (existingData !== undefined) {
-      await store.delete('currentlyEditingItineraryStateEF');
+      await store.delete(`currentlyEditingItineraryStateEF_${authUser?.uid}`);
     }
     await tx.done;
     // If everything went well, show success message and reset state.

@@ -90,7 +90,7 @@ const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.tim
 let mapsUrl: string | undefined = undefined;
 
 if (itineraryItem.locationAddress) {
-  mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${itineraryItem.siteName || ""} ${itineraryItem.locationAddress || ""}`)}`;
+  mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${itineraryItem.itemTitle || ""} ${itineraryItem.locationAddress || ""}`)}`;
 } else if (itineraryItem.location && itineraryItem.location.latitude && itineraryItem.location.longitude) {
   mapsUrl = `https://www.google.com/maps/search/?api=1&query=${itineraryItem.location.latitude},${itineraryItem.location.longitude}`;
 }  
@@ -152,7 +152,7 @@ if (itineraryItem.locationAddress) {
   }
 
 
-  const shortSiteName = itineraryItem.siteName?.substring(0, 50) || "untitled item" + "...";
+  const shortItemTitle = itineraryItem.itemTitle?.substring(0, 50) || "untitled item" + "...";
 
  
 
@@ -165,7 +165,7 @@ if (itineraryItem.locationAddress) {
                       {/* <div className={styles.itinTitleContainer}> */}
                           <h3 className={`${styles.itinTitle} ${itineraryItem.descHidden ? "" : styles.isShown}`} 
                             onClick={()=>handleShowHideDescription()}>
-                              {itineraryItem.descHidden ? shortSiteName : itineraryItem.siteName}                           
+                              {itineraryItem.descHidden ? shortItemTitle : itineraryItem.itemTitle}                           
                             </h3>
                             <div className={`${styles.activityTime} ${itineraryItem.descHidden ? "" : styles.isShown}`}>
                                     <div className={`${styles.infoBannerWords} ${itineraryItem.descHidden ? "" : styles.isShown}`}>Start:</div>
@@ -208,14 +208,14 @@ if (itineraryItem.locationAddress) {
                           <div className={`${styles.ownResearchContainer} ${itineraryItem.descHidden ? "" : styles.isShown }`}>
                             Do your own research: 
                             <div className={styles.expandedItinItemWebsite}>
-                              <a href={`https://www.google.com/search?q=${encodeURIComponent(itineraryItem.siteName ? itineraryItem.siteName : "")}`} target="_blank">
+                              <a href={`https://www.google.com/search?q=${encodeURIComponent(itineraryItem.itemTitle ? itineraryItem.itemTitle : "")}`} target="_blank">
                                 {externalLink}
                                 <span className={styles.youGSearchText}>Search on Google</span>
                               </a>
                             </div>
 
                             <div className={styles.youtubeLink}>      
-                                  <a href={`https://www.youtube.com/results?search_query=${encodeURIComponent(itineraryItem.siteName ? itineraryItem.siteName : "")}`} target="_blank">
+                                  <a href={`https://www.youtube.com/results?search_query=${encodeURIComponent(itineraryItem.itemTitle ? itineraryItem.itemTitle : "")}`} target="_blank">
                                   {externalLink} <span className={styles.youTubeLinkText}>Search on YouTube</span></a>
                             </div>
 

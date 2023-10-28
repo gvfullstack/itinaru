@@ -1,0 +1,45 @@
+.durationSection{
+    font-size: 16px;
+    margin-bottom: 1rem;
+    /* align-self: center; */
+}
+
+.heading {
+    text-align: center;
+    margin-bottom: 5px;
+    max-width: 20rem;
+
+  }
+  
+  .borderContainer {
+    border-top: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    max-width: 20rem;
+  }
+  
+  .marginRight {
+    margin-right: 1rem;
+  }
+  
+  .label {
+    margin-right: 0.5rem;
+  }
+  
+  .select {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 6px;
+    transition: border-color 0.3s;
+    font-size: 16px;
+    height: 2.5rem;
+    width: 4rem;
+    text-align: center;
+  }
+  
+  .select:focus {
+    border-color: blue;
+  }
+  

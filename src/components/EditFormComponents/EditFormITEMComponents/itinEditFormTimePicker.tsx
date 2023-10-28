@@ -6,6 +6,8 @@ import IconButton from '@mui/material/IconButton';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import dayjs from 'dayjs';
 import { DesktopTimePicker } from '@mui/x-date-pickers/DesktopTimePicker';
+import { TimeField } from '@mui/x-date-pickers/TimeField';
+
 
 import { createTheme } from '@mui/material/styles';
 
@@ -31,7 +33,7 @@ type CustomTimePickerProps = TimePickerProps<dayjs.Dayjs> & {
 
 const ItinEditFormTimePicker: React.FC<CustomTimePickerProps> = (props) => (
     <ThemeProvider theme={theme}>
-        <DesktopTimePicker {...props} />
+        <TimeField {...props} />
     </ThemeProvider>
 );
 

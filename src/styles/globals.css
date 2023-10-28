@@ -80,3 +80,39 @@ body {
   width: 100%;
 
 }
+
+.ql-snow .ql-editor .ql-size-16px {
+  font-size: 16px;
+}
+
+.ql-snow .ql-editor .ql-size-18px {
+  font-size: 18px;
+}
+
+.ql-snow .ql-editor .ql-size-20px {
+  font-size: 20px;
+}
+
+.ql-snow .ql-editor .ql-size-22px {
+  font-size: 22px;
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="16px"]::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="16px"]::before {
+  content: '16px';
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="18px"]::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="18px"]::before {
+  content: '18px';
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="20px"]::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="20px"]::before {
+  content: '20px';
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="22px"]::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="22px"]::before {
+  content: '22px';
+}

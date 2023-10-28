@@ -103,32 +103,52 @@
     
       const itineraryId = savedDocRef.id;
 
+      let userId;
       if (typeof authUser?.uid !== 'string') {
         throw new Error("UID is not a string or is missing");
-     }
-      setItinerary({
-        id: itineraryId,
-        uid: authUser.uid,
-        settings: {
-          title: title,
-          description: "",
-          city: "",
-          state: "",
-          visibility: "private",
-        },
-        items: []
-      });
+      } else {
+        userId = authUser?.uid;
+      }
+   
+     const newItinerary = {
+      id: itineraryId,
+      uid: userId,
+      settings: {
+        title: title,
+        description: "",
+        city: "",
+        state: "",
+        visibility: "private" as "private" | "shared" | "public",
+      },
+      items: []
+    };
+  
+    setItinerary(newItinerary);
+  
+    // Log the new state
+    console.log("New Recoil Itinerary State:", newItinerary);
 
-      const indexDB = await openDB('itinerariesDatabase');
-      const tx = indexDB.transaction('itineraries', 'readwrite');
-      const store = tx.objectStore('itineraries');
-      await store.put(itinerary, `currentlyEditingItineraryStateEF_${authUser?.uid}`);
-      await tx.done;
+     // Update IndexedDB
+  const indexDB = await openDB('itinerariesDatabase');
+  const tx = indexDB.transaction('itineraries', 'readwrite');
+  const store = tx.objectStore('itineraries');
+  await store.put(newItinerary, `currentlyEditingItineraryStateEF_${userId}`);
+  await tx.done;
+
+  updateMyItineraries()
       
       router.push(`/user/editMyItinerary`);
 
     };
 
+    const updateMyItineraries = async () => 
+      {
+        const db = await openDB('itinerariesDatabase');
+        const tx = db.transaction('myItineraries', 'readwrite');
+        const store = tx.objectStore('myItineraries');
+        await store.put(true, `indexDBNeedsRefresh_${authUser?.uid}`);
+        await tx.done;
+      };
     useEffect(() => {
       // Function to run when the route changes
       const handleRouteChange = () => {
