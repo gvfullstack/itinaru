@@ -161,14 +161,14 @@ const DraggableItineraryItem = React.forwardRef((
     setReplacementLoading(true);
     setTripPreferences((prevState) => ({
       ...prevState,
-      specificSitesToExclude: [...(prevState.specificSitesToExclude || []), itineraryItem.siteName].filter(Boolean) as string[],
+      specificSitesToExclude: [...(prevState.specificSitesToExclude || []), itineraryItem.itemTitle].filter(Boolean) as string[],
     }));
     const destination = tripPreferences.destination;
     const neighborhoodsToExplore = tripPreferences.neighborhoodsToExplore??[];
     const neighborhoods = neighborhoodsToExplore.join(', ')
     const itinPreferences = getSelectedTripPreferences(tripPreferences) + getSelectedUserPreferences(userPreferences);
-    const placesInItinerary = itineraryItemsInState.map(item => item.siteName).join(",");
-    const prompt = `For a tourist visiting ${neighborhoodsToExplore.length >0 ? neighborhoods: ""} in ${destination} whose itinerary already contains these sites: ${placesInItinerary} (those should not be repeated), please provide another ${itineraryItem.activityType} to replace ${itineraryItem.siteName}. The traveler preferences are as follows: ${itinPreferences}. The suggestion should in JSON object format i.e. begin with "{" and end with "}", and follow this structure exactly: {"activityType": "<Coffee Shop/Tourist Site to Visit>", "siteName": "<name>", "description": "<description>", "locationAddress": "<address>".} `;
+    const placesInItinerary = itineraryItemsInState.map(item => item.itemTitle).join(",");
+    const prompt = `For a tourist visiting ${neighborhoodsToExplore.length >0 ? neighborhoods: ""} in ${destination} whose itinerary already contains these sites: ${placesInItinerary} (those should not be repeated), please provide another ${itineraryItem.activityType} to replace ${itineraryItem.itemTitle}. The traveler preferences are as follows: ${itinPreferences}. The suggestion should in JSON object format i.e. begin with "{" and end with "}", and follow this structure exactly: {"activityType": "<Coffee Shop/Tourist Site to Visit>", "itemTitle": "<name>", "description": "<description>", "locationAddress": "<address>".} `;
     const { publicRuntimeConfig } = getConfig();
     const baseUrl = publicRuntimeConfig.BASE_URL;
   
@@ -232,7 +232,7 @@ const DraggableItineraryItem = React.forwardRef((
             newObj.descHidden = true;
             newObj.id = uuidv4();
   
-            const index = itineraryItemsInState.findIndex(item => item.siteName === itineraryItem.siteName);
+            const index = itineraryItemsInState.findIndex(item => item.itemTitle === itineraryItem.itemTitle);
             if (index !== -1) {
               const updatedItems = [...itineraryItemsInState];
               updatedItems[index] = newObj;
@@ -318,20 +318,20 @@ const DraggableItineraryItem = React.forwardRef((
                       <div className={styles.itinTitleContainer} 
                       >
                           <h3 className={`${styles.itinTitle} ${itineraryItem.descHidden ? "" : styles.isShown }`} 
-                            onClick={()=>handleShowHideDescription(itineraryItem)}>{replacementLoading ? "...processing" : itineraryItem.siteName}</h3>
+                            onClick={()=>handleShowHideDescription(itineraryItem)}>{replacementLoading ? "...processing" : itineraryItem.itemTitle}</h3>
                           <p className={`${styles.itinTitleDescription} ${itineraryItem.descHidden ? "" : styles.isShown }`}> {replacementLoading ? "" : itineraryItem.description} </p>
                           <p className={`${styles.expandedItinAddressContainer} ${itineraryItem.descHidden ? "" : styles.isShown }`}>{replacementLoading ? "" : itineraryItem.locationAddress}</p>
                           <div className={`${styles.ownResearchContainer} ${itineraryItem.descHidden ? "" : styles.isShown }`}>
                             Do your own research: 
                             <div className={styles.expandedItinItemWebsite}>
-                              <a href={`https://www.google.com/search?q=${encodeURIComponent(itineraryItem.siteName ? itineraryItem.siteName : "")} ${encodeURIComponent(tripPreferences.destination ? tripPreferences.destination : "")}`} target="_blank">
+                              <a href={`https://www.google.com/search?q=${encodeURIComponent(itineraryItem.itemTitle ? itineraryItem.itemTitle : "")} ${encodeURIComponent(tripPreferences.destination ? tripPreferences.destination : "")}`} target="_blank">
                                 {externalLink}
                                 <span className={styles.youGSearchText}>Search on Google</span>
                               </a>
                             </div>
 
                             <div className={styles.youtubeLink}>      
-                                  <a href={`https://www.youtube.com/results?search_query=${encodeURIComponent(itineraryItem.siteName ? itineraryItem.siteName : "")} ${encodeURIComponent(tripPreferences.destination ? tripPreferences.destination : "")}`} target="_blank">
+                                  <a href={`https://www.youtube.com/results?search_query=${encodeURIComponent(itineraryItem.itemTitle ? itineraryItem.itemTitle : "")} ${encodeURIComponent(tripPreferences.destination ? tripPreferences.destination : "")}`} target="_blank">
                                   {externalLink} <span className={styles.youTubeLinkText}>Search on YouTube</span></a>
                             </div>
                           </div>

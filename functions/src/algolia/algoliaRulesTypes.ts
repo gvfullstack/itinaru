@@ -25,7 +25,7 @@ import { Timestamp } from 'firebase/firestore';
   };
   
   export type TransformedItineraryItem = {
-    siteName?: string;
+    itemTitle?: string;
     startTime?: TimeObject;
     endTime?: TimeObject;
     description?: string;

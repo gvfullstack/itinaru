@@ -39,7 +39,7 @@ const trashDelete = (
   const handleShowHideDescription = (curItineraryItem: ItineraryItem) => {
     setItineraryItems(prevState => {
       const updatedNeighborhoods = prevState.map((itineraryItem) => {
-        if(curItineraryItem.siteName === itineraryItem.siteName) {
+        if(curItineraryItem.itemTitle === itineraryItem.itemTitle) {
           return {...itineraryItem, descHidden: !itineraryItem.descHidden}
         }
         else {       
@@ -89,8 +89,8 @@ const trashDelete = (
     const neighborhoodsToExplore = tripPreferences.neighborhoodsToExplore??[];
     const neighborhoods = neighborhoodsToExplore.join(', ')
     const itinPreferences = getSelectedTripPreferences(tripPreferences) + getSelectedUserPreferences(userPreferences);
-    const placesInItinerary = itineraryItemsInState.map(item => item.siteName).join(",");
-    const prompt = `For a tourist visiting ${neighborhoodsToExplore.length >0 ? neighborhoods: ""} in ${destination} whose itinerary already contains these sites: ${placesInItinerary} (those should not be repeated), please provide a  ${selectedItem === "Non-Meal Site" ? `${selectedItem} non-meal site suggestion` : `${selectedItem} restaurant suggestion`}. The traveler preferences are as follows: ${itinPreferences}. The suggestion should in JSON object format i.e. begin with "{" and end with "}", and follow this structure exactly: {"activityType": "<Coffee Shop/Tourist Site to Visit/Self Guided Activity>", "siteName": "<name>", "description": "<description>", "locationAddress": "<address>".} `;
+    const placesInItinerary = itineraryItemsInState.map(item => item.itemTitle).join(",");
+    const prompt = `For a tourist visiting ${neighborhoodsToExplore.length >0 ? neighborhoods: ""} in ${destination} whose itinerary already contains these sites: ${placesInItinerary} (those should not be repeated), please provide a  ${selectedItem === "Non-Meal Site" ? `${selectedItem} non-meal site suggestion` : `${selectedItem} restaurant suggestion`}. The traveler preferences are as follows: ${itinPreferences}. The suggestion should in JSON object format i.e. begin with "{" and end with "}", and follow this structure exactly: {"activityType": "<Coffee Shop/Tourist Site to Visit/Self Guided Activity>", "itemTitle": "<name>", "description": "<description>", "locationAddress": "<address>".} `;
     const { publicRuntimeConfig } = getConfig();
     const baseUrl = publicRuntimeConfig.BASE_URL;
 
