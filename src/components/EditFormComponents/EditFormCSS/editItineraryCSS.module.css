@@ -142,7 +142,7 @@
     .itinTitleDescription.isShown{
         display: flex;
         /* background-color: tomato; */
-        margin-top: 0rem;
+        margin-top: 1rem;;
         padding-top: 0;
         height: 3rem;
         width: 12rem;
