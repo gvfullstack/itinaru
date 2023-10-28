@@ -12,17 +12,32 @@ import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import StarRating from './siteStarRating';
 import { useGoogleMaps } from './googleMapsProvider';
-import 'react-quill/dist/quill.snow.css';  // or quill.bubble.css if you're using the bubble theme
 import {myItinerariesResults} from '../../MyItinerariesGallery/myItinerariesAtoms';
 import { db  } from '../../FirebaseAuthComponents/config/firebase.database';
 import { openDB } from 'idb';
 import firebase from 'firebase/compat/app';
 import {saveStatusDisplayedEditFormContainer} from '../editFormAtoms';
+import DurationPicker from './durationPicker';
+import EndTimeDisplay from './endTimeDisplay';
+import 'react-quill/dist/quill.snow.css';  // or quill.bubble.css if you're using the bubble theme
+import Quill from 'quill';
+const Parchment = Quill.import('parchment');
+
+var Block = Quill.import('blots/block');
+Block.tagName = 'DIV';
+Quill.register(Block, true);
+
+const SizeStyle = new Parchment.Attributor.Style('size', 'font-size', {
+  scope: Parchment.Scope.INLINE,
+  whitelist: ['16px', '18px', '20px', '22px']
+});
+Quill.register(SizeStyle, true);
 
 const ReactQuill = dynamic(import('react-quill'), {
     ssr: false, // This will make the component render only on the client-side
     loading: () => <p>Loading...</p>, // You can provide a loading component or text here
   });
+
 import {useRecoilState, useRecoilCallback} from 'recoil';
 import {currentlyEditingItineraryState} from '../editFormAtoms';
 import { toast } from 'react-toastify';
@@ -46,7 +61,23 @@ const ItineraryItemForm: FC<Props> = ({ initialItem, ...props }) => {
     const endTimeState = itineraryInEdit.items?.find(item => item.id === initialItemState.id)?.endTime?.time || null;
     const [saveStatus, setSaveStatus] = useRecoilState(saveStatusDisplayedEditFormContainer); // additional state for saving status
 
+    //Quill Config
+    
+    const modules = {
+    toolbar: [
+      [{ 'size': ['16px', '18px', '20px', '22px'] }],
+      ['bold', 'italic', 'underline'],
+      ['blockquote'],
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      ['link'],
+      ['clean']
+    ],
+    clipboard: {
+      matchVisual: false,
+    }
+  };
    
+   ////////////////
     const isGoogleMapsLoaded = useGoogleMaps();
 
     const updateItemInRecoilState = (updatedFields: Partial<ItineraryItem>, itemId: string) => {
@@ -65,29 +96,29 @@ const ItineraryItemForm: FC<Props> = ({ initialItem, ...props }) => {
         if(!initialItemState || !initialItemState.id){toast.error("No data found, please close form and try again."); return }
         const itemId = initialItemState.id; // or however you have access to the item's ID
       
-        const siteInput = document.getElementById('siteNameInput') as HTMLInputElement | null;
-        if (siteInput) {
-          const siteAutocomplete = new google.maps.places.Autocomplete(siteInput, {
-            fields: ["name", "formatted_address"]
-          });
-          siteAutocomplete.addListener('place_changed', () => {
-            const place = siteAutocomplete.getPlace();
-            if (place) {
-              updateItemInRecoilState({ siteName: place.name, locationAddress: place.formatted_address || '' }, itemId);
-            }
-          });
-        }
+        // const titleInput = document.getElementById('itemTitleInput') as HTMLInputElement | null;
+        // if (titleInput) {
+        //   const siteAutocomplete = new google.maps.places.Autocomplete(titleInput, {
+        //     fields: ["name", "formatted_address"]
+        //   });
+        //   siteAutocomplete.addListener('place_changed', () => {
+        //     const place = siteAutocomplete.getPlace();
+        //     if (place) {
+        //       updateItemInRecoilState({ itemTitle: place.name, locationAddress: place.formatted_address || '' }, itemId);
+        //     }
+        //   });
+        // }
       
         const addressInput = document.getElementById('addressInput') as HTMLInputElement | null;
         if (addressInput) {
           const addressAutocomplete = new google.maps.places.Autocomplete(addressInput, {
-            fields: ["formatted_address"]
+            fields: ["formatted_address","name"]
           });
       
           addressAutocomplete.addListener('place_changed', () => {
             const place = addressAutocomplete.getPlace();
             if (place) {
-              updateItemInRecoilState({ locationAddress: place.formatted_address || '' }, itemId);
+              updateItemInRecoilState({ itemTitle: place.name, locationAddress: place.formatted_address || '' }, itemId);
             }
           });
         }
@@ -105,8 +136,7 @@ const ItineraryItemForm: FC<Props> = ({ initialItem, ...props }) => {
         const newValue = e.target.value;
         
         setItineraryInEdit((prevItinerary: Itinerary) => {
-            // Assuming you know the item ID you want to update
-            const itemId = initialItemState.id; // Replace with actual ID
+            const itemId = initialItemState.id; 
             
             // Find the index of the item
             const itemIndex = prevItinerary.items?.findIndex(item => item.id === itemId);
@@ -203,22 +233,22 @@ const ItineraryItemForm: FC<Props> = ({ initialItem, ...props }) => {
     };
 
  ///DURATION
- const calculateDuration = (start: Dayjs | null | undefined, end: Dayjs | null | undefined): number | null => {
-    if (start && end) {
-        const duration = end.diff(start); // No unit specified, so it defaults to milliseconds.
-        return duration >= 0 ? duration : null;
-    }
-    return null;
-}
+//  const calculateDuration = (start: Dayjs | null | undefined, end: Dayjs | null | undefined): number | null => {
+//     if (start && end) {
+//         const duration = end.diff(start); // No unit specified, so it defaults to milliseconds.
+//         return duration >= 0 ? duration : null;
+//     }
+//     return null;
+// }
 
 
-    useEffect(() => {
-        const duration = calculateDuration(startTimeState || null, endTimeState || null);
+//     useEffect(() => {
+//         const duration = calculateDuration(startTimeState || null, endTimeState || null);
 
-        if (duration !== null) {
-            updateItemInRecoilState({ activityDuration: duration }, initialItemState.id ||"")
-        }
-    }, [startTimeState, endTimeState]);
+//         if (duration !== null) {
+//             updateItemInRecoilState({ activityDuration: duration }, initialItemState.id ||"")
+//         }
+//     }, [startTimeState, endTimeState]);
     
     const cancelMark = 
         <FontAwesomeIcon 
@@ -287,7 +317,7 @@ const ItineraryItemForm: FC<Props> = ({ initialItem, ...props }) => {
         });
       };
       
-      
+
     return (
 
     <div className={styles.itinItemCreatorContainer}>
@@ -299,36 +329,10 @@ const ItineraryItemForm: FC<Props> = ({ initialItem, ...props }) => {
     }
     <p className={styles.saveStatusDisplayed}>{saveStatus}</p>
     </div>
-    <div className={styles.inputFieldsTimeSelectSection}>        
-        <ItinEditFormTimePicker
-                label="Start Time"
-                value={startTimeState}
-                onChange={handleTimeChangeWithRecoilUpdate('startTime')}
-            />
-
-        <ItinEditFormTimePicker
-            label="End Time"
-            value={endTimeState}
-            onChange={handleTimeChangeWithRecoilUpdate('endTime')}
-        />
-    </div>
-
-    <TextField
-    id="siteNameInput"
-    label="Site Name"
-    variant="outlined"
-    placeholder="Site Name"
-    value={itineraryInEdit.items?.find(item => item.id === initialItemState.id)?.siteName || null}
-    onChange={handleItemChange('siteName')}
-    className={styles.inputFields}
-    helperText={siteIsHovered ? "Site name you enter will be used if no selection is made from the dropdown." : ''}
-    onMouseEnter={() => setSiteIsHovered(true)}
-    onMouseLeave={() => setSiteIsHovered(false)}
-    />
 
     <TextField
     id="addressInput"
-    label="Address"
+    label="Site Name/Address"
     variant="outlined"
     placeholder="Address"
     value={itineraryInEdit.items?.find(item => item.id === initialItemState.id)?.locationAddress || null}
@@ -338,6 +342,19 @@ const ItineraryItemForm: FC<Props> = ({ initialItem, ...props }) => {
     onMouseEnter={() => setAddressIsHovered(true)}
     onMouseLeave={() => setAddressIsHovered(false)}
     />
+
+    <TextField
+    id="itemTitleInput"
+    label="Itinerary Item Title"
+    variant="outlined"
+    placeholder="Site Name"
+    value={itineraryInEdit.items?.find(item => item.id === initialItemState.id)?.itemTitle || null}
+    onChange={handleItemChange('itemTitle')}
+    className={styles.inputFields}
+    // helperText={siteIsHovered ? "Site name you enter will be used if no selection is made from the dropdown." : ''}
+    // onMouseEnter={() => setSiteIsHovered(true)}
+    // onMouseLeave={() => setSiteIsHovered(false)}
+    />   
 
 {/* Coordinates */}
 {showInfoBoxGeolocation && 
@@ -393,6 +410,24 @@ const ItineraryItemForm: FC<Props> = ({ initialItem, ...props }) => {
   </div>
 }
 
+    <div className={styles.inputFieldsTimeSelectSection}>    
+        <div className = {styles.startTimeTimeContainer}>    
+        <ItinEditFormTimePicker
+                label="Start Time"
+                value={startTimeState}
+                onChange={handleTimeChangeWithRecoilUpdate('startTime')}
+            />
+        </div>
+        {initialItem?.id && <EndTimeDisplay itemId={initialItem.id} />}
+    </div>
+                
+        {initialItem?.id && <DurationPicker itemId={initialItem.id}/>}
+        {/* <ItinEditFormTimePicker
+            label="End Time"
+            value={endTimeState}
+            onChange={handleTimeChangeWithRecoilUpdate('endTime')}
+        /> */}
+ 
     <label htmlFor="siteDescription">Site Description:</label>
     <div className={styles.quillContainer}>
             <ReactQuill
@@ -410,6 +445,8 @@ const ItineraryItemForm: FC<Props> = ({ initialItem, ...props }) => {
                 }}
                 placeholder="Enter site description..."
                 className={styles.quill}
+                modules={modules} 
+
             />
     </div>
     
@@ -451,58 +488,3 @@ const ItineraryItemForm: FC<Props> = ({ initialItem, ...props }) => {
 }
 
 export default ItineraryItemForm;
-
-
-
-
-
-
-
-
-
-
-
-// *******************save to firestore operations*******************     
-
-// const itineraryRef = db.collection('itineraries').doc(initialItemState.id);
-// const [focusedValue, setFocusedValue] = useState<string | null>(null);
-
-// const handleFieldFocus = (e: React.FocusEvent<HTMLInputElement>) => {
-//   setFocusedValue(e.target.value);
-// };
-
-  
-// // Function to update a specific field in Firestore
-// const updateFieldInFirestore = async <K extends keyof ItineraryItem> (field: K, value: ItineraryItem[K]) => {
-//   const itemId = initialItemState.id;
-//   try {
-//     // Fetch current data
-//     const doc = await itineraryRef.get();
-//     if (doc.exists) {
-//       const itineraryData = doc.data() as Itinerary;
-      
-//       // Find index of the item to update
-//       const itemIndex = itineraryData.items.findIndex(item => item.id === itemId);
-      
-//       // If item is found, update the field
-//       if (itemIndex > -1) {
-//         const updatedItems = [...itineraryData.items];
-//         updatedItems[itemIndex][field] = value;
-        
-//         // Update Firestore
-//         await itineraryRef.update({
-//           'items': updatedItems
-//         });
-        
-//         console.log(`Field ${field} updated successfully`);
-//       } else {
-//         console.log(`Item with ID ${itemId} not found`);
-//       }
-//     } else {
-//       console.log('Document does not exist');
-//     }
-//   } catch (error) {
-//     console.log(`Error updating field ${field}:`, error);
-//   }
-// };
-

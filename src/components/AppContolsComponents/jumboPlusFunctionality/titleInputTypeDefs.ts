@@ -3,7 +3,7 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 
 export type ItineraryItem = {
-  siteName?: string;
+  itemTitle?: string;
   startTime?: {time?: Dayjs | null} ;
   endTime?: {time?: Dayjs | null} ;
   description?: string;

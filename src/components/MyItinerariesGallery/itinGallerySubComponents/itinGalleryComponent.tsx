@@ -78,14 +78,15 @@ const handleOpenEditView = async () => {
       throw new Error("UID is not a string or is missing");
   }
 
-   
+   console.log("Before openDB");
     const indexDB = await openDB('itinerariesDatabase');
     const tx = indexDB.transaction('itineraries', 'readwrite');
     const store = tx.objectStore('itineraries');
     await store.put(checkedItinerary, `currentlyEditingItineraryStateEF_${authUser?.uid}`);
-    await tx.done;
+   console.log("after openDB", store);
 
-    
+    await tx.done;
+   
     router.push(`/user/editMyItinerary`);
 
 };

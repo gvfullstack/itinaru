@@ -1,0 +1,21 @@
+.endTimeContainer {
+    position: relative;
+    padding: 16px;
+    border: solid 1px #e3e1e1;
+    border-radius: 4px;
+    height: 3.5rem;
+    width: 10rem;
+    color: #6e6d6d;
+}
+  
+.floatingLabel {
+    position: absolute;
+    top: -.5rem;
+    left: 0;
+    background: transparent;
+    padding: 0 4px;
+    color: #888;
+    font-size: 12px;
+    background-color: white;
+  }
+  

@@ -2,7 +2,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import firebase from 'firebase/compat/app';
 
 export type ItineraryItem = {
-    siteName?: string;
+    itemTitle?: string;
     startTime?: { time?: number | null };
     endTime?: { time?: number | null };
     description?: string;
@@ -49,7 +49,7 @@ export type ItineraryItem = {
   };
   
   export type TransformedItineraryItem   = {
-    siteName?: string;
+    itemTitle?: string;
     startTime?: TimeObject;
     endTime?: TimeObject;
     description?: string;

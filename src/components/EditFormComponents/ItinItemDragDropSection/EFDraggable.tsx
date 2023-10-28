@@ -186,12 +186,19 @@ const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.tim
   }, [menuOpen]);
 
 
-  function millisecondsToHoursMinutes(ms:number | undefined | null): string {
-    ms = ms ?? 0;
-    const totalMinutes = Math.floor(ms / 60000);
-    const hours = Math.floor(totalMinutes / 60);
-    const minutes = totalMinutes % 60;
-    return `${hours}:${minutes.toString().padStart(2, '0')}`;
+  // function millisecondsToHoursMinutes(ms:number | undefined | null): string {
+  //   ms = ms ?? 0;
+  //   const totalMinutes = Math.floor(ms / 60000);
+  //   const hours = Math.floor(totalMinutes / 60);
+  //   const minutes = totalMinutes % 60;
+  //   return `${hours}:${minutes.toString().padStart(2, '0')}`;
+  // }
+
+  function minutesToHoursMinutes(minutes: number | undefined | null): string {
+    minutes = minutes ?? 0;
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+    return `${hours}:${remainingMinutes.toString().padStart(2, '0')}`;
   }
 
   const [showItemForm, setShowItemForm] = useState(false);
@@ -201,12 +208,12 @@ const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.tim
 
   }
 
-  const shortSiteName = itineraryItem.siteName?.substring(0, 50) || "untitled item" + "...";
+  const shortItemTitle = itineraryItem.itemTitle?.substring(0, 50) || "untitled item" + "...";
   
   let mapsUrl: string | null = null;
 
   if (itineraryItem.locationAddress) {
-    mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${itineraryItem.siteName || ""} ${itineraryItem.locationAddress || ""}`)}`;
+    mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${itineraryItem.itemTitle || ""} ${itineraryItem.locationAddress || ""}`)}`;
   } else if (itineraryItem.location && itineraryItem.location.latitude && itineraryItem.location.longitude) {
     mapsUrl = `https://www.google.com/maps/search/?api=1&query=${itineraryItem.location.latitude},${itineraryItem.location.longitude}`;
   }
@@ -235,7 +242,7 @@ const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.tim
                       {/* <div className={styles.itinTitleContainer}> */}
                           <h3 className={`${styles.itinTitle} ${itineraryItem.descHidden ? "" : styles.isShown}`} 
                             onClick={()=>handleShowHideDescription()}>
-                              {itineraryItem.descHidden ? shortSiteName : itineraryItem.siteName}                           
+                              {itineraryItem.descHidden ? shortItemTitle : itineraryItem.itemTitle}                           
                             </h3>
                             <div className={`${styles.activityTime} ${itineraryItem.descHidden ? "" : styles.isShown}`}>
                                     <div className={`${styles.infoBannerWords} ${itineraryItem.descHidden ? "" : styles.isShown}`}>Start:</div>
@@ -257,7 +264,7 @@ const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.tim
                                     <div className={`${styles.infoBannerWords} ${itineraryItem.descHidden ? "" : styles.isShown}`}>Duration:</div>
 
                                     <div className={`${styles.durationContainer} ${itineraryItem.descHidden ? "" : styles.isShown}`}>
-                                      {millisecondsToHoursMinutes(itineraryItem.activityDuration)}&nbsp;{clock}
+                                      {minutesToHoursMinutes(itineraryItem.activityDuration)}&nbsp;{clock}
                                     </div>
                                     <div 
                                       className={`${styles.expandedItinMapText} ${itineraryItem.descHidden ? "" : styles.isShown}`} 
@@ -284,14 +291,14 @@ const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.tim
                           <div className={`${styles.ownResearchContainer} ${itineraryItem.descHidden ? "" : styles.isShown }`}>
                             Do your own research: 
                             <div className={styles.expandedItinItemWebsite}>
-                              <a href={`https://www.google.com/search?q=${encodeURIComponent(itineraryItem.siteName ? itineraryItem.siteName : "")}`} target="_blank">
+                              <a href={`https://www.google.com/search?q=${encodeURIComponent(itineraryItem.itemTitle ? itineraryItem.itemTitle : "")}`} target="_blank">
                                 {externalLink}
                                 <span className={styles.youGSearchText}>Search on Google</span>
                               </a>
                             </div>
 
                             <div className={styles.youtubeLink}>      
-                                  <a href={`https://www.youtube.com/results?search_query=${encodeURIComponent(itineraryItem.siteName ? itineraryItem.siteName : "")}`} target="_blank">
+                                  <a href={`https://www.youtube.com/results?search_query=${encodeURIComponent(itineraryItem.itemTitle ? itineraryItem.itemTitle : "")}`} target="_blank">
                                   {externalLink} <span className={styles.youTubeLinkText}>Search on YouTube</span></a>
                             </div>
                             <StaticStarRating starRating={itineraryItem.rating}/>

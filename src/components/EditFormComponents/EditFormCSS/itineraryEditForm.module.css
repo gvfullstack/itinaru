@@ -1,3 +1,4 @@
+
 .itineraryEditFormContainer{
     margin-top: 1rem;
     width: 100%;
@@ -132,6 +133,8 @@
     margin: 0;
     margin-bottom: .25rem;
     font-size: 16px;
+    z-index: 1060;
+    background-color: white;
   }
 
   .quillContainer{
@@ -216,6 +219,11 @@
   margin-bottom: 1rem;
   align-items: flex-start;
   gap: 1rem;
+  /* align-self: center; */
+}
+
+.startTimeTimeContainer{
+  width: 10rem;
 }
 
 .plusSignContainerEF{
@@ -672,9 +680,9 @@
   .sharedSettingContainer{
     margin-top: 1rem;
   }
-  .inputFieldsTimeSelectSection{
+  /* .inputFieldsTimeSelectSection{
     flex-direction: column;
-  }
+  } */
 
 .sharedSettingContainer{
   display: flex;
