@@ -136,12 +136,18 @@ if (itineraryItem.locationAddress) {
   }, [menuOpen]);
 
 
-  function millisecondsToHoursMinutes(ms:number | undefined | null): string {
-    ms = ms ?? 0;
-    const totalMinutes = Math.floor(ms / 60000);
-    const hours = Math.floor(totalMinutes / 60);
-    const minutes = totalMinutes % 60;
-    return `${hours}:${minutes.toString().padStart(2, '0')}`;
+  // function millisecondsToHoursMinutes(ms:number | undefined | null): string {
+  //   ms = ms ?? 0;
+  //   const totalMinutes = Math.floor(ms / 60000);
+  //   const hours = Math.floor(totalMinutes / 60);
+  //   const minutes = totalMinutes % 60;
+  //   return `${hours}:${minutes.toString().padStart(2, '0')}`;
+  // }
+  function minutesToHoursMinutes(minutes: number | undefined | null): string {
+    minutes = minutes ?? 0;
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+    return `${hours}:${remainingMinutes.toString().padStart(2, '0')}`;
   }
 
   const [showItemForm, setShowItemForm] = useState(false);
@@ -187,7 +193,7 @@ if (itineraryItem.locationAddress) {
                                     <div className={`${styles.infoBannerWords} ${itineraryItem.descHidden ? "" : styles.isShown}`}>Duration:</div>
 
                                     <div className={`${styles.durationContainer} ${itineraryItem.descHidden ? "" : styles.isShown}`}>
-                                      {millisecondsToHoursMinutes(itineraryItem.activityDuration)}&nbsp;{clock}
+                                      {minutesToHoursMinutes(itineraryItem.activityDuration)}&nbsp;{clock}
                                     </div>
                                     <div 
                                       className={`${styles.expandedItinMapText} ${itineraryItem.descHidden ? "" : styles.isShown}`} 
