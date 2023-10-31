@@ -12,6 +12,18 @@ import city_names from '../../../data/city_names.js';
 import state_names from '../../../data/state_names.js';
 import {myItinerariesResults} from '../../MyItinerariesGallery/myItinerariesAtoms';
 import { openDB } from 'idb';
+import Quill from 'quill';
+const Parchment = Quill.import('parchment');
+
+var Block = Quill.import('blots/block');
+Block.tagName = 'DIV';
+Quill.register(Block, true);
+
+const SizeStyle = new Parchment.Attributor.Style('size', 'font-size', {
+  scope: Parchment.Scope.INLINE,
+  whitelist: ['16px', '18px', '20px', '22px']
+});
+Quill.register(SizeStyle, true);
 
 const ReactQuill = dynamic(import('react-quill'), {
     ssr: false, // This will make the component render only on the client-side
@@ -33,11 +45,9 @@ const ItineraryEditForm: FC<Props> = () => {
     const [titleError, setTitleError] = useState(false);
     const [cityError, setCityError] = useState(false);
     const [stateError, setStateError] = useState(false);
-
     const [titleHelperText, setTitleHelperText] = useState('');
     const [cityHelperText, setCityHelperText] = useState('');
     const [stateHelperText, setStateHelperText] = useState('');
-
     const [myItineraries, setMyItineraries] = useRecoilState(myItinerariesResults);
 
 
@@ -53,6 +63,20 @@ const ItineraryEditForm: FC<Props> = () => {
         return (true)
       };
     
+      const modules = {
+        toolbar: [
+          [{ 'size': ['16px', '18px', '20px', '22px'] }],
+          ['bold', 'italic', 'underline'],
+          ['blockquote'],
+          [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+          ['link'],
+          ['clean']
+        ],
+        clipboard: {
+          matchVisual: false,
+        }
+      };
+      
       const validateCity = (value:string) => {
         if (!city_names.includes(value.toUpperCase())) 
         {
@@ -124,7 +148,7 @@ const ItineraryEditForm: FC<Props> = () => {
           ...currentItinerary,
           settings: {
             ...currentSettings,
-            [field]: value || 'default_value',  // Replace 'default_value' with whatever default you prefer
+            [field]: value || '',  
           },
         } as Itinerary;  // This asserts that the object returned conforms to the Itinerary type
       });
@@ -224,7 +248,7 @@ const handleQuillChange = (field: FieldNames, value: string) => {
                         onChange={(html) => handleQuillChange('description', html)}
                         placeholder="Enter itinerary description..."
                         className={styles.quill}
-                      
+                        modules={modules}                       
                         />
                     </div>
 

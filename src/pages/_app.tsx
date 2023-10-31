@@ -11,6 +11,7 @@ import TopNavBar from '@/components/TopNavBar/topNavBar';
 import { ToastContainer } from 'react-toastify';
 import { useState, useRef, useEffect } from 'react';
 import initDB from '@/lib/db';
+import { useRouter } from 'next/router';
 
 
 const FirebaseAuthLogic = dynamic(() => import('.././components/FirebaseAuthComponents/firebaseAuthLogic'), { ssr: false });
@@ -22,6 +23,25 @@ export default function App({ Component, pageProps }: AppProps) {
     initDB();
   }, []);
   
+  const router = useRouter();
+
+
+  useEffect(() => {
+    const handleRouteChange = (url: string ) => {
+      window.gtag('config', 'G-N8B4BB2RHJ', {
+        page_path: url,
+      });
+    };
+
+    // When the component is mounted, subscribe to route changes
+    router.events.on('routeChangeComplete', handleRouteChange);
+
+    // Unsubscribe from the event if the component is unmounted
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [router.events]);
+
 
   return (
     <div style={{ width:"100%" }}>
