@@ -9,10 +9,12 @@ import { useRecoilState } from 'recoil';
 import styles from'./dragDrop.module.css'
 import ItemDescriptionStaticComponent from '../itemDescriptionStaticComponent';
 import dayjs from 'dayjs'; 
-const externalLink = <FontAwesomeIcon icon={faExternalLinkAlt} />;
+
+const externalLink = <FontAwesomeIcon className={styles.itinItemIcon} icon={faExternalLinkAlt} />;
 const mapMarkerAlt = <FontAwesomeIcon icon={faDiamondTurnRight} />;
-const ellipsisVertical = <FontAwesomeIcon icon={faEllipsisVertical} />;
-const clock = <FontAwesomeIcon icon={faStopwatch} />;
+const ellipsisVertical = <FontAwesomeIcon className={styles.itinItemIcon} icon={faEllipsisVertical} />;
+const clock = <FontAwesomeIcon className={styles.itinItemIcon} icon={faStopwatch} />;
+
 import {currentlyViewingItineraryState} from '../publicItinViewAtoms';
 import dynamic from 'next/dynamic';
 import { max } from 'lodash';

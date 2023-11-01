@@ -110,6 +110,7 @@
     width: 100%;
     height: 1.5rem;
   }
+ 
   .previewLink{
     text-align: center;
   }
@@ -249,9 +250,6 @@
   justify-self: center;
 
 }
-.plusSignEF:hover{
-  color: #f83c5e;
-}
 
 
 .modalOverlay {
@@ -330,20 +328,24 @@
 .trashIcon,
 .attachIcon,
 .resetPhotoIcon,
-.deletePhotoIcon {
+.deletePhotoIcon,
+.addContributorIcon
+ {
   color: #807f7f;
-  font-size: 2rem;
+  /* font-size: 2rem; */
   cursor: pointer;
   align-self: center;
+  justify-self: center;
+  height: 1.5rem;
+  width: 1.5rem;
 }
 
-.floppyDisk :hover,
-.cancelMark :hover,
-.trashIcon :hover,
-.attachIcon :hover,
-.resetPhotoIcon :hover,
-.deletePhotoIcon :hover{
-  color: #f83c5e;
+.itinItemsIcons{
+  width: 1.2rem;
+  height: 1.2rem;
+  align-self: center;
+  justify-self: center;
+  color:rgb(66, 66, 66);
 }
 
 .modalCancelButton, 
@@ -376,7 +378,8 @@
 
   .EFPhotoAttachIconButtons{
     display: flex;
-    gap: 1rem;
+    gap: 2rem;
+    align-items: center;
   }
 
 /* Style for the container div */

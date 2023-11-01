@@ -26,6 +26,8 @@
 }
 .faXmark{
     margin-left: .5rem;
+    width: 1.2rem;
+    height: 1.2rem;
 }
 
 .innerModalContainer{
@@ -73,10 +75,13 @@
   }
 
   
-  .faXmarkInner{
+  .faXmarkInner,
+  .addContributorIcon{
     justify-self: end;
     text-align: right;
     justify-self: center;
+    height: 1.2rem;
+    width: 1.2rem;
   }
   .sharedUserListHeader{
     width: 100%;
