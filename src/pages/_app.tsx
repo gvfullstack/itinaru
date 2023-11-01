@@ -28,7 +28,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
   useEffect(() => {
     const handleRouteChange = (url: string ) => {
-      window.gtag('config', 'G-N8B4BB2RHJ', {
+      window.gtag('config', 'G-B44S6JZNF1', {
         page_path: url,
       });
     };
@@ -61,7 +61,7 @@ export default function App({ Component, pageProps }: AppProps) {
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-N8B4BB2RHJ');
+            gtag('config', 'G-B44S6JZNF1');
           `,
         }}
       />

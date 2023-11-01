@@ -1,3 +1,4 @@
+
 .menuContainer {
   display: flex;
   position: relative;
@@ -136,16 +137,19 @@
   .hamburgerIconContainer {
     display: block;
     width: fit-content;
-
   }
 
-  
+  .hamburgerIcon{
+    width: 1rem;
+    height: 1rem;
+  }
   .menuText {
     display: none;
   }
   .menuText :hover{
     color: #f83c5e;
   }
+  
 
   .hamburgerIcon:hover {
     color: #f83c5e !important;

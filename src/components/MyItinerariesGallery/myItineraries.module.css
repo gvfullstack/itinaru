@@ -18,6 +18,7 @@
     transition: border-color 0.3s ease-in-out;
     font-size: 1rem;
     text-align: center;
+    color: #676666;
   }
   
   .tabButton.active {
@@ -26,7 +27,7 @@
 
   .myItinerariesTitle{
     text-align: center;
-    color:#333333;
+    color: #676666;
     font-size: 20px;
   }
   
