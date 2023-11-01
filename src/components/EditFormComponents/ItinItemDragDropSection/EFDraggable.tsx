@@ -13,12 +13,12 @@ import ItemDescriptionStaticComponent from './itemDescriptionStaticComponent';
 import dayjs from 'dayjs'; 
 import StaticStarRating from './StaticStarRating';
 
-const externalLink = <FontAwesomeIcon icon={faExternalLinkAlt} />;
-const mapMarkerAlt = <FontAwesomeIcon icon={faDiamondTurnRight} />;
-const ellipsisVertical = <FontAwesomeIcon icon={faEllipsisVertical} />;
-const clock = <FontAwesomeIcon icon={faStopwatch} />;
-const deleteItemIcon = <FontAwesomeIcon icon={faTrash} />;
-const editItemIcon = <FontAwesomeIcon icon={faPenToSquare} />;
+const externalLink = <FontAwesomeIcon className={styles2.itinItemsIcons} icon={faExternalLinkAlt} />;
+const mapMarkerAlt = <FontAwesomeIcon className={styles2.itinItemsIcons} icon={faDiamondTurnRight} />;
+const ellipsisVertical = <FontAwesomeIcon className={styles2.itinItemsIcons} icon={faEllipsisVertical} />;
+const clock = <FontAwesomeIcon className={styles2.itinItemsIcons} icon={faStopwatch} />;
+const deleteItemIcon = <FontAwesomeIcon className={styles2.itinItemsIcons} icon={faTrash} />;
+const editItemIcon = <FontAwesomeIcon className={styles2.itinItemsIcons} icon={faPenToSquare} />;
 
 
 import { currentlyEditingItineraryState } from '../editFormAtoms';

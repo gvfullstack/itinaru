@@ -145,9 +145,10 @@
 .resetPhotoIcon,
 .deletePhotoIcon {
   color: #807f7f;
-  font-size: 2rem;
   cursor: pointer;
   align-self: center;
+  height: 1.5rem;
+  width: 1.5rem;
 }
 
 .floppyDisk :hover,

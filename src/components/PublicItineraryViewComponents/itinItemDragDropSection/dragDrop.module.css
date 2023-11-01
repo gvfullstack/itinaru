@@ -252,6 +252,12 @@
     display: none;
 }
 
+.itinItemIcon{
+    height: 1.2rem;
+    width: 1.2rem;
+    columns: rgb(57, 57, 57);
+}
+
 /* /////////////Expanded Itin Item View///////////////////// */ 
 
 

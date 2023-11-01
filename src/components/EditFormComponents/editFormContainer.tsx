@@ -302,8 +302,11 @@ const floppySave = (
       icon={faFloppyDisk} 
       className={styles.floppyDisk} 
       type="button" 
-      onClick={()=> {saveTransformedItinerary();
-        handleEdit();}
+      onClick={async ()=> {
+        saveTransformedItinerary();
+        await handleEdit();
+        router.push('/user/myItineraries');
+      }
         }
   />
 );
@@ -715,7 +718,7 @@ return (
                       <div className = {styles.formControlsIconContainerP}>                
                           {floppySave}
                       </div>
-                      <p className = {styles.formControlsIconTextP}>Save Itinerary</p>
+                      <p className = {styles.formControlsIconTextP}>Save/Exit</p>
                   </div>        
               </div>
 

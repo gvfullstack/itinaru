@@ -26,23 +26,6 @@ export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
 
 
-  useEffect(() => {
-    const handleRouteChange = (url: string ) => {
-      window.gtag('config', 'G-B44S6JZNF1', {
-        page_path: url,
-      });
-    };
-
-    // When the component is mounted, subscribe to route changes
-    router.events.on('routeChangeComplete', handleRouteChange);
-
-    // Unsubscribe from the event if the component is unmounted
-    return () => {
-      router.events.off('routeChangeComplete', handleRouteChange);
-    };
-  }, [router.events]);
-
-
   return (
     <div style={{ width:"100%" }}>
       <Head>
@@ -51,20 +34,18 @@ export default function App({ Component, pageProps }: AppProps) {
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"></link>
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"></link>
         <link rel="manifest" href="/site.webmanifest"></link>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','GTM-WFW7FT84');`,
+          }}
+        />
+
       </Head>
 
-      <Script
-        id="gtag-config"
-        strategy="afterInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-B44S6JZNF1');
-          `,
-        }}
-      />
 
       <RecoilRoot>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
