@@ -3,20 +3,44 @@ import dayjs, {Dayjs} from 'dayjs';
 import {TransformedItineraryItem, TransformedItinerary, Itinerary, ItineraryItem} from './retrieveItinTypeRefs';
 
 export async function fetchItineraryFromDatabase(itineraryId: string): Promise<Itinerary | null> {
+    console.log("fetchItineraryFromDatabase called with ID:", itineraryId);
+
     try {
         const itineraryDoc = await dbServer.collection('itineraries').doc(itineraryId).get();
 
-        if (!itineraryDoc.exists) {
+        if (!itineraryDoc.exists || itineraryDoc.data()?.isDeleted || itineraryDoc.data()?.settings.visibility !== 'public') {
             console.error('Itinerary not found');
             return null;
         }
 
         const itinerary = itineraryDoc.data() as TransformedItinerary;
 
+        // Fetch items from the subcollection
+        const itemsQuerySnapshot = await dbServer
+            .collection('itineraries').doc(itineraryId)
+            .collection('items')
+            .where('isDeleted', '!=', true)
+            .get();
+            
+            console.log("Raw items data:", itemsQuerySnapshot.docs.map(doc => doc.data()));
+
+        const items = itemsQuerySnapshot.docs
+            .map(doc => transformItineraryItem(doc.data() as TransformedItineraryItem));
+
+            console.log("Items before sorting:", items);
+
+            items.sort((a, b) => {
+              // Assuming startTime is a Timestamp object or null
+                const aTime = a.startTime?.time || 0;
+                const bTime = b.startTime?.time || 0;
+                return aTime - bTime;
+            });
+
+            console.log("Items after sorting:", items);
 
         return {
             ...itinerary,
-            items: itinerary.items.map(transformItineraryItem)
+            items: items
         };    
     } 
         catch (error) {

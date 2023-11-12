@@ -18,11 +18,13 @@ export type ItinerarySettings = {
 export type Itinerary = {
   id: string,
   uid: string,
+  isDeleted?: boolean;
   settings?: ItinerarySettings;
   items?: ItineraryItems;
 }
 
 export type ItineraryItem = {
+    isDeleted?: boolean;
     itemTitle?: string;
     startTime?: {time?: Dayjs | null} ;
     endTime?: {time?: Dayjs | null} ;
@@ -47,7 +49,9 @@ export type ItineraryItem = {
   export const ItemTypes = {
     ITINERARY_ITEM: 'itineraryItem',
   };
+  
   export type UserAccess = {
+    isDeleted?: boolean;
     uid: string;
     email?: string;
     username?: string;
@@ -68,13 +72,12 @@ export type ItineraryItem = {
     docId?: string;
   };
 
-
-
   export type TimeObject = {
     time?: firebase.firestore.Timestamp | null;
   };
   
   export type TransformedItineraryItem   = {
+    isDeleted?: boolean;    
     itemTitle?: string;
     startTime?: TimeObject;
     endTime?: TimeObject;
@@ -97,6 +100,7 @@ export type ItineraryItem = {
  export type TransformedItinerary = {
     id?: string;
     uid: string,
+    isDeleted?: boolean;
     settings: ItinerarySettings;
     items: TransformedItineraryItem[];
 }
@@ -109,6 +113,7 @@ export type UnixTimeObject = {
 };
 
 export type IndexDBItineraryItem   = {
+  isDeleted?: boolean;
   itemTitle?: string;
   startTime?: UnixTimeObject;
   endTime?: UnixTimeObject;
@@ -131,6 +136,7 @@ export type IndexDBItineraryItem   = {
 export type IndexDBItinerary = {
   id: string;
   uid: string,
+  isDeleted?: boolean;
   settings?: ItinerarySettings;
   items?: IndexDBItineraryItem[];
 }

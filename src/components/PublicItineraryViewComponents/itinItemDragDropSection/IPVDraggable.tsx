@@ -211,8 +211,15 @@ if (itineraryItem.locationAddress) {
                             <div className={`${styles.itinTitleDescription} ${itineraryItem.descHidden ? "" : styles.isShown}`}>  
                                <ItemDescriptionStaticComponent description={itineraryItem.description || ""} />
                             </div>                       
+                          {itineraryItem.locationAddress &&
+                          <p className={`${styles.expandedItinAddressContainer} ${itineraryItem.descHidden ? "" : styles.isShown }`}>Address: <br/> 
+                          {itineraryItem.locationAddress}
+                          </p>}
+                          {itineraryItem.location?.longitude && itineraryItem.location?.latitude &&
+                          <p className={`${styles.expandedItinAddressContainer} ${itineraryItem.descHidden ? "" : styles.isShown }`}>Coordinates: <br/> 
+                          {itineraryItem.location?.latitude}, {itineraryItem.location?.longitude}
+                          </p>}
                           
-                          <p className={`${styles.expandedItinAddressContainer} ${itineraryItem.descHidden ? "" : styles.isShown }`}>{itineraryItem.locationAddress}</p>
                           <div className={`${styles.ownResearchContainer} ${itineraryItem.descHidden ? "" : styles.isShown }`}>
                             Do your own research: 
                             <div className={styles.expandedItinItemWebsite}>

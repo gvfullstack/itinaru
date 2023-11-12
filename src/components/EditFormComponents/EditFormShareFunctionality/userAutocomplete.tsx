@@ -47,15 +47,18 @@ type AlgoliaUser = {
           filters={`NOT objectID:${itinerary.uid}`} // do not show the itinerary owner in the search results
         />
   
-        <UserInput setSearchQuery={setSearchQuery} />
+        <UserInput />
   
         {searchQuery &&<UserResults setSearchResults={setSearchResults} />}
       </InstantSearch>
     );
   };
   
-  const UserInput: React.FC<{ setSearchQuery: React.Dispatch<React.SetStateAction<string>> }> = ({ setSearchQuery }) => {
-    const [inputValue, setInputValue] = useState("");
+  const UserInput: React.FC<{}> = ({}) => {
+    // const [inputValue, setInputValue] = useState("");
+    const [searchQuery, setSearchQuery] = useRecoilState(searchUserQueryState);
+
+
     const addContributorIcon = (
         <FontAwesomeIcon
             icon={faUserPlus}
@@ -67,7 +70,9 @@ type AlgoliaUser = {
           icon={faXmark} 
           className={styles.faXmarkInner} 
           type="button" 
-          onClick={()=>{setInputValue(''); setSearchQuery('')}}
+          onClick={()=>{
+            // setInputValue(''); 
+            setSearchQuery('')}}
       />
     );
 
@@ -77,9 +82,9 @@ type AlgoliaUser = {
             <input
                 className={styles.searchInput}
                 type="text"
-                value={inputValue}
+                value={searchQuery}
                 onChange={(e) => {
-                setInputValue(e.target.value);
+                // setInputValue(e.target.value);
                 setSearchQuery(e.target.value);
                 }}
                 placeholder="Search users..."
@@ -107,7 +112,7 @@ type AlgoliaUser = {
           existingUser.uid === user.uid && existingUser.itineraryId === user.itineraryId
         );
         if (!userAlreadyExists) {
-          saveUserAccessToFirebase(user, setItineraryAccessState);
+          saveUserAccessToFirebase(user, setItineraryAccessState, itinerary.id);
         }
         setSearchQuery('');
       };

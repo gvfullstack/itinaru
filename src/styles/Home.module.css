@@ -31,7 +31,10 @@
   background-color: #f0f0f0;
 }
 
-           
+.deletedMessage{
+  margin-top: 5rem;
+  font-size: 18px;
+}           
 /* Mobile */
 @media (max-width: 500px) {
   .myItineraryPage{

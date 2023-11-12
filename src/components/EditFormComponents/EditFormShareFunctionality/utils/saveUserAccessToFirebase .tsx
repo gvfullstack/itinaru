@@ -5,48 +5,54 @@ import { SetterOrUpdater } from 'recoil';
 
 export const saveUserAccessToFirebase = async (
   user: UserAccess,
-  setItineraryAccessState: SetterOrUpdater<UserAccessWithDocId[]>
+  setItineraryAccessState: SetterOrUpdater<UserAccessWithDocId[]>,
+  itineraryId: string,
 ) => {
   // Remove any properties that are undefined before saving to Firestore
   const cleanedUser = Object.fromEntries(
     Object.entries(user).filter(([_, v]) => v !== undefined)
   );
 
-  // Reference to Firestore collection
-  const collectionRef = firebase.firestore().collection('ItineraryAccess');
+  // Generate the custom document ID
+  const customDocId = `${user.uid}_${itineraryId}`;
+
+  // Reference to the specific document with the custom ID in Firestore collection
+  const docRef = firebase.firestore().collection('ItineraryAccess').doc(customDocId);
 
   try {
-    // Check if the user already exists in the database
-    const querySnapshot = await collectionRef
-      .where('uid', '==', user.uid)
-      .where('itineraryId', '==', user.itineraryId)
-      .get();
+    // Check if the document already exists
+    const doc = await docRef.get();
 
     let userWithDocId: UserAccessWithDocId;
 
-    if (!querySnapshot.empty) {
+    if (doc.exists) {
       console.log('User already exists, retrieving existing data.');
-
-      const doc = querySnapshot.docs[0];
       userWithDocId = {
         ...doc.data() as UserAccess,
-        docId: doc.id,
+        docId: customDocId,
       };
-
     } else {
-      // If not, add the new user
-      const docRef = await collectionRef.add(cleanedUser);
-      const docId = docRef.id;
-
-      // Create a new object with the document ID and spread the rest of the user fields
+      // If not, set the new user with the custom document ID
+      await docRef.set(cleanedUser);
       userWithDocId = {
         ...user,
-        docId: docId,
+        docId: customDocId,
       };
     }
 
     // Update the Recoil state
-    setItineraryAccessState(prevState => [userWithDocId, ...prevState]);
+    setItineraryAccessState(prevState => {
+      // Ensure we're not duplicating the entry if it already exists
+      const index = prevState.findIndex(item => item.docId === customDocId);
+      if (index !== -1) {
+        // Replace the existing item
+        prevState[index] = userWithDocId;
+        return [...prevState];
+      } else {
+        // Add the new item
+        return [userWithDocId, ...prevState];
+      }
+    });
 
   } catch (error) {
     console.error("Error adding or querying document: ", error);
