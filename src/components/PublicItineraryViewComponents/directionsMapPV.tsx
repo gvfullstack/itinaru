@@ -6,7 +6,7 @@ import styles from './publicItineraryView.module.css';
 
 const GoogleMapIframe: FC = () => {
   const itinerary = useRecoilValue(currentlyViewingItineraryState);
-  const items = itinerary.items || [];
+  const items = itinerary?.items || [];
   
   if (items.length < 2) {
     return null;
