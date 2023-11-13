@@ -9,14 +9,14 @@ import dayjs from 'dayjs';
 
 
 const IPVDroppable: React.FC = () => {
-    const [itineraryItemsState, setItineraryItemsState]= useRecoilState<Itinerary>(currentlyViewingItineraryState);
+    const [itineraryItemsState, setItineraryItemsState]= useRecoilState<Itinerary | null>(currentlyViewingItineraryState);
 
     const ref = useRef<HTMLDivElement>(null);
-    const itineraryItemsRef = useRef(itineraryItemsState.items);
+    const itineraryItemsRef = useRef(itineraryItemsState?.items);
 
     useEffect(() => {
-      itineraryItemsRef.current = itineraryItemsState.items;
-    }, [itineraryItemsState.items]);
+      itineraryItemsRef.current = itineraryItemsState?.items;
+    }, [itineraryItemsState?.items]);
   
     const dropIndexRef = useRef<number | null>(null);
     const [localNewDropIndex, setLocalNewDropIndex] = useState<number | null>(null)
@@ -167,17 +167,17 @@ const IPVDroppable: React.FC = () => {
     }, []);
       
     useEffect(() => {
-      if (!itineraryItemsState.items) {
+      if (!itineraryItemsState?.items) {
         return;
       }
       itemRefs.current = itineraryItemsState.items.map(itineraryItem => {
         const ref = itemRefs.current.find((itemRef) => itemRef.id === itineraryItem.id);
         return ref || { id: itineraryItem.id, ref: null };    });
-      }, [itineraryItemsState.items]); 
+      }, [itineraryItemsState?.items]); 
     
       return (
         <div ref={ref} className={styles.parentDropDiv} >
-          {itineraryItemsState.items?.map((itineraryItem: ItineraryItem, index: number) => {
+          {itineraryItemsState?.items?.map((itineraryItem: ItineraryItem, index: number) => {
             const isDraggedDownward = !dragDirection;
             const isDraggedUpward = dragDirection;
             const isHovered = localNewDropIndex === index && draggedItemIndex !== index;

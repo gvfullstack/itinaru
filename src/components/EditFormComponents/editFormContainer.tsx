@@ -20,8 +20,7 @@ import { firebaseStorage  } from '../FirebaseAuthComponents/config/firebase.stor
 import { ref, uploadBytesResumable, getDownloadURL, list  } from 'firebase/storage';
 import pica from 'pica';
 import Image from 'next/image';
-import {myItinerariesResults} from '../MyItinerariesGallery/myItinerariesAtoms';
-import {saveStatusDisplayedEditFormContainer} from './editFormAtoms';
+import {saveStatusDisplayedEditFormContainer,itineraryInEditNeedsDeletionFromRecoilState} from './editFormAtoms';
 import { v4 as uuidv4 } from 'uuid';
 import { openDB } from 'idb';
 import { validateTitle, validateCity, validateState } from './util/index'
@@ -33,6 +32,10 @@ import SharingModal from './EditFormShareFunctionality/EFshareContainer';
 import {fetchSharedItinerariesItinView} from './EditFormShareFunctionality/utils/fetchSharedItinerariesItinView'
 import {useUpdateItineraryAccess} from './util/updateUserAccess';
 import { deleteItineraryAccessRecords } from './EditFormShareFunctionality/utils/deleteJoinAccessItinerariesRecord';
+import {createPreviousTransformedItinerary} from './util/createPreviousTransformedItinerary';
+import {createCurrentTransformedItinerary} from './util/createCurrentTransformedItinerary';
+import {saveUpdatedFields} from './util/saveUpdatedFields';
+import { markItineraryAndItemsAsDeleted } from './util/markItineraryAndItemsAsDeleted';
 
 const GoogleMapsProvider = dynamic(() => 
     import('./EditFormITEMComponents/googleMapsProvider'), {
@@ -64,6 +67,7 @@ const EditFormContainer: FC<Props> = ({...props}) => {
 
 const [showItemForm, setShowItemForm] = useState(false);
 const [itinerary, setItinerary] = useRecoilState<Itinerary>(currentlyEditingItineraryState);
+const [itineraryInEditNeedsDeletionFromRecoil, setItineraryInEditNeedsDeletionFromRecoilState] = useRecoilState<boolean>(itineraryInEditNeedsDeletionFromRecoilState);
 const [authUser, setAuthUser] = useRecoilState(authUserState);
 const [isSaving, setIsSaving] = useState(false);
 const router = useRouter();
@@ -89,28 +93,75 @@ useEffect(() => {
   }
 },[itinerary]);
 
+  ///////////////////////////'''''''''''''''''''''''''''''''''''''''''''''
+    const [previousTransformedItineraryNeedsUpdate, setPreviousTransformedItineraryNeedsUpdate] = useState(false);
 
-/////handle add of new Item to the Itinerary/////////
-const addItemToRecoilState = () => {
-    setItinerary((prevItinerary: Itinerary) => {
-      const newItem: ItineraryItem = {
-        id: uuidv4(),
-        descHidden: true
+    const handleSaveItineraryItem = async () => {
+
+      //ensure all changes are saved before attempting to add an item
+      if (timerId) {
+        clearTimeout(timerId);
+        timerId = undefined; // Reset the timerId
+      }
+      await saveItineraryToFirestore();
+     
+      console.log("saved prior to adding item")
+      console.log("User Authenticated:", firebase.auth().currentUser != null);
+      console.log("User ID:", firebase.auth().currentUser?.uid);
+      console.log("Itinerary ID:", itinerary.id);
+
+
+      // Firestore logic to add item to Firestore and retrieve the ID of the new item
+      const itemsRef = db.collection('itineraries').doc(itinerary.id).collection('items');
+      console.log("itemsRef", itemsRef)
+      const docRef = await itemsRef.add({
+        // Add other fields as necessary
+        descHidden: true,
+        itineraryParentId: itinerary.id,
+        isDeleted: false,
+      });
+
+      console.log("docRef", docRef)
+  
+      // Await is used to ensure we get the docRef before proceeding
+      const newItem = {
+        id: docRef.id,
+        descHidden: true,
+        itineraryParentId: itinerary.id,
+        isDeleted: false,
+        // Add other default fields or those returned by Firestore as necessary
       };
-      const prevItems = prevItinerary.items || []; // Provide a fallback empty array
-      return {
-        ...prevItinerary,
-        items: [...prevItems, newItem]
-      };
-    });
-  };
+    console.log("newItem", newItem)
+      // Now, update the Recoil state with the new item
+      setItinerary((prevItinerary) => {
+        const prevItems = prevItinerary.items || []; // Provide a fallback empty array
+        return {
+          ...prevItinerary,
+          items: [...prevItems, newItem]
+        };
+      });
 
+      setPreviousTransformedItineraryNeedsUpdate(true);
 
-const handleShowItemForm = () => {
+    };
+  
+    //to ensure previousTransformedItinerary only updates after itinerary state has completed updating. 
+    useEffect(() => {
+      if (previousTransformedItineraryNeedsUpdate) {
+        const transformed = createPreviousTransformedItinerary(itinerary);
+        setPreviousTransformedItinerary(transformed);
+        setPreviousTransformedItineraryNeedsUpdate(false); // Reset the flag
+      }
+    }, [previousTransformedItineraryNeedsUpdate, itinerary]); 
+    
+  ///////////////////////////'''''''''''''''''''''''''''''''''''''''''''''
+
+const handleSaveItemAndShowItemForm = async () => {
+  if (!showItemForm) {
+    await handleSaveItineraryItem();
+  }
     setShowItemForm(prev=>!showItemForm);
-    if (!showItemForm) {
-      addItemToRecoilState();
-    }
+   
 }
 
 
@@ -196,7 +247,7 @@ async function uploadGalleryPhoto(): Promise<string | null> {
 
 const [saveStatus, setSaveStatus] = useRecoilState(saveStatusDisplayedEditFormContainer); // additional state for saving status
 
-const handleEdit = async () => 
+const setIndexDBNeedsRefreshTrue = async () => 
 {
   const db = await openDB('itinerariesDatabase');
   const tx = db.transaction('myItineraries', 'readwrite');
@@ -209,6 +260,13 @@ const renderCount = useRef(0);
 
 useUpdateItineraryAccess({itinerary})
 
+const [previousTransformedItinerary, setPreviousTransformedItinerary] = useState<TransformedItinerary>(/* initial state */);
+useEffect(() => {
+  const transformed = createPreviousTransformedItinerary(itinerary);
+  setPreviousTransformedItinerary(transformed);
+}, []);
+
+let timerId: NodeJS.Timeout | undefined;
 useEffect(() => {
   if (saveStatus === 'Restoring...') {
     setTimeout(() => {
@@ -226,9 +284,10 @@ useEffect(() => {
   }
 
   setSaveStatus('Saving...');
-  const timerId = setTimeout(() => {
-    saveTransformedItinerary();
-    handleEdit();
+  timerId = setTimeout(() => {
+    saveItineraryToFirestore();
+    // saveTransformedItinerary();
+    setIndexDBNeedsRefreshTrue();
   }, 5000);
 
   return () => {
@@ -237,56 +296,33 @@ useEffect(() => {
 }, [itinerary]);
 
 
-// Transform and save itinerary.  This is/should be the primary/only exit point for form data going to the database.//////////
-async function saveTransformedItinerary() {
+async function saveItineraryToFirestore() {
+  let defaultItinerary: TransformedItinerary = {isDeleted: false, id: '', uid: "", settings: {title: "", description: "", city: "", state: "", visibility: "private", galleryPhotoUrl: ""},items:[]}
   // Initialize transformedItinerary with the same shape as TransformedItinerary, but empty values
-  let transformedItinerary: TransformedItinerary = {
-    id: itinerary.id,
-    uid: itinerary.uid || "",
-    settings: {
-      title: "",
-      description: itinerary.settings?.description || "",
-      city: "",
-      state: "",
-      visibility: itinerary.settings?.visibility || "private",
-      galleryPhotoUrl: itinerary.settings?.galleryPhotoUrl || ""
-    },
-    items: []
-  };
-
-  // Validate and populate fields...
-  if (validateTitle(itinerary?.settings?.title ?? "")) {
-    transformedItinerary.settings.title = itinerary?.settings?.title ?? "";
+  let originalTransformedItinerary = previousTransformedItinerary ?? defaultItinerary
+  console.log('originalTransformedItinerary', originalTransformedItinerary);
+  let updatedTransformedItinerary = createCurrentTransformedItinerary(itinerary);
+  console.log('updatedTransformedItinerary', updatedTransformedItinerary);
+  ///save to external DB/firestore
+  if (originalTransformedItinerary?.id) {
+    // Now it's safe to call saveUpdatedFields
+    await saveUpdatedFields(originalTransformedItinerary, updatedTransformedItinerary);
+  } else {
+    console.warn('previousTransformedItinerary is not ready. ID is missing.');
   }
-
-  if (validateCity(itinerary?.settings?.city ?? "")) {
-    transformedItinerary.settings.city = itinerary?.settings?.city?.toUpperCase() ?? ""; 
-  }
-
-  if (validateState(itinerary?.settings?.state ?? "")) {
-    transformedItinerary.settings.state = itinerary?.settings?.state?.toUpperCase() || "";
-  }
-  // Map over itinerary items to transform the incompatible types
-  transformedItinerary.items = (itinerary?.items ?? []).map(item => ({
-    ...item,
-    descHidden: true,
-    startTime: item.startTime?.time ? { time: firebase.firestore.Timestamp.fromDate(item.startTime.time.toDate()) } : { time: null },
-    endTime: item.endTime?.time ? { time: firebase.firestore.Timestamp.fromDate(item.endTime.time.toDate()) } : { time: null },  
-  }));
-
-
+  ///save to local DB
   const indexLocalDB = await openDB('itinerariesDatabase');
   const tx = indexLocalDB.transaction('itineraries', 'readwrite');
   const store = tx.objectStore('itineraries');
-  await store.put(transformedItinerary, `currentlyEditingItineraryStateEF_${authUser?.uid}`);
+  await store.put(updatedTransformedItinerary, `currentlyEditingItineraryStateEF_${authUser?.uid}`);
   await tx.done;
 
-  await db.collection('itineraries').doc(transformedItinerary.id).set(transformedItinerary);
+  setPreviousTransformedItinerary(updatedTransformedItinerary);
+
   setSaveStatus('Saved');
   setTimeout(() => {
     setSaveStatus('');
   }, 3000);
-
 }
         
 const trashDelete = (
@@ -303,8 +339,8 @@ const floppySave = (
       className={styles.floppyDisk} 
       type="button" 
       onClick={async ()=> {
-        saveTransformedItinerary();
-        await handleEdit();
+        saveItineraryToFirestore();
+        await setIndexDBNeedsRefreshTrue();
         router.push('/user/myItineraries');
       }
         }
@@ -348,28 +384,13 @@ const addContributorIcon = (
   />
 )
 
-async function checkDatabaseState(key: string) {
-  // Get a handle to the already opened database
-  const db = await openDB('itinerariesDatabase');
 
-  // Retrieve the object from the 'itineraries' object store
-  const tx = db.transaction('itineraries', 'readonly');
-  const store = tx.objectStore('itineraries');
-  const record = await store.get(key);
-
-  await tx.done;
-}
-
-const handleDeleteItinerary = async (itineraryId: string) => {
-  if (!itineraryId) {
-    toast.warn("No itinerary ID provided.");
-    return console.error("No itinerary ID provided.");
-  }
-
+const handleDeleteItinerary = async (itineraryId:string) => {
   try {
-    // First, attempt to delete the data in the external database.
-    await deleteItinerary(itineraryId);
-    router.push('/');
+    if(authUser && authUser.uid) {
+    await markItineraryAndItemsAsDeleted(itineraryId, authUser);
+
+    router.push('/user/myItineraries');
     // If successful, proceed to delete local IndexedDB data.
     const db = await openDB('itinerariesDatabase');
     const tx = db.transaction('itineraries', 'readwrite');
@@ -380,27 +401,19 @@ const handleDeleteItinerary = async (itineraryId: string) => {
       await store.delete(`currentlyEditingItineraryStateEF_${authUser?.uid}`);
     }
     await tx.done;
-    // If everything went well, show success message and reset state.
+
+    setIndexDBNeedsRefreshTrue();
     
-    setItinerary({
-      uid: "",
-      id: "",
-      settings: {
-        title: "",
-        description: "",
-        city: "",
-        state: "",
-        visibility: "private"
-      },
-      items: []
-    });
-  handleEdit();
-  } catch (error) {
-    // Handle any errors that might occur during deletion
-    toast.error(`Error deleting itinerary. ${error}`);
-    console.error("Error deleting itinerary:", error);
+    setItineraryInEditNeedsDeletionFromRecoilState(true);
+
+    toast.success("Itinerary and associated data marked as deleted!");}
+    // Further cleanup or state updates
+  } catch (error:any) {
+    toast.error(`Error: ${error.message}`);
+    console.error("Error:", error);
   }
-}
+};
+
 
 const deleteImage = async (itineraryId: string): Promise<void> => {
   if (!authUser || !authUser.uid) {
@@ -632,7 +645,7 @@ return (
             <div className={styles.modalContent}>
               <GoogleMapsProvider>
                 <ItineraryItemForm 
-                  handleShowItemForm={handleShowItemForm} 
+                  handleShowItemForm={handleSaveItemAndShowItemForm} 
                   mode="create"
                   initialItem={itinerary.items?.[itinerary.items.length - 1] ?? undefined}  // Pass the last item as a prop, or null if 'itinerary.items' is undefined
                   />
@@ -700,13 +713,14 @@ return (
                 
                   
                   <div className={styles.plusSignContainerEF}>
-                    <div className={styles.plusSignEF} onClick={handleShowItemForm}>
+                    <div className={styles.plusSignEF} onClick={handleSaveItemAndShowItemForm}>
                       <span className={styles.plusSignText}> itinerary item</span> + 
                     </div>
                   </div>
                   <DragDropSection />
               </div>
               <GoogleMapIframe />
+              {!displayDeleteConfirmation &&
               <div className={styles.saveOrCancelButtonSectionP}>
                   <div className = {styles.iconSectionContainerP}>                                      
                       <div className = {styles.formControlsIconContainerP}>                
@@ -720,23 +734,96 @@ return (
                       </div>
                       <p className = {styles.formControlsIconTextP}>Save/Exit</p>
                   </div>        
-              </div>
+              </div>}
 
               {displayDeleteConfirmation &&
-              <div className={styles.EFConfirmDeleteItinSection}>
-                <p className={styles.confirmQ}>Are you sure you want to delete the entire Itinerary?</p>
-                <div>
-                  <button className={styles.cancelButton}
-                  onClick={()=>setDisplayDeleteConfirmation(false)}
-                  >Cancel</button>
-                  <button className={styles.deleteButton}
-                  onClick={()=>handleDeleteItinerary(itinerary.id?itinerary.id:"")}
-                  >Yes, Delete Itinerary</button>
-                </div>        
-              </div>}
+              <div className={styles.EFConfirmDeleteItinContainer}>
+                  <div className={styles.EFConfirmDeleteItinSection}>
+                    <p className={styles.confirmQ}>Are you sure you want to delete the entire Itinerary?</p>
+                    <div>
+                      <button className={styles.cancelButton}
+                      onClick={()=>setDisplayDeleteConfirmation(false)}
+                      >Cancel</button>
+                      <button className={styles.deleteButton}
+                      onClick={()=>handleDeleteItinerary(itinerary.id?itinerary.id:"")}
+                      >Yes, Delete Itinerary</button>
+                    </div>        
+                  </div>
+                </div>}
 </div>
   );
 };
 
 export default EditFormContainer;
  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// // Transform and save itinerary.  This is/should be the primary/only exit point for form data going to the database.//////////
+// async function saveTransformedItinerary() {
+//   // Initialize transformedItinerary with the same shape as TransformedItinerary, but empty values
+//   let transformedItinerary: TransformedItinerary = {
+//     id: itinerary.id,
+//     uid: itinerary.uid || "",
+//     settings: {
+//       title: "",
+//       description: itinerary.settings?.description || "",
+//       city: "",
+//       state: "",
+//       visibility: itinerary.settings?.visibility || "private",
+//       galleryPhotoUrl: itinerary.settings?.galleryPhotoUrl || ""
+//     },
+//     items: []
+//   };
+
+//   // Validate and populate fields...
+//   if (validateTitle(itinerary?.settings?.title ?? "")) {
+//     transformedItinerary.settings.title = itinerary?.settings?.title ?? "";
+//   }
+
+//   if (validateCity(itinerary?.settings?.city ?? "")) {
+//     transformedItinerary.settings.city = itinerary?.settings?.city?.toUpperCase() ?? ""; 
+//   }
+
+//   if (validateState(itinerary?.settings?.state ?? "")) {
+//     transformedItinerary.settings.state = itinerary?.settings?.state?.toUpperCase() || "";
+//   }
+//   // Map over itinerary items to transform the incompatible types
+//   transformedItinerary.items = (itinerary?.items ?? []).map(item => ({
+//     ...item,
+//     descHidden: true,
+//     startTime: item.startTime?.time ? { time: firebase.firestore.Timestamp.fromDate(item.startTime.time.toDate()) } : { time: null },
+//     endTime: item.endTime?.time ? { time: firebase.firestore.Timestamp.fromDate(item.endTime.time.toDate()) } : { time: null },  
+//   }));
+
+
+//   const indexLocalDB = await openDB('itinerariesDatabase');
+//   const tx = indexLocalDB.transaction('itineraries', 'readwrite');
+//   const store = tx.objectStore('itineraries');
+//   await store.put(transformedItinerary, `currentlyEditingItineraryStateEF_${authUser?.uid}`);
+//   await tx.done;
+
+//   await db.collection('itineraries').doc(transformedItinerary.id).set(transformedItinerary);
+//   setSaveStatus('Saved');
+//   setTimeout(() => {
+//     setSaveStatus('');
+//   }, 3000);
+
+// }

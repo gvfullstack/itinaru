@@ -16,7 +16,7 @@ import { toast } from 'react-toastify';
     const toastShownRef = useRef(false);
   
     useEffect(() => {
-      if (!editItineraryState.id && !toastShownRef.current) {
+      if (!editItineraryState?.id && !toastShownRef.current) {
         router.push('/');
         toast.error("Please select an itinerary to view.");
         toastShownRef.current = true;

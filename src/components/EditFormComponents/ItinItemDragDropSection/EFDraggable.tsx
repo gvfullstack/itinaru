@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect, Ref, forwardRef, useImperativeHandle } from 'react';
-import { useDrag, useDrop } from 'react-dnd';
+import { useDrag, DragPreviewImage  } from 'react-dnd';
 import { ItineraryItem, ItemTypes, Itinerary} from '../editFormTypeDefs';
 const { v4: uuidv4 } = require('uuid');
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -12,6 +12,7 @@ import styles2 from'.././EditFormCSS/itineraryEditForm.module.css'
 import ItemDescriptionStaticComponent from './itemDescriptionStaticComponent';
 import dayjs from 'dayjs'; 
 import StaticStarRating from './StaticStarRating';
+import DeleteConfirmationDialog from './DeleteConfirmationDialog';
 
 const externalLink = <FontAwesomeIcon className={styles2.itinItemsIcons} icon={faExternalLinkAlt} />;
 const mapMarkerAlt = <FontAwesomeIcon className={styles2.itinItemsIcons} icon={faDiamondTurnRight} />;
@@ -46,42 +47,14 @@ const EFDraggable = React.forwardRef((
   ) => {
 
   const [itineraryInEdit, setItineraryInEdit]= useRecoilState<Itinerary>(currentlyEditingItineraryState);
-  const itemStyles = {...styles, ...style}
   const localRef = useRef<HTMLDivElement>(null);
-  const [showDescription, setShowDescription] = useState(false);
-  useEffect(() => {console.log(showDescription)}, [showDescription]);
+  const [hideDescription, setHideDescription] = useState(true);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   
   const handleShowHideDescription = () => {
-    setItineraryInEdit(prevItinerary => {
-        const updatedItems = prevItinerary.items?.map((item) => {
-            if (item.id === itineraryItem.id) {
-                return { ...item, descHidden: !item.descHidden };
-            }
-            return item;
-        });
-
-        return {
-            ...prevItinerary,
-            items: updatedItems
-        };
-    });
+    setHideDescription(prev=>!prev)
 }
-//   const handleShowHideDescription = () => {
-//     setItineraryInEdit(prevItinerary => {
-//       console.log("prevItinerary", prevItinerary)
-//         const updatedItems = prevItinerary.items.map((item) => {
-//             if (item.id === itineraryItem.id) {
-//                 return { ...item, descHidden: !item.descHidden };
-//             }
-//             return item;
-//         });
 
-//         return {
-//             ...prevItinerary,
-//             items: updatedItems
-//         };
-//     });
-// }
   
   const [{ isDragging }, drag] = useDrag(() => ({
     type: ItemTypes.ITINERARY_ITEM,
@@ -91,6 +64,9 @@ const EFDraggable = React.forwardRef((
       isDragging: monitor.isDragging(),  
     }),
   }));
+  
+  const draggingStyle = isDragging ? { display: 'none' } : {};
+  const itemStyles = {...styles, ...style, ...draggingStyle}
 
   drag(localRef); // use the local ref with the drag function
   useImperativeHandle(forwardedRef, () => localRef.current as HTMLDivElement);                    
@@ -133,7 +109,7 @@ const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.tim
   
   const Menu = () => {
     return (
-      <div className={`${styles.menu} ${itineraryItem.descHidden ? "" : styles.isShown }`}>
+      <div className={`${styles.menu} ${hideDescription ? "" : styles.isShown }`}>
         <div className={styles.menuItem} onClick={handleShowItemForm}>{editItemIcon} Edit</div>
         <div className={styles.menuItem} >
         <a
@@ -151,7 +127,6 @@ const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.tim
           Directions
         </a>  
         </div>
-        <div className={styles.menuItem} onClick={handleRemoveClick}>{deleteItemIcon} Delete</div> 
       </div>
     );
   };
@@ -186,14 +161,6 @@ const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.tim
   }, [menuOpen]);
 
 
-  // function millisecondsToHoursMinutes(ms:number | undefined | null): string {
-  //   ms = ms ?? 0;
-  //   const totalMinutes = Math.floor(ms / 60000);
-  //   const hours = Math.floor(totalMinutes / 60);
-  //   const minutes = totalMinutes % 60;
-  //   return `${hours}:${minutes.toString().padStart(2, '0')}`;
-  // }
-
   function minutesToHoursMinutes(minutes: number | undefined | null): string {
     minutes = minutes ?? 0;
     const hours = Math.floor(minutes / 60);
@@ -218,10 +185,25 @@ const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.tim
     mapsUrl = `https://www.google.com/maps/search/?api=1&query=${itineraryItem.location.latitude},${itineraryItem.location.longitude}`;
   }
  
+
+  const openDeleteConfirmation = () => {
+    setShowDeleteConfirmation(true);
+  };
+
+  const closeDeleteConfirmation = () => {
+    setShowDeleteConfirmation(false);
+  };
+
+
   return (
     <>
  
-    <div ref={localRef} style={itemStyles}  className={styles.dropDiv} >
+    <div 
+      ref={localRef} 
+      style={itemStyles}  
+      className={styles.dropDiv} 
+      draggable={hideDescription ? "true" : "false"}
+>
     {showItemForm && 
       <div className={styles2.modalOverlay}>
         <div className={styles2.modalContent}>
@@ -236,38 +218,38 @@ const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.tim
         </div>
        </div> 
            }
-        <div key={uuidv4()} className={`${styles.itineraryParent} ${itineraryItem.descHidden ? "" : styles.isShown }`}>
+        <div key={uuidv4()} className={`${styles.itineraryParent} ${hideDescription ? "" : styles.isShown }`}>
              <div className={styles.mainItinItemContainer}>
-                  <div className={`${styles.itineraryItemContainerContainer} ${itineraryItem.descHidden ? "" : styles.isShown}`}>
+                  <div className={`${styles.itineraryItemContainerContainer} ${hideDescription ? "" : styles.isShown}`}>
                       {/* <div className={styles.itinTitleContainer}> */}
-                          <h3 className={`${styles.itinTitle} ${itineraryItem.descHidden ? "" : styles.isShown}`} 
+                          <h3 className={`${styles.itinTitle} ${hideDescription ? "" : styles.isShown}`} 
                             onClick={()=>handleShowHideDescription()}>
-                              {itineraryItem.descHidden ? shortItemTitle : itineraryItem.itemTitle}                           
+                              {hideDescription ? shortItemTitle : itineraryItem.itemTitle}                           
                             </h3>
-                            <div className={`${styles.activityTime} ${itineraryItem.descHidden ? "" : styles.isShown}`}>
-                                    <div className={`${styles.infoBannerWords} ${itineraryItem.descHidden ? "" : styles.isShown}`}>Start:</div>
+                            <div className={`${styles.activityTime} ${hideDescription ? "" : styles.isShown}`}>
+                                    <div className={`${styles.infoBannerWords} ${hideDescription ? "" : styles.isShown}`}>Start:</div>
                                     <div className={styles.startTimeContainer}>
-                                      <div className={`${styles.startTime} ${itineraryItem.descHidden ? "" : styles.isShown}`}>
+                                      <div className={`${styles.startTime} ${hideDescription ? "" : styles.isShown}`}>
                                           <div>  
                                             {formattedStartTime}
                                           </div>
                                       </div>
                                     </div>
-                                    <div className={`${styles.infoBannerWords} ${itineraryItem.descHidden ? "" : styles.isShown}`}>End:</div>
+                                    <div className={`${styles.infoBannerWords} ${hideDescription ? "" : styles.isShown}`}>End:</div>
                                     <div className={styles.endTimeContainer}>
-                                      <div className={`${styles.endTime} ${itineraryItem.descHidden ? "" : styles.isShown}`}>
+                                      <div className={`${styles.endTime} ${hideDescription ? "" : styles.isShown}`}>
                                             <div>
                                               {formattedEndTime}
                                             </div>
                                       </div>
                                     </div>
-                                    <div className={`${styles.infoBannerWords} ${itineraryItem.descHidden ? "" : styles.isShown}`}>Duration:</div>
+                                    <div className={`${styles.infoBannerWords} ${hideDescription ? "" : styles.isShown}`}>Duration:</div>
 
-                                    <div className={`${styles.durationContainer} ${itineraryItem.descHidden ? "" : styles.isShown}`}>
+                                    <div className={`${styles.durationContainer} ${hideDescription ? "" : styles.isShown}`}>
                                       {minutesToHoursMinutes(itineraryItem.activityDuration)}&nbsp;{clock}
                                     </div>
                                     <div 
-                                      className={`${styles.expandedItinMapText} ${itineraryItem.descHidden ? "" : styles.isShown}`} 
+                                      className={`${styles.expandedItinMapText} ${hideDescription ? "" : styles.isShown}`} 
                                                                 >
                                           <a
                                             href={mapsUrl || undefined}
@@ -277,18 +259,18 @@ const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.tim
                                                 
                                     </div>
                           </div> 
-                            <div className={`${styles.itinTitleDescription} ${itineraryItem.descHidden ? "" : styles.isShown}`}>  
+                            <div className={`${styles.itinTitleDescription} ${hideDescription ? "" : styles.isShown}`}>  
                                <ItemDescriptionStaticComponent description={itineraryItem.description || ""} />
                             </div>                       
                           
-                          <p className={`${styles.expandedItinAddressContainer} ${itineraryItem.descHidden ? "" : styles.isShown }`}>{itineraryItem.locationAddress}</p>
+                          <p className={`${styles.expandedItinAddressContainer} ${hideDescription ? "" : styles.isShown }`}>{itineraryItem.locationAddress}</p>
                           {itineraryItem.location?.latitude && itineraryItem.location?.longitude &&
-                            <p className={`${styles.expandedItinAddressContainer} ${itineraryItem.descHidden ? "" 
+                            <p className={`${styles.expandedItinAddressContainer} ${hideDescription ? "" 
                             : styles.isShown }`}>{itineraryItem.location?.latitude}, {itineraryItem.location?.longitude}
                             </p>
                           }
                          
-                          <div className={`${styles.ownResearchContainer} ${itineraryItem.descHidden ? "" : styles.isShown }`}>
+                          <div className={`${styles.ownResearchContainer} ${hideDescription ? "" : styles.isShown }`}>
                             Do your own research: 
                             <div className={styles.expandedItinItemWebsite}>
                               <a href={`https://www.google.com/search?q=${encodeURIComponent(itineraryItem.itemTitle ? itineraryItem.itemTitle : "")}`} target="_blank">
@@ -303,7 +285,7 @@ const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.tim
                             </div>
                             <StaticStarRating starRating={itineraryItem.rating}/>
 
-                            <div className={`${styles.expandedMenu} ${itineraryItem.descHidden ? "" : styles.isShown }`}>
+                            <div className={`${styles.expandedMenu} ${hideDescription ? "" : styles.isShown }`}>
                               <div className={styles.expandedMenuItem} onClick={handleShowItemForm}>{editItemIcon} Edit</div>
                               <div className={styles.expandedMenuItem} >
                                 <a
@@ -321,13 +303,20 @@ const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.tim
                                   Directions
                                 </a> 
                               </div>
-                              <div className={styles.expandedMenuItem} onClick={handleRemoveClick}>{deleteItemIcon} Delete</div> 
+                              <div className={styles.expandedMenuItem} onClick={openDeleteConfirmation}>{deleteItemIcon} Delete</div> 
                             </div>
+                            {showDeleteConfirmation && (
+                              <DeleteConfirmationDialog
+                                onCancel={closeDeleteConfirmation}
+                                onConfirm={handleRemoveClick}
+                              />
+                            )}
+
                           </div>
                   
                         
                           <div 
-                            className={`${styles.hamburgerMenuContainer} ${itineraryItem.descHidden ? "" : styles.isShown}`} 
+                            className={`${styles.hamburgerMenuContainer} ${hideDescription ? "" : styles.isShown}`} 
                             onClick={handleMenuClick} 
                             ref={menuRef}
                             >

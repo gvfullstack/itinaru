@@ -13,7 +13,7 @@ const GeneralItineraryInformation: FC = () => {
     return (
         <div className = {styles.generalItineraryInformationContainer}>
             <div className={styles.itinGeneralInfoPhotoContainer}>
-            {itinerary.settings?.galleryPhotoUrl && <Image 
+            {itinerary?.settings?.galleryPhotoUrl && <Image 
                     src={itinerary.settings?.galleryPhotoUrl ? itinerary.settings.galleryPhotoUrl : ''} 
                     alt="Itinerary Gallery Photo" 
                     width={2400} // replace with actual image width
@@ -24,11 +24,11 @@ const GeneralItineraryInformation: FC = () => {
                 />}
             </div>
             <div className={styles.itinGeneralInfoTextSection}>
-                <p className={styles.publicItinViewTitle}>{itinerary.settings?.title }</p>
-                <p>{itinerary.settings?.city || ''}, {itinerary.settings?.state || ''}</p>
+                <p className={styles.publicItinViewTitle}>{itinerary?.settings?.title }</p>
+                <p>{itinerary?.settings?.city || ''}, {itinerary?.settings?.state || ''}</p>
             </div>
             <div className={styles.itinTitleDescription}>
-                <ItemDescriptionStaticComponent description={itinerary.settings?.description ?? ''} />
+                <ItemDescriptionStaticComponent description={itinerary?.settings?.description ?? ''} />
             </div>    
         </div>
     );

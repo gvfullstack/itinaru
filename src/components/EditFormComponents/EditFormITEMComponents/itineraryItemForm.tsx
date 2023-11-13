@@ -19,6 +19,7 @@ import firebase from 'firebase/compat/app';
 import {saveStatusDisplayedEditFormContainer} from '../editFormAtoms';
 import DurationPicker from './durationPicker';
 import EndTimeDisplay from './endTimeDisplay';
+import DeleteConfirmationDialog from '../ItinItemDragDropSection/DeleteConfirmationDialog';
 import 'react-quill/dist/quill.snow.css';  // or quill.bubble.css if you're using the bubble theme
 import Quill from 'quill';
 const Parchment = Quill.import('parchment');
@@ -60,6 +61,7 @@ const ItineraryItemForm: FC<Props> = ({ initialItem, ...props }) => {
     const startTimeState = itineraryInEdit.items?.find(item => item.id === initialItemState.id)?.startTime?.time || null;
     const endTimeState = itineraryInEdit.items?.find(item => item.id === initialItemState.id)?.endTime?.time || null;
     const [saveStatus, setSaveStatus] = useRecoilState(saveStatusDisplayedEditFormContainer); // additional state for saving status
+    const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
     //Quill Config
     
@@ -95,20 +97,7 @@ const ItineraryItemForm: FC<Props> = ({ initialItem, ...props }) => {
       function initAutocomplete(): void {
         if(!initialItemState || !initialItemState.id){toast.error("No data found, please close form and try again."); return }
         const itemId = initialItemState.id; // or however you have access to the item's ID
-      
-        // const titleInput = document.getElementById('itemTitleInput') as HTMLInputElement | null;
-        // if (titleInput) {
-        //   const siteAutocomplete = new google.maps.places.Autocomplete(titleInput, {
-        //     fields: ["name", "formatted_address"]
-        //   });
-        //   siteAutocomplete.addListener('place_changed', () => {
-        //     const place = siteAutocomplete.getPlace();
-        //     if (place) {
-        //       updateItemInRecoilState({ itemTitle: place.name, locationAddress: place.formatted_address || '' }, itemId);
-        //     }
-        //   });
-        // }
-      
+         
         const addressInput = document.getElementById('addressInput') as HTMLInputElement | null;
         if (addressInput) {
           const addressAutocomplete = new google.maps.places.Autocomplete(addressInput, {
@@ -118,12 +107,13 @@ const ItineraryItemForm: FC<Props> = ({ initialItem, ...props }) => {
           addressAutocomplete.addListener('place_changed', () => {
             const place = addressAutocomplete.getPlace();
             if (place) {
-              updateItemInRecoilState({ itemTitle: place.name, locationAddress: place.formatted_address || '' }, itemId);
+              updateItemInRecoilState({ itemTitle: `${place.name}`, locationAddress: `${place.name} ${place.formatted_address}` || '' }, itemId);
             }
           });
         }
       }
       
+      useEffect(()=>{console.log(initialItemState)})
   
     useEffect(() => {
         if (isGoogleMapsLoaded) {
@@ -131,7 +121,7 @@ const ItineraryItemForm: FC<Props> = ({ initialItem, ...props }) => {
         }
         }, [isGoogleMapsLoaded]);
 
-
+// `````````````````````````````````````````````````````xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
     const handleItemChange =  (field: string) => async (e: React.ChangeEvent<HTMLInputElement>) => {
         const newValue = e.target.value;
         
@@ -196,60 +186,55 @@ const ItineraryItemForm: FC<Props> = ({ initialItem, ...props }) => {
         
    
 //get coordinates
-    const fetchCurrentLocation = async () => {
-        if (!navigator.geolocation) {
-            toast.error("Geolocation is not supported by your browser.");
-            alert("Geolocation is not supported by your browser.");
-            return;
-        }
+const fetchCurrentLocation = async () => {
+  if (!navigator.geolocation) {
+      toast.error("Geolocation is not supported by your browser.");
+      alert("Geolocation is either not supported by your browser or has been denied permission by your security settings.");
+      // Set coordinates to 0, 0 if geolocation is not available
+      setCoordinatesToDefault();
+      return;
+  }
 
-        navigator.geolocation.getCurrentPosition(position => {
-            const { latitude, longitude } = position.coords;
-            const coordinates = latitude + ", " + longitude;
-            console.log(coordinates, "coordinates")
+  navigator.geolocation.getCurrentPosition(position => {
+      const { latitude, longitude } = position.coords;
+      updateItineraryWithCoordinates(latitude, longitude);
+  }, 
+  () => {
+      alert("Unable to retrieve your location. Please ensure your device has location services enabled or enter manually.");
+      // Optionally, set coordinates to 0, 0 if location retrieval fails
+      setCoordinatesToDefault();
+  });
+};
 
-            setItineraryInEdit((prevItinerary: Itinerary) => {
-                const updatedItems = prevItinerary.items?.map((item) => {
-                  if (item.id === initialItemState.id) {  // Replace `currentItem.id` with appropriate logic if needed
-                    return {
-                      ...item,
-                      location: {
-                        latitude: latitude, 
-                        longitude:longitude, 
-                      }
-                    };
+const setCoordinatesToDefault = () => {
+  const defaultLatitude = 0;
+  const defaultLongitude = 0;
+  updateItineraryWithCoordinates(defaultLatitude, defaultLongitude);
+}
+
+const updateItineraryWithCoordinates = (latitude: number, longitude: number) => {
+  console.log(`${latitude}, ${longitude}`, "coordinates");
+  setItineraryInEdit((prevItinerary) => {
+      const updatedItems = prevItinerary.items?.map((item) => {
+          if (item.id === initialItemState.id) {
+              return {
+                  ...item,
+                  location: {
+                      latitude, 
+                      longitude, 
                   }
-                  return item;
-                });
-                
-                return {
-                  ...prevItinerary,
-                  items: updatedItems
-                };
-              });     
-            }, 
-            () => {alert("Unable to retrieve your location. Please ensure your device has location services enabled or enter manually.");
-        });
-    };
+              };
+          }
+          return item;
+      });
 
- ///DURATION
-//  const calculateDuration = (start: Dayjs | null | undefined, end: Dayjs | null | undefined): number | null => {
-//     if (start && end) {
-//         const duration = end.diff(start); // No unit specified, so it defaults to milliseconds.
-//         return duration >= 0 ? duration : null;
-//     }
-//     return null;
-// }
-
-
-//     useEffect(() => {
-//         const duration = calculateDuration(startTimeState || null, endTimeState || null);
-
-//         if (duration !== null) {
-//             updateItemInRecoilState({ activityDuration: duration }, initialItemState.id ||"")
-//         }
-//     }, [startTimeState, endTimeState]);
-    
+      return {
+          ...prevItinerary,
+          items: updatedItems
+      };
+  });
+}
+   
     const cancelMark = 
         <FontAwesomeIcon 
             icon={faXmark} 
@@ -262,14 +247,7 @@ const ItineraryItemForm: FC<Props> = ({ initialItem, ...props }) => {
             icon={faTrashCan} 
             className={styles.trashIcon} 
             type="button" 
-            onClick={() => { 
-                if (props.handleRemoveClick) {
-                  props.handleRemoveClick();
-                }
-                if (props.handleShowItemForm) {
-                  props.handleShowItemForm();
-                }
-              }}
+            onClick={() => {openDeleteConfirmation();}}
         />
     );
 
@@ -317,11 +295,18 @@ const ItineraryItemForm: FC<Props> = ({ initialItem, ...props }) => {
         });
       };
       
+      
+  const openDeleteConfirmation = () => {
+    setShowDeleteConfirmation(true);
+  };
+
+  const closeDeleteConfirmation = () => {
+    setShowDeleteConfirmation(false);
+  };
 
     return (
 
     <div className={styles.itinItemCreatorContainer}>
-       
    <div className={styles.itinItemHeadingContainer}>          
     {props.mode==="create" ?
         <h4 className = {styles.itemSectionHeading}>New Itinerary Item Entry</h4>:
@@ -351,9 +336,9 @@ const ItineraryItemForm: FC<Props> = ({ initialItem, ...props }) => {
     value={itineraryInEdit.items?.find(item => item.id === initialItemState.id)?.itemTitle || null}
     onChange={handleItemChange('itemTitle')}
     className={styles.inputFields}
-    // helperText={siteIsHovered ? "Site name you enter will be used if no selection is made from the dropdown." : ''}
-    // onMouseEnter={() => setSiteIsHovered(true)}
-    // onMouseLeave={() => setSiteIsHovered(false)}
+    InputLabelProps={{
+        shrink: true, // This will force the label to shrink
+      }}
     />   
 
 {/* Coordinates */}
@@ -466,21 +451,37 @@ const ItineraryItemForm: FC<Props> = ({ initialItem, ...props }) => {
    
    <StarRating initialItem={initialItem} updateItemInRecoilState={updateItemInRecoilState}/>
    
-   <div className={styles.saveOrCancelButtonSection}>
+   {!showDeleteConfirmation && (
+    <div className={styles.saveOrCancelButtonSection}>
             <div className = {styles.iconSectionContainer}>                
                 <div className = {styles.formControlsIconContainer}>                
                     {trashDelete}
                 </div>
                 <p className = {styles.formControlsIconText}>Delete</p>
+                
+                
             </div>
-
+           
             <div className = {styles.iconSectionContainer}>                
                 <div className = {styles.formControlsIconContainer}>                
                     {cancelMark}
                 </div>
                 <p className = {styles.formControlsIconText}>Close</p>
             </div>            
-        </div>
+        </div>)}
+        {showDeleteConfirmation && (
+                  <DeleteConfirmationDialog
+                    onCancel={closeDeleteConfirmation}
+                    onConfirm={() => {
+                      if (props.handleRemoveClick) {
+                        props.handleRemoveClick();
+                      }
+                      if (props.handleShowItemForm) {
+                        props.handleShowItemForm();
+                      }
+                    }}
+                  />
+                )}
 
 </div>
 

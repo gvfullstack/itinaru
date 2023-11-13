@@ -11,8 +11,8 @@ import {currentlyEditingItineraryState} from '../../EditFormComponents/editFormA
 import { openDB } from 'idb';
 import dayjs, {Dayjs} from 'dayjs';
 import 'firebase/firestore';
-import { useEffect, useState } from 'react';
-
+import { useEffect, useState, useRef } from 'react';
+import { fetchItineraryItems } from '../myItineraryUtilityFunctions/fetchItineraryItems';
 
 type ItinGalleryComponentProps = {
   itinerary: TransformedItinerary;
@@ -65,9 +65,10 @@ const ItinGalleryComponent: React.FC<ItinGalleryComponentProps> = ({itinerary}) 
   };
   
 ////////////////////////////////
+const checkedItineraryRef = useRef<TransformedItinerary | null>(null);
 
 const handleOpenEditView = async () => {
-  
+    console.log("handleOpenEditView")
     if (!authUser || !authUser.uid) {
       toast.error("No authenticated user found. Please log in and try again.");
       console.error("No authenticated user found.");
@@ -77,19 +78,34 @@ const handleOpenEditView = async () => {
     if (typeof authUser?.uid !== 'string') {
       throw new Error("UID is not a string or is missing");
   }
+  
+  const items = await fetchItineraryItems(itinerary.id as string) ?? [];
+  console.log("items", items);
+  checkedItineraryRef.current = {
+    ...itinerary,
+    items,
+  };
 
-   console.log("Before openDB");
+  setCheckedItinerary(checkedItineraryRef.current);
+  console.log("checkedItineraryRef.current", checkedItineraryRef.current);
+  await updateIndexedDB();
+
+};
+
+const updateIndexedDB = async () => {
+  if (checkedItineraryRef.current) {
+    console.log("Before openDB");
     const indexDB = await openDB('itinerariesDatabase');
     const tx = indexDB.transaction('itineraries', 'readwrite');
     const store = tx.objectStore('itineraries');
-    await store.put(checkedItinerary, `currentlyEditingItineraryStateEF_${authUser?.uid}`);
-   console.log("after openDB", store);
-
+    await store.put(checkedItineraryRef.current, `currentlyEditingItineraryStateEF_${authUser?.uid}`);
+    console.log("after openDB", store);
     await tx.done;
-   
     router.push(`/user/editMyItinerary`);
 
+  }
 };
+
 
 //////////////////////////////
   return (

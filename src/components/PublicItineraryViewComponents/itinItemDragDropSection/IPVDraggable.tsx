@@ -31,13 +31,13 @@ const IPVDraggable = React.forwardRef((
   forwardedRef: Ref<HTMLDivElement> // specify the type of the ref
   ) => {
 
-  const [itineraryInEdit, setItineraryInEdit]= useRecoilState<Itinerary>(currentlyViewingItineraryState);
+  const [itineraryInEdit, setItineraryInEdit]= useRecoilState<Itinerary | null>(currentlyViewingItineraryState);
   const itemStyles = {...styles, ...style}
   const localRef = useRef<HTMLDivElement>(null);
 
   const handleShowHideDescription = () => {
     setItineraryInEdit(prevItinerary => {
-        const updatedItems = prevItinerary.items?.map((item) => {
+        const updatedItems = prevItinerary?.items?.map((item) => {
             if (item.id === itineraryItem.id) {
                 return { ...item, descHidden: !item.descHidden };
             }
@@ -211,8 +211,15 @@ if (itineraryItem.locationAddress) {
                             <div className={`${styles.itinTitleDescription} ${itineraryItem.descHidden ? "" : styles.isShown}`}>  
                                <ItemDescriptionStaticComponent description={itineraryItem.description || ""} />
                             </div>                       
+                          {itineraryItem.locationAddress &&
+                          <p className={`${styles.expandedItinAddressContainer} ${itineraryItem.descHidden ? "" : styles.isShown }`}>Address: <br/> 
+                          {itineraryItem.locationAddress}
+                          </p>}
+                          {itineraryItem.location?.longitude && itineraryItem.location?.latitude &&
+                          <p className={`${styles.expandedItinAddressContainer} ${itineraryItem.descHidden ? "" : styles.isShown }`}>Coordinates: <br/> 
+                          {itineraryItem.location?.latitude}, {itineraryItem.location?.longitude}
+                          </p>}
                           
-                          <p className={`${styles.expandedItinAddressContainer} ${itineraryItem.descHidden ? "" : styles.isShown }`}>{itineraryItem.locationAddress}</p>
                           <div className={`${styles.ownResearchContainer} ${itineraryItem.descHidden ? "" : styles.isShown }`}>
                             Do your own research: 
                             <div className={styles.expandedItinItemWebsite}>

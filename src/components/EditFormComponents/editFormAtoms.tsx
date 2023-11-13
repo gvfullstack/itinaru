@@ -53,3 +53,9 @@ export const currentlyEditingItineraryState = atom<Itinerary>({
     key: 'itineraryAccessItinViewState', // unique ID (with respect to other atoms/selectors)
     default: [], // default value (aka initial value)
   });
+
+
+  export const itineraryInEditNeedsDeletionFromRecoilState = atom<boolean>({
+    key: 'itineraryInEditNeedsDeletionFromRecoilState', // unique ID (with respect to other atoms/selectors)
+    default: false, // default value (aka initial value)
+  });

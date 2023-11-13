@@ -19,7 +19,6 @@
   const NewItineraryTitleInput: React.FC<NewItineraryTitleInputProps> = (props) => {
 
     const [authUser, setAuthUser] = useRecoilState(authUserState);
-    // const [title, setTitle] = useState('');
     const MIN_TITLE_LENGTH = 1;
     const [isSaving, setIsSaving] = useState(false);
     const { register, handleSubmit, control, formState: { errors }, watch } = useForm();
@@ -32,9 +31,9 @@
       if (title.trim().length < 5 || title.trim().length > 100) {
           return "Title should be between 5 and 100 characters.";
       }
-      if (!/^[A-Za-z0-9 ]+$/.test(title.trim())) {
-          return "Title can only contain numbers, spaces, and letters.";
-      }
+      // if (!/^[A-Za-z0-9 ]+$/.test(title.trim())) {
+      //     return "Title can only contain numbers, spaces, and letters.";
+      // }
       if (/^\s|\s$/.test(title)) {
           return "Title cannot start or end with a space.";
       }
@@ -54,6 +53,7 @@
       const itineraryData = {
         id: "",
         uid: authUser.uid,
+        isDeleted: false,
         settings: {
           title: title,
           visibility: "private",
@@ -112,7 +112,8 @@
    
      const newItinerary = {
       id: itineraryId,
-      uid: userId,
+      uid: userId,  
+      isDeleted: false,
       settings: {
         title: title,
         description: "",

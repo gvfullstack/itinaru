@@ -2,7 +2,7 @@ import ItinGalCompWrapper from './itinGallerySubComponents/itinGalCompWrapper';
 import ItinGalleryComponent from './itinGallerySubComponents/itinGalleryComponent';
 import styles from './myItineraries.module.css';
 import { useState, useRef, useEffect } from 'react';
-import { TransformedItinerary } from '../EditFormComponents/editFormTypeDefs';
+import { TransformedItinerary, Itinerary } from '../EditFormComponents/editFormTypeDefs';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import {myItinerariesResults} from './myItinerariesAtoms';
@@ -12,13 +12,34 @@ import { toast } from 'react-toastify';
 import { authUserState } from '../../atoms/atoms'
 import { openDB } from 'idb';
 import SharedItineraries from './itinerariesSharedWithMe';
-  
+import {itineraryInEditNeedsDeletionFromRecoilState, currentlyEditingItineraryState} from '../EditFormComponents/editFormAtoms';
+
 const MyItineraries: React.FC = () => {
 
   const [myItineraries, setMyItineraries] = useRecoilState(myItinerariesResults);
   const [authUser, setAuthUser] = useRecoilState(authUserState);
   const [activeTab, setActiveTab] = useState<'private' | 'shared' | 'public' | 'sharedWithMe'>('private'); // Added this state
   const userId = authUser?.uid as string;
+  const [itineraryInEdit, setItineraryInEdit] = useRecoilState<Itinerary>(currentlyEditingItineraryState);
+  const [itineraryInEditNeedsDeletionFromRecoil, setItineraryInEditNeedsDeletionFromRecoilState] = useRecoilState<boolean>(itineraryInEditNeedsDeletionFromRecoilState);
+
+  useEffect(() => {
+    if (itineraryInEditNeedsDeletionFromRecoil) {
+      setItineraryInEdit({
+        uid: "",
+        id: "",
+        settings: {
+          title: "",
+          description: "",
+          city: "",
+          state: "",
+          visibility: "private"
+        },
+        items: []
+      });
+    }
+    setItineraryInEditNeedsDeletionFromRecoilState(false);
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,6 +59,7 @@ const MyItineraries: React.FC = () => {
       
       // Read back the value to confirm it was saved
       const refreshedValue = await store.get(`indexDBNeedsRefresh_${userId}`);
+      console.log(refreshedValue);
       
       await tx.done;
     };  

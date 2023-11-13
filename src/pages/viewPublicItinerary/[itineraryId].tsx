@@ -22,31 +22,37 @@ export const getServerSideProps = async (context:GetServerSidePropsContext) => {
   }
   
  
-  const ItinPublicViewPage: React.FC<{ itinerary?: Itinerary }> = ({ itinerary }) => {
-    const [localItinerary, setItinerary] = useRecoilState<Itinerary>(currentlyViewingItineraryState);
-
+  const ItinPublicViewPage: React.FC<{ itinerary?: Itinerary | null }> = ({ itinerary }) => {
+    const [localItinerary, setItinerary] = useRecoilState<Itinerary | null>(currentlyViewingItineraryState);
+  
     useEffect(() => {
-        if (itinerary) {
-            // Convert the startTime and endTime to Dayjs
-            const updatedItems = itinerary.items?.map(item => ({
-                ...item,
-                startTime: item.startTime?.time != null ? { time: dayjs(item.startTime.time) } : undefined,
-                endTime: item.endTime?.time != null ? { time: dayjs(item.endTime.time) } : undefined
-            }));
-
-            // Set the itinerary with the updated items
-            setItinerary({
-                ...itinerary,
-                items: updatedItems
-            });
-        }
+      if (itinerary) {
+        // Convert the startTime and endTime to Dayjs
+        const updatedItems = itinerary.items?.map(item => ({
+            ...item,
+            startTime: item.startTime?.time != null ? { time: dayjs(item.startTime.time) } : undefined,
+            endTime: item.endTime?.time != null ? { time: dayjs(item.endTime.time) } : undefined
+        }));
+  
+        // Set the itinerary with the updated items
+        setItinerary({
+            ...itinerary,
+            items: updatedItems
+        });
+      } else {
+        setItinerary(null);
+      }
     }, [itinerary, setItinerary]);
-
+  
     return (
       <div className={styles.publicItinViewMain}>
-        <PublicItinViewContainer />
+        {localItinerary ? (
+          <PublicItinViewContainer />
+        ) : (
+          <p className={styles.deletedMessage}>This itinerary has been deleted or is unavailable.</p>
+        )}
       </div>
-      )
+    );
   };
   
   export default ItinPublicViewPage;

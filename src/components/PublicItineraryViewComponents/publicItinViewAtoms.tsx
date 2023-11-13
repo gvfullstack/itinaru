@@ -16,7 +16,7 @@ export const defaultItinerary: Itinerary = {
   };
   
 
-export const currentlyViewingItineraryState = atom<Itinerary>({
+export const currentlyViewingItineraryState = atom<Itinerary | null>({
     key: 'currentlyViewingItineraryState',
     default: defaultItinerary,
   });
