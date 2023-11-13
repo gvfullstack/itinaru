@@ -31,13 +31,13 @@ const IPVDraggable = React.forwardRef((
   forwardedRef: Ref<HTMLDivElement> // specify the type of the ref
   ) => {
 
-  const [itineraryInEdit, setItineraryInEdit]= useRecoilState<Itinerary>(currentlyViewingItineraryState);
+  const [itineraryInEdit, setItineraryInEdit]= useRecoilState<Itinerary | null>(currentlyViewingItineraryState);
   const itemStyles = {...styles, ...style}
   const localRef = useRef<HTMLDivElement>(null);
 
   const handleShowHideDescription = () => {
     setItineraryInEdit(prevItinerary => {
-        const updatedItems = prevItinerary.items?.map((item) => {
+        const updatedItems = prevItinerary?.items?.map((item) => {
             if (item.id === itineraryItem.id) {
                 return { ...item, descHidden: !item.descHidden };
             }
