@@ -28,10 +28,6 @@ const DragDropSection = dynamic(() =>
 
 const PublicItinViewContainer: FC = () => {
 
-const [itinerary, setItinerary] = useRecoilState<Itinerary>(currentlyViewingItineraryState);
-const router = useRouter();
-
-
 return (
 <div className={styles.publicItinViewContainer}>
         <div className={styles.publicItinViewContentContainer}>
