@@ -67,6 +67,7 @@
     "react-hook-form": "^7.45.4",
     "react-instantsearch": "^7.0.1",
     "react-instantsearch-core": "^7.0.1",
+    "react-instantsearch-hooks-web": "^6.47.3",
     "react-quill": "^2.0.0",
     "react-tabs": "^6.0.2",
     "react-time-picker": "^6.0.4",

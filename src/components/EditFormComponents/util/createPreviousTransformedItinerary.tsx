@@ -15,7 +15,8 @@ export const createPreviousTransformedItinerary = (itinerary: Itinerary): Transf
         city: itinerary.settings?.city || "",
         state: itinerary.settings?.state || "",
         visibility: itinerary.settings?.visibility || "private",
-        galleryPhotoUrl: itinerary.settings?.galleryPhotoUrl || ""
+        galleryPhotoUrl: itinerary.settings?.galleryPhotoUrl || "",
+        keywords: itinerary.settings?.keywords || '',
       },
       items: (itinerary?.items ?? []).map(item => ({
         ...item,

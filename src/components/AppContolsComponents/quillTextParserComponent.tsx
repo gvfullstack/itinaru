@@ -4,8 +4,9 @@ import parse from 'html-react-parser';
 
 function QuillTextParserComponent({ description }: { description: string }) {
   const [isMounted, setIsMounted] = useState(false);
-  
+  console.log(isMounted);
   useEffect(() => {
+    console.log('QuillTextParserComponent: useEffect');
     setIsMounted(true);
   }, []);
 

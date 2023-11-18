@@ -16,8 +16,7 @@ import { Timestamp } from 'firebase/firestore';
     duration?: string;
     galleryPhotoUrl?: string;
     visibility: 'private' | 'shared' | 'public';
-    readAccess?: string[];
-    editAccess?: string[];
+    keywords?: string;
   }
 
   export type TimeObject = {
@@ -25,6 +24,7 @@ import { Timestamp } from 'firebase/firestore';
   };
   
   export type TransformedItineraryItem = {
+    isDeleted?: boolean;    
     itemTitle?: string;
     startTime?: TimeObject;
     endTime?: TimeObject;
@@ -47,6 +47,7 @@ import { Timestamp } from 'firebase/firestore';
  export type TransformedItinerary = {
     id?: string;
     uid: string,
+    isDeleted?: boolean;
     settings: ItinerarySettings;
     items: TransformedItineraryItem[];
 }

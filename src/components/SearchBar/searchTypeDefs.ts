@@ -20,6 +20,7 @@ export type ItineraryItem = {
     activityType?: string;
     itineraryParentId?: string;
     beingEdited?: boolean
+    isDeleted?: boolean;
   } 
 
   export const ItemTypes = {
@@ -37,13 +38,13 @@ export type ItineraryItem = {
     duration?: string;
     galleryPhotoUrl?: string;
     visibility: 'private' | 'shared' | 'public';
-    readAccess?: string[];
-    editAccess?: string[];
+    keywords?: string;
   }
       
   export type Itinerary = {
-    id?: string,
-    uid: string,
+    id?: string;
+    uid: string;
+    isDeleted?: boolean;
     settings: ItinerarySettings;
     items: ItineraryItems;
   }
@@ -52,7 +53,8 @@ export type ItineraryItem = {
     time?: firebase.firestore.Timestamp | null;
   };
   
-  export type TransformedItineraryItem   = {
+  export type TransformedItineraryItem = {
+    isDeleted?: boolean;    
     itemTitle?: string;
     startTime?: TimeObject;
     endTime?: TimeObject;
@@ -74,6 +76,19 @@ export type ItineraryItem = {
 
  export type TransformedItinerary = {
     id?: string;
+    uid: string,
+    isDeleted?: boolean;
     settings: ItinerarySettings;
     items: TransformedItineraryItem[];
+}
+
+export interface AlgoliaHitType {
+  objectID: string; // Common in Algolia hits
+  uid?: string;
+  settings?: ItinerarySettings;
+  itineraryParentId?: string;
+  itemTitle?: string;
+  description?: string;
+  locationAddress?: string;
+  // ... include other fields as necessary
 }

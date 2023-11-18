@@ -45,9 +45,11 @@ const ItineraryEditForm: FC<Props> = () => {
     const [titleError, setTitleError] = useState(false);
     const [cityError, setCityError] = useState(false);
     const [stateError, setStateError] = useState(false);
+    const [keywordError, setKeywordError] = useState(false);
     const [titleHelperText, setTitleHelperText] = useState('');
     const [cityHelperText, setCityHelperText] = useState('');
     const [stateHelperText, setStateHelperText] = useState('');
+    const [keywordHelperText, setKeywordHelperText] = useState('');
     const [myItineraries, setMyItineraries] = useRecoilState(myItinerariesResults);
 
 
@@ -102,7 +104,16 @@ const ItineraryEditForm: FC<Props> = () => {
 
       const validateDescription = (value:string) => {return true}; // no validation needed for description, FOR NOW
       const validateVisibility = (value:string) => {return true}; // no validation needed for visibility, FOR NOW
-
+      const validateKeywords = (value:string) => {
+        if (value.split(',').length > 5) {
+          setKeywordError(true);  
+          setKeywordHelperText('Please enter 5 or less keywords.');
+          return (false)
+        }
+        setKeywordError(false);
+        setKeywordHelperText('Keywords that should return itinerary on search.');
+        return (true)
+      }; 
 // *******************save to localDatabase operations*******************    
       const [focusedValue, setFocusedValue] = useState<string | null>(null);
       const handleFieldFocus = (e: React.FocusEvent<HTMLInputElement>) => {
@@ -114,11 +125,12 @@ const ItineraryEditForm: FC<Props> = () => {
         city: validateCity,
         state: validateState,
         description: validateDescription,
-        visibility: validateVisibility
+        visibility: validateVisibility,
+        keywords: validateKeywords
         // Add more validation functions   here if needed
       };
 
-      type FieldNames = 'title' | 'city' | 'state' | 'description' | 'visibility'; // Add more field names as needed
+      type FieldNames = 'title' | 'city' | 'state' | 'description' | 'visibility' | 'keywords'; // Add more field names as needed
 
 
 // Function to validate field and then update it if valid for the onBlur event
@@ -251,6 +263,21 @@ const handleQuillChange = (field: FieldNames, value: string) => {
                         modules={modules}                       
                         />
                     </div>
+
+                    {itinerary.settings?.visibility === 'public' &&
+                      <TextField
+                        id="Keywords"
+                        label="Keywords"
+                        variant="outlined"
+                        placeholder="comma separated i.e. beach, #hiking, family-friendly"
+                        value={itinerary.settings?.keywords || ''}
+                        onChange={handleSettingsChange('keywords')}
+                        onBlur={(e) => {handleFieldChangeAndSave('keywords', e.target.value)}}
+                        className={styles.inputFields}
+                        error={keywordError}
+                        helperText={keywordHelperText}
+                        onFocus={handleFieldFocus}
+                      />}
 
                     <div className={styles.sharedSettingContainer}>
                     <label title="Visible only to you">

@@ -297,7 +297,7 @@ useEffect(() => {
 
 
 async function saveItineraryToFirestore() {
-  let defaultItinerary: TransformedItinerary = {isDeleted: false, id: '', uid: "", settings: {title: "", description: "", city: "", state: "", visibility: "private", galleryPhotoUrl: ""},items:[]}
+  let defaultItinerary: TransformedItinerary = {isDeleted: false, id: '', uid: "", settings: {title: "", description: "", city: "", state: "", visibility: "private", galleryPhotoUrl: "", keywords:""},items:[]}
   // Initialize transformedItinerary with the same shape as TransformedItinerary, but empty values
   let originalTransformedItinerary = previousTransformedItinerary ?? defaultItinerary
   console.log('originalTransformedItinerary', originalTransformedItinerary);

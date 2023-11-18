@@ -1,5 +1,5 @@
 import isEqual from 'lodash/isEqual';
-import { TransformedItineraryItem} from '../editFormTypeDefs'
+import { TransformedItineraryItem, TimeObject} from '../editFormTypeDefs'
 import dayjs, { Dayjs } from 'dayjs';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
@@ -30,6 +30,18 @@ export function getUpdatedItemFields(
   return updatedFieldsArray;
 }
 
+// Utility function to create a default timestamp for midnight
+function getDefaultMidnightTimestamp(): firebase.firestore.Timestamp {
+  const now = new Date();
+  now.setHours(0, 0, 0, 0); // Set to midnight
+  return firebase.firestore.Timestamp.fromDate(now);
+}
+
+// Type guard to check if a value is a TimeObject
+function isTimeObject(value: any): value is TimeObject {
+  return value && typeof value === 'object' && 'time' in value;
+}
+
 function getUpdatedFields(originalItem: TransformedItineraryItem, updatedItem: TransformedItineraryItem) {
   const updatedFields: Partial<Record<keyof TransformedItineraryItem, any>> = {};
 
@@ -37,7 +49,15 @@ function getUpdatedFields(originalItem: TransformedItineraryItem, updatedItem: T
     const originalValue = originalItem[key];
     const updatedValue = updatedItem[key];
 
-    if (updatedValue !== undefined && !isEqual(originalValue, updatedValue)) {
+    // Check for startTime specifically and use type guard
+    if (key === 'startTime') {
+      if (!isTimeObject(updatedValue) || updatedValue?.time === undefined) {
+        updatedFields.startTime = { time: getDefaultMidnightTimestamp() };
+      } else {
+        updatedFields.startTime = updatedValue;
+      }
+    } else if (updatedValue !== undefined && !isEqual(originalValue, updatedValue)) {
+      // Handle other fields
       if (key === 'location' && isLocation(updatedValue) && isLocation(originalValue)) {
         const updatedLocation = {
           latitude: updatedValue.latitude ?? originalValue.latitude,

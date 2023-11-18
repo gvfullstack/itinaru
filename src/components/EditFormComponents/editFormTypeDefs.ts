@@ -12,7 +12,7 @@ export type ItinerarySettings = {
   duration?: string;
   galleryPhotoUrl?: string;
   visibility: 'private' | 'shared' | 'public';
-
+  keywords?: string;
 }
     
 export type Itinerary = {

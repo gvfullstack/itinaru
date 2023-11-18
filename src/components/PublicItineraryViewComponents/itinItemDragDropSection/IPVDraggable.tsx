@@ -86,8 +86,8 @@ const IPVDraggable = React.forwardRef((
 
     return formatter.format(formattedDate);
 }
-const formattedEndTime = formatTimeWithoutSeconds(itineraryItem.endTime?.time?? new Date());
-const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.time?? new Date());
+const formattedEndTime = formatTimeWithoutSeconds(itineraryItem.endTime?.time?? null);
+const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.time?? null);
 
 let mapsUrl: string | undefined = undefined;
 
@@ -166,7 +166,11 @@ if (itineraryItem.locationAddress) {
 
   return (
     <>
-    <div ref={localRef} style={itemStyles}  className={styles.dropDiv} >
+    <div ref={localRef} 
+      style={itemStyles}  
+      className={styles.dropDiv} 
+      draggable={itineraryItem.descHidden ? "true" : "false"}
+      >
       <div key={uuidv4()} className={`${styles.itineraryParent} ${itineraryItem.descHidden ? "" : styles.isShown }`}>
              <div className={styles.mainItinItemContainer}>
                   <div className={`${styles.itineraryItemContainerContainer} ${itineraryItem.descHidden ? "" : styles.isShown}`}>

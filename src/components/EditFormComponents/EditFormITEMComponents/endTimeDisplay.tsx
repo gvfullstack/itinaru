@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
-import { Dayjs } from 'dayjs';
+import { Dayjs  } from 'dayjs';
+import dayjs from 'dayjs';
 import { Itinerary, ItineraryItem } from '../editFormTypeDefs';
 import { currentlyEditingItineraryState } from '../editFormAtoms';
 import styles from './endTimeDisplay.module.css'
@@ -23,26 +24,29 @@ const EndTimeDisplay: React.FC<EndTimeDisplayProps> = ({ itemId }) => {
   const startTime = targetItem?.startTime?.time;
   const activityDuration = targetItem?.activityDuration;
 
-  useEffect(() => {
-    if (startTime && activityDuration !== undefined) {
-      const endTime = calculateEndTime(startTime, activityDuration);
+useEffect(() => {
+  // Check if startTime is a valid Dayjs object and activityDuration is defined
+  if (dayjs.isDayjs(startTime) && startTime.isValid() && activityDuration !== undefined) {
+    const endTime = calculateEndTime(startTime, activityDuration);
 
-      // Find the index of the target item
-      const targetItemIndex = itineraryInEdit.items!.findIndex(item => item.id === itemId);
+    // Find the index of the target item
+    const targetItemIndex = itineraryInEdit.items!.findIndex(item => item.id === itemId);
 
-      // Update the state
-      const updatedItems = [...itineraryInEdit.items!];
-      updatedItems[targetItemIndex] = {
-        ...updatedItems[targetItemIndex],
-        endTime: { time: endTime },
-      };
+    // Update the state
+    const updatedItems = [...itineraryInEdit.items!];
+    updatedItems[targetItemIndex] = {
+      ...updatedItems[targetItemIndex],
+      endTime: { time: endTime },
+    };
 
-      setItineraryInEdit({
-        ...itineraryInEdit,
-        items: updatedItems,
-      });
-    }
-  }, [startTime, activityDuration]);
+    setItineraryInEdit({
+      ...itineraryInEdit,
+      items: updatedItems,
+    });
+  }
+}, [startTime, activityDuration]);
+
+
 
   return (
     <div className={styles.endTimeContainer}>
@@ -50,7 +54,7 @@ const EndTimeDisplay: React.FC<EndTimeDisplayProps> = ({ itemId }) => {
       {targetItem && targetItem.endTime?.time ? (
         <div className={styles.endTimeTimeContainer}>{targetItem.endTime.time.format('hh:mm A')}</div>
       ) : (
-        <div>N/A</div>
+        <div>End Time</div>
       )}
     </div>
   );

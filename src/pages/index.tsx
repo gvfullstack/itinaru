@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import styles from '@/styles/Home.module.css'
-import SearchBar from '../components/SearchBar/searchBar'
+import SearchBar from '../components/SearchBar/searchPageComponents/mainSearchPageContainer'
 import ItineraryItemForm from '../components/EditFormComponents/EditFormITEMComponents/itineraryItemForm'
 
 export default function Home() {

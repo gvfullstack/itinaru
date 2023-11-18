@@ -1,25 +1,13 @@
 import { atom } from 'recoil';
+import { AlgoliaHitType } from './searchTypeDefs';
 
-type AlgoliaItinerary = {
-    id: string;
-    uid: string;
-    settings: {
-      title: string;
-      description: string;
-      neighborhood: string;
-      city: string;
-      state: string;
-      duration: string;
-      galleryPhotoUrl: string;
-    };
-  };
 
-export const searchResultsState = atom<AlgoliaItinerary[]>({
+export const searchResultsState = atom<AlgoliaHitType[]>({
   key: 'searchResultsState',
   default: [],
 });
 
-export const searchQueryState = atom<string>({
+export const searchQueryState = atom<string | undefined>({
     key: 'searchQueryState',
-    default: "",
+    default: undefined,
   });
