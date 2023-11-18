@@ -14,7 +14,8 @@ export function createCurrentTransformedItinerary(itinerary: Itinerary): Transfo
           city: "",
           state: "",
           visibility: itinerary.settings?.visibility || "private",
-          galleryPhotoUrl: itinerary.settings?.galleryPhotoUrl || ""
+          galleryPhotoUrl: itinerary.settings?.galleryPhotoUrl || "",
+          keywords: itinerary.settings?.keywords || '',
         },
         items: []
       };

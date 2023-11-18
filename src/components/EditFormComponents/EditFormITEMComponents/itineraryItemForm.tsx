@@ -252,30 +252,32 @@ const updateItineraryWithCoordinates = (latitude: number, longitude: number) => 
     );
 
    
-    const handleTimeChangeWithRecoilUpdate =  (timeField: 'startTime' | 'endTime') => {
-        return (date: Dayjs | null) => {        
-          // Update Recoil state
+    const handleTimeChangeWithRecoilUpdate = (timeField: 'startTime' | 'endTime') => {
+      return (date: Dayjs | null) => {
+        if (dayjs.isDayjs(date) && date.isValid()) {
+          // Update Recoil state only if date is a valid Dayjs object
           setItineraryInEdit((prevItinerary: Itinerary) => {
             const updatedItems = prevItinerary.items?.map((item) => {
-              if (item.id === initialItemState.id) {  // Replace `currentItem.id` with appropriate logic if needed
+              if (item.id === initialItemState.id) {  // Replace `initialItemState.id` with appropriate logic if needed
                 return {
                   ...item,
                   [timeField]: {
                     ...item[timeField],
-                    time: date || item[timeField]?.time
+                    time: date
                   }
                 };
               }
               return item;
             });
-            
+    
             return {
               ...prevItinerary,
               items: updatedItems
             };
           });
-        };
+        }
       };
+    };
 
       const resetLatLong = () => {
         setItineraryInEdit((prevItinerary: Itinerary) => {

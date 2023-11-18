@@ -1,31 +1,41 @@
 import * as functions from 'firebase-functions';
 import { index } from './algoliaConfig';
-import { TransformedItinerary, TransformedItineraryItem } from './algoliaRulesTypes'; // Replace 'yourTypesFile' with the actual path to your types file
+import { TransformedItinerary } from './algoliaRulesTypes'; // Ensure this path is correct
 
 export const updateIndex = functions.firestore.document('itineraries/{itineraryId}')
-  .onUpdate(async change => {
-    const newData = change.after.data() as TransformedItinerary; // Explicitly set the type here
+  .onUpdate(async (change, context) => {
+    console.log('updateIndex triggered for itineraryId:', context.params.itineraryId);
+    const newData = change.after.data() as TransformedItinerary;
+    console.log('Retrieved Itinerary Data:', newData);
 
-    // Check if the itinerary is marked as public
     const visibility = newData?.settings?.visibility;
-    if (visibility === 'public') {
-      // Get items sub-collection
-      const items: TransformedItineraryItem[] = []; // Explicitly set the type here
-      const itemsSnapshot = await change.after.ref.collection('items').get();
-      itemsSnapshot.forEach(itemDoc => {
-        items.push(itemDoc.data() as TransformedItineraryItem); // Explicitly set the type here
-      });
+    const isDeleted = newData?.isDeleted;
+    console.log('Visibility:', visibility, 'IsDeleted:', isDeleted);
 
+    if (visibility === 'public' && isDeleted !== true) {
       const object = {
         objectID: change.after.id,
         ...newData,
-        items,
+        // Removed the items array inclusion
       };
-      
+
+      console.log('Updating Algolia Index for:', change.after.id);
       return index.saveObject(object);
     } else {
-      // Delete from Algolia index if it's not public
-      console.log('Itinerary is not public. Removing from Algolia index.');
-      return index.deleteObject(change.after.id);
+      console.log('Deleting from Algolia Index:', change.after.id);
+      await index.deleteObject(change.after.id);
+
+      // Additional step: Delete all associated items
+      const query = `itineraryParentId:${change.after.id}`;
+      const hits = await index.search(query);
+      const objectIDs = hits.hits.map(hit => hit.objectID);
+
+      if (objectIDs.length > 0) {
+        console.log('Deleting associated items from Algolia Index for:', change.after.id);
+        return index.deleteObjects(objectIDs);
+      } else {
+        console.log('No associated items to delete for:', change.after.id);
+        return null;
+      }
     }
   });

@@ -94,8 +94,8 @@ const EFDraggable = React.forwardRef((
 
     return formatter.format(formattedDate);
 }
-const formattedEndTime = formatTimeWithoutSeconds(itineraryItem.endTime?.time?? new Date());
-const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.time?? new Date());
+const formattedEndTime = formatTimeWithoutSeconds(itineraryItem.endTime?.time?? null);
+const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.time?? null);
 
 
  const handleRemoveClick = () => {

@@ -1,40 +1,37 @@
 import * as functions from 'firebase-functions';
 import { index } from './algoliaConfig';
-import * as admin from 'firebase-admin';
-import { TransformedItinerary, TransformedItineraryItem } from './algoliaRulesTypes'; // Replace 'yourTypesFile' with the actual path to your types file
+import {TransformedItineraryItem } from './algoliaRulesTypes'; // Replace 'yourTypesFile' with the actual path to your types file
 
 export const itemUpdate = functions.firestore.document('itineraries/{itineraryId}/items/{itemId}')
   .onWrite(async (change, context) => {
-    const itineraryId = context.params.itineraryId;
+    const { itineraryId, itemId } = context.params;
 
-    // Fetch the itinerary document
-    const itineraryDoc = await admin.firestore().collection('itineraries').doc(itineraryId).get();
+    // Determine if the document was deleted
+    const wasDeleted = !change.after.exists;
 
-    if (!itineraryDoc.exists) {
-      console.error(`Failed to find itinerary with ID: ${itineraryId}`);
-      return null;
+    // If deleted, remove the item from Algolia
+    if (wasDeleted) {
+      return index.deleteObject(itemId);
     }
 
-    const itineraryData = itineraryDoc.data() as TransformedItinerary; // Explicitly set the type here
+    // Fetch the specific item document
+    const itemDoc = change.after.exists ? change.after : change.before;
+    const itemData = itemDoc.data() as TransformedItineraryItem;
 
-    // Check for visibility status
-    if (itineraryData?.settings?.visibility !== 'public') {
-      console.log(`Itinerary with ID: ${itineraryId} is not public. Skipping Algolia update.`);
+    // Check if the item is not marked as deleted
+    if (itemData.isDeleted !== true) {
+      const itemObject = {
+        objectID: itemId,
+        itineraryParentId: itineraryId,
+        itemTitle: itemData.itemTitle,
+        description: itemData.description,
+        locationAddress: itemData.locationAddress,
+        // Include other fields that you need to index
+      };
+
+      return index.saveObject(itemObject);
+    } else {
+      console.log('Item is deleted or missing itinerary ID. Skipping Algolia indexing.');
       return null;
     }
-
-    // Get items sub-collection
-    const items: TransformedItineraryItem[] = []; // Explicitly set the type here
-    const itemsSnapshot = await itineraryDoc.ref.collection('items').get();
-    itemsSnapshot.forEach(itemDoc => {
-      items.push(itemDoc.data() as TransformedItineraryItem); // Explicitly set the type here
-    });
-
-    const object = {
-      objectID: itineraryId,
-      ...itineraryData,
-      items,
-    };
-
-    return index.saveObject(object);
   });
