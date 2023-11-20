@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useRef} from 'react';
 import {useRouter} from 'next/router';
 import QuillTextParserComponent from '../../AppContolsComponents/quillTextParserComponent';
 import Image from 'next/image';
@@ -11,7 +11,10 @@ import { openDB } from 'idb';
 import dayjs, {Dayjs} from 'dayjs';
 import 'firebase/firestore';
 import styles from './itinGalleryComponent.module.css';
-
+import { TransformedItinerary} from '../../EditFormComponents/editFormTypeDefs';
+import { fetchItineraryItems } from '../myItineraryUtilityFunctions/fetchItineraryItems';
+import {fetchItineraryAndItems} from '../myItineraryUtilityFunctions/fetchIndividualItinerary';
+import {currentlyViewingItineraryState} from '../../PublicItineraryViewComponents/publicItinViewAtoms';
 
 type ItinGalleryComponentProps = {
   itinerary: UserAccessWithDocId;
@@ -35,6 +38,7 @@ const SharedItinGalleryComponent: React.FC<ItinGalleryComponentProps> = ({
 }) => {
   const router = useRouter();
   const [authUser, setAuthUser] = useRecoilState(authUserState);
+  const [currentlyViewingItinerary, setCurrentlyViewingItinerary] = useRecoilState(currentlyViewingItineraryState);
 
   const getRandomImage = () => {
     const images = ['dubaiShine.jpg', 'landscape.jpg', 'rainbow.jpg', 'sunflower.jpg', 'tropicalSunset.jpg'];
@@ -43,36 +47,139 @@ const SharedItinGalleryComponent: React.FC<ItinGalleryComponentProps> = ({
   };
   
 ////////////////////////////////
+const handleOpenRoleBasedView = () => {
+  console.log("handleOpenRoleBasedView", role)
+  switch (role) {
+      case 'editor':
+          handleOpenEditView();
+          break;
+      case 'viewer':
+          handleOpenPreview();
+          break;
+      default:
+          console.log('Unknown role');
+  }
+};
+////////////////////////////////
+const checkedItineraryRef = useRef<TransformedItinerary | null>(null);
 
-const handleCreateAndGo = async () => {
+const getItinerary = async () => {
+  return await fetchItineraryAndItems(itineraryId as string);
+};
+
+function checkAuthenticatedUser(): boolean {
+  if (!authUser || !authUser.uid) {
+    console.error("No authenticated user found.");
+    toast.warn("No authenticated user found.");
+    return false;
+  }
+  return true;
+}
+
+const handleOpenEditView = async () => {
   
-    if (!authUser || !authUser.uid) {
-      toast.error("No authenticated user found. Please log in and try again.");
-      console.error("No authenticated user found.");
+  if (!checkAuthenticatedUser()) {
       return;
     }
+  
+  const itinerary = await getItinerary();
 
-    if (typeof authUser?.uid !== 'string') {
-      throw new Error("UID is not a string or is missing");
+  if (itinerary) {
+    checkedItineraryRef.current = itinerary;
+  } else {
+    // Handle the case where the itinerary is not fetched properly
+    console.log('Failed to fetch itinerary');
   }
 
-   
-    // const indexDB = await openDB('itinerariesDatabase');
-    // const tx = indexDB.transaction('itineraries', 'readwrite');
-    // const store = tx.objectStore('itineraries');
-  //   await store.put(itinerary, 'currentlyEditingItineraryStateEF');
-  //  console.log(store, 'store')
-    // await tx.done;
 
-    // setItineraryToEdit(newTransformedItinerary);
+  await updateIndexedDB();
+};
+
+/////////////////////////////
+const handleOpenPreview = async () => {
+
+    if (!checkAuthenticatedUser()) {
+        return;
+      }
+
+    const itinerary = await getItinerary();
+
     
+      if (itinerary && itinerary.id) {
+        checkedItineraryRef.current = itinerary;
+        const itemsForPreview = itinerary?.items.map((item) => {
+          let startTime: Dayjs | null = null;
+          let endTime: Dayjs | null = null;
+
+          // Transform startTime to Dayjs if it's UnixTimeObject
+          if (item.startTime?.time) {
+            const seconds = item.startTime.time.seconds;
+            if (typeof seconds === 'number') {
+              startTime = dayjs.unix(seconds);
+            }
+          }
+
+          // Transform endTime to Dayjs if it's UnixTimeObject
+          if (item.endTime?.time && 'seconds' in item.endTime.time) {
+            const seconds = item.endTime.time.seconds;
+            if (typeof seconds === 'number') {
+              endTime = dayjs.unix(seconds);
+            }
+          }
+
+          return {
+            ...item,
+            startTime: { time: startTime },
+            endTime: { time: endTime },
+          };
+        });
+
+    const itineraryForPreview: Itinerary = {
+          ...itinerary,
+          id: itinerary.id!,// Using non-null assertion here since the above guarantees a non null value
+          items: itemsForPreview,
+        };
+
+    setCurrentlyViewingItinerary(itineraryForPreview)
+    await updateIndexedDBPreview(itineraryForPreview);
+
+    } else {
+      // Handle the case where the itinerary is not fetched properly
+      console.log('Failed to fetch itinerary');
+    }
+    
+};
+const updateIndexedDBPreview = async (itineraryForPreview:Itinerary) => {
+  if (itineraryForPreview) {
+    console.log("Before openDB");
+    const indexDB = await openDB('itinerariesDatabase');
+    const tx = indexDB.transaction('itineraries', 'readwrite');
+    const store = tx.objectStore('itineraries');
+    await store.put(itineraryForPreview, `currentlyPreviewingItinerary_${authUser?.uid}`);
+    console.log("after openDB", store);
+    await tx.done;
+    router.push(`/viewPublicItinerary/previewItinerary`);
+
+  }
+};
+
+const updateIndexedDB = async () => {
+  if (checkedItineraryRef.current) {
+    console.log("Before openDB");
+    const indexDB = await openDB('itinerariesDatabase');
+    const tx = indexDB.transaction('itineraries', 'readwrite');
+    const store = tx.objectStore('itineraries');
+    await store.put(checkedItineraryRef.current, `currentlyEditingItineraryStateEF_${authUser?.uid}`);
+    console.log("after openDB", store);
+    await tx.done;
     router.push(`/user/editMyItinerary`);
 
+  }
 };
 
 //////////////////////////////
   return (
-    <div className={styles.container} onClick={handleCreateAndGo}>
+    <div className={styles.container} onClick={handleOpenRoleBasedView}>
       <div className={styles.imageWrapper}>
         <div className={styles.aspectRatioBox}> 
             <Image

@@ -7,7 +7,6 @@ import { Itinerary, TransformedItinerary, TransformedItineraryItem, ItineraryIte
 import { authUserState } from '../../../atoms/atoms'
 import { useRecoilState} from 'recoil';
 import { toast } from 'react-toastify';
-import {currentlyEditingItineraryState} from '../../EditFormComponents/editFormAtoms';
 import { openDB } from 'idb';
 import dayjs, {Dayjs} from 'dayjs';
 import 'firebase/firestore';
@@ -45,7 +44,6 @@ const ItinGalleryComponent: React.FC<ItinGalleryComponentProps> = ({itinerary}) 
 
 
   const [authUser, setAuthUser] = useRecoilState(authUserState);
-  const [itineraryToEdit, setItineraryToEdit] = useRecoilState<Itinerary>(currentlyEditingItineraryState);
 
   const truncateText = (text: string, maxLength: number) => {
     if(!text) return "";

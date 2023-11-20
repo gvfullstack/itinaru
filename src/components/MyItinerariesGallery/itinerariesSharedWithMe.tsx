@@ -19,7 +19,7 @@ const SharedItineraries: React.FC = () => {
   
     useEffect(() => {
       const fetchData = async () => {
-        const itineraries = await fetchSharedItineraries(userId, setSharedItineraries);
+        const itineraries = await fetchSharedItineraries(userId);
         if (itineraries !== undefined) {
           setSharedItineraries(itineraries);
       };

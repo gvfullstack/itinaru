@@ -1,15 +1,12 @@
-import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import { collection, query, where, getDocs } from 'firebase/firestore'; // Import Firestore methods
 import { db  } from '../../FirebaseAuthComponents/config/firebase.database';
 import { UserAccess, UserAccessWithDocId, ItineraryAccess } from '../../EditFormComponents/editFormTypeDefs';
 import { SetterOrUpdater } from 'recoil';
-import { vi } from 'date-fns/locale';
-import { Visibility } from '@mui/icons-material';
+
 
 export const fetchSharedItineraries = async (
   uid: string,
-  setItineraryAccessState: SetterOrUpdater<ItineraryAccess>
 ) => {
   // Reference to Firestore collection
   try {
@@ -17,7 +14,8 @@ export const fetchSharedItineraries = async (
     const q = query(
       collection(db, 'ItineraryAccess'), 
       where('uid', '==', uid),
-      where('visibility', '==', 'shared')
+      where('visibility', '==', 'shared'),
+      where('isDeleted', '!=', true)
       );
     // Query for all itineraries shared with the user
     const querySnapshot = await getDocs(q); 
