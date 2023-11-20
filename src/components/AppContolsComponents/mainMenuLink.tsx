@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link'; 
 import styles from './Menu.module.css';
-import { authUserState } from '../../atoms/atoms'
 import { useRecoilState } from 'recoil';
 import { logout } from '../FirebaseAuthComponents/config/firebase.auth.js';
 import { useRouter } from 'next/router';
@@ -9,6 +8,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
 
+import { authUserState } from '../../atoms/atoms'
+import useResetAllStates from './hooks/useResetAllStates';
 
 const Menu: React.FC = () => {
   const [menuVisible, setMenuVisible] = useState<boolean>(false);
@@ -16,6 +17,7 @@ const Menu: React.FC = () => {
   const router = useRouter();
   const menuRef = useRef<HTMLDivElement>(null)
 
+  const resetAllStates = useResetAllStates();
 
   const hamburgerIcon = <FontAwesomeIcon icon={faBars} className= {styles.hamburgerIcon} />;
   
@@ -42,6 +44,7 @@ const Menu: React.FC = () => {
 
   const handleLogout = () => {
     toggleMenu();
+    resetAllStates();
     logout()
       .then(() => {
         router.push('/')

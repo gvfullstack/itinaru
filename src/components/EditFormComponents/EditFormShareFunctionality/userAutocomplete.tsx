@@ -149,7 +149,7 @@ type AlgoliaUser = {
             ...(itinerary.settings?.state ? { state: itinerary.settings?.state } : {}),
             ...(itinerary.settings?.galleryPhotoUrl ? { galleryPhotoUrl: itinerary.settings?.galleryPhotoUrl } : {}),
             visibility: itinerary.settings?.visibility ?? 'private', // This sets a default value of 'private'
-
+            isDeleted: false,
           };
           handleUpdateAccess(transformedUser);
         };
