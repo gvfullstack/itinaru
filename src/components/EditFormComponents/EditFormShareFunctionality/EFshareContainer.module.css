@@ -76,13 +76,22 @@
 
   
   .faXmarkInner,
-  .addContributorIcon{
+  .addContributorIcon,
+  .faSearchInner{
     justify-self: end;
     text-align: right;
     justify-self: center;
     height: 1.2rem;
     width: 1.2rem;
   }
+  .faSearchInner{
+    margin-left: 1.5rem;
+  }
+  .searchCancelButton{
+    background-color: white;
+    border: none
+  }
+
   .sharedUserListHeader{
     width: 100%;
     display: flex;

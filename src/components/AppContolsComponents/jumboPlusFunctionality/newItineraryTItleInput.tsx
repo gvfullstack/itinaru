@@ -28,8 +28,8 @@
     const router = useRouter();
 
     function validateTitle(title: string) {
-      if (title.trim().length < 5 || title.trim().length > 100) {
-          return "Title should be between 5 and 100 characters.";
+      if (title.trim().length < 3 || title.trim().length > 100) {
+          return "Title should be between 3 and 100 characters.";
       }
       // if (!/^[A-Za-z0-9 ]+$/.test(title.trim())) {
       //     return "Title can only contain numbers, spaces, and letters.";
@@ -77,7 +77,7 @@
 
       } catch (error) {
         console.error("Error saving itinerary:", error);
-        toast.error("Error saving itinerary. Please try again.");
+        toast.error(`Error saving itinerary. ${error}` );
         return null
       }
       

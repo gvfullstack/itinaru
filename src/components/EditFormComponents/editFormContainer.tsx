@@ -36,6 +36,7 @@ import {createPreviousTransformedItinerary} from './util/createPreviousTransform
 import {createCurrentTransformedItinerary} from './util/createCurrentTransformedItinerary';
 import {saveUpdatedFields} from './util/saveUpdatedFields';
 import { markItineraryAndItemsAsDeleted } from './util/markItineraryAndItemsAsDeleted';
+import {myItinerariesResults} from '../MyItinerariesGallery/myItinerariesAtoms';
 
 const GoogleMapsProvider = dynamic(() => 
     import('./EditFormITEMComponents/googleMapsProvider'), {
@@ -84,7 +85,7 @@ const [processingImage, setProcessingImage] = useState(false);
 const [currentlyViewingItinerary, setCurrentlyViewingItinerary] = useRecoilState(currentlyViewingItineraryState);
 const [showSharingModal, setShowSharingModal] = useState(false);
 const [itinAccessList, setItinAccessList] = useRecoilState(itineraryAccessItinView);
-
+const [myItineraries, setMyItineraries] = useRecoilState(myItinerariesResults);
 
 useEffect(() => {
   if(authUser && authUser.uid ) {
@@ -247,14 +248,14 @@ async function uploadGalleryPhoto(): Promise<string | null> {
 
 const [saveStatus, setSaveStatus] = useRecoilState(saveStatusDisplayedEditFormContainer); // additional state for saving status
 
-const setIndexDBNeedsRefreshTrue = async () => 
-{
-  const db = await openDB('itinerariesDatabase');
-  const tx = db.transaction('myItineraries', 'readwrite');
-  const store = tx.objectStore('myItineraries');
-  await store.put(true, `indexDBNeedsRefresh_${authUser?.uid}`);
-  await tx.done;
-};
+// const setIndexDBNeedsRefreshTrue = async () => 
+// {
+//   const db = await openDB('itinerariesDatabase');
+//   const tx = db.transaction('myItineraries', 'readwrite');
+//   const store = tx.objectStore('myItineraries');
+//   await store.put(true, `indexDBNeedsRefresh_${authUser?.uid}`);
+//   await tx.done;
+// }; replaced by setMyItineraries([])
 
 const renderCount = useRef(0);
 
@@ -287,7 +288,8 @@ useEffect(() => {
   timerId = setTimeout(() => {
     saveItineraryToFirestore();
     // saveTransformedItinerary();
-    setIndexDBNeedsRefreshTrue();
+    // setIndexDBNeedsRefreshTrue();
+    setMyItineraries([])
   }, 5000);
 
   return () => {
@@ -340,7 +342,8 @@ const floppySave = (
       type="button" 
       onClick={async ()=> {
         saveItineraryToFirestore();
-        await setIndexDBNeedsRefreshTrue();
+        // await setIndexDBNeedsRefreshTrue();
+        setMyItineraries([])
         router.push('/user/myItineraries');
       }
         }
@@ -402,8 +405,8 @@ const handleDeleteItinerary = async (itineraryId:string) => {
     }
     await tx.done;
 
-    setIndexDBNeedsRefreshTrue();
-    
+    // setIndexDBNeedsRefreshTrue();
+    setMyItineraries([])
     setItineraryInEditNeedsDeletionFromRecoilState(true);
 
     toast.success("Itinerary and associated data marked as deleted!");}

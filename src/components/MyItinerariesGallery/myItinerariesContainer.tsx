@@ -41,50 +41,23 @@ const MyItineraries: React.FC = () => {
     setItineraryInEditNeedsDeletionFromRecoilState(false);
   }, []);
 
+  
   useEffect(() => {
     const fetchData = async () => {
+      console.log("ran use effect")
       const itineraries = await fetchUserItineraries(userId);
       if (itineraries !== undefined) {
         setMyItineraries(itineraries);
-        await updateIndexedDB(itineraries, false);
       }
     };
   
-    const updateIndexedDB = async (itineraries: TransformedItinerary[], needsRefresh: boolean) => {
-      const db = await openDB('itinerariesDatabase');
-      const tx = db.transaction('myItineraries', 'readwrite');
-      const store = tx.objectStore('myItineraries');
-      await store.put(itineraries, `userItineraries_${userId}`);
-      await store.put(needsRefresh, `indexDBNeedsRefresh_${userId}`);
-      
-      // Read back the value to confirm it was saved
-      const refreshedValue = await store.get(`indexDBNeedsRefresh_${userId}`);
-      console.log(refreshedValue);
-      
-      await tx.done;
-    };  
+    if ((myItineraries === undefined || myItineraries.length === 0) && authUser) {
+      fetchData();
+    }
   
-    const loadFromIndexedDB = async () => {
-      const db = await openDB('itinerariesDatabase');
-      const tx = db.transaction('myItineraries', 'readonly');
-      const store = tx.objectStore('myItineraries');
-      const cachedItineraries = await store.get(`userItineraries_${userId}`);
-      const needsRefresh = await store.get(`indexDBNeedsRefresh_${userId}`);
+  }, [userId, myItineraries]);
   
-      if (cachedItineraries && !needsRefresh && authUser) {
-        setMyItineraries(cachedItineraries);
-      } else if (authUser) {
-        fetchData();
-      }
-  
-      await tx.done;
-    };
-  
-    loadFromIndexedDB();
-  
-  }, [userId]);
-  
-
+///this is to prevent errors due to itineraries that might be missing required setting properties
   const checkedItineraries = myItineraries.map(itinerary => {
     const defaultSettings = {
       title: "",
@@ -135,3 +108,50 @@ const MyItineraries: React.FC = () => {
 export default MyItineraries;
 
 
+
+
+
+
+
+// useEffect(() => {
+//   const fetchData = async () => {
+//     const itineraries = await fetchUserItineraries(userId);
+//     if (itineraries !== undefined) {
+//       setMyItineraries(itineraries);
+//       await updateIndexedDB(itineraries, false);
+//     }
+//   };
+
+//   const updateIndexedDB = async (itineraries: TransformedItinerary[], needsRefresh: boolean) => {
+//     const db = await openDB('itinerariesDatabase');
+//     const tx = db.transaction('myItineraries', 'readwrite');
+//     const store = tx.objectStore('myItineraries');
+//     await store.put(itineraries, `userItineraries_${userId}`);
+//     await store.put(needsRefresh, `indexDBNeedsRefresh_${userId}`);
+    
+//     // Read back the value to confirm it was saved
+//     const refreshedValue = await store.get(`indexDBNeedsRefresh_${userId}`);
+//     console.log(refreshedValue);
+    
+//     await tx.done;
+//   };  
+
+//   const loadFromIndexedDB = async () => {
+//     const db = await openDB('itinerariesDatabase');
+//     const tx = db.transaction('myItineraries', 'readonly');
+//     const store = tx.objectStore('myItineraries');
+//     const cachedItineraries = await store.get(`userItineraries_${userId}`);
+//     const needsRefresh = await store.get(`indexDBNeedsRefresh_${userId}`);
+
+//     if ((myItineraries !== undefined && myItineraries.length > 0) && cachedItineraries && !needsRefresh && authUser) {
+//       setMyItineraries(cachedItineraries);
+//     } else if (authUser) {
+//       fetchData();
+//     }
+
+//     await tx.done;
+//   };
+
+//   loadFromIndexedDB();
+
+// }, [userId]);

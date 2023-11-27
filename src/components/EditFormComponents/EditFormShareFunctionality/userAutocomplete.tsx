@@ -7,7 +7,7 @@ import { searchUserResultsState, searchUserQueryState,
 import Image from 'next/image';
 import styles from './EFshareContainer.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserPlus, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faUserPlus, faXmark, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { Itinerary, UserAccessWithDocId,ItineraryAccess } from '../editFormTypeDefs';
 import {saveUserAccessToFirebase}  from './utils/saveUserAccessToFirebase ';
 
@@ -57,7 +57,7 @@ type AlgoliaUser = {
   const UserInput: React.FC<{}> = ({}) => {
     // const [inputValue, setInputValue] = useState("");
     const [searchQuery, setSearchQuery] = useRecoilState(searchUserQueryState);
-
+    const [localSearchQuery, setLocalSearchQuery] = useState(searchQuery);
 
     const addContributorIcon = (
         <FontAwesomeIcon
@@ -69,10 +69,27 @@ type AlgoliaUser = {
       <FontAwesomeIcon 
           icon={faXmark} 
           className={styles.faXmarkInner} 
-          type="button" 
+          type="button"
+          tabIndex={1}  
           onClick={()=>{
-            // setInputValue(''); 
+            setLocalSearchQuery('')
             setSearchQuery('')}}
+      />
+    );
+
+    const faSearchIcon = (
+      <FontAwesomeIcon 
+          icon={faSearch} 
+          className={styles.faSearchInner} 
+          type="button" 
+          tabIndex={0}  // Make the icon focusable
+          onKeyDown={(event) => {
+            if (event.key === 'Enter') {
+              setSearchQuery(localSearchQuery);
+            }
+          }}
+          onClick={()=>{
+            setSearchQuery(localSearchQuery)}}
       />
     );
 
@@ -82,14 +99,14 @@ type AlgoliaUser = {
             <input
                 className={styles.searchInput}
                 type="text"
-                value={searchQuery}
+                value={localSearchQuery}
                 onChange={(e) => {
-                // setInputValue(e.target.value);
-                setSearchQuery(e.target.value);
+                setLocalSearchQuery(e.target.value);
                 }}
                 placeholder="Search users..."
             />
-              {faXmarkIcon}
+            {localSearchQuery.length > 0 && faXmarkIcon}
+            {localSearchQuery.length > 0 && faSearchIcon}    
         </div>
 
 
