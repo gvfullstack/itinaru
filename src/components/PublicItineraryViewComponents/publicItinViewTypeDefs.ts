@@ -3,6 +3,7 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 
 export type ItineraryItem = {
+    isDeleted?: boolean;
     itemTitle?: string;
     startTime?: {time?: Dayjs | null};
     endTime?: {time?: Dayjs | null};
@@ -37,13 +38,14 @@ export type ItineraryItem = {
     duration?: string;
     galleryPhotoUrl?: string;
     visibility: 'private' | 'shared' | 'public';
-    readAccess?: string[];
-    editAccess?: string[];
+   keywords?: string;
+    
   }
       
   export type Itinerary = {
     id?: string,
     uid?: string,
+    isDeleted?: boolean;
     settings?: ItinerarySettings;
     items?: ItineraryItems;
   }
