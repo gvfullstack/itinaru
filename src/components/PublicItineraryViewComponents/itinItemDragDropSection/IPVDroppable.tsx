@@ -6,6 +6,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { currentlyViewingItineraryState } from "../publicItinViewAtoms";
 import styles from'./dragDrop.module.css'
 import dayjs from 'dayjs';
+const { v4: uuidv4 } = require('uuid');
 
 
 const IPVDroppable: React.FC = () => {
@@ -184,7 +185,7 @@ const IPVDroppable: React.FC = () => {
             
             return (
               <IPVDraggable
-                key={itineraryItem.id}
+                key={uuidv4()} 
                 id={itineraryItem.id || "default-id"} // Provide a default value here
                 itineraryItem={itineraryItem}
                 // handleShowHideDescription={handleShowHideDescription}

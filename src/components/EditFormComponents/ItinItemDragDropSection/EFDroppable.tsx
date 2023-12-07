@@ -7,6 +7,7 @@ import styles from'.././EditFormCSS/editItineraryCSS.module.css'
 import dayjs from 'dayjs';
 import { previousDay } from "date-fns";
 import EFDraggable from "./EFDraggable";
+const { v4: uuidv4 } = require('uuid');
 
 
 const EFDroppable: React.FC = () => {
@@ -117,6 +118,7 @@ const EFDroppable: React.FC = () => {
       return (
         <div ref={ref} className={styles.parentDropDiv} >
           {itineraryItemsState?.items?.map((itineraryItem: ItineraryItem, index: number) => {
+            console.log("itineraryItem", itineraryItem)
             const isDraggedDownward = !dragDirection;
             const isDraggedUpward = dragDirection;
             const isHovered = localNewDropIndex === index && draggedItemIndex !== index;

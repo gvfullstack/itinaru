@@ -49,6 +49,7 @@ export const ItemTypes = {
   }
       
   export type Itinerary = {
+    derivedFromItineraryId?: string,
     settings: ItinerarySettings;
     items: ItineraryItems;
   }

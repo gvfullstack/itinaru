@@ -4,6 +4,7 @@ import {currentlyViewingItineraryState} from './publicItinViewAtoms';
 import {useRecoilState} from 'recoil';
 import ItemDescriptionStaticComponent from './itemDescriptionStaticComponent';
 import Image from 'next/image';
+import CopyItineraryButton from './copyItineraryForEditByEndUser';
 
 
 const GeneralItineraryInformation: FC = () => {
@@ -23,9 +24,14 @@ const GeneralItineraryInformation: FC = () => {
                     style={{objectFit: 'cover'}}            
                 />}
             </div>
-            <div className={styles.itinGeneralInfoTextSection}>
-                <p className={styles.publicItinViewTitle}>{itinerary?.settings?.title }</p>
-                <p>{itinerary?.settings?.city || ''}, {itinerary?.settings?.state || ''}</p>
+            <div className={styles.itinGeneralInfoTextSectionWIthCopyButton}> 
+                <div className={styles.itinGeneralInfoTextSection}>
+                    <p className={styles.publicItinViewTitle}>{itinerary?.settings?.title }</p>
+                    <p>{itinerary?.settings?.city || ''}, {itinerary?.settings?.state || ''}</p>
+                </div>
+                <div>
+                    <CopyItineraryButton />
+                </div>
             </div>
             <div className={styles.itinTitleDescription}>
                 <ItemDescriptionStaticComponent description={itinerary?.settings?.description ?? ''} />

@@ -1,4 +1,12 @@
 @media (min-width: 0px) {
+.itinGeneralInfoTextSectionWIthCopyButton{
+  display: flex;
+  flex-direction: row;
+  /* align-items: center; */
+  width: 100%;
+  padding: 0 0;
+}
+
 .publicItinViewContainer{
     display: flex;
     flex-direction: column;
@@ -77,6 +85,29 @@
   height: 80vh;
 }
 
+.copyItineraryButton {
+  background-color: transparent;
+  border: none;
+  color: #383838;
+  padding: 8px 12px;
+  font-size: 16px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.copyItineraryButton:hover {
+  color: #555;
+}
+
+.copyItineraryButton svg {
+  margin-right: 8px;
+  width: 1em;
+  height: 1em;
+}
 
 }
 
@@ -105,6 +136,11 @@
   .mapIframe{
     max-width: 80vw;
   }
+
+  .copyItineraryButton {
+    padding: 12px 18px;
+    font-size: 18px;
+  }
 }
 
 @media (min-width: 1200px) {
@@ -125,5 +161,11 @@
   .itinGeneralInfoPhoto{
     border-radius: 10px;
   } 
+
+
+  .copyItineraryButton {
+    padding: 14px 20px;
+    font-size: 20px;
+  }
 
 }

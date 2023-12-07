@@ -16,6 +16,7 @@ export type ItinerarySettings = {
 }
     
 export type Itinerary = {
+  derivedFromItineraryId?: string,
   id: string,
   uid: string,
   isDeleted?: boolean;
@@ -98,6 +99,7 @@ export type ItineraryItem = {
   } 
 
  export type TransformedItinerary = {
+    derivedFromItineraryId?: string,
     id?: string;
     uid: string,
     isDeleted?: boolean;
@@ -134,8 +136,9 @@ export type IndexDBItineraryItem   = {
 } 
 
 export type IndexDBItinerary = {
-  id: string;
-  uid: string,
+  derivedFromItineraryId?: string,
+  id?: string;
+  uid?: string,
   isDeleted?: boolean;
   settings?: ItinerarySettings;
   items?: IndexDBItineraryItem[];
