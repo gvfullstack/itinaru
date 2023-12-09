@@ -21,5 +21,9 @@ export const currentlyViewingItineraryState = atom<Itinerary | null>({
     default: defaultItinerary,
   });
  
+export const showNotLoggedInModal= atom<boolean>({
+  key: 'showNotLoggedInModal',
+  default: false,
+});
 
  

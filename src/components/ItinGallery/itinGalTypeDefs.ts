@@ -42,6 +42,7 @@ export type ItineraryItem = {
   }
       
   export type Itinerary = {
+    derivedFromItineraryId?: string,
     id?: string,
     uid: string,
     settings: ItinerarySettings;
@@ -73,6 +74,7 @@ export type ItineraryItem = {
   } 
 
  export type TransformedItinerary = {
+    derivedFromItineraryId?: string,
     id?: string;
     settings: ItinerarySettings;
     items: TransformedItineraryItem[];

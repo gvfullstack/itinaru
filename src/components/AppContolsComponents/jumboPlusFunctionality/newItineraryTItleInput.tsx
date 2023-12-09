@@ -150,6 +150,7 @@
         await store.put(true, `indexDBNeedsRefresh_${authUser?.uid}`);
         await tx.done;
       };
+      
     useEffect(() => {
       // Function to run when the route changes
       const handleRouteChange = () => {

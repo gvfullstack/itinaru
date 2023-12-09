@@ -29,6 +29,7 @@ const GoogleMapsProvider = dynamic(() =>
     ssr: false,
     loading: () => <p>Loading...</p>
     });
+
 const ItineraryItemForm = dynamic(() => 
     import('../EditFormITEMComponents/itineraryItemForm'), {
     ssr: false,
@@ -187,6 +188,7 @@ const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.tim
  
 
   const openDeleteConfirmation = () => {
+    console.log("openDeleteConfirmation");
     setShowDeleteConfirmation(true);
   };
 
