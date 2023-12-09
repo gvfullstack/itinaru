@@ -10,8 +10,6 @@ import { useRecoilState} from 'recoil';
 import { toast } from 'react-toastify';
 import {updateIndexedDB} from './copyItineraryUtilityFunctions/updateIndexDB';
 import checkAuthenticatedUser from './copyItineraryUtilityFunctions/checkAuthenticatedUser';
-import {createGenericFirestoreItineraryDocAndRetrieveDocRef} from './copyItineraryUtilityFunctions/createGenericFirestoreItineraryDocAndRetrieveDocRef';
-import { DocumentReference } from 'firebase/firestore';
 import {copyItineraryToFirestoreAndRetrieveUpdatedItinerary} from './copyItineraryUtilityFunctions/copyItineraryToFirestoreAndRetrieveUpdatedItinerary';
 import styles from './publicItineraryView.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
