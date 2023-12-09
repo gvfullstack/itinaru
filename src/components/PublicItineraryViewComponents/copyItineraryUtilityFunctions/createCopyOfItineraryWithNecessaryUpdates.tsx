@@ -1,11 +1,7 @@
 import { DocumentReference } from 'firebase/firestore';
 import {IndexDBItinerary} from '../../../components/EditFormComponents/editFormTypeDefs'
 import { Itinerary } from '../publicItinViewTypeDefs'; 
-import { authUserState } from '../../../atoms/atoms'
-import { useRecoilState, useRecoilValue} from 'recoil';
-import {currentlyViewingItineraryState} from '../../../components/PublicItineraryViewComponents/publicItinViewAtoms';
 import {AuthenticatedUser} from '../../../components/typeDefs/index'
-import {createGenericFirestoreItinItemDocAndRetrieveDocRef} from './createGenericFirestoreItinItemDocAndRetrieveDocRef';  
 
 export const createCopyOfItineraryWithNecessaryUpdates = (currentlyViewingItinerary:Itinerary | null, 
   authUser:AuthenticatedUser | null, savedDocRef: DocumentReference | null): IndexDBItinerary | undefined => {
