@@ -37,7 +37,9 @@ export async function copyItineraryToFirestoreAndRetrieveUpdatedItinerary(origin
 
         if (originalItinerary.settings?.galleryPhotoUrl) {
             const newGalleryPhotoUrl = await copyImageAndGetDownloadURL(originalItinerary.settings.galleryPhotoUrl, newItineraryId, userId);
-            newItineraryData.settings.galleryPhotoUrl = newGalleryPhotoUrl;
+            if (newGalleryPhotoUrl !== null) {
+                newItineraryData.settings.galleryPhotoUrl = newGalleryPhotoUrl;
+              }
         }
 
         const newItineraryRef = itinerariesRef.doc(newItineraryId);
