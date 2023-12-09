@@ -5,7 +5,7 @@ import {IndexDBItineraryItem} from "../../../components/EditFormComponents/editF
 import {TransformedItineraryItem} from "../../../components/EditFormComponents/editFormTypeDefs";
 import {copyImageAndGetDownloadURL} from "./copyImageAndGetDownloadURL";
 
-export async function copyItineraryToFirestoreAndRetrieveUpdatedItinerary(originalItinerary:Itinerary | null, userId:string | undefined ) {
+export async function copyItineraryToFirestoreAndRetrieveUpdatedItinerary(originalItinerary:Itinerary | undefined, userId:string | undefined ) {
     if(!originalItinerary) {
         console.error("Cannot save empty itinerary.");
         return;
