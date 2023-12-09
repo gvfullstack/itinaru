@@ -37,9 +37,7 @@ return (
             <DragDropSection />
             <GoogleMapIframe /> 
             {showNotLoggedInModalState && 
-              <NotLoggedInModal 
-                onClose={() => setShowNotLoggedInModalState(false)} 
-                onLogin={() => setShowNotLoggedInModalState(false)} />}           
+              <NotLoggedInModal /> } 
         </div>
 </div>
   );

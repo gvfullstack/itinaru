@@ -5,14 +5,35 @@ import {useRecoilState} from 'recoil';
 import ItemDescriptionStaticComponent from './itemDescriptionStaticComponent';
 import Image from 'next/image';
 import CopyItineraryButton from './copyItineraryForEditByEndUser';
+import { useRouter } from 'next/router';
 
 
 const GeneralItineraryInformation: FC = () => {
+    const router = useRouter();
 
+
+    const navigateToParentItinerary = () => {
+        if (itinerary?.derivedFromItineraryId) {
+          router.push(`/viewPublicItinerary/${itinerary.derivedFromItineraryId}`);
+        }
+      };
+    
     const [itinerary, setItinerary] = useRecoilState(currentlyViewingItineraryState);
       
     return (
         <div className = {styles.generalItineraryInformationContainer}>
+             {itinerary?.derivedFromItineraryId && (
+                <p className={styles.derivedFromItineraryText}>
+                Derived from a copy of {' '}
+                <span 
+                    className={styles.linkStyle} // Add styles to make it look like a link
+                    onClick={navigateToParentItinerary}
+                >
+                    {itinerary.derivedFromItineraryId}
+                </span>
+                </p>
+            )}
+           
             <div className={styles.itinGeneralInfoPhotoContainer}>
             {itinerary?.settings?.galleryPhotoUrl && <Image 
                     src={itinerary.settings?.galleryPhotoUrl ? itinerary.settings.galleryPhotoUrl : ''} 

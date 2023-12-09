@@ -6,47 +6,45 @@ import {showNotLoggedInModal} from '../../../components/PublicItineraryViewCompo
 import { useRouter } from 'next/router';
 
 
-type CustomModalProps = {
-  onClose: () => void;
-  onLogin: () => void;
-};
 
-const CustomModal: React.FC<CustomModalProps> = ({ onClose, onLogin }) => {
+
+const CustomModal: React.FC = () => {
   const router = useRouter();
 
     const [showNotLoggedInModalState, setShowNotLoggedInModalState] = useRecoilState(showNotLoggedInModal);
 
+   const closeModal = () => {
+    setShowNotLoggedInModalState(false);
+  } 
   // Function to handle click on the backdrop
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     // Close modal only if clicked on backdrop (not modal content)
     if (e.target === e.currentTarget) {
-      onClose();
+      closeModal();
     }
   };
 
   
-  const handleLoginLinkClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleLoginLinkClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    console.log("login link clicked")
     event.preventDefault();
     // Store the current path.
     sessionStorage.setItem('preLoginRoute', router.asPath);
     // Navigate to login page.
     router.push('/loginPage');
-    onLogin();  
+    closeModal();
+  
   };
 
   return (
     <div className={styles.modalBackdrop} onClick={handleBackdropClick}>
       <div className={styles.modalContent}>
-        <button onClick={onClose} className={styles.closeButton}>&times;</button>
+        <button onClick={closeModal} className={styles.closeButton} aria-label="Close">&times;</button>
         <p className={styles.modalMessage}>
-          You may continue without logging in, but your changes will be lost on refresh or upon leaving the website.
-        </p>
+        To access this feature, please sign in with your email. If you're new, you'll have the option to create an account.        </p>
         <div className={styles.modalActions}>
-          <button onClick={onClose} className={styles.modalButton}>
-            Continue Without Login
-          </button>
-          <button onClick={()=>handleLoginLinkClick} className={styles.modalButton}>
-            Take Me to the Login Page
+          <button onClick={handleLoginLinkClick} className={styles.modalButton}>
+           Login/Create Account
           </button>
         </div>
       </div>

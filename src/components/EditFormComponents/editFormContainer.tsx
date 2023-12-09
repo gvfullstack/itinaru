@@ -169,8 +169,6 @@ const handleSaveItemAndShowItemForm = async () => {
 // Check for authenticated user
 function checkAuthenticatedUser(): boolean {
   if (!authUser || !authUser.uid) {
-    console.error("No authenticated user found.");
-    toast.warn("No authenticated user found.");
     return false;
   }
   return true;
@@ -269,6 +267,10 @@ useEffect(() => {
 
 let timerId: NodeJS.Timeout | undefined;
 useEffect(() => {
+  if (!checkAuthenticatedUser()) {
+    return;
+  }
+  
   if (saveStatus === 'Restoring...') {
     setTimeout(() => {
       setSaveStatus('Session restored.');
@@ -326,7 +328,8 @@ async function saveItineraryToFirestore() {
     setSaveStatus('');
   }, 3000);
 }
-        
+
+
 const trashDelete = (
   <FontAwesomeIcon 
       icon={faTrashCan} 
@@ -638,6 +641,11 @@ const handleShowSharingModal = () => {
 const handleCloseModal = () => {
   setShowSharingModal(prev => false);}
 
+const navigateToParentItinerary = () => {
+  if (itinerary?.derivedFromItineraryId) {
+    router.push(`/viewPublicItinerary/${itinerary.derivedFromItineraryId}`);
+  }
+};
 
 return (
 <div className={styles.EFPageContainer}>
@@ -660,7 +668,18 @@ return (
           <SharingModal viewHideModal={handleCloseModal}/>
           }
 
-              <div className={styles.EFFormContainer}>
+            <div className={styles.EFFormContainer}>
+              {itinerary?.derivedFromItineraryId && (
+                  <p className={styles.derivedFromItineraryText}>
+                  Derived from a copy of {' '}
+                  <span 
+                      className={styles.linkStyle} // Add styles to make it look like a link
+                      onClick={navigateToParentItinerary}
+                  >
+                      {itinerary.derivedFromItineraryId}
+                  </span>
+                  </p>
+              )}
               <div className={styles.EFpageTopNav}>
                  <div className={styles.topNavGenericDiv}></div>
                   <Link className={styles.previewLink} href="/viewPublicItinerary/previewItinerary" 

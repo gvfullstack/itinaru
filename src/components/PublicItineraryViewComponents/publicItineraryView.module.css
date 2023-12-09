@@ -4,7 +4,7 @@
   flex-direction: row;
   /* align-items: center; */
   width: 100%;
-  padding: 0 0;
+  padding: 0 1.5rem;
 }
 
 .publicItinViewContainer{
@@ -31,15 +31,31 @@
   margin-top: 3.5rem;
 }
 
-
 .generalItineraryInformationContainer{
-
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
     align-self: center;
     height: fit-content;
+}
+
+.derivedFromItineraryText{
+  margin: 0;
+  padding: 0;
+  font-size: 6px;
+  color: #828282;
+  align-self: flex-start;
+  margin-bottom: .5rem;
+  margin-top: 1rem;
+}
+
+.linkStyle{
+  text-decoration: none;
+  font-size: 6px;
+  margin: 0;
+  padding: 1px;
+  cursor: pointer;
 }
 
 .itinGeneralInfoPhotoContainer{
@@ -52,12 +68,12 @@
 }
 .itinTitleDescription{
   width: 100%;
-  padding: 0 1.5rem;
   text-align: justify;
+  padding: 0 1.5rem;
 }
 .itinGeneralInfoTextSection{
   width: 100%;
-  padding: 0 1.5rem;
+  padding: 0;
 }
 
 .publicItinViewTitle{

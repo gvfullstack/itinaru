@@ -28,7 +28,7 @@
   
   .modalActions {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
   }
   
   .modalButton {
