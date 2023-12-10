@@ -1,6 +1,6 @@
 [
     {
-      "origin": ["http://localhost:3000",  "https://itinaru.com"],
+      "origin": ["http://localhost:3000",  "https://www.itinaru.com"],
       "method": ["GET"],
       "maxAgeSeconds": 3600
     }

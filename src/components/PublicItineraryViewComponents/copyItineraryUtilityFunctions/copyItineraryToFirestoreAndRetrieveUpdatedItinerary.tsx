@@ -21,7 +21,7 @@ export async function copyItineraryToFirestoreAndRetrieveUpdatedItinerary(origin
 
         // Create a new itinerary
         const newItineraryData = {
-            derivedFromItineraryId: originalItinerary?.id,
+            derivedFromItineraryId: originalItinerary?.derivedFromItineraryId ? originalItinerary?.derivedFromItineraryId :  originalItinerary?.id,
             id: newItineraryId,
             uid: userId || undefined, 
             isDeleted:false,
