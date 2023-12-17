@@ -51,6 +51,7 @@ export default function FirebaseAuthLogic () {
               const accountCreationDate = Timestamp.fromDate(new Date());
               const defaultUser: Partial<AuthenticatedUser> = {
                 accountCreationDate: Timestamp.fromDate(new Date()),
+                isDeleted: false,
                 bio: null,  
                 profilePictureUrl: null,
                 privacySettings:{

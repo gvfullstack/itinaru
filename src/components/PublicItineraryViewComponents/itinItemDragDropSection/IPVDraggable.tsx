@@ -34,22 +34,27 @@ const IPVDraggable = React.forwardRef((
   const [itineraryInEdit, setItineraryInEdit]= useRecoilState<Itinerary | null>(currentlyViewingItineraryState);
   const itemStyles = {...styles, ...style}
   const localRef = useRef<HTMLDivElement>(null);
+  const [hideDescription, setHideDescription] = useState(true);
 
   const handleShowHideDescription = () => {
-    setItineraryInEdit(prevItinerary => {
-        const updatedItems = prevItinerary?.items?.map((item) => {
-            if (item.id === itineraryItem.id) {
-                return { ...item, descHidden: !item.descHidden };
-            }
-            return item;
-        });
-
-        return {
-            ...prevItinerary,
-            items: updatedItems
-        };
-    });
+    setHideDescription(prev=>!prev)
 }
+
+//   const handleShowHideDescription = () => {
+//     setItineraryInEdit(prevItinerary => {
+//         const updatedItems = prevItinerary?.items?.map((item) => {
+//             if (item.id === itineraryItem.id) {
+//                 return { ...item, descHidden: !item.descHidden };
+//             }
+//             return item;
+//         });
+
+//         return {
+//             ...prevItinerary,
+//             items: updatedItems
+//         };
+//     });
+// }
   
   const [{ isDragging }, drag] = useDrag(() => ({
     type: ItemTypes.ITINERARY_ITEM,
@@ -98,7 +103,7 @@ if (itineraryItem.locationAddress) {
 }  
   const Menu = () => {
     return (
-      <div className={`${styles.menu} ${itineraryItem.descHidden ? "" : styles.isShown }`}>
+      <div className={`${styles.menu} ${hideDescription ? "" : styles.isShown }`}>
         <div className={styles.menuItem} >
           <a
               href={mapsUrl}
@@ -138,13 +143,7 @@ if (itineraryItem.locationAddress) {
   }, [menuOpen]);
 
 
-  // function millisecondsToHoursMinutes(ms:number | undefined | null): string {
-  //   ms = ms ?? 0;
-  //   const totalMinutes = Math.floor(ms / 60000);
-  //   const hours = Math.floor(totalMinutes / 60);
-  //   const minutes = totalMinutes % 60;
-  //   return `${hours}:${minutes.toString().padStart(2, '0')}`;
-  // }
+
   function minutesToHoursMinutes(minutes: number | undefined | null): string {
     minutes = minutes ?? 0;
     const hours = Math.floor(minutes / 60);
@@ -169,40 +168,40 @@ if (itineraryItem.locationAddress) {
     <div ref={localRef} 
       style={itemStyles}  
       className={styles.dropDiv} 
-      draggable={itineraryItem.descHidden ? "true" : "false"}
+      draggable={hideDescription ? "true" : "false"}
       >
-      <div key={uuidv4()} className={`${styles.itineraryParent} ${itineraryItem.descHidden ? "" : styles.isShown }`}>
+      <div key={uuidv4()} className={`${styles.itineraryParent} ${hideDescription ? "" : styles.isShown }`}>
              <div className={styles.mainItinItemContainer}>
-                  <div className={`${styles.itineraryItemContainerContainer} ${itineraryItem.descHidden ? "" : styles.isShown}`}>
+                  <div className={`${styles.itineraryItemContainerContainer} ${hideDescription ? "" : styles.isShown}`}>
                       {/* <div className={styles.itinTitleContainer}> */}
-                          <h3 className={`${styles.itinTitle} ${itineraryItem.descHidden ? "" : styles.isShown}`} 
+                          <h3 className={`${styles.itinTitle} ${hideDescription ? "" : styles.isShown}`} 
                             onClick={()=>handleShowHideDescription()}>
-                              {itineraryItem.descHidden ? shortItemTitle : itineraryItem.itemTitle}                           
+                              {hideDescription ? shortItemTitle : itineraryItem.itemTitle}                           
                             </h3>
-                            <div className={`${styles.activityTime} ${itineraryItem.descHidden ? "" : styles.isShown}`}>
-                                    <div className={`${styles.infoBannerWords} ${itineraryItem.descHidden ? "" : styles.isShown}`}>Start:</div>
+                            <div className={`${styles.activityTime} ${hideDescription ? "" : styles.isShown}`}>
+                                    <div className={`${styles.infoBannerWords} ${hideDescription ? "" : styles.isShown}`}>Start:</div>
                                     <div className={styles.startTimeContainer}>
-                                      <div className={`${styles.startTime} ${itineraryItem.descHidden ? "" : styles.isShown}`}>
+                                      <div className={`${styles.startTime} ${hideDescription ? "" : styles.isShown}`}>
                                           <div>  
                                             {formattedStartTime}
                                           </div>
                                       </div>
                                     </div>
-                                    <div className={`${styles.infoBannerWords} ${itineraryItem.descHidden ? "" : styles.isShown}`}>End:</div>
+                                    <div className={`${styles.infoBannerWords} ${hideDescription ? "" : styles.isShown}`}>End:</div>
                                     <div className={styles.endTimeContainer}>
-                                      <div className={`${styles.endTime} ${itineraryItem.descHidden ? "" : styles.isShown}`}>
+                                      <div className={`${styles.endTime} ${hideDescription ? "" : styles.isShown}`}>
                                             <div>
                                               {formattedEndTime}
                                             </div>
                                       </div>
                                     </div>
-                                    <div className={`${styles.infoBannerWords} ${itineraryItem.descHidden ? "" : styles.isShown}`}>Duration:</div>
+                                    <div className={`${styles.infoBannerWords} ${hideDescription ? "" : styles.isShown}`}>Duration:</div>
 
-                                    <div className={`${styles.durationContainer} ${itineraryItem.descHidden ? "" : styles.isShown}`}>
+                                    <div className={`${styles.durationContainer} ${hideDescription ? "" : styles.isShown}`}>
                                       {minutesToHoursMinutes(itineraryItem.activityDuration)}&nbsp;{clock}
                                     </div>
                                     <div 
-                                      className={`${styles.expandedItinMapText} ${itineraryItem.descHidden ? "" : styles.isShown}`} 
+                                      className={`${styles.expandedItinMapText} ${hideDescription ? "" : styles.isShown}`} 
                                                                 >
                                           <a
                                             href={mapsUrl}
@@ -212,19 +211,19 @@ if (itineraryItem.locationAddress) {
                                                 
                                     </div>
                           </div> 
-                            <div className={`${styles.itinTitleDescription} ${itineraryItem.descHidden ? "" : styles.isShown}`}>  
+                            <div className={`${styles.itinTitleDescription} ${hideDescription ? "" : styles.isShown}`}>  
                                <ItemDescriptionStaticComponent description={itineraryItem.description || ""} />
                             </div>                       
                           {itineraryItem.locationAddress &&
-                          <p className={`${styles.expandedItinAddressContainer} ${itineraryItem.descHidden ? "" : styles.isShown }`}>Address: <br/> 
+                          <p className={`${styles.expandedItinAddressContainer} ${hideDescription ? "" : styles.isShown }`}>Address: <br/> 
                           {itineraryItem.locationAddress}
                           </p>}
                           {itineraryItem.location?.longitude && itineraryItem.location?.latitude &&
-                          <p className={`${styles.expandedItinAddressContainer} ${itineraryItem.descHidden ? "" : styles.isShown }`}>Coordinates: <br/> 
+                          <p className={`${styles.expandedItinAddressContainer} ${hideDescription ? "" : styles.isShown }`}>Coordinates: <br/> 
                           {itineraryItem.location?.latitude}, {itineraryItem.location?.longitude}
                           </p>}
                           
-                          <div className={`${styles.ownResearchContainer} ${itineraryItem.descHidden ? "" : styles.isShown }`}>
+                          <div className={`${styles.ownResearchContainer} ${hideDescription ? "" : styles.isShown }`}>
                             Do your own research: 
                             <div className={styles.expandedItinItemWebsite}>
                               <a href={`https://www.google.com/search?q=${encodeURIComponent(itineraryItem.itemTitle ? itineraryItem.itemTitle : "")}`} target="_blank">
@@ -253,7 +252,7 @@ if (itineraryItem.locationAddress) {
                   
                         
                           <div 
-                            className={`${styles.hamburgerMenuContainer} ${itineraryItem.descHidden ? "" : styles.isShown}`} 
+                            className={`${styles.hamburgerMenuContainer} ${hideDescription ? "" : styles.isShown}`} 
                             onClick={handleMenuClick} 
                             ref={menuRef}
                             >

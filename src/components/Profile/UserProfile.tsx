@@ -30,7 +30,7 @@ import { styleSettings } from './UserProfileEditUtilityFunctions/styleSettings'
 import { ReauthModal } from './ReauthModal';
 import { useUpdateItineraryAccessUserData } from './UserProfileEditUtilityFunctions/updateUserAccessUserData';
 import { profile } from 'console';
-
+import DeleteAccountModal from './DeleteAccountModal';
 const ReactQuill = dynamic(import('react-quill'), {
   ssr: false, // This will make the component render only on the client-side
   loading: () => <p>Loading...</p>, // You can provide a loading component or text here
@@ -529,6 +529,12 @@ const attachIcon = (
             inputFileRef.current?.click()}}
       />
     );     
+
+  const [showDeleteAccountModal, setDeleteAccountModal] = useState<boolean>(false);
+  const toggleModal = () => {
+    setDeleteAccountModal(!showDeleteAccountModal);
+};
+
   return (
     <>
     <div className={styles.tabsContainer}>
@@ -637,10 +643,9 @@ const attachIcon = (
               <button className={styles.profileSaveButton} type="submit">Save</button>
               <button className={styles.profileCancelButton} type="button" 
               onClick={() => { resetProfileForm(); setEditing(false); }}>Cancel</button>
+              {showDeleteAccountModal && <DeleteAccountModal showModal={showDeleteAccountModal} toggleModal={toggleModal}/>}
               <button className={styles.profileCancelButton} type="button" 
-              onClick={() => {
-                
-              }}>Delete Accont</button>
+              onClick={toggleModal}>Delete Accont</button>
               
           </form>
           </div>

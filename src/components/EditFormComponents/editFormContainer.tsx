@@ -31,7 +31,6 @@ import { set } from 'lodash';
 import SharingModal from './EditFormShareFunctionality/EFshareContainer';
 import {fetchSharedItinerariesItinView} from './EditFormShareFunctionality/utils/fetchSharedItinerariesItinView'
 import {useUpdateItineraryAccess} from './util/updateUserAccess';
-import { deleteItineraryAccessRecords } from './EditFormShareFunctionality/utils/deleteJoinAccessItinerariesRecord';
 import {createPreviousTransformedItinerary} from './util/createPreviousTransformedItinerary';
 import {createCurrentTransformedItinerary} from './util/createCurrentTransformedItinerary';
 import {saveUpdatedFields} from './util/saveUpdatedFields';
@@ -441,39 +440,6 @@ const deleteImage = async (itineraryId: string): Promise<void> => {
     toast.error("Error while deleting itinerary. Please try again later.");
   }
 }
-
-const deleteItinerary = async (itineraryId: string): Promise<void> => {
-  if (!authUser || !authUser.uid) {
-    toast.warn("No authenticated user found.");
-    console.error("No authenticated user found.");
-    return;
-  }
-
-  const itineraryRef = db.collection('itineraries').doc(itineraryId);
-  const imageExistsInState = itinerary?.settings?.galleryPhotoUrl;
-
-  try {
-    if (imageExistsInState) {
-      const storageRef = firebase.storage().ref();
-      const imagePath = `itineraries/${authUser.uid}/${itineraryId}/itineraryGalleryPhoto`;
-      await storageRef.child(imagePath).delete();
-    }
-    
-    await itineraryRef.delete();
-
-    try {
-      await deleteItineraryAccessRecords(itineraryId);
-    } catch (error) {
-      console.error("Error while deleting ItineraryAccess records: ", error);
-      toast.error("Error while deleting associated records. Please try again later.");
-    }
-    
-    toast.success("Itinerary successfully deleted!");
-  } catch (error) {
-    toast.error("Error while deleting itinerary. Please try again later.");
-  }
-};
-
 
 ////////////////////////////////////////////////////////////////
 const imageProcessing = (e: React.ChangeEvent<HTMLInputElement>) => {

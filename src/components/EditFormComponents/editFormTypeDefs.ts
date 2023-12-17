@@ -58,6 +58,7 @@ export type ItineraryItem = {
     username?: string;
     profilePictureUrl?: string;
     itineraryId: string;
+    creatorId?: string;
     title?: string;
     neighborhood?: string;
     city?: string;
@@ -154,6 +155,7 @@ export type AlgoliaUser = {
 
 export type UpdateItineraryAccessProps = {
   itineraryId: string;
+  creatorId?: string;
   title?: string;
   neighborhood?: string;
   city?: string;

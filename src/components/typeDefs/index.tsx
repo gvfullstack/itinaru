@@ -182,6 +182,7 @@ export type BrandPageRender = {
   
   export type AuthenticatedUser = {
     accountCreationDate?: Timestamp;
+    isDeleted?: boolean;
     username?: string | null;
     userFirstLastName?: string | null;
     email?: string | null;
