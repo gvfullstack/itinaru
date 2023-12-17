@@ -1,0 +1,93 @@
+/* DeleteAccountModal.module.css */
+.modalBackdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modalContent {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    width: 80%; /* Default width */
+    max-width: 500px; /* Maximum width */
+}
+
+.modalMessage {
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+}
+
+.modalActions {
+    display: flex;
+    justify-content: center;
+}
+
+.confirmDeleteButton, 
+.cancelButton {
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+    margin-right: 1rem;
+}
+
+.confirmDeleteButton{
+    background-color: #dc3545;
+}
+.modalButton:hover {
+    background-color: #0056b3;
+}
+
+.closeButton {
+    float: right;
+    font-size: 1.5rem;
+    line-height: 1rem;
+    cursor: pointer;
+    border: none;
+    background: none;
+    padding: 0 8px;
+    color: #aaa;
+}
+
+.closeButton:hover {
+    color: #777;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .modalContent {
+      width: 90%; /* Wider in smaller screens */
+    }
+
+    .modalMessage {
+      font-size: 1rem;
+    }
+}
+
+@media (max-width: 400px) {
+    .modalContent {
+      padding: 15px; /* Smaller padding for very small screens */
+    }
+
+    .modalActions {
+      flex-direction: column; /* Stack buttons on very small screens */
+    }
+
+    .modalButton {
+      margin-bottom: 10px; /* Space between stacked buttons */
+      width: 100%; /* Full width buttons */
+    }
+}

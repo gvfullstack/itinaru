@@ -34,6 +34,7 @@ export const saveUserAccessToFirebase = async (
     } else {
       // If not, set the new user with the custom document ID
       await docRef.set(cleanedUser);
+
       userWithDocId = {
         ...user,
         docId: customDocId,

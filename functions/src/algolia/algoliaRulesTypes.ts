@@ -63,6 +63,7 @@ export type UnixTimeObject = {
 export type AuthenticatedUser = {
   objectID?: string;
   accountCreationDate?: Timestamp;
+  isDeleted?: boolean;
   username?: string | null;
   userFirstLastName?: string | null;
   email?: string | null;

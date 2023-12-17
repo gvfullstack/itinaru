@@ -4,6 +4,7 @@ import {UpdateItineraryAccessProps} from '../../editFormTypeDefs';
 
 export const updateItineraryAccess = async ({
   itineraryId,
+  creatorId,
   title,
   neighborhood,
   city,
@@ -33,6 +34,7 @@ export const updateItineraryAccess = async ({
     };
 
     if (title) updateData.title = title;
+    if (creatorId) updateData.creatorId = creatorId;
     if (neighborhood) updateData.neighborhood = neighborhood;
     if (city) updateData.city = city;
     if (state) updateData.state = state;

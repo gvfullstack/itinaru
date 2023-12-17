@@ -10,10 +10,6 @@ const GoogleMapIframe: FC = () => {
   
   if (items.length < 2) {
     return null;
-  }
-
-  if (items.length < 2) {
-    return null;
   } 
   const waypoints = items
   .map((item) => getLocationString(item))
@@ -21,13 +17,14 @@ const GoogleMapIframe: FC = () => {
 // Set origin and destination based on the waypoints
   const origin = waypoints[0] || getLocationString(items[0]);
   const destination = waypoints[waypoints.length - 1] || getLocationString(items[items.length - 1]);
+  const intermediateWaypoints = waypoints.slice(1, -1);
 
   // Initialize Google Maps URL
   let googleMapURL = `https://www.google.com/maps/embed/v1/directions?key=${'AIzaSyDI6tYErd_J2V4l0yQvj6ug4hYSMmeCMJ0'}&origin=${origin}&destination=${destination}`;
 
   // Add waypoints to the URL if there are more than two
-  if (waypoints.length > 1) {
-    googleMapURL += `&waypoints=${waypoints.join('|')}`;
+  if (intermediateWaypoints.length > 0) {
+    googleMapURL += `&waypoints=${intermediateWaypoints.join('|')}`;
   }
 
 

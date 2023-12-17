@@ -160,6 +160,7 @@ type AlgoliaUser = {
             ...(hit.email ? { email: hit.email } : {}),
             ...(hit.username ? { username: hit.username } : {}),
             ...(hit.profilePictureUrl ? { profilePictureUrl: hit.profilePictureUrl } : {}),
+            ...(itinerary.uid ? { creatorId: itinerary.uid } : {}),
             ...(itinerary.settings?.title ? { title: itinerary.settings?.title } : {}),
             ...(itinerary.settings?.neighborhood ? { neighborhood: itinerary.settings?.neighborhood } : {}),
             ...(itinerary.settings?.city ? { city: itinerary.settings?.city } : {}),
