@@ -23,7 +23,13 @@ export default function FirebaseAuthLogic () {
 
     useEffect(() => {
         const unsubscribe = firebaseAuth.onAuthStateChanged(async (firebaseUser) => {
-          if (firebaseUser) {   
+          if (firebaseUser) {  
+            
+            // User is signed in, get the ID token
+            const idToken = await firebaseUser.getIdToken();
+            console.log("idToken:", idToken);
+            document.cookie = `idToken=${idToken}; path=/; secure; httponly; samesite=strict`;
+
             //identify user
             const uid = firebaseUser.uid;
             // Fetch user information from Firestore

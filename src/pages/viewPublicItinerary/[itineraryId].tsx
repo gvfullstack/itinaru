@@ -12,7 +12,20 @@ import styles from '@/styles/Home.module.css'
 
 export const getServerSideProps = async (context:GetServerSidePropsContext) => {
   const itineraryId = context.params?.itineraryId as string; // Extracting itineraryId from context
-  const itineraryData = await fetchItineraryFromDatabase(itineraryId);
+  const idToken = context.req.cookies['idToken']; // Replace with your cookie name
+
+  if (!idToken) {
+    console.log("No idToken found in cookies");
+    // idToken is not available, redirect to login or return an error
+    return {
+      redirect: {
+        destination: '/loginPage',
+        permanent: false,
+      },
+    };
+  }
+
+  const itineraryData = await fetchItineraryFromDatabase(itineraryId, idToken);
 
     return {
       props: {

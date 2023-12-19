@@ -2,16 +2,25 @@ import dbServer from '../../utils/firebase.admin';
 import dayjs, {Dayjs} from 'dayjs';
 import {TransformedItineraryItem, TransformedItinerary, Itinerary, ItineraryItem} from './retrieveItinTypeRefs';
 
-export async function fetchItineraryFromDatabase(itineraryId: string): Promise<Itinerary | null> {
+export async function fetchItineraryFromDatabase(itineraryId: string, userId: string): Promise<Itinerary | null> {
     console.log("fetchItineraryFromDatabase called with ID:", itineraryId);
 
     try {
         const itineraryDoc = await dbServer.collection('itineraries').doc(itineraryId).get();
+        const itineraryData = itineraryDoc.data();
 
-        if (!itineraryDoc.exists || itineraryDoc.data()?.isDeleted || itineraryDoc.data()?.settings.visibility !== 'public') {
-            console.error('Itinerary not found');
+        if (!itineraryDoc.exists || itineraryData?.isDeleted) {
             return null;
         }
+
+        const isOwner = itineraryData?.uid === userId;
+        const isPublic = itineraryData?.settings.visibility === 'public';
+        const isSharedAccess = itineraryData?.settings.visibility === 'shared' && 
+                               (await dbServer.collection('ItineraryAccess').doc(`${userId}_${itineraryId}`).get()).exists;
+
+        if (!(isOwner || isPublic || isSharedAccess)) {
+            return null;
+        }        
 
         const itinerary = itineraryDoc.data() as TransformedItinerary;
 

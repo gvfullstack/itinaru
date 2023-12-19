@@ -6,7 +6,7 @@ import ItemDescriptionStaticComponent from './itemDescriptionStaticComponent';
 import Image from 'next/image';
 import CopyItineraryButton from './copyItineraryForEditByEndUser';
 import { useRouter } from 'next/router';
-
+import ItineraryLink from '../AppContolsComponents/IEFutilities/itineraryPublicLink';
 
 const GeneralItineraryInformation: FC = () => {
     const router = useRouter();
@@ -49,6 +49,9 @@ const GeneralItineraryInformation: FC = () => {
                 <div className={styles.itinGeneralInfoTextSection}>
                     <p className={styles.publicItinViewTitle}>{itinerary?.settings?.title }</p>
                     <p>{itinerary?.settings?.city || ''}, {itinerary?.settings?.state || ''}</p>
+                    <div style={{margin:"-2rem 0 -0.5rem -0.5rem"}}>
+                       <ItineraryLink itineraryId={itinerary?.id} itineraryVisibility = {itinerary?.settings?.visibility}/> 
+                    </div>
                 </div>
                 <div>
                     <CopyItineraryButton />

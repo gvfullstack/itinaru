@@ -15,8 +15,6 @@ import styles from './publicItineraryView.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCopy } from '@fortawesome/free-solid-svg-icons';
 
-const copyIcon = <FontAwesomeIcon icon={faCopy} />
-
 const CopyItineraryButton: React.FC = () => {
   const router = useRouter();
   const currentlyViewingItinerary = useRecoilValue<Itinerary | null>(currentlyViewingItineraryState);
