@@ -6,7 +6,7 @@ import ItemDescriptionStaticComponent from './itemDescriptionStaticComponent';
 import Image from 'next/image';
 import CopyItineraryButton from './copyItineraryForEditByEndUser';
 import { useRouter } from 'next/router';
-import ItineraryLink from '../AppContolsComponents/IEFutilities/itineraryPublicLink';
+import ItineraryLink from '../AppContolsComponents/shareableLink/itineraryPublicLink';
 
 const GeneralItineraryInformation: FC = () => {
     const router = useRouter();

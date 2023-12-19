@@ -13,7 +13,7 @@ import state_names from '../../../data/state_names.js';
 import {myItinerariesResults} from '../../MyItinerariesGallery/myItinerariesAtoms';
 import { openDB } from 'idb';
 import Quill from 'quill';
-import ItineraryLink from '../../AppContolsComponents/IEFutilities/itineraryPublicLink';
+import ItineraryLink from '../../AppContolsComponents/shareableLink/itineraryPublicLink';
 const Parchment = Quill.import('parchment');
 
 var Block = Quill.import('blots/block');

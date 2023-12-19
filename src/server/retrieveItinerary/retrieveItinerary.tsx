@@ -2,7 +2,7 @@ import dbServer from '../../utils/firebase.admin';
 import dayjs, {Dayjs} from 'dayjs';
 import {TransformedItineraryItem, TransformedItinerary, Itinerary, ItineraryItem} from './retrieveItinTypeRefs';
 
-export async function fetchItineraryFromDatabase(itineraryId: string, userId: string): Promise<Itinerary | null> {
+export async function fetchItineraryFromDatabase(itineraryId: string, userId: string | undefined): Promise<Itinerary | null> {
     console.log("fetchItineraryFromDatabase called with ID:", itineraryId);
 
     try {

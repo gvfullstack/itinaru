@@ -28,8 +28,22 @@ export default function FirebaseAuthLogic () {
             // User is signed in, get the ID token
             const idToken = await firebaseUser.getIdToken();
             console.log("idToken:", idToken);
-            document.cookie = `idToken=${idToken}; path=/; secure; httponly; samesite=strict`;
-
+            fetch('/api/authenticate', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ idToken }),
+              })
+              .then(response => response.json())
+              .then(data => {
+                // Handle response data
+                console.log('Success:', data);
+              })
+              .catch((error) => {
+                console.error('Error:', error);
+              });
+          
             //identify user
             const uid = firebaseUser.uid;
             // Fetch user information from Firestore
@@ -105,3 +119,4 @@ export default function FirebaseAuthLogic () {
     return null; // Return null. component is only for useEffect handling
   }
   
+
