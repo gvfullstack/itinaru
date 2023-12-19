@@ -13,6 +13,7 @@ import state_names from '../../../data/state_names.js';
 import {myItinerariesResults} from '../../MyItinerariesGallery/myItinerariesAtoms';
 import { openDB } from 'idb';
 import Quill from 'quill';
+import ItineraryLink from '../../AppContolsComponents/IEFutilities/itineraryPublicLink';
 const Parchment = Quill.import('parchment');
 
 var Block = Quill.import('blots/block');
@@ -111,7 +112,7 @@ const ItineraryEditForm: FC<Props> = () => {
           return (false)
         }
         setKeywordError(false);
-        setKeywordHelperText('Keywords that should return itinerary on search.');
+        setKeywordHelperText('Keywords help make itinerary more searchable.');
         return (true)
       }; 
 // *******************save to localDatabase operations*******************    
@@ -264,21 +265,6 @@ const handleQuillChange = (field: FieldNames, value: string) => {
                         />
                     </div>
 
-                    {itinerary.settings?.visibility === 'public' &&
-                      <TextField
-                        id="Keywords"
-                        label="Keywords"
-                        variant="outlined"
-                        placeholder="comma separated i.e. beach, #hiking, family-friendly"
-                        value={itinerary.settings?.keywords || ''}
-                        onChange={handleSettingsChange('keywords')}
-                        onBlur={(e) => {handleFieldChangeAndSave('keywords', e.target.value)}}
-                        className={styles.inputFields}
-                        error={keywordError}
-                        helperText={keywordHelperText}
-                        onFocus={handleFieldFocus}
-                      />}
-
                     <div className={styles.sharedSettingContainer}>
                     <label title="Visible only to you">
                     <input 
@@ -328,7 +314,27 @@ const handleQuillChange = (field: FieldNames, value: string) => {
                                     
                             </div>
                             }
+
                     </div>
+
+                    <ItineraryLink itineraryId={itinerary.id} itineraryVisibility = {itinerary.settings?.visibility}/>
+
+                    {itinerary.settings?.visibility === 'public' &&
+                      <TextField
+                        id="Keywords"
+                        label="Keywords"
+                        variant="outlined"
+                        placeholder="comma separated i.e. beach, #hiking, family-friendly"
+                        value={itinerary.settings?.keywords || ''}
+                        onChange={handleSettingsChange('keywords')}
+                        onBlur={(e) => {handleFieldChangeAndSave('keywords', e.target.value)}}
+                        className={styles.inputFields}
+                        error={keywordError}
+                        helperText={keywordHelperText}
+                        onFocus={handleFieldFocus}
+                      />}
+                      
+
                 </div>
             
         </div>

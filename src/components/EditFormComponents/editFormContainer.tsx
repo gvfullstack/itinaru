@@ -697,9 +697,7 @@ return (
                   <p className={styles.profilePictureMessage}>*Image uploads must be in JPEG, PNG, or GIF format.</p>
 
                   <ItineraryEditForm />
-     
-                
-                  
+              
                   <div className={styles.plusSignContainerEF}>
                     <div className={styles.plusSignEF} onClick={handleSaveItemAndShowItemForm}>
                       <span className={styles.plusSignText}> itinerary item</span> + 
@@ -763,55 +761,3 @@ export default EditFormContainer;
 
 
 
-
-// // Transform and save itinerary.  This is/should be the primary/only exit point for form data going to the database.//////////
-// async function saveTransformedItinerary() {
-//   // Initialize transformedItinerary with the same shape as TransformedItinerary, but empty values
-//   let transformedItinerary: TransformedItinerary = {
-//     id: itinerary.id,
-//     uid: itinerary.uid || "",
-//     settings: {
-//       title: "",
-//       description: itinerary.settings?.description || "",
-//       city: "",
-//       state: "",
-//       visibility: itinerary.settings?.visibility || "private",
-//       galleryPhotoUrl: itinerary.settings?.galleryPhotoUrl || ""
-//     },
-//     items: []
-//   };
-
-//   // Validate and populate fields...
-//   if (validateTitle(itinerary?.settings?.title ?? "")) {
-//     transformedItinerary.settings.title = itinerary?.settings?.title ?? "";
-//   }
-
-//   if (validateCity(itinerary?.settings?.city ?? "")) {
-//     transformedItinerary.settings.city = itinerary?.settings?.city?.toUpperCase() ?? ""; 
-//   }
-
-//   if (validateState(itinerary?.settings?.state ?? "")) {
-//     transformedItinerary.settings.state = itinerary?.settings?.state?.toUpperCase() || "";
-//   }
-//   // Map over itinerary items to transform the incompatible types
-//   transformedItinerary.items = (itinerary?.items ?? []).map(item => ({
-//     ...item,
-//     descHidden: true,
-//     startTime: item.startTime?.time ? { time: firebase.firestore.Timestamp.fromDate(item.startTime.time.toDate()) } : { time: null },
-//     endTime: item.endTime?.time ? { time: firebase.firestore.Timestamp.fromDate(item.endTime.time.toDate()) } : { time: null },  
-//   }));
-
-
-//   const indexLocalDB = await openDB('itinerariesDatabase');
-//   const tx = indexLocalDB.transaction('itineraries', 'readwrite');
-//   const store = tx.objectStore('itineraries');
-//   await store.put(transformedItinerary, `currentlyEditingItineraryStateEF_${authUser?.uid}`);
-//   await tx.done;
-
-//   await db.collection('itineraries').doc(transformedItinerary.id).set(transformedItinerary);
-//   setSaveStatus('Saved');
-//   setTimeout(() => {
-//     setSaveStatus('');
-//   }, 3000);
-
-// }
