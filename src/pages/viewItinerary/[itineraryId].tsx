@@ -8,30 +8,33 @@ import { GetServerSidePropsContext } from 'next';
 import {fetchItineraryFromDatabase} from '../../server/retrieveItinerary/retrieveItinerary';
 import dayjs, {Dayjs} from 'dayjs';
 import styles from '@/styles/Home.module.css'
-
+import { authServer } from '@/utils/firebase.admin';
 
 export const getServerSideProps = async (context:GetServerSidePropsContext) => {
   const itineraryId = context.params?.itineraryId as string; // Extracting itineraryId from context
   const idToken = context.req.cookies['idToken']; // Replace with your cookie name
 
   if (!idToken) {
-    console.log("No idToken found in cookies");
-    // idToken is not available, redirect to login or return an error
-    return {
-      redirect: {
-        destination: '/loginPage',
-        permanent: false,
-      },
-    };
+    // Handle the case where the token is not present
+    return { props: { itinerary: null } };
   }
 
-  const itineraryData = await fetchItineraryFromDatabase(itineraryId, idToken);
+   try {
+      const decodedToken = await authServer.verifyIdToken(idToken);
+      const userId = decodedToken.uid;
 
-    return {
-      props: {
-        itinerary: itineraryData
-      }
-    };
+      const itineraryData = await fetchItineraryFromDatabase(itineraryId, userId);
+
+      return {
+        props: {
+          itinerary: itineraryData
+        }
+      };
+    } catch (error) {
+      console.error('Error verifying token:', error);
+      // Handle the error (e.g., token is invalid)
+      return { props: { itinerary: null } };
+    }
   }
   
  

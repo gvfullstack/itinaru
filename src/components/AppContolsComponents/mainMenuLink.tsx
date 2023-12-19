@@ -43,18 +43,29 @@ const Menu: React.FC = () => {
   }, []);
 
   const handleLogout = () => {
-    toggleMenu();
-    resetAllStates();
-    logout()
-      .then(() => {
-        router.push('/')
-      })
-      .catch((error) => {
-        console.error("Error logging out:", error);
-        // Handle any errors that may occur during logout
-      });
+    // First, clear the server-side cookie
+    fetch('/api/logout', {
+      method: 'POST',
+    })
+    .then(() => {
+      // After the server has cleared the cookie
+      toggleMenu();
+      resetAllStates();
+      logout()
+        .then(() => {
+          router.push('/');
+        })
+        .catch((error) => {
+          console.error("Error logging out:", error);
+          // Handle any errors that may occur during logout
+        });
+    })
+    .catch((error) => {
+      console.error("Error in logout fetch call:", error);
+      // Handle errors related to the fetch call
+    });
   };
-
+  
   const handleLoginLinkClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
     // Store the current path.

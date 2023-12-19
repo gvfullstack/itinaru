@@ -609,7 +609,7 @@ const handleCloseModal = () => {
 
 const navigateToParentItinerary = () => {
   if (itinerary?.derivedFromItineraryId) {
-    router.push(`/viewPublicItinerary/${itinerary.derivedFromItineraryId}`);
+    router.push(`/viewItinerary/${itinerary.derivedFromItineraryId}`);
   }
 };
 
@@ -648,7 +648,7 @@ return (
               )}
               <div className={styles.EFpageTopNav}>
                  <div className={styles.topNavGenericDiv}></div>
-                  <Link className={styles.previewLink} href="/viewPublicItinerary/previewItinerary" 
+                  <Link className={styles.previewLink} href="/viewItinerary/previewItinerary" 
                   onClick={handlePreviewItinerary}>Preview</Link>
                   <div className={styles.addContributorIconContainer} >
                     {addContributorIcon}          
