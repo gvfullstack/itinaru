@@ -15,7 +15,7 @@
 //     // Loop over your itineraries and add them to the sitemap
 //     itineraries.forEach(itinerary => {
 //       stream.write({
-//         url: `/viewPublicItinerary/${itinerary.id}`,
+//         url: `/viewItinerary/${itinerary.id}`,
 //         changefreq: 'weekly',
 //         priority: 0.9
 //       });

@@ -158,7 +158,7 @@ const updateIndexedDBPreview = async (itineraryForPreview:Itinerary) => {
     await store.put(itineraryForPreview, `currentlyPreviewingItinerary_${authUser?.uid}`);
     console.log("after openDB", store);
     await tx.done;
-    router.push(`/viewPublicItinerary/previewItinerary`);
+    router.push(`/viewItinerary/previewItinerary`);
 
   }
 };

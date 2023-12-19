@@ -13,7 +13,7 @@ const ItineraryLink: React.FC<ItineraryLinkProps> = ({ itineraryId, itineraryVis
     const [copySuccess, setCopySuccess] = useState('');
 
     const copyToClipboard = () => {
-        const url = `https://www.itinaru.com/viewPublicItinerary/${itineraryId}`;
+        const url = `https://www.itinaru.com/viewItinerary/${itineraryId}`;
         navigator.clipboard.writeText(url).then(() => {
             // You can display a confirmation message or toast here if needed
             setCopySuccess('copied');
@@ -25,7 +25,6 @@ const ItineraryLink: React.FC<ItineraryLinkProps> = ({ itineraryId, itineraryVis
         });
     };
 
-    if (itineraryVisibility  === 'public') {
         return (                
                <div className={style.ItineraryLinkSection}>
                     {!copySuccess &&
@@ -37,7 +36,7 @@ const ItineraryLink: React.FC<ItineraryLinkProps> = ({ itineraryId, itineraryVis
                             <button     
                                 className={style.copyItineraryLinkButton}
                                 onClick={copyToClipboard}
-                                title={`https://www.itinaru.com/viewPublicItinerary/${itineraryId}`}
+                                title={`https://www.itinaru.com/viewItinerary/${itineraryId}`}
                                 >
                                 {copyIcon}
                             </button>
@@ -46,9 +45,6 @@ const ItineraryLink: React.FC<ItineraryLinkProps> = ({ itineraryId, itineraryVis
                 {copySuccess && <p className={style.ItineraryLinkSectionCopy}>{copySuccess}</p>}
             </div>
         );
-    }
-
-    return null;
-};
+    };
 
 export default ItineraryLink;

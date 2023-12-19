@@ -10,11 +10,11 @@ import ItineraryLink from '../AppContolsComponents/shareableLink/itineraryPublic
 
 const GeneralItineraryInformation: FC = () => {
     const router = useRouter();
-
+    
 
     const navigateToParentItinerary = () => {
         if (itinerary?.derivedFromItineraryId) {
-          router.push(`/viewPublicItinerary/${itinerary.derivedFromItineraryId}`);
+          router.push(`/viewItinerary/${itinerary.derivedFromItineraryId}`);
         }
       };
     

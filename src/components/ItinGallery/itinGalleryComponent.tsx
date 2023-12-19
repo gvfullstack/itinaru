@@ -43,7 +43,7 @@ const ItinGalleryComponent: React.FC<Props> = ({...props}) => {
   
 
   return (
-    <div className={styles.container} onClick={() => router.push(`/viewPublicItinerary/${props.itinId}`)}>
+    <div className={styles.container} onClick={() => router.push(`/viewItinerary/${props.itinId}`)}>
       <div className={styles.imageWrapper}>
       {props.imageUrl && <div className={styles.aspectRatioBox}> 
             <Image
