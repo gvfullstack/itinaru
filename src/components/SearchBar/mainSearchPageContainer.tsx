@@ -1,13 +1,13 @@
 import { InstantSearch, Configure } from 'react-instantsearch-hooks-web';
-import SearchInput from './searchInput';
-import SearchButton from './searchButton';
-import styles from '../searchBar.module.css';
+import SearchInput from './searchPageComponents/searchInput';
+import SearchButton from './searchPageComponents/searchButton';
+import styles from './searchBar.module.css';
 import { useState, useRef, useEffect } from 'react';
-import ItinGalCompWrapper from '../../ItinGallery/itinGalCompWrapper';
-import CustomHits from './customHits';
+import ItinGalCompWrapper from '../ItinGallery/itinGalCompWrapper';
+import CustomHits from './searchPageComponents/customHits';
 import algoliasearch from 'algoliasearch';
 import { useRecoilState } from 'recoil';
-import {searchResultsState, searchQueryState} from '../searchAtoms';
+import {searchResultsState, searchQueryState} from './searchAtoms';
 
 
 const appId = process.env.NEXT_PUBLIC_ALGOLIA_APP_ID || '';
@@ -29,6 +29,7 @@ const SearchBar: React.FC = () => {
         if (event) {
             event.preventDefault();
         }
+        if(inputValue==searchQuery) {return}
         setIsSearchReady(false); // Prevent Configure from rendering with outdated searchQuery
         setSearchQuery(inputValue); // Update the searchQuery
     
