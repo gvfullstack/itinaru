@@ -252,10 +252,12 @@
     display: none;
 }
 
-.itinItemIcon{
-    height: 1.2rem;
+.itinItemsIcons{
     width: 1.2rem;
-    columns: rgb(57, 57, 57);
+    height: 1.2rem;
+    align-self: center;
+    justify-self: center;
+    color:rgb(66, 66, 66);
 }
 
 /* /////////////Expanded Itin Item View///////////////////// */ 

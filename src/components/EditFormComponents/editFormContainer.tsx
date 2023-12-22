@@ -104,12 +104,6 @@ useEffect(() => {
         timerId = undefined; // Reset the timerId
       }
       await saveItineraryToFirestore();
-     
-      console.log("saved prior to adding item")
-      console.log("User Authenticated:", firebase.auth().currentUser != null);
-      console.log("User ID:", firebase.auth().currentUser?.uid);
-      console.log("Itinerary ID:", itinerary.id);
-
 
       // Firestore logic to add item to Firestore and retrieve the ID of the new item
       const itemsRef = db.collection('itineraries').doc(itinerary.id).collection('items');
@@ -280,10 +274,10 @@ useEffect(() => {
     return;
   }
   
-  if (renderCount.current<1) {
-    renderCount.current += 1;
-    return;
-  }
+  // if (renderCount.current<1) {
+  //   renderCount.current += 1;
+  //   return;
+  // }
 
   setSaveStatus('Saving...');
   timerId = setTimeout(() => {

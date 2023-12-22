@@ -10,10 +10,10 @@ import styles from'./dragDrop.module.css'
 import ItemDescriptionStaticComponent from '../itemDescriptionStaticComponent';
 import dayjs from 'dayjs'; 
 
-const externalLink = <FontAwesomeIcon className={styles.itinItemIcon} icon={faExternalLinkAlt} />;
-const mapMarkerAlt = <FontAwesomeIcon icon={faDiamondTurnRight} />;
-const ellipsisVertical = <FontAwesomeIcon className={styles.itinItemIcon} icon={faEllipsisVertical} />;
-const clock = <FontAwesomeIcon className={styles.itinItemIcon} icon={faStopwatch} />;
+const externalLink = <FontAwesomeIcon className={styles.itinItemsIcons} icon={faExternalLinkAlt} />;
+const mapMarkerAlt = <FontAwesomeIcon className={styles.itinItemsIcons} icon={faDiamondTurnRight} />;
+const ellipsisVertical = <FontAwesomeIcon className={styles.itinItemsIcons} icon={faEllipsisVertical} />;
+const clock = <FontAwesomeIcon className={styles.itinItemsIcons} icon={faStopwatch} />;
 
 import {currentlyViewingItineraryState} from '../publicItinViewAtoms';
 import dynamic from 'next/dynamic';
@@ -110,6 +110,11 @@ if (itineraryItem.locationAddress) {
               target="_blank"
               rel="noopener noreferrer"
               style={{ textDecoration: 'none', color: 'black' }}
+              onClick={(e) => {
+                if (!mapsUrl) {
+                  e.preventDefault(); // Prevent navigation when mapsUrl is not set
+                }
+              }}
             >
               {mapMarkerAlt}
               Directions
@@ -207,7 +212,13 @@ if (itineraryItem.locationAddress) {
                                             href={mapsUrl}
                                             target="_blank"
                                             style={{ textDecoration: 'none', color: 'black' }}
-                                            >{mapMarkerAlt}</a>
+                                            onClick={(e) => {
+                                              if (!mapsUrl) {
+                                                e.preventDefault(); // Prevent navigation when mapsUrl is not set
+                                              }
+                                            }}
+                                            >{mapMarkerAlt}
+                                            </a>
                                                 
                                     </div>
                           </div> 

@@ -96,12 +96,22 @@
   }
 
   .saveStatusDisplayed{
+    position: fixed;
+    top: 3.5rem; /* Adjust as needed */
+    left: 50%; /* Center relative to the viewport */
+    transform: translateX(-50%); /* Adjust horizontal position to truly center */
+    text-align: center;
+    z-index: 1000;
     font-size: 18px;
-    margin:0;
-    padding: 0;
+    margin: 0;
+    padding: 0 5px;
     align-self: flex-start;
     color: #333;
+    background-color: rgba(199, 197, 197, 0.9);
+    border-radius: 10px;
+    /* Specify a width if necessary */
   }
+  
 
   .sharedSettingContainer{
     display: flex;
