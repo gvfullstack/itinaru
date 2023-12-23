@@ -7,7 +7,7 @@ type SitemapItinerary = {
     // Add any other properties you might need for the sitemap
   };
 
-async function fetchItineraries(): Promise<SitemapItinerary[]> {
+export async function fetchItineraries(): Promise<SitemapItinerary[]> {
     const itinerariesRef = dbServer.collection('itineraries');
     const snapshot = await itinerariesRef.where('settings.visibility', '==', 'public').where('isDeleted', '==', false).get();
   
@@ -22,4 +22,5 @@ async function fetchItineraries(): Promise<SitemapItinerary[]> {
   
     return itineraries;
   }
+  
   
