@@ -16,13 +16,14 @@ export const getServerSideProps = async (context:GetServerSidePropsContext) => {
 
 
    try {
-      const decodedToken = await authServer.verifyIdToken(idToken);
+      let decodedToken;
 
       let  userId;
 
       if (!idToken) {
         userId = "unknownUser";
       }else{
+        decodedToken = await authServer.verifyIdToken(idToken);
         userId = decodedToken.uid;
       }
 
