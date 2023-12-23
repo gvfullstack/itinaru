@@ -14,14 +14,18 @@ export const getServerSideProps = async (context:GetServerSidePropsContext) => {
   const itineraryId = context.params?.itineraryId as string; // Extracting itineraryId from context
   const idToken = context.req.cookies['idToken']; // Replace with your cookie name
 
-  if (!idToken) {
-    // Handle the case where the token is not present
-    return { props: { itinerary: null } };
-  }
 
    try {
-      const decodedToken = await authServer.verifyIdToken(idToken);
-      const userId = decodedToken.uid;
+      let decodedToken;
+
+      let  userId;
+
+      if (!idToken) {
+        userId = "unknownUser";
+      }else{
+        decodedToken = await authServer.verifyIdToken(idToken);
+        userId = decodedToken.uid;
+      }
 
       const itineraryData = await fetchItineraryFromDatabase(itineraryId, userId);
 
