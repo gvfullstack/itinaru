@@ -12,7 +12,7 @@ import { ToastContainer } from 'react-toastify';
 import { useState, useRef, useEffect } from 'react';
 import initDB from '@/lib/db';
 import { useRouter } from 'next/router';
-
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const FirebaseAuthLogic = dynamic(() => import('.././components/FirebaseAuthComponents/firebaseAuthLogic'), { ssr: false });
 
