@@ -5,10 +5,9 @@ import style from './itineraryPublicLink.module.css';
 
 interface ItineraryLinkProps {
     itineraryId: string | undefined;
-    itineraryVisibility: 'private' | 'shared' | 'public' | undefined;
   }
 
-const ItineraryLink: React.FC<ItineraryLinkProps> = ({ itineraryId, itineraryVisibility }) => {
+const ItineraryLink: React.FC<ItineraryLinkProps> = ({ itineraryId }) => {
     const copyIcon = <FontAwesomeIcon icon={faLink} />
     const [copySuccess, setCopySuccess] = useState('');
 

@@ -50,7 +50,7 @@ const GeneralItineraryInformation: FC = () => {
                     <p className={styles.publicItinViewTitle}>{itinerary?.settings?.title }</p>
                     <p>{itinerary?.settings?.city || ''}, {itinerary?.settings?.state || ''}</p>
                     <div style={{margin:"-2rem 0 -0.5rem -0.5rem"}}>
-                       <ItineraryLink itineraryId={itinerary?.id} itineraryVisibility = {itinerary?.settings?.visibility}/> 
+                       <ItineraryLink itineraryId={itinerary?.id} /> 
                     </div>
                 </div>
                 <div>

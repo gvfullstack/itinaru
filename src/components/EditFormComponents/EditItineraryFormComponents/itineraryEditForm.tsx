@@ -317,7 +317,7 @@ const handleQuillChange = (field: FieldNames, value: string) => {
 
                     </div>
 
-                    <ItineraryLink itineraryId={itinerary.id} itineraryVisibility = {itinerary.settings?.visibility}/>
+                    <ItineraryLink itineraryId={itinerary.id} />
 
                     {itinerary.settings?.visibility === 'public' &&
                       <TextField
