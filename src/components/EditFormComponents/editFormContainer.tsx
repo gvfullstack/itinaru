@@ -264,9 +264,9 @@ useEffect(() => {
     return;
   }
   
-  if (saveStatus === 'Restoring...') {
+  if (saveStatus === 'Loading...') {
     setTimeout(() => {
-      setSaveStatus('Session restored.');
+      setSaveStatus('Session loaded.');
       setTimeout(() => {
         setSaveStatus('');
       }, 3000);

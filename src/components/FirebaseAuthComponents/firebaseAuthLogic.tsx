@@ -27,7 +27,6 @@ export default function FirebaseAuthLogic () {
             
             // User is signed in, get the ID token
             const idToken = await firebaseUser.getIdToken();
-            console.log("idToken:", idToken);
             fetch('/api/authenticate', {
                 method: 'POST',
                 headers: {

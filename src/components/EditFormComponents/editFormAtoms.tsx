@@ -15,6 +15,11 @@ export const defaultItinerary: Itinerary = {
     items: []
   };
   
+export const newItineraryState = atom<Itinerary>({
+  key: 'newItineraryStateEF',
+  default: defaultItinerary,
+});
+
 
 export const currentlyEditingItineraryState = atom<Itinerary>({
     key: 'currentlyEditingItineraryStateEF',
