@@ -24,6 +24,8 @@ import { Timestamp } from 'firebase/firestore';
   };
   
   export type TransformedItineraryItem = {
+    creationTimestamp?: firebase.firestore.Timestamp | Date;
+    lastUpdatedTimestamp?: firebase.firestore.Timestamp | Date;
     isDeleted?: boolean;    
     itemTitle?: string;
     startTime?: TimeObject;
@@ -45,8 +47,11 @@ import { Timestamp } from 'firebase/firestore';
   } 
 
  export type TransformedItinerary = {
+    creationTimestamp?: TimeObject | Date;
+    lastUpdatedTimestamp?: TimeObject | Date;
     id?: string;
     uid: string,
+    profilePictureUrl?: string;
     isDeleted?: boolean;
     settings: ItinerarySettings;
     items: TransformedItineraryItem[];

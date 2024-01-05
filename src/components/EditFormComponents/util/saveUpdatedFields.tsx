@@ -2,14 +2,18 @@ import { ItinerarySettings, ItineraryItem, TransformedItinerary} from '../editFo
 import { db  } from '../../FirebaseAuthComponents/config/firebase.database';
 import { getSettingsDifferences } from './getSettingsDifferences';
 import {getUpdatedItemFields} from './getItemsDifferences';
+import { Timestamp } from '@firebase/firestore';
+import {serverTimestamp } from 'firebase/firestore'
 
 export async function saveUpdatedFields(originalItinerary:TransformedItinerary, updatedItinerary:TransformedItinerary) {
   const batch = db.batch();
   const settingsRef = db.collection('itineraries').doc(originalItinerary.id);
-  const itemsRef = db.collection('itineraries').doc(originalItinerary.id).collection('items');
+  const itemsRef = db.collection('itineraries').doc(originalItinerary.id).
+    collection('items');
   
   // Handle settings updates
-  const updatedSettings = getSettingsDifferences(originalItinerary.settings, updatedItinerary.settings);
+  const updatedSettings = getSettingsDifferences(originalItinerary.settings, 
+    updatedItinerary.settings);
   if (Object.keys(updatedSettings).length > 0) {
     batch.update(settingsRef, updatedSettings);
   }
@@ -36,6 +40,8 @@ export async function saveUpdatedFields(originalItinerary:TransformedItinerary, 
     const itemRef = itemsRef.doc(itemId);
     batch.delete(itemRef);
   }
+
+  batch.update(settingsRef, { lastUpdatedTimestamp: serverTimestamp() });
 
   // Commit the batch operation to Firestore
   await batch.commit()

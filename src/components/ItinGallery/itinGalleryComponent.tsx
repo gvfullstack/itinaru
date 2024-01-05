@@ -7,6 +7,7 @@ import Image from 'next/image';
 type Props = {
   itinId: string,
   userId: string,
+  profilePictureUrl?: string,
   title: string,
   description: string,
   neighborhood: string,

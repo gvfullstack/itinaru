@@ -2,7 +2,14 @@ import dayjs, { Dayjs } from 'dayjs';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 
+
+export type TimeObject = {
+  time?: firebase.firestore.Timestamp | null;
+};
+
 export type ItineraryItem = {
+    creationTimestamp?: firebase.firestore.Timestamp | Date;
+    lastUpdatedTimestamp?: firebase.firestore.Timestamp | Date;
     isDeleted?: boolean;
     itemTitle?: string;
     startTime?: {time?: Dayjs | null};
@@ -43,20 +50,21 @@ export type ItineraryItem = {
   }
       
   export type Itinerary = {
+    creationTimestamp?: firebase.firestore.Timestamp | Date;
+    lastUpdatedTimestamp?: firebase.firestore.Timestamp | Date;
     derivedFromItineraryId?: string,
     id?: string,
     uid?: string,
-    isDeleted?: boolean;
-    settings?: ItinerarySettings;
-    items?: ItineraryItems;
+    profilePictureUrl?: string,
+    isDeleted?: boolean,
+    settings?: ItinerarySettings,
+    items?: ItineraryItems,
   }
 
-
-  export type TimeObject = {
-    time?: firebase.firestore.Timestamp | null;
-  };
   
   export type TransformedItineraryItem   = {
+    creationTimestamp?: firebase.firestore.Timestamp | Date;
+    lastUpdatedTimestamp?: firebase.firestore.Timestamp | Date;
     itemTitle?: string;
     startTime?: TimeObject;
     endTime?: TimeObject;
@@ -77,6 +85,8 @@ export type ItineraryItem = {
   } 
 
  export type TransformedItinerary = {
+    creationTimestamp?: firebase.firestore.Timestamp | Date;
+    lastUpdatedTimestamp?: firebase.firestore.Timestamp | Date;
     derivedFromItineraryId?: string,
     id?: string;
     settings: ItinerarySettings;

@@ -10,7 +10,6 @@ export const updateIndex = functions.firestore.document('itineraries/{itineraryI
 
     const visibility = newData?.settings?.visibility;
     const isDeleted = newData?.isDeleted;
-    console.log('Visibility:', visibility, 'IsDeleted:', isDeleted);
 
     if (visibility === 'public' && isDeleted !== true) {
       const object = {

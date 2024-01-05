@@ -35,5 +35,6 @@ module.exports = {
     "require-jsdoc": "off",
     "indent": "off",
     "eol-last": ["error", "always"],
+    "@typescript-eslint/no-explicit-any": "off",
   },
 };

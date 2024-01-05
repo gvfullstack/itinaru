@@ -3,6 +3,7 @@ import { TransformedItineraryItem, TimeObject} from '../editFormTypeDefs'
 import dayjs, { Dayjs } from 'dayjs';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
+import {serverTimestamp } from 'firebase/firestore'
 
 export function getUpdatedItemFields(
   originalItems: TransformedItineraryItem[],
@@ -45,31 +46,36 @@ function isTimeObject(value: any): value is TimeObject {
 function getUpdatedFields(originalItem: TransformedItineraryItem, updatedItem: TransformedItineraryItem) {
   const updatedFields: Partial<Record<keyof TransformedItineraryItem, any>> = {};
 
+  let isChanged = false; // Flag to track if any field has changed
+
   (Object.keys(updatedItem) as Array<keyof TransformedItineraryItem>).forEach(key => {
     const originalValue = originalItem[key];
     const updatedValue = updatedItem[key];
 
-    // Check for startTime specifically and use type guard
-    if (key === 'startTime') {
-      if (!isTimeObject(updatedValue) || updatedValue?.time === undefined) {
+    if (!isEqual(originalValue, updatedValue)) {
+      isChanged = true;
+
+      // Specific logic for startTime and location
+      if (key === 'startTime' && (!isTimeObject(updatedValue) || updatedValue?.time === undefined)) {
         updatedFields.startTime = { time: getDefaultMidnightTimestamp() };
-      } else {
-        updatedFields.startTime = updatedValue;
-      }
-    } else if (updatedValue !== undefined && !isEqual(originalValue, updatedValue)) {
-      // Handle other fields
-      if (key === 'location' && isLocation(updatedValue) && isLocation(originalValue)) {
+      } else if (key === 'location' && isLocation(updatedValue) && isLocation(originalValue)) {
         const updatedLocation = {
           latitude: updatedValue.latitude ?? originalValue.latitude,
           longitude: updatedValue.longitude ?? originalValue.longitude
         };
         updatedFields.location = updatedLocation;
       } else {
+        // Generic update for all other fields
         updatedFields[key] = updatedValue;
       }
     }
   });
 
+  // If any field has changed, set the lastUpdatedTimestamp
+  if (isChanged) {
+    updatedFields.lastUpdatedTimestamp = serverTimestamp();
+  }
+  
   return updatedFields;
 }
 

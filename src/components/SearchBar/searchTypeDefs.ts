@@ -45,6 +45,7 @@ export type ItineraryItem = {
     derivedFromItineraryId?: string,
     id?: string;
     uid: string;
+    profilePictureUrl?: string;
     isDeleted?: boolean;
     settings: ItinerarySettings;
     items: ItineraryItems;
@@ -79,6 +80,7 @@ export type ItineraryItem = {
     derivedFromItineraryId?: string,
     id?: string;
     uid: string,
+    profilePictureUrl?: string;
     isDeleted?: boolean;
     settings: ItinerarySettings;
     items: TransformedItineraryItem[];
@@ -88,6 +90,7 @@ export interface AlgoliaHitType {
   objectID: string; // Common in Algolia hits
   derivedFromItineraryId?: string;
   uid?: string;
+  profilePictureUrl?: string;
   settings?: ItinerarySettings;
   itineraryParentId?: string;
   itemTitle?: string;

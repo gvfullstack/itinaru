@@ -309,7 +309,7 @@ const updateItineraryWithCoordinates = (latitude: number, longitude: number) => 
     return (
 
     <div className={styles.itinItemCreatorContainer}>
-   <div className={styles.itinItemHeadingContainer}>          
+    <div className={styles.itinItemHeadingContainer}>          
     {props.mode==="create" ?
         <h4 className = {styles.itemSectionHeading}>New Itinerary Item Entry</h4>:
         <h2 className = {styles.itemSectionHeading}>Edit Itinerary Item</h2>
@@ -351,7 +351,7 @@ const updateItineraryWithCoordinates = (latitude: number, longitude: number) => 
               <strong>Important Note: </strong> The address field takes precedence. If you would like to use coordinates for map directions, please leave the address field blank.
               <br />
               <br />
-              Also, when using the "Use current geolocation" feature to obtain your location, please be aware that the accuracy can vary based on several factors, including your device, surrounding buildings, and signal strength. It&apos;s always a good practice to double-check and confirm your location. If you notice any discrepancies, kindly adjust manually or choose a different method to ensure precision in your itinerary.
+              Also, when using the &quot; Use current geolocation &quot; feature to obtain your location, please be aware that the accuracy can vary based on several factors, including your device, surrounding buildings, and signal strength. It&apos;s always a good practice to double-check and confirm your location. If you notice any discrepancies, kindly adjust manually or choose a different method to ensure precision in your itinerary.
             </p>
         </div>  
     }
