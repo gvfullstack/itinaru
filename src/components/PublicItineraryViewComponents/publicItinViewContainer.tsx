@@ -8,6 +8,9 @@ import GoogleMapIframe from './directionsMapPV';
 import NotLoggedInModal from './copyItineraryUtilityFunctions/notLoggedInModal';
 import {TimeObject} from './publicItinViewTypeDefs'
 import {currentlyViewingItineraryState} from './publicItinViewAtoms';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/firestore';
+
 
 const GeneralItineraryInformation = dynamic(() => 
     import('./generalItineraryInformationSection'), {
@@ -29,29 +32,23 @@ const PublicItinViewContainer: FC = () => {
   const [showNotLoggedInModalState, setShowNotLoggedInModalState] = useRecoilState(showNotLoggedInModal);
   const [itinerary, setItinerary] = useRecoilState(currentlyViewingItineraryState);
  
-  function formatTimestamp(timestamp: TimeObject | Date | { seconds: number, nanoseconds: number } | null | undefined): string {
+  function formatTimestamp(timestamp: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue | null | undefined): string {
     if (!timestamp) return '';
   
     if (timestamp instanceof Date) {
+      // JavaScript Date object
       return timestamp.toLocaleString();
-    } else if ('seconds' in timestamp && typeof timestamp.seconds === 'number') {
-      // Handling Firestore Timestamp-like object
-      const date = new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
-      return date.toLocaleString();
-    } else if ('time' in timestamp && timestamp.time) {
-      // Handling TimeObject
-      const innerTimestamp = timestamp.time;
-      if ('toDate' in innerTimestamp && typeof innerTimestamp.toDate === 'function') {
-        // Handling Firestore Timestamp
-        return innerTimestamp.toDate().toLocaleString();
-      } else if ('seconds' in innerTimestamp && typeof innerTimestamp.seconds === 'number') {
-        // Handling Firestore Timestamp-like object within TimeObject
-        const date = new Date(innerTimestamp.seconds * 1000 + innerTimestamp.nanoseconds / 1000000);
-        return date.toLocaleString();
-      }
+    } else if (timestamp instanceof firebase.firestore.Timestamp) {
+      // Firestore Timestamp object
+      return timestamp.toDate().toLocaleString();
+    } else if (timestamp instanceof firebase.firestore.FieldValue) {
+      // Firestore FieldValue (e.g., serverTimestamp) - not a readable timestamp in client-side code
+      return 'Pending...'; // or some placeholder text, as actual timestamp is not available yet
     }
+  
     return ''; // Fallback for null, undefined, or unrecognized format
-  }     
+  }
+      
 
 return (
 <div className={styles.publicItinViewContainer}>
