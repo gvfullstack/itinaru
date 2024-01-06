@@ -33,7 +33,7 @@ const StaticStarRating: React.FC<StaticStarRatingProps> = ({ starRating }) => {
   return (
     <div style={{display:'flex', flexDirection:"column"}}>
       <div style={{display: "flex", marginTop:".5rem", gap:".5rem"}}>
-        <p>Creator's Rating:</p>
+        <p>Creator&apos;s Rating:</p>
         {renderStars()}
       </div>
     </div>
