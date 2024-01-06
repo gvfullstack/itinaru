@@ -14,8 +14,8 @@ export const ItemTypes = {
 
 
   export type ItineraryItem = {
-    creationTimestamp?: firebase.firestore.Timestamp | Date;
-    lastUpdatedTimestamp?: firebase.firestore.Timestamp | Date;
+    creationTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue;
+    lastUpdatedTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue;
     itemTitle?: string;
     startTime?: {time?: Dayjs | null, beingEdited?: boolean};
     endTime?: {time?: Dayjs | null, beingEdited?: boolean};
@@ -52,8 +52,8 @@ export const ItemTypes = {
   }
       
   export type Itinerary = {
-    creationTimestamp?: TimeObject | Date;
-    lastUpdatedTimestamp?: TimeObject | Date;
+    creationTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue;
+    lastUpdatedTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue;
     derivedFromItineraryId?: string,
     id: string,
     uid: string,

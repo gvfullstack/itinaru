@@ -7,8 +7,8 @@ export type TimeObject = {
 };
 
 export type ItineraryItem = {
-    creationTimestamp?: firebase.firestore.Timestamp | Date;
-    lastUpdatedTimestamp?: firebase.firestore.Timestamp | Date;
+    creationTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue;
+    lastUpdatedTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue;
     itemTitle?: string;
     startTime?: {time?: Dayjs | null};
     endTime?: {time?: Dayjs | null};
@@ -48,8 +48,8 @@ export type ItineraryItem = {
   }
       
   export type Itinerary = {
-    creationTimestamp?: firebase.firestore.Timestamp | Date;
-    lastUpdatedTimestamp?: firebase.firestore.Timestamp | Date;
+    creationTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue;
+    lastUpdatedTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue;
     derivedFromItineraryId?: string,
     id?: string,
     uid: string,
@@ -61,8 +61,8 @@ export type ItineraryItem = {
  
   
   export type TransformedItineraryItem   = {
-    creationTimestamp?: firebase.firestore.Timestamp | Date;
-    lastUpdatedTimestamp?: firebase.firestore.Timestamp | Date;
+    creationTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue;
+    lastUpdatedTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue;
     itemTitle?: string;
     startTime?: TimeObject;
     endTime?: TimeObject;
@@ -83,8 +83,8 @@ export type ItineraryItem = {
   } 
 
  export type TransformedItinerary = {
-    creationTimestamp?: firebase.firestore.Timestamp | Date;
-    lastUpdatedTimestamp?: firebase.firestore.Timestamp | Date;
+    creationTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue;
+    lastUpdatedTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue;
     derivedFromItineraryId?: string,
     id?: string;
     settings: ItinerarySettings;
