@@ -1,11 +1,12 @@
 import { RecoilState } from 'recoil';
 import { Timestamp } from 'firebase/firestore';
 import dayjs, { Dayjs } from 'dayjs';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/firestore';
 
-
-// export interface RecoilInputField {
-//   atom: RecoilState<string>;
-// }
+export type TimeObject = {
+  time?: firebase.firestore.Timestamp | null;
+};
 
 export const ItemTypes = {
   ITINERARY_ITEM: 'itineraryItem',
@@ -13,6 +14,8 @@ export const ItemTypes = {
 
 
   export type ItineraryItem = {
+    creationTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue;
+    lastUpdatedTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue;
     itemTitle?: string;
     startTime?: {time?: Dayjs | null, beingEdited?: boolean};
     endTime?: {time?: Dayjs | null, beingEdited?: boolean};
@@ -49,8 +52,14 @@ export const ItemTypes = {
   }
       
   export type Itinerary = {
+    creationTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue;
+    lastUpdatedTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue;
     derivedFromItineraryId?: string,
-    settings: ItinerarySettings;
+    id: string,
+    uid: string,
+    profilePictureUrl?: string,
+    isDeleted?: boolean,
+    settings: ItinerarySettings,
     items: ItineraryItems;
   }
 

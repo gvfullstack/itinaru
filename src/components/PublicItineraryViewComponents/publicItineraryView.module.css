@@ -125,6 +125,11 @@
   height: 1em;
 }
 
+.timeStamps{
+  font-size: 14px;
+  width: 100%;
+  
+}
 }
 
 @media (min-width: 500px){

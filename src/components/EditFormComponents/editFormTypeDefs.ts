@@ -2,6 +2,9 @@ import dayjs, { Dayjs } from 'dayjs';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 
+export type TimeObject = {
+  time?: firebase.firestore.Timestamp | null;
+};
 
 export type ItinerarySettings = {
   title: string;
@@ -16,15 +19,20 @@ export type ItinerarySettings = {
 }
     
 export type Itinerary = {
+  creationTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue;
+	lastUpdatedTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue;
   derivedFromItineraryId?: string,
   id: string,
   uid: string,
+  profilePictureUrl?: string;
   isDeleted?: boolean;
   settings?: ItinerarySettings;
   items?: ItineraryItems;
 }
 
 export type ItineraryItem = {
+    creationTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue;
+    lastUpdatedTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue;
     isDeleted?: boolean;
     itemTitle?: string;
     startTime?: {time?: Dayjs | null} ;
@@ -52,6 +60,8 @@ export type ItineraryItem = {
   };
   
   export type UserAccess = {
+    creationTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue;
+  	lastUpdatedTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue;
     isDeleted?: boolean;
     uid: string;
     email?: string;
@@ -74,11 +84,10 @@ export type ItineraryItem = {
     docId?: string;
   };
 
-  export type TimeObject = {
-    time?: firebase.firestore.Timestamp | null;
-  };
   
   export type TransformedItineraryItem   = {
+    creationTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue;
+  	lastUpdatedTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue;
     isDeleted?: boolean;    
     itemTitle?: string;
     startTime?: TimeObject;
@@ -100,6 +109,8 @@ export type ItineraryItem = {
   } 
 
  export type TransformedItinerary = {
+    creationTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue;
+    lastUpdatedTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue;
     derivedFromItineraryId?: string,
     id?: string;
     uid: string,
@@ -116,6 +127,8 @@ export type UnixTimeObject = {
 };
 
 export type IndexDBItineraryItem   = {
+  creationTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue;
+	lastUpdatedTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue;
   isDeleted?: boolean;
   itemTitle?: string;
   startTime?: UnixTimeObject;
@@ -137,6 +150,8 @@ export type IndexDBItineraryItem   = {
 } 
 
 export type IndexDBItinerary = {
+  creationTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue;
+	lastUpdatedTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue;
   derivedFromItineraryId?: string,
   id?: string;
   uid?: string,
@@ -154,6 +169,8 @@ export type AlgoliaUser = {
 }
 
 export type UpdateItineraryAccessProps = {
+  creationTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue;
+	lastUpdatedTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue;
   itineraryId: string;
   creatorId?: string;
   title?: string;

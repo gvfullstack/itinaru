@@ -1,17 +1,18 @@
   import React, { useEffect, useState } from 'react';
   import styles from './newItineraryTitleInput.module.css';
   import { db  } from '../../FirebaseAuthComponents/config/firebase.database';
-  import { collection, addDoc, updateDoc } from 'firebase/firestore';
+  import { collection, addDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
   import { authUserState } from '../../../atoms/atoms'
   import { useRecoilState} from 'recoil';
   import { useForm } from 'react-hook-form';
-  import {currentlyEditingItineraryState} from '../../EditFormComponents/editFormAtoms';
+  import {newItineraryState} from '../../EditFormComponents/editFormAtoms';
   import { Itinerary} from '../../EditFormComponents/editFormTypeDefs'
   import { useRouter } from 'next/router';
   import { toast } from 'react-toastify';
   import 'react-toastify/dist/ReactToastify.css';
   import { openDB } from 'idb';
 
+  
   interface NewItineraryTitleInputProps {
     hideBox: () => void;
   }
@@ -23,7 +24,7 @@
     const [isSaving, setIsSaving] = useState(false);
     const { register, handleSubmit, control, formState: { errors }, watch } = useForm();
     const title = watch("title", "");
-    const [itinerary, setItinerary] = useRecoilState<Itinerary>(currentlyEditingItineraryState);
+    const [itinerary, setItinerary] = useRecoilState<Itinerary>(newItineraryState);
     const [showModal, setShowModal] = useState(false);
     const router = useRouter();
 
@@ -51,6 +52,8 @@
       }
     
       const itineraryData = {
+        creationTimestamp: serverTimestamp(), 
+	      lastUpdatedTimestamp: serverTimestamp(),  
         id: "",
         uid: authUser.uid,
         isDeleted: false,
@@ -138,7 +141,7 @@
 
   updateMyItineraries()
       
-      router.push(`/user/editMyItinerary`);
+      router.push(`/user/createItineraryLoader`);
 
     };
 

@@ -59,6 +59,7 @@ export default function CustomHits({ searchClient }: CustomHitsProps) {
                 key={index}
                 itinId={itin.objectID || ''}
                 userId={itin.uid || ''}
+                profilePictureUrl={itin.profilePictureUrl || ''}
                 title={itin.settings?.title || ''}
                 description={itin.settings?.description || ''}
                 neighborhood={itin.settings?.neighborhood || ''}

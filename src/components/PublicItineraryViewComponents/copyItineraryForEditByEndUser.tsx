@@ -28,7 +28,6 @@ const CopyItineraryButton: React.FC = () => {
       setShowNotLoggedInModalState(true);
       return; 
     }
-    console.log("user is authenticated")
     // Create a new itinerary in Firestore then, retrieve the updated itinerary, and update IndexedDB if user is logged in
     const copiedItinerary = await copyItineraryToFirestoreAndRetrieveUpdatedItinerary(currentlyViewingItinerary || undefined,  authUser?.uid || undefined)
     if (copiedItinerary) {

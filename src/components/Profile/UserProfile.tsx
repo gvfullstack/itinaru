@@ -28,7 +28,7 @@ import ImgDialog from './UserProfileEditUtilityFunctions/ImgDialog'
 import getCroppedImg from './UserProfileEditUtilityFunctions/cropImage'
 import { styleSettings } from './UserProfileEditUtilityFunctions/styleSettings'
 import { ReauthModal } from './ReauthModal';
-import { useUpdateItineraryAccessUserData } from './UserProfileEditUtilityFunctions/updateUserAccessUserData';
+import { updateItineraryAccessUserData } from './UserProfileEditUtilityFunctions/updateUserAccessUserData';
 import { profile } from 'console';
 import DeleteAccountModal from './DeleteAccountModal';
 const ReactQuill = dynamic(import('react-quill'), {
@@ -212,7 +212,7 @@ const onCropComplete = async (croppedArea: ICroppedArea, croppedAreaPixels: ICro
                   return; // Exit early; the rest of the code will be handled by handleReauthentication
                 }
 
-                await useUpdateItineraryAccessUserData(email, username, profilePictureUrl, authUser)
+                await updateItineraryAccessUserData(email, username, profilePictureUrl, authUser)
                 
                 await updateDoc(userRef, {
                   userFirstLastName,
@@ -251,7 +251,7 @@ const onCropComplete = async (croppedArea: ICroppedArea, croppedAreaPixels: ICro
             return;
           }
       
-          await useUpdateItineraryAccessUserData(email, username, profilePictureUrl, authUser);
+          await updateItineraryAccessUserData(email, username, profilePictureUrl, authUser);
       
           await updateDoc(userRef, {
             userFirstLastName,
@@ -309,7 +309,7 @@ const onCropComplete = async (croppedArea: ICroppedArea, croppedAreaPixels: ICro
       }
   
       // Update Firestore record
-      await useUpdateItineraryAccessUserData(email, username, profilePictureUrl, authUser)
+      await updateItineraryAccessUserData(email, username, profilePictureUrl, authUser)
 
       await updateDoc(userRef, {
         userFirstLastName,

@@ -4,6 +4,7 @@ import { Timestamp } from 'firebase/firestore';
 import {IndexDBItineraryItem} from "../../../components/EditFormComponents/editFormTypeDefs";
 import {TransformedItineraryItem} from "../../../components/EditFormComponents/editFormTypeDefs";
 import {copyImageAndGetDownloadURL} from "./copyImageAndGetDownloadURL";
+import {serverTimestamp } from 'firebase/firestore'
 
 export async function copyItineraryToFirestoreAndRetrieveUpdatedItinerary(originalItinerary:Itinerary | undefined, userId:string | undefined ) {
     if(!originalItinerary) {
@@ -22,12 +23,14 @@ export async function copyItineraryToFirestoreAndRetrieveUpdatedItinerary(origin
         // Create a new itinerary
         const newItineraryData = {
             derivedFromItineraryId: originalItinerary?.derivedFromItineraryId ? originalItinerary?.derivedFromItineraryId :  originalItinerary?.id,
+            creationTimestamp: serverTimestamp(),
+            lastUpdatedTimestamp: serverTimestamp(),
             id: newItineraryId,
             uid: userId || undefined, 
             isDeleted:false,
             settings:{
                 ...originalItinerary.settings,
-                title: originalItinerary.settings?.title || '', 
+                title: `copy ${originalItinerary.settings?.title}` || '', 
                 description: originalItinerary.settings?.description || '', 
                 city: originalItinerary.settings?.city || '', 
                 state: originalItinerary.settings?.state || '', 
@@ -52,6 +55,8 @@ export async function copyItineraryToFirestoreAndRetrieveUpdatedItinerary(origin
             const newItemRef = itemsRef.doc(); // Generate a new document reference for each item
             const transformedItem = {
                 ...item,
+                creationTimestamp: serverTimestamp(),
+                lastUpdatedTimestamp: serverTimestamp(),
                 id: newItemRef.id, // Use the new ID for each item
                 itineraryParentId: newItineraryId,
                 startTime: item.startTime?.time
@@ -59,7 +64,6 @@ export async function copyItineraryToFirestoreAndRetrieveUpdatedItinerary(origin
                 endTime: item.endTime?.time 
                 ? { time: Timestamp.fromDate(item.endTime.time.toDate()) } : { time: null },
                 };
-                console.log("transformedItem:", transformedItem)
                 batch2.set(newItemRef, transformedItem);
 
             return transformedItem;

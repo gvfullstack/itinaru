@@ -11,7 +11,6 @@ import ItineraryLink from '../AppContolsComponents/shareableLink/itineraryPublic
 const GeneralItineraryInformation: FC = () => {
     const router = useRouter();
     
-
     const navigateToParentItinerary = () => {
         if (itinerary?.derivedFromItineraryId) {
           router.push(`/viewItinerary/${itinerary.derivedFromItineraryId}`);
@@ -20,8 +19,11 @@ const GeneralItineraryInformation: FC = () => {
     
     const [itinerary, setItinerary] = useRecoilState(currentlyViewingItineraryState);
       
+    
+  
     return (
         <div className = {styles.generalItineraryInformationContainer}>
+          
              {itinerary?.derivedFromItineraryId && (
                 <p className={styles.derivedFromItineraryText}>
                 Derived from a copy of {' '}
@@ -48,7 +50,7 @@ const GeneralItineraryInformation: FC = () => {
             <div className={styles.itinGeneralInfoTextSectionWIthCopyButton}> 
                 <div className={styles.itinGeneralInfoTextSection}>
                     <p className={styles.publicItinViewTitle}>{itinerary?.settings?.title }</p>
-                    <p>{itinerary?.settings?.city || ''}, {itinerary?.settings?.state || ''}</p>
+                    <p>{itinerary?.settings?.city || 'CITY MISSING'}, {itinerary?.settings?.state || 'STATE MISSING'}</p>
                     <div style={{margin:"-2rem 0 -0.5rem -0.5rem"}}>
                        <ItineraryLink itineraryId={itinerary?.id} /> 
                     </div>
@@ -59,7 +61,8 @@ const GeneralItineraryInformation: FC = () => {
             </div>
             <div className={styles.itinTitleDescription}>
                 <ItemDescriptionStaticComponent description={itinerary?.settings?.description ?? ''} />
-            </div>    
+            </div>   
+          
         </div>
     );
   };

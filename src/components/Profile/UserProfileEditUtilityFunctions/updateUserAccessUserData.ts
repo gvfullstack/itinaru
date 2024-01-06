@@ -2,7 +2,7 @@ import {updateItineraryAccessUser} from './updateJoinAccessTableUser';
 import { AuthenticatedUser } from '@/components/typeDefs';
 import {UpdateUserAccessProps} from '../UserProfileTypeDefs';
 
-export const useUpdateItineraryAccessUserData = async (
+export const updateItineraryAccessUserData = async (
     email: string,
     username: string,
     profilePictureUrl: string,

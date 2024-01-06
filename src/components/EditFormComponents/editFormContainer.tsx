@@ -36,6 +36,7 @@ import {createCurrentTransformedItinerary} from './util/createCurrentTransformed
 import {saveUpdatedFields} from './util/saveUpdatedFields';
 import { markItineraryAndItemsAsDeleted } from './util/markItineraryAndItemsAsDeleted';
 import {myItinerariesResults} from '../MyItinerariesGallery/myItinerariesAtoms';
+import {serverTimestamp } from 'firebase/firestore'
 
 const GoogleMapsProvider = dynamic(() => 
     import('./EditFormITEMComponents/googleMapsProvider'), {
@@ -113,6 +114,8 @@ useEffect(() => {
         descHidden: true,
         itineraryParentId: itinerary.id,
         isDeleted: false,
+        creationTimestamp: serverTimestamp(),
+        lastUpdatedTimestamp: serverTimestamp(),
       });
 
       console.log("docRef", docRef)
@@ -264,9 +267,9 @@ useEffect(() => {
     return;
   }
   
-  if (saveStatus === 'Restoring...') {
+  if (saveStatus === 'Loading...') {
     setTimeout(() => {
-      setSaveStatus('Session restored.');
+      setSaveStatus('Session loaded.');
       setTimeout(() => {
         setSaveStatus('');
       }, 3000);
@@ -607,6 +610,21 @@ const navigateToParentItinerary = () => {
   }
 };
 
+function handleRemoveItem() {
+  const items = itinerary.items;
+  if (!items || items.length === 0) return [];
+  // Create a new array without the last item
+  const newItemsArray = items.slice(0, -1);
+
+  setItinerary(prev => {
+    return {
+      ...prev,
+      items: newItemsArray
+    };
+  });
+}
+
+
 return (
 <div className={styles.EFPageContainer}>
   <p className={styles.saveStatusDisplayed}>{saveStatus}</p>
@@ -616,6 +634,7 @@ return (
             <div className={styles.modalContent}>
               <GoogleMapsProvider>
                 <ItineraryItemForm 
+                  handleRemoveClick={handleRemoveItem} 
                   handleShowItemForm={handleSaveItemAndShowItemForm} 
                   mode="create"
                   initialItem={itinerary.items?.[itinerary.items.length - 1] ?? undefined}  // Pass the last item as a prop, or null if 'itinerary.items' is undefined
