@@ -49,7 +49,7 @@ const StarRating: React.FC<StarRatingProps> = ({ initialItem, updateItemInRecoil
     <div style={{display:'flex', flexDirection:"column"}}>
       
       <div style={{display: "flex", marginTop:".5rem", gap:".5rem", }}>
-      <p>Creator's Rating:</p>{renderStars()}
+      <p>Creator&apos;s Rating:</p>{renderStars()}
       </div>
       <Button 
         startIcon={<Clear />} 
