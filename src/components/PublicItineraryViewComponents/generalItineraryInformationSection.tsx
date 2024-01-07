@@ -1,29 +1,49 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import styles from './publicItineraryView.module.css'
 import {currentlyViewingItineraryState} from './publicItinViewAtoms';
 import {useRecoilState} from 'recoil';
 import ItemDescriptionStaticComponent from './itemDescriptionStaticComponent';
 import Image from 'next/image';
-import CopyItineraryButton from './copyItineraryForEditByEndUser';
 import { useRouter } from 'next/router';
-import ItineraryLink from '../AppContolsComponents/shareableLink/itineraryPublicLink';
-
+import ButtonToolbarContainer from '../AppContolsComponents/utilityToolBar/utilityToolBarContainer';
 const GeneralItineraryInformation: FC = () => {
     const router = useRouter();
     
     const navigateToParentItinerary = () => {
+        console.log('navigateToParentItinerary');
         if (itinerary?.derivedFromItineraryId) {
           router.push(`/viewItinerary/${itinerary.derivedFromItineraryId}`);
         }
       };
     
     const [itinerary, setItinerary] = useRecoilState(currentlyViewingItineraryState);
-      
+    const [summarySectionHidden, setSummarySectionHidden] = useState(false);
     
+    const toggleSummarySection = () => {
+        setSummarySectionHidden(!summarySectionHidden);
+      }
   
     return (
         <div className = {styles.generalItineraryInformationContainer}>
-          
+          <ButtonToolbarContainer 
+            toggleSummarySection={toggleSummarySection} 
+            summarySectionHidden = {summarySectionHidden}
+            />
+
+           {!summarySectionHidden && <div className={styles.itinGeneralInfoPhotoContainer}>
+                {itinerary?.settings?.galleryPhotoUrl && 
+                    <Image 
+                        src={itinerary.settings?.galleryPhotoUrl ? itinerary.settings.galleryPhotoUrl : ''} 
+                        alt="Itinerary Gallery Photo" 
+                        width={2400} // replace with actual image width
+                        height={2400} // replace with actual image height
+                        loading='lazy'
+                        className={styles.itinGeneralInfoPhoto}
+                        style={{objectFit: 'cover'}}            
+                    />
+                    }
+            </div>}
+
              {itinerary?.derivedFromItineraryId && (
                 <p className={styles.derivedFromItineraryText}>
                 Derived from a copy of {' '}
@@ -35,33 +55,18 @@ const GeneralItineraryInformation: FC = () => {
                 </span>
                 </p>
             )}
-           
-            <div className={styles.itinGeneralInfoPhotoContainer}>
-            {itinerary?.settings?.galleryPhotoUrl && <Image 
-                    src={itinerary.settings?.galleryPhotoUrl ? itinerary.settings.galleryPhotoUrl : ''} 
-                    alt="Itinerary Gallery Photo" 
-                    width={2400} // replace with actual image width
-                    height={2400} // replace with actual image height
-                    loading='lazy'
-                    className={styles.itinGeneralInfoPhoto}
-                    style={{objectFit: 'cover'}}            
-                />}
-            </div>
-            <div className={styles.itinGeneralInfoTextSectionWIthCopyButton}> 
+            
+           <div className={styles.itinGeneralInfoTextSectionWIthCopyButton}> 
                 <div className={styles.itinGeneralInfoTextSection}>
                     <p className={styles.publicItinViewTitle}>{itinerary?.settings?.title }</p>
                     <p>{itinerary?.settings?.city || 'CITY MISSING'}, {itinerary?.settings?.state || 'STATE MISSING'}</p>
-                    <div style={{margin:"-2rem 0 -0.5rem -0.5rem"}}>
-                       <ItineraryLink itineraryId={itinerary?.id} /> 
-                    </div>
-                </div>
-                <div>
-                    <CopyItineraryButton />
                 </div>
             </div>
-            <div className={styles.itinTitleDescription}>
+                
+            {!summarySectionHidden && <div className={styles.itinTitleDescription}>
                 <ItemDescriptionStaticComponent description={itinerary?.settings?.description ?? ''} />
-            </div>   
+            </div>  
+                } 
           
         </div>
     );

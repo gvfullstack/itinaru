@@ -1,0 +1,56 @@
+/* buttonToolbarContainer.module.css */
+@media (min-width: 0px) {
+
+.buttonToolbarContainer {
+    display: flex;
+    align-items: space-evenly;
+    justify-content: space-evenly;
+    background-color: #ebeaea;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    flex-wrap: nowrap; /* Prevent wrapping of items */
+    position: fixed;
+    top: 2.95rem;
+    left:auto;
+    z-index: 100000;
+    
+  }
+  
+  .utilityToolbarButton {
+    flex: 1 1 0 ; /* Grow each button equally to fill the container */
+    padding: 0.5rem 1rem;
+    border: none;
+    background-color: #ebeaea;
+    color: rgb(59, 59, 59);
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.2s ease-in-out;
+    text-align: center; /* Center the button text */
+    border-right: solid 1px #dbdada;
+  }
+  
+  
+  .utilityToolbarButton:hover {
+    background-color: #dbdada;
+  }
+  
+  .utilityToolbarButton:active {
+    background-color: #dbdada;
+  }
+  
+  .utilityToolbarButton:focus {
+    outline: none;
+    }
+}
+
+@media (min-width: 600px) {
+    .buttonToolbarContainer {
+        width: 600px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .buttonToolbarContainer {
+        width: 800px;
+    }
+}

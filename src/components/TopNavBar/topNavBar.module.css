@@ -19,11 +19,7 @@
     background-color: whitesmoke;
   }
   
-  .navBuffer{
-    height: 2rem;
-    width: 100%;
-    background: linear-gradient(whitesmoke, rgba(255, 255, 255, 0.5));
-  }
+
 
   .title{
     font-size: 1.5rem;
