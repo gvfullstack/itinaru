@@ -7,6 +7,25 @@
   padding: 0 1.5rem;
 }
 
+.buttonToolbarContainer{
+  position: fixed;
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin: 1rem 0;
+  padding: 0 1.5rem;
+  top: 2rem;
+  /* background-color: tan; */
+}
+
+.hideSummaryButton{
+  background-color: transparent;
+  border: none;
+}
+
 .publicItinViewContainer{
     display: flex;
     flex-direction: column;
@@ -38,6 +57,7 @@
     width: 100%;
     align-self: center;
     height: fit-content;
+    margin-top: 1.80rem;
 }
 
 .derivedFromItineraryText{
@@ -70,6 +90,7 @@
   width: 100%;
   text-align: justify;
   padding: 0 1.5rem;
+  margin: 1rem 0 2rem 0 ;
 }
 .itinGeneralInfoTextSection{
   width: 100%;
@@ -101,7 +122,7 @@
   height: 80vh;
 }
 
-.copyItineraryButton {
+.utilityToolbarButton {
   background-color: transparent;
   border: none;
   color: #383838;
@@ -115,11 +136,11 @@
   transition: color 0.3s ease;
 }
 
-.copyItineraryButton:hover {
+.utilityToolbarButton:hover {
   color: #555;
 }
 
-.copyItineraryButton svg {
+.utilityToolbarButton svg {
   margin-right: 8px;
   width: 1em;
   height: 1em;
@@ -151,14 +172,11 @@
     width: 600px;
   }
 
-  .itinGeneralInfoPhoto{
-    border-radius: 10px;
-  } 
   .mapIframe{
     max-width: 80vw;
   }
 
-  .copyItineraryButton {
+  .utilityToolbarButton {
     padding: 12px 18px;
     font-size: 18px;
   }
@@ -179,12 +197,7 @@
     font-size: 20px;
   }
 
-  .itinGeneralInfoPhoto{
-    border-radius: 10px;
-  } 
-
-
-  .copyItineraryButton {
+  .utilityToolbarButton {
     padding: 14px 20px;
     font-size: 20px;
   }
