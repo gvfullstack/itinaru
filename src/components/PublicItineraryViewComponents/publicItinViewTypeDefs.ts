@@ -55,7 +55,7 @@ export type ItineraryItem = {
     derivedFromItineraryId?: string,
     id?: string,
     uid?: string,
-    profilePictureUrl?: string,
+    profilePictureUrl?: string | null,
     isDeleted?: boolean,
     settings?: ItinerarySettings,
     items?: ItineraryItems,
