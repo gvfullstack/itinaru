@@ -50,7 +50,7 @@ const SearchBar: React.FC = () => {
             {isSearchReady && (
                 <Configure 
                     attributesToRetrieve={[
-                        'id', 'uid', 'settings.title', 'settings.description',
+                        'id', 'uid', 'profilePictureUrl', 'settings.title', 'settings.description',
                         'settings.neighborhood', 'settings.city', 'settings.state',
                         'settings.duration', 'settings.galleryPhotoUrl'
                     ]}

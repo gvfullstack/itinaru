@@ -1,0 +1,82 @@
+@keyframes highlightFade {
+  0% {
+    background-color: transparent; /* Highlight color */
+  }
+
+  50% {
+    background-color: rgb(203, 203, 203); /* Normal background color */
+  }
+ 
+  75% {
+      background-color: transparent; /* Normal background color */
+  } 
+}
+
+@media (min-width: 0px) {
+.ItineraryLinkSection{
+  font-size: 16px;
+  padding: 0 .5rem;
+  display: flex;
+  align-items: center;  
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+
+}
+.copyItineraryLinkButton {
+  background-color: transparent;
+  border: none;
+  color: #383838;
+  padding: 0px 12px;
+  font-size: 16px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  margin: 0;
+  height: 1rem;
+  width: 1rem;
+}
+
+.ItineraryLinkSectionHeader
+{
+  padding: 0;
+  animation: highlightFade 2s ease-out; /* Adjust duration as needed */
+}
+
+}
+
+@media (min-width: 600px) {
+  .ItineraryLinkSection{
+      font-size: 18px;
+  }
+.copyItineraryLinkButton {
+  padding: 12px 18px;
+  font-size: 18px;
+  height: 1.25rem;
+  width: 1.25rem;
+}
+
+.copySuccess{
+  display: flex;
+  align-items: center;
+  /* justify-content: center; */
+  height: 3rem;
+  align-self: center  ;
+}
+}
+
+@media (min-width: 1200px) {
+  .ItineraryLinkSection{
+      font-size: 20px;
+  }
+  .copyItineraryLinkButton {
+    padding: 14px 20px;
+    font-size: 20px;
+    height: 1.5rem;
+  width: 1.5rem;
+  }
+
+}

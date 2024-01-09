@@ -14,11 +14,59 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
   
+  .userPhotoPlaceholder {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .userPhotoPlaceholder svg {
+    width: 100%;
+    height: 100%;
+  }
+
   .aspectRatioBox {
     position: relative;
     width: 22rem;
     height: 13rem;
     display: block;
+  }
+
+  .titleContainer {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 0 .5rem;
+  }
+  .aspectRatioBox2 {
+    position: relative;
+    width: 2rem;
+    height: 2rem;
+    display: block;
+  }
+
+  .profilePicture {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    border-radius: 50px;
+    cursor: pointer;
+  }
+
+  .defaultImage{
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-color: #ffffff;
+    border-radius: 50px;
+    border-color: #414141;
+    border-width: 1px;
+    border-style: solid;
+    cursor: pointer;
   }
 
   .image {

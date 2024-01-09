@@ -87,6 +87,8 @@ export type ItineraryItem = {
     lastUpdatedTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue;
     derivedFromItineraryId?: string,
     id?: string;
+    uid?: string,
+    profilePictureUrl?: string,
     settings: ItinerarySettings;
     items: TransformedItineraryItem[];
 }

@@ -212,7 +212,7 @@ const onCropComplete = async (croppedArea: ICroppedArea, croppedAreaPixels: ICro
                   return; // Exit early; the rest of the code will be handled by handleReauthentication
                 }
 
-                await updateItineraryAccessUserData(email, username, profilePictureUrl, authUser)
+                // await updateItineraryAccessUserData(email, username, downloadURL, authUser) // ended up not using because photos  use the same directory when a new photo is uploaded. Keeping here as the related function can help make mass updates to firestore tables. 
                 
                 await updateDoc(userRef, {
                   userFirstLastName,

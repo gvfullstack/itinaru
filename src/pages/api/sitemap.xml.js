@@ -11,7 +11,7 @@ export default async (req, res) => {
     const itineraries = await fetchItineraries(); // Replace with your actual data fetching logic
 
     // Create a stream to write to
-    const stream = new SitemapStream({ hostname: 'http://itinaru.com/' });
+    const stream = new SitemapStream({ hostname: 'https://www.itinaru.com/' });
 
     // Loop over your itineraries and add them to the sitemap
     itineraries.forEach(itinerary => {

@@ -10,7 +10,7 @@ export const updateItineraryAccessUser = async ({
 }: UpdateUserAccessProps) => {
   const db = firebase.firestore();
   const querySnapshot = await db
-    .collection('ItineraryAccess')
+    .collection('itineraries')
     .where('uid', '==', uid)
     .get();
 
@@ -22,17 +22,19 @@ export const updateItineraryAccessUser = async ({
   const batch = db.batch();
 
   querySnapshot.forEach((doc) => {
-    const docRef = db.collection('ItineraryAccess').doc(doc.id);
+    const docRef = db.collection('itineraries').doc(doc.id);
 
     const updateData: Partial<UpdateUserAccessProps> = {
         uid,
     };
 
-    if (email) updateData.email = email;
-    if (username) updateData.username = username;
+    // if (email) updateData.email = email;
+    // if (username) updateData.username = username;
     if (profilePictureUrl) updateData.profilePictureUrl = profilePictureUrl;
 
-    batch.update(docRef, updateData);
+    // batch.update(docRef, updateData);
+    batch.set(docRef, { profilePictureUrl }, { merge: true });
+
   });
 
   batch.commit()

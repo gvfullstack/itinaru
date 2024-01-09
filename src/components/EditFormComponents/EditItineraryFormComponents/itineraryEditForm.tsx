@@ -13,7 +13,7 @@ import state_names from '../../../data/state_names.js';
 import {myItinerariesResults} from '../../MyItinerariesGallery/myItinerariesAtoms';
 import { openDB } from 'idb';
 import Quill from 'quill';
-import ItineraryLink from '../../AppContolsComponents/shareableLink/itineraryPublicLink';
+import ItineraryLink from './shareableLink/itineraryPublicLink';
 const Parchment = Quill.import('parchment');
 
 var Block = Quill.import('blots/block');
@@ -316,8 +316,9 @@ const handleQuillChange = (field: FieldNames, value: string) => {
                             }
 
                     </div>
-
+                       
                     <ItineraryLink itineraryId={itinerary.id} />
+                    
 
                     {itinerary.settings?.visibility === 'public' &&
                       <TextField
