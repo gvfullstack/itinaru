@@ -31,10 +31,13 @@
   /* background-color: #333; */
   transition: right 0.3s ease;
   overflow-y: auto; /* Scrollable if content overflows */
+  z-index: 100001;
+  
 }
 
 .menuBar.show {
   right: 0; /* Visible */
+  
 }
 
 .menuOptions {

@@ -77,10 +77,13 @@ const Menu: React.FC = () => {
 
   return (
     <div className={styles.menuContainer} ref={menuRef}>
+      
       <button onClick={toggleMenu} className={styles.menuButton}>
           <span className={styles.hamburgerIconContainer}>{hamburgerIcon}</span>
           <span className={styles.menuText}>Menu</span>
-      </button> <div className={`${styles.menuBar} ${menuVisible ? styles.show : ''}`}>
+      </button> 
+      
+      <div className={`${styles.menuBar} ${menuVisible ? styles.show : ''}`}>
         <button onClick={toggleMenu} className={styles.closeButton}>Close</button>
         <ul className={styles.menuOptions}>
           {authUser &&

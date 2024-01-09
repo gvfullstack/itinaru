@@ -6,13 +6,14 @@
     align-items: space-evenly;
     justify-content: space-evenly;
     background-color: #ebeaea;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
     width: 100%;
     flex-wrap: nowrap; /* Prevent wrapping of items */
     position: fixed;
     top: 2.95rem;
     left:auto;
-    z-index: 100000;
+    z-index: 10 ;
+    border-style: none;
     
   }
   
@@ -29,7 +30,10 @@
     border-right: solid 1px #dbdada;
   }
   
-  
+  .utilityToolbarButton:last-child  {
+    border-right: none;
+  }
+
   .utilityToolbarButton:hover {
     background-color: #dbdada;
   }

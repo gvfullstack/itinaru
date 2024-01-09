@@ -31,12 +31,9 @@ export async function fetchItineraryFromDatabase(itineraryId: string, userId: st
             .where('isDeleted', '!=', true)
             .get();
             
-            console.log("Raw items data:", itemsQuerySnapshot.docs.map(doc => doc.data()));
 
         const items = itemsQuerySnapshot.docs
             .map(doc => transformItineraryItem(doc.data() as TransformedItineraryItem));
-
-            console.log("Items before sorting:", items);
 
             items.sort((a, b) => {
               // Assuming startTime is a Timestamp object or null
@@ -45,7 +42,6 @@ export async function fetchItineraryFromDatabase(itineraryId: string, userId: st
                 return aTime - bTime;
             });
 
-            console.log("Items after sorting:", items);
 
         return {
             ...itinerary,
