@@ -23,7 +23,7 @@ export const updateItineraryAccessUserData = async (
         checkAndUpdateField('email', email);
         checkAndUpdateField('username', username || '');
         checkAndUpdateField('profilePictureUrl', profilePictureUrl || '');
-        
+        console.log('profilePictureUrl', profilePictureUrl )
     
         if (Object.keys(updatedFields).length > 1) {  // More than just `userId`
             updateItineraryAccessUser(updatedFields as UpdateUserAccessProps);                

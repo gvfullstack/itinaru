@@ -1,5 +1,4 @@
   import React, { useEffect, useState } from 'react';
-  import styles from './newItineraryTitleInput.module.css';
   import { db  } from '../../FirebaseAuthComponents/config/firebase.database';
   import { collection, addDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
   import { authUserState } from '../../../atoms/atoms'
@@ -11,7 +10,7 @@
   import { toast } from 'react-toastify';
   import 'react-toastify/dist/ReactToastify.css';
   import { openDB } from 'idb';
-
+  import styles from './newItineraryTitleInput.module.css';
   
   interface NewItineraryTitleInputProps {
     hideBox: () => void;
@@ -56,6 +55,7 @@
 	      lastUpdatedTimestamp: serverTimestamp(),  
         id: "",
         uid: authUser.uid,
+        profilePictureUrl: authUser.profilePictureUrl ,
         isDeleted: false,
         settings: {
           title: title,
@@ -116,6 +116,7 @@
      const newItinerary = {
       id: itineraryId,
       uid: userId,  
+      profilePictureUrl: authUser.profilePictureUrl,
       isDeleted: false,
       settings: {
         title: title,

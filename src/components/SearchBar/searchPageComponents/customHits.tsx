@@ -49,10 +49,10 @@ export default function CustomHits({ searchClient }: CustomHitsProps) {
     }, [hits]);
     
     useEffect(() => {
-        console.log('savedHits:', hits)
+        console.log('savedHits:',   )
         
     }, [hits])
-   
+
     return (
         <>{savedHits.map((itin, index) => (
             <ItinGalleryComponent 

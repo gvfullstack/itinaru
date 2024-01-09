@@ -22,9 +22,9 @@ export type Itinerary = {
   creationTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue;
 	lastUpdatedTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue;
   derivedFromItineraryId?: string,
-  id: string,
+  id?: string,
   uid: string,
-  profilePictureUrl?: string;
+  profilePictureUrl?: string | null;
   isDeleted?: boolean;
   settings?: ItinerarySettings;
   items?: ItineraryItems;
@@ -66,9 +66,9 @@ export type ItineraryItem = {
     uid: string;
     email?: string;
     username?: string;
-    profilePictureUrl?: string;
     itineraryId: string;
     creatorId?: string;
+    profilePictureUrl?: string;
     title?: string;
     neighborhood?: string;
     city?: string;
@@ -114,6 +114,7 @@ export type ItineraryItem = {
     derivedFromItineraryId?: string,
     id?: string;
     uid: string,
+    profilePictureUrl?: string;
     isDeleted?: boolean;
     settings: ItinerarySettings;
     items: TransformedItineraryItem[];
@@ -155,6 +156,7 @@ export type IndexDBItinerary = {
   derivedFromItineraryId?: string,
   id?: string;
   uid?: string,
+  profilePictureUrl?: string;
   isDeleted?: boolean;
   settings?: ItinerarySettings;
   items?: IndexDBItineraryItem[];

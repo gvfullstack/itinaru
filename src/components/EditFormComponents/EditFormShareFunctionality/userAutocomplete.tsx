@@ -122,14 +122,14 @@ type AlgoliaUser = {
     }, [hits]);
   
     const [itinerary, setItinerary] = useRecoilState<Itinerary>(currentlyEditingItineraryState);
+    console.log(itinerary)
     const [itineraryAccessState, setItineraryAccessState] = useRecoilState<ItineraryAccess>(itineraryAccessItinView);
-
       const handleUpdateAccess = (user: UserAccessWithDocId) => {
         const userAlreadyExists = itineraryAccessState.some(existingUser =>
           existingUser.uid === user.uid && existingUser.itineraryId === user.itineraryId
         );
         if (!userAlreadyExists) {
-          saveUserAccessToFirebase(user, setItineraryAccessState, itinerary.id);
+          saveUserAccessToFirebase(user, setItineraryAccessState, itinerary.id || '');
         }
         setSearchQuery('');
       };
@@ -156,11 +156,11 @@ type AlgoliaUser = {
           const transformedUser: UserAccessWithDocId = {
             uid: hit.objectID,
             role: 'viewer',
-            itineraryId: itinerary.id,
+            itineraryId: itinerary.id || '',
             ...(hit.email ? { email: hit.email } : {}),
             ...(hit.username ? { username: hit.username } : {}),
-            ...(hit.profilePictureUrl ? { profilePictureUrl: hit.profilePictureUrl } : {}),
             ...(itinerary.uid ? { creatorId: itinerary.uid } : {}),
+            ...(itinerary.profilePictureUrl ? { creatorProfilePictureUrl: itinerary.profilePictureUrl } : {}),
             ...(itinerary.settings?.title ? { title: itinerary.settings?.title } : {}),
             ...(itinerary.settings?.neighborhood ? { neighborhood: itinerary.settings?.neighborhood } : {}),
             ...(itinerary.settings?.city ? { city: itinerary.settings?.city } : {}),

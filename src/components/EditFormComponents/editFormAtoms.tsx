@@ -1,5 +1,5 @@
 import {atom} from 'recoil';
-import { Itinerary, ItineraryAccess, ItineraryItem,AlgoliaUser} from './editFormTypeDefs'
+import { Itinerary, ItineraryAccess, ItineraryItem,AlgoliaUser, TransformedItinerary} from './editFormTypeDefs'
 import { startOfWeek, addDays, format, isAfter } from 'date-fns';
 
 export const defaultItinerary: Itinerary = {

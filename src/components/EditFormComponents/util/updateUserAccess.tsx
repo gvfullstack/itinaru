@@ -15,7 +15,7 @@ export const useUpdateItineraryAccess = ({itinerary}: {itinerary: Itinerary}) =>
     
     useEffect(() => {
         setLastSavedItinerary({
-            itineraryId: itinerary.id,
+            itineraryId: itinerary.id || '',
             title: itinerary.settings?.title || '',
             neighborhood: itinerary.settings?.neighborhood || '',
             city: itinerary.settings?.city || '',
