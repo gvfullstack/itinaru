@@ -12,8 +12,11 @@ const CreateItineraryLoader: React.FC = () => {
   useEffect(() => {
     setItinerary(newItinerary);
 
+    const timer = setTimeout(() => {
+      router.push('/user/editMyItinerary');
+    }, 2000); // 2000 milliseconds = 2 seconds
+
     // Navigate to edit itinerary page after state update
-    router.push('/user/editMyItinerary');
   }, []);
 
   return (

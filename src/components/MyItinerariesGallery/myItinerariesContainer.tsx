@@ -59,6 +59,7 @@ const MyItineraries: React.FC = () => {
   
 ///this is to prevent errors due to itineraries that might be missing required setting properties
   const checkedItineraries = myItineraries.map(itinerary => {
+    console.log("itinerary", itinerary);
     const defaultSettings = {
       title: "",
       description: "",

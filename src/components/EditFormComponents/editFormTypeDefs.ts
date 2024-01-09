@@ -22,7 +22,7 @@ export type Itinerary = {
   creationTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue;
 	lastUpdatedTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue;
   derivedFromItineraryId?: string,
-  id: string,
+  id?: string,
   uid: string,
   profilePictureUrl?: string | null;
   isDeleted?: boolean;
@@ -68,7 +68,7 @@ export type ItineraryItem = {
     username?: string;
     itineraryId: string;
     creatorId?: string;
-    creatorProfilePictureUrl?: string;
+    profilePictureUrl?: string;
     title?: string;
     neighborhood?: string;
     city?: string;

@@ -20,7 +20,7 @@ type ItinGalleryComponentProps = {
 const ItinGalleryComponent: React.FC<ItinGalleryComponentProps> = ({itinerary}) => {
   const router = useRouter();
   const [checkedItinerary, setCheckedItinerary] = useState<TransformedItinerary>(itinerary);
-
+ 
   useEffect(() => {
     const defaultSettings: ItinerarySettings = {
       title: "",
@@ -99,11 +99,9 @@ const updateIndexedDB = async () => {
     await store.put(checkedItineraryRef.current, `currentlyEditingItineraryStateEF_${authUser?.uid}`);
     console.log("after openDB", store);
     await tx.done;
-    router.push(`/user/editMyItinerary`);
-
+    router.push(`/user/editItineraryLoader`);
   }
 };
-
 
 //////////////////////////////
   return (
