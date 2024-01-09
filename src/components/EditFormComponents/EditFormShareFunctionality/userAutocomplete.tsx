@@ -129,7 +129,7 @@ type AlgoliaUser = {
           existingUser.uid === user.uid && existingUser.itineraryId === user.itineraryId
         );
         if (!userAlreadyExists) {
-          saveUserAccessToFirebase(user, setItineraryAccessState, itinerary.id);
+          saveUserAccessToFirebase(user, setItineraryAccessState, itinerary.id || '');
         }
         setSearchQuery('');
       };
