@@ -156,7 +156,7 @@ type AlgoliaUser = {
           const transformedUser: UserAccessWithDocId = {
             uid: hit.objectID,
             role: 'viewer',
-            itineraryId: itinerary.id,
+            itineraryId: itinerary.id || '',
             ...(hit.email ? { email: hit.email } : {}),
             ...(hit.username ? { username: hit.username } : {}),
             ...(itinerary.uid ? { creatorId: itinerary.uid } : {}),
