@@ -583,7 +583,7 @@ const handleShowSharingModal = () => {
   setShowSharingModal(prev => true);
 
   const fetchData = async () => {
-    const fetchedAccessList = await fetchSharedItinerariesItinView(itinerary.id);
+    const fetchedAccessList = await fetchSharedItinerariesItinView(itinerary.id || '');
 
     if (fetchedAccessList !== undefined) {
       setItinAccessList(prevList => {
