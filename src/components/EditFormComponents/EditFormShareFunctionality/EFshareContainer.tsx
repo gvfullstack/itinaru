@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from './EFshareContainer.module.css';
 import UserAutocomplete from './userAutocomplete';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {DynamicFontAwesomeIcon} from '@/components';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
 import ShareWhitelistUsers from './EFshareWhitelistUsers';
@@ -13,7 +13,7 @@ interface Props {
 function SharingModal({ viewHideModal }: Props) {  
     
     const faXmarkIcon = (
-        <FontAwesomeIcon 
+        <DynamicFontAwesomeIcon 
             icon={faXmark} 
             className={styles.faXmark} 
             type="button" 

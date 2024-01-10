@@ -4,7 +4,7 @@ import styles from './Menu.module.css';
 import { useRecoilState } from 'recoil';
 import { logout } from '../FirebaseAuthComponents/config/firebase.auth.js';
 import { useRouter } from 'next/router';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {DynamicFontAwesomeIcon} from '@/components';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
 
@@ -19,7 +19,7 @@ const Menu: React.FC = () => {
 
   const resetAllStates = useResetAllStates();
 
-  const hamburgerIcon = <FontAwesomeIcon icon={faBars} className= {styles.hamburgerIcon} />;
+  const hamburgerIcon = <DynamicFontAwesomeIcon icon={faBars} className= {styles.hamburgerIcon} />;
   
   const toggleMenu = () => {
     setMenuVisible(prevState => !prevState);

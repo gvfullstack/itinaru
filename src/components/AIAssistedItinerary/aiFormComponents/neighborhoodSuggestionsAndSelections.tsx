@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { neighborhoodRecommendationList, tripPreferencesAtom } from '../aiItinAtoms';
 import { NeighborhoodRecommendation, NeighborhoodRecommendationList} from '../aiItinTypeDefs';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {DynamicFontAwesomeIcon} from '@/components';
 import { faMedal } from '@fortawesome/free-solid-svg-icons';
 import styles from '../aiItinBuilderCSS/NeighborhoodRecommendations.module.css';
 
@@ -87,7 +87,7 @@ const NeighborhoodRecommendations: React.FC<NeighborhoodRecommendationList> = ()
             >
               <h3 className={styles.rating}>
                 {recommendation.rating === 'Top Match' && (
-                  <FontAwesomeIcon className={styles.icon} icon={faMedal} />
+                  <DynamicFontAwesomeIcon className={styles.icon} icon={faMedal} />
                 )}
                 {recommendation.rating}
                 {isSelected && <p className={styles.selectedText}>Selected</p>}

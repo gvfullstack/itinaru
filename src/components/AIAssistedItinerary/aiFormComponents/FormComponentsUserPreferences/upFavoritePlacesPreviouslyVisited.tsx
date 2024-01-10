@@ -4,7 +4,7 @@ import { styled } from '@mui/material/styles';
 import { useRecoilState } from "recoil";
 import { userPreferencesAtom} from "../../aiItinAtoms";
 import ViewAllFavPlacesPrevVisited from "./viewAllFavPlacesPrevVisited";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {DynamicFontAwesomeIcon} from '@/components';
 import { faEye, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 
@@ -110,14 +110,14 @@ const FavoritePlacesPreviouslyVisited: React.FC = (props) => {
         <IconButton 
             onClick={()=>handleAddFavoritePlacesPreviouslyVisited(favPlacesPrevVisiteInput)}
         >
-            <FontAwesomeIcon icon={faPlus} size="xs"/>
+            <DynamicFontAwesomeIcon icon={faPlus} size="xs"/>
         </IconButton>
     
     {showViewAllFavPlacesPrevVisited ? (
         <ViewAllFavPlacesPrevVisited handleClose={handleClose} />
     ) : (
         <IconButton onClick={handleClick}>
-            <FontAwesomeIcon icon={faEye} size="xs"/>
+            <DynamicFontAwesomeIcon icon={faEye} size="xs"/>
         </IconButton>
     )}
 </div>

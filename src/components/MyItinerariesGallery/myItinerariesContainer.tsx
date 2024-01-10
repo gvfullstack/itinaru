@@ -1,16 +1,12 @@
 import ItinGalCompWrapper from './itinGallerySubComponents/itinGalCompWrapper';
 import ItinGalleryComponent from './itinGallerySubComponents/itinGalleryComponent';
 import styles from './myItineraries.module.css';
-import { useState, useRef, useEffect } from 'react';
-import { TransformedItinerary, Itinerary } from '../EditFormComponents/editFormTypeDefs';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { useState, useEffect } from 'react';
+import { Itinerary } from '../EditFormComponents/editFormTypeDefs';
 import {myItinerariesResults} from './myItinerariesAtoms';
 import {useRecoilState } from 'recoil';
 import  fetchUserItineraries  from './myItineraryUtilityFunctions/fetchMyItineraries';
-import { toast } from 'react-toastify';
 import { authUserState } from '../../atoms/atoms'
-import { openDB } from 'idb';
 import SharedItineraries from './itinerariesSharedWithMe';
 import {itineraryInEditNeedsDeletionFromRecoilState, currentlyEditingItineraryState} from '../EditFormComponents/editFormAtoms';
 

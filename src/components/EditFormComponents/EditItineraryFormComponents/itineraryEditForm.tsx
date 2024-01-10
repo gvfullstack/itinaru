@@ -1,7 +1,7 @@
 import React, { useEffect, useState, FC, forwardRef} from 'react';
 import {ItinerarySettings, Itinerary } from '../editFormTypeDefs';
 import styles from '../EditFormCSS/itineraryEditForm.module.css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {DynamicFontAwesomeIcon} from '@/components';
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 import dynamic from 'next/dynamic';
 import 'react-quill/dist/quill.snow.css';  // or quill.bubble.css if you're using the bubble theme
@@ -298,7 +298,7 @@ const handleQuillChange = (field: FieldNames, value: string) => {
                     />
                     Public
                   </label>
-                        <FontAwesomeIcon 
+                        <DynamicFontAwesomeIcon 
                             icon={faQuestionCircle} 
                             className={styles.infoIcon}
                             onClick={() => setShowInfoBox(true)}
