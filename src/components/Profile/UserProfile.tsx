@@ -17,7 +17,7 @@ import 'react-quill/dist/quill.snow.css';
 import BioComponent from './BioComponent';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {DynamicFontAwesomeIcon} from '@/components';
 import {faTrashCan, faPaperclip, faRotateLeft } from '@fortawesome/free-solid-svg-icons';
 import Cropper from 'react-easy-crop'
 import Slider from '@mui/material/Slider'
@@ -499,7 +499,7 @@ const updatePrivacySettings = async () => {
 };
 
 const trashDelete = (
-        <FontAwesomeIcon 
+        <DynamicFontAwesomeIcon 
             icon={faTrashCan} 
             className={styles.trashIcon} 
             type="button" 
@@ -512,7 +512,7 @@ const trashDelete = (
 );
 
 const resetPhotoIcon = (
-        <FontAwesomeIcon
+        <DynamicFontAwesomeIcon
             icon={faRotateLeft}
             className={styles.resetPhotoIcon}
             type="button"
@@ -521,7 +521,7 @@ const resetPhotoIcon = (
         />
       );
 const attachIcon = (
-      <FontAwesomeIcon 
+      <DynamicFontAwesomeIcon 
           icon={faPaperclip} 
           className={styles.attachIcon} 
           type="button" 

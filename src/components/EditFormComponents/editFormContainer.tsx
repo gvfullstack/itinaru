@@ -5,11 +5,10 @@ import {currentlyEditingItineraryState, itineraryAccessItinView} from './editFor
 import { Itinerary, ItinerarySettings, TimeObject, TransformedItineraryItem, TransformedItinerary, ItineraryItem} from './editFormTypeDefs'
 import {useRecoilState, useRecoilCallback} from 'recoil';
 import styles from './EditFormCSS/itineraryEditForm.module.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faXmark, faTrashCan, faPaperclip, faRotateLeft, faUserPlus } from '@fortawesome/free-solid-svg-icons';
+import {DynamicFontAwesomeIcon} from '@/components';
+import { faTrashCan, faPaperclip, faRotateLeft, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import { faFloppyDisk } from '@fortawesome/free-regular-svg-icons';
 import { authUserState } from '../../atoms/atoms'
-// import { collection, doc, updateDoc, addDoc, deleteDoc, setDoc, Timestamp  } from 'firebase/firestore';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import { db  } from '../FirebaseAuthComponents/config/firebase.database';
@@ -327,7 +326,7 @@ async function saveItineraryToFirestore() {
 
 
 const trashDelete = (
-  <FontAwesomeIcon 
+  <DynamicFontAwesomeIcon 
       icon={faTrashCan} 
       className={styles.trashIcon} 
       type="button" 
@@ -335,7 +334,7 @@ const trashDelete = (
   />
 );
 const floppySave = (
-  <FontAwesomeIcon 
+  <DynamicFontAwesomeIcon 
       icon={faFloppyDisk} 
       className={styles.floppyDisk} 
       type="button" 
@@ -351,7 +350,7 @@ const floppySave = (
 
 
 const attachIcon = (
-  <FontAwesomeIcon 
+  <DynamicFontAwesomeIcon 
       icon={faPaperclip} 
       className={styles.attachIcon} 
       type="button" 
@@ -363,7 +362,7 @@ const attachIcon = (
 );
 
 const resetPhotoIcon = (
-  <FontAwesomeIcon
+  <DynamicFontAwesomeIcon
       icon={faRotateLeft}
       className={styles.resetPhotoIcon}
       type="button"
@@ -375,7 +374,7 @@ const resetPhotoIcon = (
 );
 
 const addContributorIcon = (
-  <FontAwesomeIcon
+  <DynamicFontAwesomeIcon
       icon={faUserPlus}
       className={styles.addContributorIcon}
       type="button"
@@ -555,7 +554,7 @@ const removeImage = async (e: React.MouseEvent<HTMLElement | SVGSVGElement>)  =>
 };
 ////////////////////////////
 const deletePhotoIcon = (
-  <FontAwesomeIcon
+  <DynamicFontAwesomeIcon
       icon={faTrashCan}
       className={styles.deletePhotoIcon}
       type="button"

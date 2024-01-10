@@ -1,9 +1,8 @@
-import React, {useEffect, useState} from "react";
+import React, { useState} from "react";
 import { itineraryItemsState, tripPreferencesAtom, userPreferencesAtom } from '../aiItinAtoms';
 import { useRecoilState } from 'recoil';
 import styles from '../aiItinBuilderCSS/itinerary.module.css';
 import { ItineraryItem } from "../aiItinTypeDefs";
-import DraggableItineraryItem from './draggableItineraryItem';
 import DroppableItineraryContainer from './droppableItineraryContainer';
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -11,8 +10,8 @@ import { getSelectedUserPreferences } from "./FormComponentsUserPreferences/getU
 import { getSelectedTripPreferences } from "./FormComponentsTravelPreferences/getTravelPreferences";
 import getConfig from 'next/config';
 import { v4 as uuidv4 } from 'uuid';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faQuestionCircle, faCrosshairs, faXmark, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import {DynamicFontAwesomeIcon} from '@/components';
+import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { faFloppyDisk } from '@fortawesome/free-regular-svg-icons';
 
 
@@ -22,7 +21,7 @@ const Itinerary: React.FC = () => {
   const [itineraryItems, setItineraryItems] = useRecoilState(itineraryItemsState);
 
   const floppyDiskAddSave = (
-    <FontAwesomeIcon 
+    <DynamicFontAwesomeIcon 
         icon={faFloppyDisk as any} 
         className={styles.floppyDisk} 
         type="button" 
@@ -30,7 +29,7 @@ const Itinerary: React.FC = () => {
 );
   
 const trashDelete = (
-    <FontAwesomeIcon 
+    <DynamicFontAwesomeIcon 
         icon={faTrashCan} 
         className={styles.trashIcon} 
         type="button" 

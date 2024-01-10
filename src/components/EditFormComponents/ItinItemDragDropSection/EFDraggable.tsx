@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect, Ref, forwardRef, useImperativeHandl
 import { useDrag, DragPreviewImage  } from 'react-dnd';
 import { ItineraryItem, ItemTypes, Itinerary} from '../editFormTypeDefs';
 const { v4: uuidv4 } = require('uuid');
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {DynamicFontAwesomeIcon} from '@/components';
 import { faExternalLinkAlt, faDiamondTurnRight, faEllipsisVertical, 
   faStopwatch, faTrash, faPenToSquare} from "@fortawesome/free-solid-svg-icons";
 import { useRecoilState } from 'recoil';
@@ -14,12 +14,12 @@ import dayjs from 'dayjs';
 import StaticStarRating from './StaticStarRating';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
 
-const externalLink = <FontAwesomeIcon className={styles2.itinItemsIcons} icon={faExternalLinkAlt} />;
-const mapMarkerAlt = <FontAwesomeIcon className={styles2.itinItemsIcons} icon={faDiamondTurnRight} />;
-const ellipsisVertical = <FontAwesomeIcon className={styles2.itinItemsIcons} icon={faEllipsisVertical} />;
-const clock = <FontAwesomeIcon className={styles2.itinItemsIcons} icon={faStopwatch} />;
-const deleteItemIcon = <FontAwesomeIcon className={styles2.itinItemsIcons} icon={faTrash} />;
-const editItemIcon = <FontAwesomeIcon className={styles2.itinItemsIcons} icon={faPenToSquare} />;
+const externalLink = <DynamicFontAwesomeIcon className={styles2.itinItemsIcons} icon={faExternalLinkAlt} />;
+const mapMarkerAlt = <DynamicFontAwesomeIcon className={styles2.itinItemsIcons} icon={faDiamondTurnRight} />;
+const ellipsisVertical = <DynamicFontAwesomeIcon className={styles2.itinItemsIcons} icon={faEllipsisVertical} />;
+const clock = <DynamicFontAwesomeIcon className={styles2.itinItemsIcons} icon={faStopwatch} />;
+const deleteItemIcon = <DynamicFontAwesomeIcon className={styles2.itinItemsIcons} icon={faTrash} />;
+const editItemIcon = <DynamicFontAwesomeIcon className={styles2.itinItemsIcons} icon={faPenToSquare} />;
 
 
 import { currentlyEditingItineraryState } from '../editFormAtoms';

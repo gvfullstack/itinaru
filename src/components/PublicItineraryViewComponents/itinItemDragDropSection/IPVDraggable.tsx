@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect, Ref, forwardRef, useImperativeHandl
 import { useDrag, useDrop } from 'react-dnd';
 import { ItineraryItem, ItemTypes, Itinerary} from '../publicItinViewTypeDefs';
 const { v4: uuidv4 } = require('uuid');
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {DynamicFontAwesomeIcon} from '@/components';
 import { faExternalLinkAlt, faDiamondTurnRight, faEllipsisVertical, 
   faStopwatch, faTrash, faPenToSquare} from "@fortawesome/free-solid-svg-icons";
 import { useRecoilState } from 'recoil';
@@ -10,10 +10,10 @@ import styles from'./dragDrop.module.css'
 import ItemDescriptionStaticComponent from '../itemDescriptionStaticComponent';
 import dayjs from 'dayjs'; 
 
-const externalLink = <FontAwesomeIcon className={styles.itinItemsIcons} icon={faExternalLinkAlt} />;
-const mapMarkerAlt = <FontAwesomeIcon className={styles.itinItemsIcons} icon={faDiamondTurnRight} />;
-const ellipsisVertical = <FontAwesomeIcon className={styles.itinItemsIcons} icon={faEllipsisVertical} />;
-const clock = <FontAwesomeIcon className={styles.itinItemsIcons} icon={faStopwatch} />;
+const externalLink = <DynamicFontAwesomeIcon className={styles.itinItemsIcons} icon={faExternalLinkAlt} />;
+const mapMarkerAlt = <DynamicFontAwesomeIcon className={styles.itinItemsIcons} icon={faDiamondTurnRight} />;
+const ellipsisVertical = <DynamicFontAwesomeIcon className={styles.itinItemsIcons} icon={faEllipsisVertical} />;
+const clock = <DynamicFontAwesomeIcon className={styles.itinItemsIcons} icon={faStopwatch} />;
 
 import {currentlyViewingItineraryState} from '../publicItinViewAtoms';
 import dynamic from 'next/dynamic';

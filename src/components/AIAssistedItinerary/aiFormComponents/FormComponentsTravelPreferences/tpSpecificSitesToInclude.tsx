@@ -6,7 +6,7 @@ import { useRecoilState } from "recoil";
 import { tripPreferencesAtom} from "../../aiItinAtoms";
 import styles from './tpSpecificSitesToInclude.module.css';
 import ViewAllSpecificSites from "./viewAllSpecificSites";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {DynamicFontAwesomeIcon} from '@/components';
 import { faEye,faPlus } from '@fortawesome/free-solid-svg-icons';
 
 const PinkOutlinedTextField = styled(TextField)(({ theme }) => ({
@@ -98,14 +98,14 @@ const SpecificSitesToIncludeInput: React.FC<TripPreferences> = (props) => {
             <IconButton  
               onClick={()=>handleAddSpecificSitesToInclude(specificSitesToIncludeInput)}
               >
-              <FontAwesomeIcon icon={faPlus} size="xs"/>
+              <DynamicFontAwesomeIcon icon={faPlus} size="xs"/>
             </IconButton>
             
             {showViewAllSpecificSites ? (
                 <ViewAllSpecificSites handleClose={handleClose} />
             ) : (
                 <IconButton onClick={handleClick}>
-                  <FontAwesomeIcon icon={faEye} size="xs"/>
+                  <DynamicFontAwesomeIcon icon={faEye} size="xs"/>
                 </IconButton>
             )}
         </div>

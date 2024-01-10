@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {DynamicFontAwesomeIcon} from '@/components';
 import { faLink } from '@fortawesome/free-solid-svg-icons';
 import style from './itineraryPublicLink.module.css';
 import style2 from '../utilityToolBar/utilityToolbar.module.css';
@@ -8,7 +8,7 @@ interface ItineraryLinkProps {
   }
 
 const ItineraryLink: React.FC<ItineraryLinkProps> = ({ itineraryId }) => {
-    const copyIcon = <FontAwesomeIcon icon={faLink} />
+    const copyIcon = <DynamicFontAwesomeIcon icon={faLink} />
     const [copySuccess, setCopySuccess] = useState('');
 
     const copyToClipboard = () => {

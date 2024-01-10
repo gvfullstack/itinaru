@@ -12,7 +12,7 @@ import {updateIndexedDB} from '../../PublicItineraryViewComponents/copyItinerary
 import checkAuthenticatedUser from '../../PublicItineraryViewComponents/copyItineraryUtilityFunctions/checkAuthenticatedUser';
 import {copyItineraryToFirestoreAndRetrieveUpdatedItinerary} from '../../PublicItineraryViewComponents/copyItineraryUtilityFunctions/copyItineraryToFirestoreAndRetrieveUpdatedItinerary';
 import styles from './utilityToolbar.module.css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {DynamicFontAwesomeIcon} from '@/components';
 import { faCopy, faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 const CopyItineraryButton: React.FC = () => {
@@ -48,8 +48,8 @@ const copyItinerary = async () => {
 };
 
 
-  const copyIcon = <FontAwesomeIcon icon={faCopy} />
-  const spinner = <FontAwesomeIcon icon={faSpinner} spin />
+  const copyIcon = <DynamicFontAwesomeIcon icon={faCopy} />
+  const spinner = <DynamicFontAwesomeIcon icon={faSpinner} spin />
 
 
   return (

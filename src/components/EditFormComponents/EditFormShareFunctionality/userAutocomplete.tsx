@@ -6,7 +6,7 @@ import { searchUserResultsState, searchUserQueryState,
   currentlyEditingItineraryState, itineraryAccessItinView } from '../editFormAtoms'; // Replace with your own Recoil atoms for users
 import Image from 'next/image';
 import styles from './EFshareContainer.module.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {DynamicFontAwesomeIcon} from '@/components';
 import { faUserPlus, faXmark, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { Itinerary, UserAccessWithDocId,ItineraryAccess } from '../editFormTypeDefs';
 import {saveUserAccessToFirebase}  from './utils/saveUserAccessToFirebase ';
@@ -60,13 +60,13 @@ type AlgoliaUser = {
     const [localSearchQuery, setLocalSearchQuery] = useState(searchQuery);
 
     const addContributorIcon = (
-        <FontAwesomeIcon
+        <DynamicFontAwesomeIcon
             icon={faUserPlus}
             className={styles.addContributorIcon}
         />
       )
     const faXmarkIcon = (
-      <FontAwesomeIcon 
+      <DynamicFontAwesomeIcon 
           icon={faXmark} 
           className={styles.faXmarkInner} 
           type="button"
@@ -78,7 +78,7 @@ type AlgoliaUser = {
     );
 
     const faSearchIcon = (
-      <FontAwesomeIcon 
+      <DynamicFontAwesomeIcon 
           icon={faSearch} 
           className={styles.faSearchInner} 
           type="button" 

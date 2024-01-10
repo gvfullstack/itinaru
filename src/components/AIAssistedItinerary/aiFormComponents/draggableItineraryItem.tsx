@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect, Ref, forwardRef, useImperativeHandl
 import { useDrag, useDrop } from 'react-dnd';
 import { ItineraryItem, ItemTypes } from '../aiItinTypeDefs';
 const { v4: uuidv4 } = require('uuid');
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {DynamicFontAwesomeIcon} from '@/components';
 import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 import { faDiamondTurnRight } from '@fortawesome/free-solid-svg-icons';
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
@@ -14,9 +14,9 @@ import getConfig from 'next/config';
 import { getSelectedUserPreferences } from "./FormComponentsUserPreferences/getUserPreferences";
 import { getSelectedTripPreferences } from "./FormComponentsTravelPreferences/getTravelPreferences";
 import styles from '../aiItinBuilderCSS/itinerary.module.css';
-const externalLink = <FontAwesomeIcon icon={faExternalLinkAlt} />;
-const mapMarkerAlt = <FontAwesomeIcon icon={faDiamondTurnRight} />;
-const ellipsisVertical = <FontAwesomeIcon icon={faEllipsisVertical} />;
+const externalLink = <DynamicFontAwesomeIcon icon={faExternalLinkAlt} />;
+const mapMarkerAlt = <DynamicFontAwesomeIcon icon={faDiamondTurnRight} />;
+const ellipsisVertical = <DynamicFontAwesomeIcon icon={faEllipsisVertical} />;
 
 interface DraggableItineraryItemProps {
   id: string;

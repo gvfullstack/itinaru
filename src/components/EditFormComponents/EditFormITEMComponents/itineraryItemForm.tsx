@@ -2,7 +2,7 @@ import React, { useState, FC, useRef, useEffect, createContext, useContext } fro
 import { ItineraryItems, ItineraryItem, Itinerary } from '../editFormTypeDefs';
 import { v4 as uuidv4 } from 'uuid';
 import styles from '../EditFormCSS/itineraryEditForm.module.css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {DynamicFontAwesomeIcon} from '@/components';
 import { faQuestionCircle, faCrosshairs, faXmark, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { faFloppyDisk } from '@fortawesome/free-regular-svg-icons';
 import dynamic from 'next/dynamic';
@@ -236,14 +236,14 @@ const updateItineraryWithCoordinates = (latitude: number, longitude: number) => 
 }
    
     const cancelMark = 
-        <FontAwesomeIcon 
+        <DynamicFontAwesomeIcon 
             icon={faXmark} 
             className={styles.cancelMark}
             onClick={props.handleShowItemForm}
         />
 
     const trashDelete = (
-        <FontAwesomeIcon 
+        <DynamicFontAwesomeIcon 
             icon={faTrashCan} 
             className={styles.trashIcon} 
             type="button" 
@@ -357,12 +357,12 @@ const updateItineraryWithCoordinates = (latitude: number, longitude: number) => 
     }
     
 <div className={styles.fieldRow + " " + styles.geolocationSection}>
-    <FontAwesomeIcon icon={faCrosshairs} className={styles.crossHair} 
+    <DynamicFontAwesomeIcon icon={faCrosshairs} className={styles.crossHair} 
     onClick={()=>fetchCurrentLocation()} 
     />
 
     <h4 style={{fontSize:"16px"}}>Use current geolocation</h4>
-    <FontAwesomeIcon 
+    <DynamicFontAwesomeIcon 
         icon={faQuestionCircle} 
         className={styles.infoIcon}
         onClick={() => setShowInfoBoxGeolocation(true)}
