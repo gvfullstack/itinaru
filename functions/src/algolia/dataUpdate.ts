@@ -15,7 +15,6 @@ export const updateIndex = functions.firestore.document('itineraries/{itineraryI
       const object = {
         objectID: change.after.id,
         ...newData,
-        // Removed the items array inclusion
       };
 
       console.log('Updating Algolia Index for:', change.after.id);
@@ -25,16 +24,23 @@ export const updateIndex = functions.firestore.document('itineraries/{itineraryI
       await index.deleteObject(change.after.id);
 
       // Additional step: Delete all associated items
-      const query = `itineraryParentId:${change.after.id}`;
-      const hits = await index.search(query);
-      const objectIDs = hits.hits.map(hit => hit.objectID);
+      try {
+        const query = `itineraryParentId:${change.after.id}`;
+        // Perform a search for all objects that match the query
+        const hits = await index.search('', { filters: query });
+        console.log("hits", hits);
+        const objectIDs = hits.hits.map(hit => hit.objectID);
 
-      if (objectIDs.length > 0) {
-        console.log('Deleting associated items from Algolia Index for:', change.after.id);
-        return index.deleteObjects(objectIDs);
-      } else {
-        console.log('No associated items to delete for:', change.after.id);
-        return null;
+        if (objectIDs.length > 0) {
+          console.log('Deleting associated items from Algolia Index for:', change.after.id);
+          return index.deleteObjects(objectIDs);
+        } else {
+          console.log('No associated items to delete for:', change.after.id);
+          return null;
+        }
+      } catch (error) {
+        console.error('Error deleting associated items:', error);
+        throw error; // or handle the error as needed
       }
     }
   });

@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import dynamic from 'next/dynamic';
 // import EditFormContainer from '../../components/EditFormComponents/editFormContainer';
-import {currentlyEditingItineraryState, saveStatusDisplayedEditFormContainer} from '../../components/EditFormComponents/editFormAtoms';
+import {currentlyEditingItineraryState, saveStatusDisplayedEditFormContainer,   defaultItinerary} from '../../components/EditFormComponents/editFormAtoms';
 import { useRecoilState } from 'recoil';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
@@ -100,7 +100,7 @@ const EFEditPage: React.FC = () => {
           });
   
           // Update save status
-          setSaveStatus("Restoring...");
+          setSaveStatus("Loading...");
         }
       } catch (error) {
         console.error("Error loading data from IndexedDB:", error);
@@ -110,7 +110,12 @@ const EFEditPage: React.FC = () => {
     });
   
     // Clean up subscription on component unmount
-    return () => unsubscribe();
+    return () => {
+      // Perform both cleanup actions here
+      unsubscribe(); // Unsubscribe from Firebase auth changes
+      // setItinerary(defaultItinerary); // Resetting the Recoil state
+    };
+    
   }, []);
   
 
