@@ -26,13 +26,9 @@ export async function fetchItineraryFromDatabase(itineraryId: string, userId: st
         }        
 
         const itinerary = itineraryDoc.data() as TransformedItinerary;
-        console.log("SSR Returned Itinerary", itinerary);
         if (itinerary) {
-            console.log("Before conversion:", itinerary.creationTimestamp);
             itinerary.creationTimestamp = convertFirestoreTimestampToDate(itinerary.creationTimestamp);
             itinerary.lastUpdatedTimestamp = convertFirestoreTimestampToDate(itinerary.lastUpdatedTimestamp);
-            console.log("After conversion:", itinerary.creationTimestamp);
-
         }
         // Fetch items from the subcollection
         const itemsQuerySnapshot = await dbServer
@@ -52,8 +48,6 @@ export async function fetchItineraryFromDatabase(itineraryId: string, userId: st
                 return aTime - bTime;
             });
 
-            console.log("SSR Returned Itinerary After", {...itinerary,
-                items: items})
         return {
             ...itinerary,
             items: items
@@ -78,18 +72,31 @@ function transformItineraryItem(item: TransformedItineraryItem): ItineraryItem {
     };
 }
 
+
 interface FirestoreTimestamp {
     _seconds: number;
     _nanoseconds: number;
     toDate(): Date;
 }
 
-function convertFirestoreTimestampToDate(timestamp: FirestoreTimestamp | Date): string {
-    if ('_seconds' in timestamp && '_nanoseconds' in timestamp) {
+function convertFirestoreTimestampToDate(timestamp: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue | string | FirestoreTimestamp | undefined): string {
+    if (timestamp === null || timestamp === undefined) {
+        return ''; // Return blank for strictly null or undefined values
+    }
+
+    if (typeof timestamp === 'object' && '_seconds' in timestamp && '_nanoseconds' in timestamp) {
+        // Handles Firestore Timestamp and FirestoreTimestamp interface
         return new Date(timestamp._seconds * 1000 + timestamp._nanoseconds / 1000000).toISOString();
     } else if (timestamp instanceof Date) {
+        // Handles JavaScript Date object
         return timestamp.toISOString();
+    } else if (typeof timestamp === 'string') {
+        // Handle string (assuming it's already in a correct format)
+        return timestamp;
     }
-    return timestamp; // This case should not happen, but it's here as a fallback
+
+    return ''; // Fallback for any other types that might not be handled
 }
+
+
 

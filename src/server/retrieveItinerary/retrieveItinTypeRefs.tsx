@@ -1,9 +1,15 @@
 import dayjs, { Dayjs } from 'dayjs';
 import firebase from 'firebase/compat/app';
 
+interface FirestoreTimestamp {
+  _seconds: number;
+  _nanoseconds: number;
+  toDate(): Date;
+}
+
 export type ItineraryItem = {
-  creationTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue;
-  lastUpdatedTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue;
+  creationTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue| string | FirestoreTimestamp;
+  lastUpdatedTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue| string | FirestoreTimestamp;
   isDeleted?: boolean;
   itemTitle?: string;
   startTime?: {time?: number | null} ;
@@ -39,8 +45,8 @@ export type ItineraryItem = {
   }
 
 export type Itinerary = {
-  creationTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue;
-	lastUpdatedTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue;
+  creationTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue| string | FirestoreTimestamp;
+	lastUpdatedTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue| string | FirestoreTimestamp;
   derivedFromItineraryId?: string,
   id?: string,
   uid: string,
@@ -56,8 +62,8 @@ export type Itinerary = {
   };
   
   export type TransformedItineraryItem   = {
-    creationTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue;
-  	lastUpdatedTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue;
+    creationTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue | string | FirestoreTimestamp;
+  	lastUpdatedTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue | string | FirestoreTimestamp;
     isDeleted?: boolean;    
     itemTitle?: string;
     startTime?: TimeObject;
@@ -79,8 +85,8 @@ export type Itinerary = {
   }  
 
   export type TransformedItinerary = {
-    creationTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue;
-    lastUpdatedTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue;
+    creationTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue | string | FirestoreTimestamp;
+    lastUpdatedTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue | string | FirestoreTimestamp;
     derivedFromItineraryId?: string,
     id?: string;
     uid: string,
