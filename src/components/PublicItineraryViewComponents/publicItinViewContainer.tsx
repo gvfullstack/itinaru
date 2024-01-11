@@ -30,16 +30,20 @@ const PublicItinViewContainer: FC = () => {
   const [showNotLoggedInModalState, setShowNotLoggedInModalState] = useRecoilState(showNotLoggedInModal);
   const [itinerary, setItinerary] = useRecoilState(currentlyViewingItineraryState);
  
-  function formatTimestamp(timestamp: firebase.firestore.Timestamp | Date | { seconds: number, nanoseconds: number } | firebase.firestore.FieldValue | null | undefined): string {
+  function formatTimestamp(timestamp: firebase.firestore.Timestamp | Date | { seconds: number, nanoseconds: number } | firebase.firestore.FieldValue | string | null | undefined): string {
     if (!timestamp) return '';
   
-    if (timestamp instanceof Date) {
+    if (typeof timestamp === 'string') {
+      // Assuming the string is an ISO date string
+      const date = new Date(timestamp);
+      return date.toLocaleString();
+    } else if (timestamp instanceof Date) {
       // JavaScript Date object
       return timestamp.toLocaleString();
     } else if (timestamp instanceof firebase.firestore.Timestamp) {
       // Firestore Timestamp object
       return timestamp.toDate().toLocaleString();
-    } else if ('seconds' in timestamp && 'nanoseconds' in timestamp) {
+    } else if (typeof timestamp === 'object' && timestamp !== null && 'seconds' in timestamp && 'nanoseconds' in timestamp) {
       // Object with seconds and nanoseconds (similar to Firestore Timestamp)
       const date = new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
       return date.toLocaleString();
@@ -49,7 +53,8 @@ const PublicItinViewContainer: FC = () => {
     }
   
     return ''; // Fallback for null, undefined, or unrecognized format
-  }
+}
+
        
 
 return (
