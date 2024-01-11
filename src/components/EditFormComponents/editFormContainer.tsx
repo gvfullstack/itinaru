@@ -1,5 +1,5 @@
 import ItineraryEditForm from './EditItineraryFormComponents/itineraryEditForm';
-import React, { useRef, useState, FC, useEffect } from 'react';
+import React, { useRef, useState, FC, useEffect, use } from 'react';
 import dynamic from 'next/dynamic';
 import {currentlyEditingItineraryState, itineraryAccessItinView} from './editFormAtoms';
 import { Itinerary, ItinerarySettings, TimeObject, TransformedItineraryItem, TransformedItinerary, ItineraryItem} from './editFormTypeDefs'
@@ -96,6 +96,7 @@ useEffect(() => {
   ///////////////////////////'''''''''''''''''''''''''''''''''''''''''''''
     const [previousTransformedItineraryNeedsUpdate, setPreviousTransformedItineraryNeedsUpdate] = useState(false);
 
+  
     const handleSaveItineraryItem = async () => {
 
       //ensure all changes are saved before attempting to add an item
@@ -107,7 +108,6 @@ useEffect(() => {
 
       // Firestore logic to add item to Firestore and retrieve the ID of the new item
       const itemsRef = db.collection('itineraries').doc(itinerary.id).collection('items');
-      console.log("itemsRef", itemsRef)
       const docRef = await itemsRef.add({
         // Add other fields as necessary
         descHidden: true,
@@ -117,8 +117,7 @@ useEffect(() => {
         lastUpdatedTimestamp: serverTimestamp(),
       });
 
-      console.log("docRef", docRef)
-  
+
       // Await is used to ensure we get the docRef before proceeding
       const newItem = {
         id: docRef.id,
@@ -127,7 +126,6 @@ useEffect(() => {
         isDeleted: false,
         // Add other default fields or those returned by Firestore as necessary
       };
-    console.log("newItem", newItem)
       // Now, update the Recoil state with the new item
       setItinerary((prevItinerary) => {
         const prevItems = prevItinerary.items || []; // Provide a fallback empty array
@@ -241,20 +239,12 @@ async function uploadGalleryPhoto(): Promise<string | null> {
 
 const [saveStatus, setSaveStatus] = useRecoilState(saveStatusDisplayedEditFormContainer); // additional state for saving status
 
-// const setIndexDBNeedsRefreshTrue = async () => 
-// {
-//   const db = await openDB('itinerariesDatabase');
-//   const tx = db.transaction('myItineraries', 'readwrite');
-//   const store = tx.objectStore('myItineraries');
-//   await store.put(true, `indexDBNeedsRefresh_${authUser?.uid}`);
-//   await tx.done;
-// }; replaced by setMyItineraries([])
-
 const renderCount = useRef(0);
 
 useUpdateItineraryAccess({itinerary})
 
 const [previousTransformedItinerary, setPreviousTransformedItinerary] = useState<TransformedItinerary>(/* initial state */);
+
 useEffect(() => {
   const transformed = createPreviousTransformedItinerary(itinerary);
   setPreviousTransformedItinerary(transformed);
@@ -262,6 +252,7 @@ useEffect(() => {
 
 let timerId: NodeJS.Timeout | undefined;
 useEffect(() => {
+  console.log("itinerary changed", itinerary)
   if (!checkAuthenticatedUser()) {
     return;
   }
@@ -269,17 +260,13 @@ useEffect(() => {
   if (saveStatus === 'Loading...') {
     setTimeout(() => {
       setSaveStatus('Session loaded.');
+      saveItineraryToFirestore(); //exits to saveItineraryToFirestore to evaluate if the currentlyEditingItinerary has been reset
       setTimeout(() => {
         setSaveStatus('');
-      }, 3000);
-    }, 3000);
+      }, 1000);
+    }, 1000);
     return;
   }
-  
-  // if (renderCount.current<1) {
-  //   renderCount.current += 1;
-  //   return;
-  // }
 
   setSaveStatus('Saving...');
   timerId = setTimeout(() => {
@@ -303,8 +290,18 @@ async function saveItineraryToFirestore() {
   let updatedTransformedItinerary = createCurrentTransformedItinerary(itinerary);
   console.log('updatedTransformedItinerary', updatedTransformedItinerary);
   ///save to external DB/firestore
+  if(!originalTransformedItinerary?.id || 
+    originalTransformedItinerary?.id !== updatedTransformedItinerary?.id) { // If the IDs do not match it means the currentlyEditingItinerary did not reset before page loaded for the new itinerary. 
+    setPreviousTransformedItinerary(updatedTransformedItinerary);
+    setSaveStatus('Loaded');
+    setTimeout(() => {
+      setSaveStatus('');
+    }, 3000);
+    return
+  }
+
   if (originalTransformedItinerary?.id) {
-    // Now it's safe to call saveUpdatedFields
+    // Now it's safe to call saveUpdatedFields    
     await saveUpdatedFields(originalTransformedItinerary, updatedTransformedItinerary);
   } else {
     console.warn('previousTransformedItinerary is not ready. ID is missing.');

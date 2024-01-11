@@ -66,7 +66,6 @@ const ItinGalleryComponent: React.FC<ItinGalleryComponentProps> = ({itinerary}) 
 const checkedItineraryRef = useRef<TransformedItinerary | null>(null);
 
 const handleOpenEditView = async () => {
-    console.log("handleOpenEditView")
     if (!authUser || !authUser.uid) {
       toast.error("No authenticated user found. Please log in and try again.");
       console.error("No authenticated user found.");
@@ -78,26 +77,22 @@ const handleOpenEditView = async () => {
   }
   
   const items = await fetchItineraryItems(itinerary.id as string) ?? [];
-  console.log("items", items);
   checkedItineraryRef.current = {
     ...itinerary,
     items,
   };
 
   setCheckedItinerary(checkedItineraryRef.current);
-  console.log("checkedItineraryRef.current", checkedItineraryRef.current);
   await updateIndexedDB();
 
 };
 
 const updateIndexedDB = async () => {
   if (checkedItineraryRef.current) {
-    console.log("Before openDB");
     const indexDB = await openDB('itinerariesDatabase');
     const tx = indexDB.transaction('itineraries', 'readwrite');
     const store = tx.objectStore('itineraries');
     await store.put(checkedItineraryRef.current, `currentlyEditingItineraryStateEF_${authUser?.uid}`);
-    console.log("after openDB", store);
     await tx.done;
     router.push(`/user/editItineraryLoader`);
   }

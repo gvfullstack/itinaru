@@ -16,40 +16,84 @@ export default function CustomHits({ searchClient }: CustomHitsProps) {
     const [searchQuery, setSearchQuery] = useRecoilState(searchQueryState);
     console.log(searchQuery, 'searchQuery at customHits.tsx useEffect')
 
+      
     useEffect(() => {
-            console.log('hits:', hits);
-            const directItineraries = hits.filter(hit => !hit._highlightResult.itineraryParentId);
-            let itemParentIds = hits
-                .filter(hit => hit._highlightResult.itineraryParentId)
-                .map(hit => hit._highlightResult.itineraryParentId.value);
+        console.log('hits:', hits);
     
-            // Remove duplicates
-            itemParentIds = Array.from(new Set(itemParentIds));
+        // Step 1: Classify records
+        const directItineraries = hits.filter(hit => !hit._highlightResult.itineraryParentId);
+        let itemParentIds = hits
+            .filter(hit => hit._highlightResult.itineraryParentId)
+            .map(hit => hit._highlightResult.itineraryParentId.value);
     
-            // Filter out IDs that are already in directItineraries
-            itemParentIds = itemParentIds.filter(id => !directItineraries.some(itin => itin.objectID === id));
-    
-            const processHits = async () => {
-                let fetchedItineraries: AlgoliaHitType[] = [];
-                if (itemParentIds.length > 0) {
-                    try {
-                        fetchedItineraries = await Promise.all(itemParentIds.map(id =>
-                            searchClient.initIndex('itineraries').getObject<AlgoliaHitType>(id)
-                        ));
-                    } catch (error) {
-                        console.error('Error fetching itineraries:', error);
-                    }
+        // Remove duplicates of parent IDs of returned items
+        itemParentIds = Array.from(new Set(itemParentIds));
+
+        const testFetchSingleParentItinerary = async () => {
+            if (itemParentIds.length > 0) {
+                const testId = itemParentIds[0]; // Taking the first ID for testing
+        
+                try {
+                    const fetchedItinerary = await searchClient.initIndex('itineraries').getObject(testId);
+                    console.log('Successfully fetched itinerary:', fetchedItinerary);
+                } catch (error) {
+                    console.error('Error fetching single parent itinerary:', error);
                 }
+            }
+        };
+        
+        testFetchSingleParentItinerary();
+        
     
-                // Update the existing itineraries in the global state with both direct and fetched itineraries
-                setSearchResults(prev => [...directItineraries, ...fetchedItineraries]);
-            };
+        const processHits = async () => {
+            let fetchedItineraries:AlgoliaHitType[] = [];
     
-            processHits();
-    }, [hits]);
+            // Step 2: Fetch parent itineraries
+            if (itemParentIds.length > 0) {
+                const fetchItineraryPromises = itemParentIds.map(id =>
+                    searchClient.initIndex('itineraries').getObject(id)
+                        .catch(error => {
+                            console.error('Error fetching itinerary with ID:', id, error);
+                            return null; // Return null or an appropriate fallback value
+                        })
+                );
+            
+                try {
+                    const fetchItineraryPromises = itemParentIds.map(id =>
+                        searchClient.initIndex('itineraries').getObject(id)
+                            .catch(error => {
+                                console.error('Error fetching itinerary with ID:', id, error);
+                                return null;
+                            })
+                    );
+                
+                    let results = await Promise.all(fetchItineraryPromises);
+                    
+                    // Filter out null values and assert the type to AlgoliaHitType
+                    fetchedItineraries = results.filter((item): item is AlgoliaHitType => item !== null);
+                
+                } catch (error) {
+                    console.error('Error in fetching itineraries:', error);
+                }
+                
+            }       
     
+            // Step 3: Combine direct and fetched itineraries
+            let combinedItineraries = [...directItineraries, ...fetchedItineraries];
+    
+            // Step 4: Ensure uniqueness
+            combinedItineraries = Array.from(new Map(combinedItineraries.map(itin => [itin.objectID, itin])).values());
+    
+            // Update the existing itineraries in the global state
+            setSearchResults(combinedItineraries);
+        };
+    
+        processHits();
+    }, [hits]); // Assuming hits is a dependency for this effect
+    
+
     useEffect(() => {
-        console.log('savedHits:',   )
+            console.log('savedHits:', savedHits)
         
     }, [hits])
 
