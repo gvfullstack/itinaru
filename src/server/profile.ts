@@ -15,11 +15,11 @@ export async function getPublicProfileWithAdminSDK(userId: string) {
 
     if (profile.privacySettings) {
       // Explicitly include fields based on privacy settings
-      if (profile.privacySettings.username) publicProfile.username = profile.username;
-      if (profile.privacySettings.userFirstLastName) publicProfile.userFirstLastName = profile.userFirstLastName;
-      if (profile.privacySettings.email) publicProfile.email = profile.email;
-      if (profile.privacySettings.bio) publicProfile.bio = profile.bio;
-      if (profile.privacySettings.profilePictureUrl) publicProfile.profilePictureUrl = profile.profilePictureUrl;
+      if (profile.privacySettings.username) publicProfile.username = profile.username ?? null;
+      if (profile.privacySettings.userFirstLastName) publicProfile.userFirstLastName = profile.userFirstLastName ?? null;
+      if (profile.privacySettings.email) publicProfile.email = profile.email ?? null;
+      if (profile.privacySettings.bio) publicProfile.bio = profile.bio ?? null;
+      if (profile.privacySettings.profilePictureUrl) publicProfile.profilePictureUrl = profile.profilePictureUrl ?? null;
     }
 
     return publicProfile;

@@ -1,6 +1,9 @@
 import dbServer from '../../utils/firebase.admin';
 import dayjs, {Dayjs} from 'dayjs';
 import {TransformedItineraryItem, TransformedItinerary, Itinerary, ItineraryItem} from './retrieveItinTypeRefs';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/firestore';
+
 
 export async function fetchItineraryFromDatabase(itineraryId: string, userId: string | undefined): Promise<Itinerary | null> {
     console.log("fetchItineraryFromDatabase called with ID:", itineraryId);
@@ -23,7 +26,10 @@ export async function fetchItineraryFromDatabase(itineraryId: string, userId: st
         }        
 
         const itinerary = itineraryDoc.data() as TransformedItinerary;
-
+        if (itinerary) {
+            itinerary.creationTimestamp = convertFirestoreTimestampToDate(itinerary.creationTimestamp);
+            itinerary.lastUpdatedTimestamp = convertFirestoreTimestampToDate(itinerary.lastUpdatedTimestamp);
+        }
         // Fetch items from the subcollection
         const itemsQuerySnapshot = await dbServer
             .collection('itineraries').doc(itineraryId)
@@ -42,7 +48,6 @@ export async function fetchItineraryFromDatabase(itineraryId: string, userId: st
                 return aTime - bTime;
             });
 
-
         return {
             ...itinerary,
             items: items
@@ -59,8 +64,39 @@ export async function fetchItineraryFromDatabase(itineraryId: string, userId: st
 function transformItineraryItem(item: TransformedItineraryItem): ItineraryItem {
     return {
         ...item,  // spread the rest of the properties
+        creationTimestamp : convertFirestoreTimestampToDate(item.creationTimestamp),
+        lastUpdatedTimestamp : convertFirestoreTimestampToDate(item.lastUpdatedTimestamp),
         startTime: item.startTime?.time ? { time: item.startTime.time.toMillis() } : undefined,
         endTime: item.endTime?.time ? { time: item.endTime.time.toMillis() } : undefined
 
     };
 }
+
+
+interface FirestoreTimestamp {
+    _seconds: number;
+    _nanoseconds: number;
+    toDate(): Date;
+}
+
+function convertFirestoreTimestampToDate(timestamp: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue | string | FirestoreTimestamp | undefined): string {
+    if (timestamp === null || timestamp === undefined) {
+        return ''; // Return blank for strictly null or undefined values
+    }
+
+    if (typeof timestamp === 'object' && '_seconds' in timestamp && '_nanoseconds' in timestamp) {
+        // Handles Firestore Timestamp and FirestoreTimestamp interface
+        return new Date(timestamp._seconds * 1000 + timestamp._nanoseconds / 1000000).toISOString();
+    } else if (timestamp instanceof Date) {
+        // Handles JavaScript Date object
+        return timestamp.toISOString();
+    } else if (typeof timestamp === 'string') {
+        // Handle string (assuming it's already in a correct format)
+        return timestamp;
+    }
+
+    return ''; // Fallback for any other types that might not be handled
+}
+
+
+
