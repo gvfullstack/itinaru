@@ -159,6 +159,12 @@
 .deletePhotoIcon :hover{
   color: #f83c5e;
 }
+
+.shareProfileLinksContainer{
+  display: flex;
+  width: 100%;
+  
+}
   /* For screens smaller than 768px, reduce max-width */
   @media (max-width: 767px) {
     

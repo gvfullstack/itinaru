@@ -1,0 +1,42 @@
+/* ShareButton.module.css */
+.shareProfileLinksContainer{
+  display: flex;
+}
+
+.iconWrapper{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+  border-radius: 50%; /* Round shape */
+  width: 24px; /* Width of the button */
+  height: 24px; /* Height of the button */
+  margin-right: .75rem;
+}
+
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #4CAF50; /* Green background */
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    border-radius: 50%; /* Round shape */
+    width: 24px; /* Width of the button */
+    height: 24px; /* Height of the button */
+  }
+  
+  .icon {
+    font-size: 24px; /* Size of the icon */
+  }
+  

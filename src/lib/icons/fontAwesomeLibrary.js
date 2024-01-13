@@ -20,7 +20,9 @@ import {
     faList,faExpandAlt, faHouseChimney,
     faPaperclip, faRotateLeft, faUserPlus,
     faSearch,
-    faMagnifyingGlass
+    faMagnifyingGlass,
+    faSquareShareNodes,
+    faWindowMinimize
 } from '@fortawesome/free-solid-svg-icons';
 
 
@@ -42,4 +44,6 @@ library.add(faDiamondTurnRight,
     faPaperclip, faRotateLeft, faUserPlus,
     faSearch,
     faMagnifyingGlass,
-    faFloppyDisk);
+    faFloppyDisk,
+    faSquareShareNodes,
+    faWindowMinimize);
