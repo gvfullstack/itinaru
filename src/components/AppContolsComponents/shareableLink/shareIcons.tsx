@@ -23,7 +23,7 @@ const ShareIcons: React.FC<ItineraryLinkProps> = ({ itineraryId }) => {
 
     return (          
         <div>   
-            <p className={styles.shareItineraryHeading}>Share profile link</p>
+            <p className={styles.shareItineraryHeading}>Share this itinerary!</p>
             <div className={styles.shareItineraryLinksContainer}>
                 <div className={styles.iconWrapper}>
                 <EmailShareButton
