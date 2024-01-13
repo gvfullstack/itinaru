@@ -8,7 +8,8 @@
     import {useRecoilState} from 'recoil';
     import React, { useState, useRef, useEffect } from 'react';
     import ShareIcons from '../shareableLink/shareIcons';
-
+    import ShareButton from '../shareableLink/webShareAPIicon';
+    
     type ButtonToolbarContainerProps = {
         toggleSummarySection: () => void;
         summarySectionHidden: boolean;
@@ -91,6 +92,10 @@
                 className={styles.closeShareItineraryPopupContainerButton}
                 onClick={()=>setDisplayShareIcons(false)}>  </button>                
                 <ShareIcons itineraryId={itinerary?.id}  />
+                <ShareButton 
+                    title="link to itinerary" 
+                    text="" 
+                    url={`https://itinaru.com/viewItinerary/${itinerary?.id}`} />
             </div> 
     </div>
 
