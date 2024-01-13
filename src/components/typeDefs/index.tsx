@@ -200,9 +200,7 @@ export type BrandPageRender = {
     displayName?: string | null;
     uid: string | null;
     privacySettings?: PrivacySettings
-    itinerariesSharedWithMe?: string[];
-    creatorsIamFollowing?: string[];
-    followers?: string[];
+    isNewUser?: boolean;
   };
   
   export type PrivacySettings = {

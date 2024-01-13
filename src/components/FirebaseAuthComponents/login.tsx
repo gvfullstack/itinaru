@@ -28,13 +28,8 @@ const Login: React.FC = () => {
           // Add more options as per your requirements
         ],
         callbacks: {
-          signInSuccessWithAuthResult: () => {            
-          const postLoginRoute = sessionStorage.getItem('preLoginRoute');
-          if (postLoginRoute) {
-            router.push(postLoginRoute);
-          } else {
-            router.push('/');  // Default route in case the stored route is not available.
-          }
+          signInSuccessWithAuthResult: () => { 
+            sessionStorage.setItem('preLoginRouteIsLogin', "true");
           return false;
           },
           // No need for window.open if you want to navigate directly

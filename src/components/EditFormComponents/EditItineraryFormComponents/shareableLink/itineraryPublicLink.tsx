@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {DynamicFontAwesomeIcon} from '@/components';
 import { faLink } from '@fortawesome/free-solid-svg-icons';
 import style from './itineraryPublicLink.module.css';
+
 interface ItineraryLinkProps {
     itineraryId: string | undefined;
   }

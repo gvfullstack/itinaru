@@ -35,6 +35,8 @@ const ReactQuill = dynamic(import('react-quill'), {
   ssr: false, // This will make the component render only on the client-side
   loading: () => <p>Loading...</p>, // You can provide a loading component or text here
 });
+import ShareIcons from './shareIcons';
+
 
 interface ICroppedArea {
   x: number
@@ -535,6 +537,7 @@ const attachIcon = (
     setDeleteAccountModal(!showDeleteAccountModal);
 };
 
+
   return (
     <>
     <div className={styles.tabsContainer}>
@@ -670,7 +673,7 @@ const attachIcon = (
             Bio:
              <BioComponent bio={authUser?.bio ?? ''} />
           </div>
-
+          <ShareIcons />
           <button className={styles.profileEditButton}
           onClick={() =>{setEditing(true); setProfilePicWhileEditing(prev=>profilePictureUrl)}}>Edit</button> 
         </div>
@@ -683,12 +686,13 @@ const attachIcon = (
               <>
             <form className={styles.checkBoxContainer}>
               <h3>Privacy Settings</h3>
-              <p>Please check fields you would like to share publicly.</p>
+              <p>Please check fields you would like to share on your public profile.</p>
               <label className={styles.checkBoxItems}>
                 <input
                   type="checkbox"
                   checked={localPrivacySettings.username}
                   onChange={() => handleCheckboxChange('username')}
+                  disabled={true}
                 />
                 Username
               </label>
