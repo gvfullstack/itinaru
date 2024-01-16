@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import PublicItinViewContainer from '../../components/PublicItineraryViewComponents/publicItinViewContainer';
 import React,{ useEffect} from 'react';
 import dynamic from 'next/dynamic';
@@ -44,7 +45,8 @@ export const getServerSideProps = async (context:GetServerSidePropsContext) => {
  
   const ItinPublicViewPage: React.FC<{ itinerary?: Itinerary | null }> = ({ itinerary }) => {
     const [localItinerary, setItinerary] = useRecoilState<Itinerary | null>(currentlyViewingItineraryState);
-  
+    const canonicalUrl = `https://www.itinaru.com/viewItinerary/${itinerary?.id}`;
+
     useEffect(() => {
       if (itinerary) {
         // Convert the startTime and endTime to Dayjs
@@ -65,13 +67,19 @@ export const getServerSideProps = async (context:GetServerSidePropsContext) => {
     }, [itinerary, setItinerary]);
   
     return (
-      <div className={styles.publicItinViewMain}>
-        {localItinerary ? (
-          <PublicItinViewContainer />
-        ) : (
-          <p className={styles.deletedMessage}>This itinerary has been deleted or is unavailable.</p>
-        )}
-      </div>
+      <>
+       <Head>
+          <title>{`Itinerary for ${itinerary?.settings?.title}`}</title> {/* Replace with your dynamic title */}
+          <link rel="canonical" href={canonicalUrl} />
+       </Head>
+          <div className={styles.publicItinViewMain}>
+            {localItinerary ? (
+              <PublicItinViewContainer />
+            ) : (
+              <p className={styles.deletedMessage}>This itinerary has been deleted or is unavailable.</p>
+            )}
+          </div>
+      </>
     );
   };
   
