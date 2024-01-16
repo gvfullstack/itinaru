@@ -27,7 +27,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
 
   return (
-    <div style={{ width:"100vw", backgroundColor:"red"}}>
+    <div style={{ width:"100vw" }}>
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0" />
         <meta name="mobile-web-app-capable" content="yes"></meta>
@@ -52,7 +52,6 @@ export default function App({ Component, pageProps }: AppProps) {
       <RecoilRoot>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <main className="app-container">
-            <div className="app-container">
               <ToastContainer style={{ zIndex: 99999 }} />
               <div className="nav-container">
                 <TopNavBar />
@@ -60,8 +59,6 @@ export default function App({ Component, pageProps }: AppProps) {
               <Component {...pageProps} />
               <Analytics />
               <FirebaseAuthLogic />
-              
-            </div>
           </main>
         </LocalizationProvider>
       </RecoilRoot>

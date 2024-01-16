@@ -34,20 +34,30 @@
 .deletedMessage{
   margin-top: 5rem;
   font-size: 18px;
-}           
+}       
+.jumboPlusHomePage{
+  display: none;
+}
 /* Mobile */
-@media (max-width: 500px) {
+@media (max-width: 800px) {
   .myItineraryPage{
     padding: 3rem 0px;
     width: 100vw;
   }
-}
-/* @media (max-width: 700px) {
-  
-} */
 
-/* Tablet and Smaller Desktop */
-/* @media (min-width: 701px) and (max-width: 1120px) {
-  
-} */
+  .jumboPlusHomePage{
+    display: flex;
+    align-self: flex-end;
+    margin-right: 6rem;
+    margin-top: -2.7rem;
+    margin-bottom: 2rem;
+    z-index: 35;
+  } 
+  .jumboPlusHomePage :first-child{
+    color: #bebebe;    
+  }
+}
+
+
+
 

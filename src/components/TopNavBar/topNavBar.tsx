@@ -30,15 +30,15 @@ const TopNavBar: React.FC = () => {
           <div></div>
           <div></div>
           <div>
-            <Link href="/"  
-              style={{textDecoration:"none"}}> {/* Link to the home page */}
-                  <h1 className={styles.title}>
-                    itinaru</h1>
-            </Link> 
+            <h1 className={styles.title}>
+              itinaru
+            </h1>
           </div>
           <div></div>
           <div className = {styles.rightTopNavBar} >
-            <JumboPlus />     
+            <div className={styles.jumboVisibilityContainer}>
+              <JumboPlus />     
+            </div>
             <Menu />       
           </div> 
       </div>

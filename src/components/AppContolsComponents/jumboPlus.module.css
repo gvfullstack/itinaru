@@ -1,20 +1,34 @@
+@media (min-width: 0px) {
 .container{
-    font-size: 2rem;
+    font-size: 1.75rem;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 3rem;
     color: #bebebe;
     width: fit-content;
 }
 
 .plusSign{
     cursor: pointer;  
-    color:#bebebe; 
+    color:rgb(59, 59, 59);; 
 }
 
-
-.plusSign:hover{
-    color: #f83c5e;
 }
 
+@media (min-width: 800px) {
+    .container{
+        font-size: 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 3rem;
+        color: #bebebe;
+        width: fit-content;
+    }
+    
+    .plusSign{
+        cursor: pointer;  
+        color:#bebebe; 
+    }
+    
+}

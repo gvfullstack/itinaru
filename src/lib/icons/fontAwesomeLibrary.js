@@ -23,7 +23,8 @@ import {
     faMagnifyingGlass,
     faSquareShareNodes,
     faWindowMinimize,
-    faShare
+    faShare,
+    faDownLeftAndUpRightToCenter
 } from '@fortawesome/free-solid-svg-icons';
 
 
@@ -48,4 +49,4 @@ library.add(faDiamondTurnRight,
     faFloppyDisk,
     faSquareShareNodes,
     faWindowMinimize,
-    faShare);
+    faShare,faDownLeftAndUpRightToCenter);
