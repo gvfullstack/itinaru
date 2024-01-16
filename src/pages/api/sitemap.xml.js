@@ -2,7 +2,8 @@ import { SitemapStream, streamToPromise } from 'sitemap';
 import { Readable } from 'stream';
 import { fetchItineraries } from '../../server/sitemap/getDataForSitemap';
 
-export default async (req, res) => {
+// Define the async function and assign it to a variable
+const generateSitemap = async (req, res) => {
   try {
     // Set response header
     res.setHeader('Content-Type', 'application/xml');
@@ -35,3 +36,6 @@ export default async (req, res) => {
     res.status(500).end();
   }
 };
+
+// Export the variable as default
+export default generateSitemap;

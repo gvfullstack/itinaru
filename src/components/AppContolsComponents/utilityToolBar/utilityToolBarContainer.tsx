@@ -2,14 +2,16 @@
     import CopyItineraryButton from './copyItineraryForEditByEndUser'; // Replace with your actual component path
     import ItineraryLink from '../shareableLink/itineraryPublicLink'; // Replace with your actual component path
     import {DynamicFontAwesomeIcon} from '@/components';
-    import { faList,faExpandAlt, faHouseChimney, faSquareShareNodes, faWindowMinimize } from '@fortawesome/free-solid-svg-icons';
+    import { faList, faExpandAlt, faHouseChimney, faSquareShareNodes, faWindowMinimize, faDownLeftAndUpRightToCenter } from '@fortawesome/free-solid-svg-icons';
     import { useRouter } from 'next/router';
     import {currentlyViewingItineraryState} from '../../PublicItineraryViewComponents/publicItinViewAtoms';
     import {useRecoilState} from 'recoil';
     import React, { useState, useRef, useEffect } from 'react';
     import ShareIcons from '../shareableLink/shareIcons';
     import ShareButton from '../shareableLink/webShareAPIicon';
-    
+    import JumboPlus from '../jumboPlus';
+
+
     type ButtonToolbarContainerProps = {
         toggleSummarySection: () => void;
         summarySectionHidden: boolean;
@@ -19,9 +21,9 @@
         const [itinerary, setItinerary] = useRecoilState(currentlyViewingItineraryState);
         const listIcon = <DynamicFontAwesomeIcon icon={faList} />
         const expandIcon = <DynamicFontAwesomeIcon icon={faExpandAlt} />
+        const collapseIcon = <DynamicFontAwesomeIcon icon={faDownLeftAndUpRightToCenter} />
         const homeIcon = <DynamicFontAwesomeIcon icon={faHouseChimney} />
         const shareIcon = <DynamicFontAwesomeIcon icon={faSquareShareNodes} />
-        const minimizeIcon = <DynamicFontAwesomeIcon icon={faWindowMinimize} />
         const router = useRouter(); // Hook to get router object
         const [displayShareIcons, setDisplayShareIcons] = useState(false);
         const sharePopupRef = useRef<HTMLDivElement>(null); // Ref for the popup
@@ -71,7 +73,7 @@
                         title="Exapand/Collapse Summary Section"
                         aria-label="Exapand/Collapse Summary Section"
                     >
-                        {summarySectionHidden ? expandIcon : listIcon}
+                        {summarySectionHidden ? expandIcon : collapseIcon}
                     </button>
                     <CopyItineraryButton /> 
                    
@@ -83,6 +85,10 @@
                     >
                         {shareIcon}
                     </button> 
+                    <div
+                        className={styles.utilityToolbarButtonJumboPlus}>
+                        <JumboPlus />
+                    </div>
                                          
             </div>
             <div 
@@ -95,8 +101,9 @@
                 <ShareButton 
                     title="link to itinerary" 
                     text="" 
-                    url={`https://itinaru.com/viewItinerary/${itinerary?.id}`} />
+                    url={`https://www.itinaru.com/viewItinerary/${itinerary?.id}`} />
             </div> 
+            
     </div>
 
         );

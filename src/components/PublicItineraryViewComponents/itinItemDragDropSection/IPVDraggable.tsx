@@ -40,21 +40,6 @@ const IPVDraggable = React.forwardRef((
     setHideDescription(prev=>!prev)
 }
 
-//   const handleShowHideDescription = () => {
-//     setItineraryInEdit(prevItinerary => {
-//         const updatedItems = prevItinerary?.items?.map((item) => {
-//             if (item.id === itineraryItem.id) {
-//                 return { ...item, descHidden: !item.descHidden };
-//             }
-//             return item;
-//         });
-
-//         return {
-//             ...prevItinerary,
-//             items: updatedItems
-//         };
-//     });
-// }
   
   const [{ isDragging }, drag] = useDrag(() => ({
     type: ItemTypes.ITINERARY_ITEM,

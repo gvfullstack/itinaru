@@ -63,7 +63,7 @@ export default function FirebaseAuthLogic() {
             sessionStorage.removeItem('preLoginRouteIsLogin');
           }
           else {
-            router.push('/'); // Default route for returning users
+            return; // Default route for returning users
             // Redirect returning user to a post-login page
           }
         } else {

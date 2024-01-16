@@ -17,13 +17,13 @@ interface ItineraryLinkProps {
 
 const ShareIcons: React.FC<ItineraryLinkProps> = ({ itineraryId }) => {
 
-    const shareUrl = `https://itinaru.com/viewItinerary/${itineraryId}`;
+    const shareUrl = `https://www.itinaru.com/viewItinerary/${itineraryId}`;
     const subject = 'Link to itinerary on itinaru, an itinerary distribution website.';
     const body = 'Hello, I would like to share this itinerary with you.';
 
     return (          
         <div>   
-            <p className={styles.shareItineraryHeading}>Share profile link</p>
+            <p className={styles.shareItineraryHeading}>Share this itinerary!</p>
             <div className={styles.shareItineraryLinksContainer}>
                 <div className={styles.iconWrapper}>
                 <EmailShareButton
