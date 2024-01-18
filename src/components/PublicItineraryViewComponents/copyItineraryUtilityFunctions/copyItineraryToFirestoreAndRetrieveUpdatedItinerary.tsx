@@ -27,6 +27,7 @@ export async function copyItineraryToFirestoreAndRetrieveUpdatedItinerary(origin
             lastUpdatedTimestamp: serverTimestamp(),
             id: newItineraryId,
             uid: userId || undefined, 
+            profilePictureUrl: originalItinerary?.profilePictureUrl || '',
             isDeleted:false,
             settings:{
                 ...originalItinerary.settings,

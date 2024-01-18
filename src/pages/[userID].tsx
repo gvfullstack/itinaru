@@ -22,12 +22,23 @@ const PublicUserProfilePage: React.FC<Props> = ({ publicProfile, userID }) => {
   
   return (
     <>
-      <Head>
-        <title>{`${publicProfile?.username} itinaru profile page`}</title> 
-        <link rel="canonical" href={canonicalUrl} />
+     <Head>
+          <title>{`${publicProfile?.username}'s itinaru Profile`}</title>
+          <meta name="description" content={`${publicProfile?.username}'s profile: ${publicProfile?.bio}`} />
+          <link rel="canonical" href={canonicalUrl} />
+          <meta property="og:title" content={`${publicProfile?.username}'s itinaru Profile`} />
+          <meta property="og:description" content={`${publicProfile?.username}'s profile: ${publicProfile?.bio}`} />
+          <meta property="og:url" content={canonicalUrl} />
+          <meta property="og:type" content="profile" />
+          <meta property="og:image" content={publicProfile?.profilePictureUrl || ''} />
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content={`${publicProfile?.username}'s itinaru Profile`} />
+          <meta name="twitter:description" content={`${publicProfile?.username}'s profile: ${publicProfile?.bio}`} />
+          <meta name="twitter:image" content={publicProfile?.profilePictureUrl || ''} />
       </Head>
+
       <div style={{display:"flex", justifyContent:"center"}}>
-        <PublicProfile publicProfile={publicProfile} />;
+        <PublicProfile publicProfile={publicProfile} userID = {userID}/>;
       </div>
     </>
   );

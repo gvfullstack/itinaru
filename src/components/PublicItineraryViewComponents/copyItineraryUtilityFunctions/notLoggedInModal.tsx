@@ -41,7 +41,8 @@ const CustomModal: React.FC = () => {
       <div className={styles.modalContent}>
         <button onClick={closeModal} className={styles.closeButton} aria-label="Close">&times;</button>
         <p className={styles.modalMessage}>
-        To access this feature, please sign in with your email. If you&apos;re new, you&apos;ll have the option to create an account.        </p>
+        To copy this itinerary to your account for customization, you must be logged in. Please sign in or create a new account to proceed. 
+        </p>
         <div className={styles.modalActions}>
           <button onClick={handleLoginLinkClick} className={styles.modalButton}>
            Login/Create Account

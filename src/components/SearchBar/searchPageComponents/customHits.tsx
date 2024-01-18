@@ -1,10 +1,11 @@
 import { useHits } from 'react-instantsearch-hooks-web';
 import { useState, useRef, useEffect } from 'react';
-import {AlgoliaHitType } from '../searchTypeDefs';
 import { useRecoilState } from 'recoil';
 import {searchResultsState, searchQueryState} from '../searchAtoms';
 import algoliasearch from 'algoliasearch';
 import ItinGalleryComponent from '../../ItinGallery/itinGalleryComponent';
+
+import {AlgoliaHitType } from '../searchTypeDefs';
 
 interface CustomHitsProps {
     searchClient: ReturnType<typeof algoliasearch>;
@@ -27,23 +28,7 @@ export default function CustomHits({ searchClient }: CustomHitsProps) {
             .map(hit => hit._highlightResult.itineraryParentId.value);
     
         // Remove duplicates of parent IDs of returned items
-        itemParentIds = Array.from(new Set(itemParentIds));
-
-        const testFetchSingleParentItinerary = async () => {
-            if (itemParentIds.length > 0) {
-                const testId = itemParentIds[0]; // Taking the first ID for testing
-        
-                try {
-                    const fetchedItinerary = await searchClient.initIndex('itineraries').getObject(testId);
-                    console.log('Successfully fetched itinerary:', fetchedItinerary);
-                } catch (error) {
-                    console.error('Error fetching single parent itinerary:', error);
-                }
-            }
-        };
-        
-        testFetchSingleParentItinerary();
-        
+        itemParentIds = Array.from(new Set(itemParentIds));      
     
         const processHits = async () => {
             let fetchedItineraries:AlgoliaHitType[] = [];

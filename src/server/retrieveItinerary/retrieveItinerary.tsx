@@ -6,7 +6,6 @@ import 'firebase/compat/firestore';
 
 
 export async function fetchItineraryFromDatabase(itineraryId: string, userId: string | undefined): Promise<Itinerary | null> {
-    console.log("fetchItineraryFromDatabase called with ID:", itineraryId);
 
     try {
         const itineraryDoc = await dbServer.collection('itineraries').doc(itineraryId).get();
