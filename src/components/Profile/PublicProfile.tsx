@@ -3,13 +3,14 @@ import styles from './PublicProfile.module.css';
 import { AuthenticatedUser } from "@/components/typeDefs";
 import BioComponent from './BioComponent';
 import Image from 'next/image';
-
+import UserItinerariesList from './UserItinerariesListComponent/userItinerariesListMainComponent';
 
 type PublicProfileProps = {
     publicProfile: AuthenticatedUser | null; // Replace with the appropriate type
+    userID: string;
   };
 
-const PublicProfile: React.FC<PublicProfileProps> = ({ publicProfile }) => {
+const PublicProfile: React.FC<PublicProfileProps> = ({ publicProfile, userID }) => {
  
   return (
     <div className={styles.profileStaticContainer}>
@@ -34,6 +35,8 @@ const PublicProfile: React.FC<PublicProfileProps> = ({ publicProfile }) => {
           <div className={styles.profileStaticFieldsBio}>
              <BioComponent bio={publicProfile?.bio ?? ''} />
           </div>}
+          <p className={styles.profileStaticFields}>Itineraries Curated by Me:</p>
+          <UserItinerariesList userID = {userID}/>
     </div>
     
   );

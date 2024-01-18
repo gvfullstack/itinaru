@@ -77,9 +77,9 @@ export const getServerSideProps = async (context:GetServerSidePropsContext) => {
           <meta property="og:url" content={canonicalUrl} />
           <meta property="og:type" content="website" />
           <meta name="twitter:card" content="summary_large_image" />
-          <meta name="twitter:title" content={`Itinerary for ${itinerary?.settings?.title}`} />
+          <meta name="twitter:title" content={`Itinerary for ${itinerary?.settings?.title} ${itinerary?.settings?.galleryPhotoUrl}`} />
           <meta name="twitter:description" content={`Explore the detailed itinerary for ${itinerary?.settings?.title}.`} />
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <meta name="twitter:image" content={itinerary?.settings?.galleryPhotoUrl} />
       </Head>
 
           <div className={styles.publicItinViewMain}>
