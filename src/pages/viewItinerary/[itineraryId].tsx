@@ -69,9 +69,19 @@ export const getServerSideProps = async (context:GetServerSidePropsContext) => {
     return (
       <>
        <Head>
-          <title>{`Itinerary for ${itinerary?.settings?.title}`}</title> {/* Replace with your dynamic title */}
+          <title>{`Itinerary for ${itinerary?.settings?.title}`}</title>
+          <meta name="description" content={`Detailed itinerary for ${itinerary?.settings?.title}`} />
           <link rel="canonical" href={canonicalUrl} />
-       </Head>
+          <meta property="og:title" content={`Itinerary for ${itinerary?.settings?.title}`} />
+          <meta property="og:description" content={`Explore the detailed itinerary for ${itinerary?.settings?.title}.`} />
+          <meta property="og:url" content={canonicalUrl} />
+          <meta property="og:type" content="website" />
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content={`Itinerary for ${itinerary?.settings?.title}`} />
+          <meta name="twitter:description" content={`Explore the detailed itinerary for ${itinerary?.settings?.title}.`} />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </Head>
+
           <div className={styles.publicItinViewMain}>
             {localItinerary ? (
               <PublicItinViewContainer />

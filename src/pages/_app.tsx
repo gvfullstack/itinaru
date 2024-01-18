@@ -13,6 +13,10 @@ import { useState, useRef, useEffect } from 'react';
 import initDB from '@/lib/db';
 import { useRouter } from 'next/router';
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import '@fortawesome/fontawesome-svg-core/styles.css';
+import { config } from '@fortawesome/fontawesome-svg-core';
+
+config.autoAddCss = false;
 
 const FirebaseAuthLogic = dynamic(() => import('.././components/FirebaseAuthComponents/firebaseAuthLogic'), { ssr: false });
 
