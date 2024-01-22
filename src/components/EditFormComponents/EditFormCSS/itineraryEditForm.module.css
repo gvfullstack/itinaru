@@ -482,7 +482,7 @@
     align-items: center;
     width: 85%;
     align-self: center;
-    margin-top: 3.5rem;
+    /* margin-top: 3.5rem; */
     height: fit-content;
     border-radius: 10px;
     padding: 0rem 2rem 2rem 1rem;

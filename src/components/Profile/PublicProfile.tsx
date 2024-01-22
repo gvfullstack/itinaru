@@ -39,7 +39,7 @@ const PublicProfile: React.FC<PublicProfileProps> = ({ publicProfile, userID }) 
           <UserItinerariesList userID = {userID}/>
     </div>
     
-  );
+  )
 };
 
 export default PublicProfile;
