@@ -1,10 +1,22 @@
 /* buttonToolbarContainer.module.css */
 @media (min-width: 0px) {
+  .toolbarContainer.stickyToolbar {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%; /* Fits the width of .sharedContainer */
+    max-width: 800px; /* Matches the max-width of .sharedContainer */
+    z-index: 20;
+    background-color: #ebeaea;
+}
+
 .toolbarContainer{
   display: flex;
   flex-direction: column;
   width: 100%;
 }
+
 .shareItineraryPopupContainer {
   /* Initial state of the popup, placed at the bottom */
   display: flex;
@@ -16,7 +28,7 @@
   /* Ensures the popup is full-width on mobile devices */
   width: 100%;
   max-width: 400px; /* Adjust as needed for larger screens */
-  height: 10rem;
+  height: 50%;
   /* Additional styling as required */
   position: fixed;
   bottom: 0;
@@ -62,10 +74,6 @@
     /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
     width: 100%;
     flex-wrap: nowrap; /* Prevent wrapping of items */
-    position: fixed;
-    top: 2.95rem;
-    left:auto;
-    z-index: 10 ;
     border-style: none;
     
   }

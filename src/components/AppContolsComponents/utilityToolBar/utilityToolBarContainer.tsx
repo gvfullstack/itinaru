@@ -56,8 +56,32 @@
             };
         }, []);
 
+        const toolbarRef = useRef<HTMLDivElement>(null);
+        const [isSticky, setIsSticky] = useState(false);
+        const [initialTop, setInitialTop] = useState(0);
+    
+        useEffect(() => {
+        // Set the initial top offset of the toolbar on mount
+        setInitialTop(toolbarRef.current?.offsetTop ?? 0);
+
+        const handleScroll = () => {
+            if (window.scrollY >= initialTop) {
+                setIsSticky(true);
+            } else {
+                setIsSticky(false);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, [initialTop]);
+
+        
         return (
-        <div className={styles.toolbarContainer}>
+        <div ref={toolbarRef} className={`${styles.toolbarContainer} ${isSticky ? styles.stickyToolbar : ''}`}>
             <div className={styles.buttonToolbarContainer}>
                     <button
                         className={styles.utilityToolbarButton}
@@ -85,10 +109,10 @@
                     >
                         {shareIcon}
                     </button> 
-                    <div
+                    {/* <div
                         className={styles.utilityToolbarButtonJumboPlus}>
                         <JumboPlus />
-                    </div>
+                    </div> */}
                                          
             </div>
             <div 

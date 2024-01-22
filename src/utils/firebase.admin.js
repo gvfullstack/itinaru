@@ -16,13 +16,13 @@ if (process.env.FIREBASE_SERVICE_ACCOUNT_JSON) {
 if (!admin.apps.length) {
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
+    // You might need to add additional configuration here if required
   });
 }
 
 const dbServer = admin.firestore();
-
 const authServer = admin.auth();
+const storageServer = admin.storage(); // Initialize Firebase Storage
 
-export { authServer };
-
+export { authServer, storageServer };
 export default dbServer;

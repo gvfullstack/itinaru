@@ -1,30 +1,37 @@
-  
 import React, { useEffect, useState } from 'react';
 import styles from './topNavBar.module.css';
-import Menu from "../AppContolsComponents/mainMenuLink" 
-import Link from 'next/link';
+import Menu from "../AppContolsComponents/mainMenuLink";
 import JumboPlus from '../AppContolsComponents/jumboPlus';
 
 const TopNavBar: React.FC = () => {
-  const [scrolled, setScrolled] = React.useState(false);
-  React.useEffect(() => {
+  const [lastScrollY, setLastScrollY] = useState(0); // Initialize with 0
+  const [navBarVisible, setNavBarVisible] = useState(true);
+
+  useEffect(() => {
+    // Update the initial scroll position when the component mounts
+    setLastScrollY(window.scrollY);
+
     const handleScroll = () => {
-      // This will set "scrolled" to true when the user scrolls more than 10 pixels
-      // You can adjust the value as needed
-      setScrolled(window.scrollY > 2);
+      const currentScrollY = window.scrollY;
+      if (currentScrollY > lastScrollY) {
+        // Scrolling down
+        setNavBarVisible(false);
+      } else {
+        // Scrolling up
+        setNavBarVisible(true);
+      }
+      setLastScrollY(currentScrollY);
     };
 
-    // Add the event listener when the component mounts
     window.addEventListener("scroll", handleScroll);
 
-    // Clean up the event listener when the component unmounts
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [lastScrollY]);
 
   return  (
-    <div className={styles.nav}>
+    <div className={`${styles.nav} ${navBarVisible ? '' : styles.navHidden}`}>
       <div 
       className={`${styles.topNavContainer}`}>
           <div></div>
@@ -42,7 +49,7 @@ const TopNavBar: React.FC = () => {
             <Menu />       
           </div> 
       </div>
-    {scrolled && <div className={styles.navBuffer}></div>}
+    {/* {scrolled && <div className={styles.navBuffer}></div>} */}
     </div>
   ) 
   

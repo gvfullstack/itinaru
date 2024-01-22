@@ -7,19 +7,13 @@
   padding: 0 1.5rem;
 }
 
-.buttonToolbarContainer{
-  position: fixed;
-  width: 100%;
-  /* max-width: 800px; */
-  background-color: rgb(157, 3, 3);
+.sharedContainer {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  margin: 1rem 0;
-  padding: 0 1.5rem;
-  top: 2rem;
-  /* background-color: tan; */
+  max-width: 800px;
+  margin: 0 auto; /* Centers the container */
+  width: 100%;
 }
 
 .hideSummaryButton{
@@ -28,37 +22,25 @@
 }
 
 .publicItinViewContainer{
+    align-self: center;
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
     align-self: center;
     height: fit-content;
-    /* border-style: solid;
-    border-width: 1px;
-    border-color: #bebebe; */
     border-radius: 10px;
     padding: 0rem 0rem 2rem 0rem;
-  
-}
-
-.publicItinViewContentContainer{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  height: fit-content;
-  margin-top: 3.25rem;
 }
 
 .generalItineraryInformationContainer{
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     width: 100%;
     align-self: center;
     height: fit-content;
-    margin-top: 1.80rem;
 }
 
 .derivedFromItineraryText{

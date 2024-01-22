@@ -9,6 +9,7 @@ import NotLoggedInModal from './copyItineraryUtilityFunctions/notLoggedInModal';
 import {currentlyViewingItineraryState} from './publicItinViewAtoms';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
+import ButtonToolbarContainer from '../AppContolsComponents/utilityToolBar/utilityToolBarContainer';
 
 const GeneralItineraryInformation = dynamic(() => 
     import('./generalItineraryInformationSection'), {
@@ -56,19 +57,28 @@ const PublicItinViewContainer: FC = () => {
 }
 
        
+const [summarySectionHidden, setSummarySectionHidden] = useState(false);
+    
+const toggleSummarySection = () => {
+    setSummarySectionHidden(!summarySectionHidden);
+  }
 
 return (
-<div className={styles.publicItinViewContainer}>
-        <div className={styles.publicItinViewContentContainer}>
-            <GeneralItineraryInformation />
-            <DragDropSection />
-            <GoogleMapIframe /> 
-            <div className={styles.timeStamps}>Created: {itinerary && formatTimestamp(itinerary.creationTimestamp)}</div>
-            <div className={styles.timeStamps}>Last Updated: {itinerary && formatTimestamp(itinerary.lastUpdatedTimestamp)}</div>
-            {showNotLoggedInModalState && 
-              <NotLoggedInModal /> } 
+  <div className={styles.sharedContainer}>  
+        <ButtonToolbarContainer 
+        toggleSummarySection={toggleSummarySection} 
+        summarySectionHidden = {summarySectionHidden}
+        />
+        <div className={styles.publicItinViewContainer}>
+                    <GeneralItineraryInformation summarySectionHidden={summarySectionHidden}/>
+                    <DragDropSection />
+                    <GoogleMapIframe /> 
+                    <div className={styles.timeStamps}>Created: {itinerary && formatTimestamp(itinerary.creationTimestamp)}</div>
+                    <div className={styles.timeStamps}>Last Updated: {itinerary && formatTimestamp(itinerary.lastUpdatedTimestamp)}</div>
+                    {showNotLoggedInModalState && 
+                      <NotLoggedInModal /> } 
         </div>
-</div>
+    </div>
   );
 };
 

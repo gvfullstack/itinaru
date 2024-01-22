@@ -45,17 +45,7 @@
     width: 100vw;
   }
 
-  .jumboPlusHomePage{
-    display: flex;
-    align-self: flex-end;
-    margin-right: 6rem;
-    margin-top: -2.7rem;
-    margin-bottom: 2rem;
-    z-index: 35;
-  } 
-  .jumboPlusHomePage :first-child{
-    color: #bebebe;    
-  }
+
 }
 
 

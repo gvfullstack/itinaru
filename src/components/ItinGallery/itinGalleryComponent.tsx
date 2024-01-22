@@ -15,7 +15,7 @@ type Props = {
   neighborhood: string,
   city: string,
   state: string,
-  duration: string,
+  duration: number,
   imageUrl: string,
 }
 
