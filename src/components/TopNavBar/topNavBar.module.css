@@ -1,16 +1,20 @@
-.nav{
+.nav {
   position: fixed;
   top: 0;
-  left:0;
+  left: 0;
   display: flex;
   flex-direction: column;
   height: 3rem;
   width: 100VW;
-  gap:0;
+  gap: 0;
   background-color: whitesmoke;
   align-items: center;
   z-index: 30;
+  transition: top 0.3s; /* Smooth transition for moving the bar */
+}
 
+.navHidden {
+  top: -3rem; /* Adjust this value as needed */
 }
 
 .topNavContainer{
@@ -74,6 +78,6 @@
     width: 5rem;
   }
   .jumboVisibilityContainer{
-    display: none;
+    /* display: none; */
   }
 } 

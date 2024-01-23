@@ -5,8 +5,14 @@ import {useRecoilState} from 'recoil';
 import ItemDescriptionStaticComponent from './itemDescriptionStaticComponent';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import ButtonToolbarContainer from '../AppContolsComponents/utilityToolBar/utilityToolBarContainer';
-const GeneralItineraryInformation: FC = () => {
+
+
+type GeneralItineraryInformationProps = {
+    summarySectionHidden: boolean;
+};
+
+
+const GeneralItineraryInformation: FC<GeneralItineraryInformationProps> = ({ summarySectionHidden }) => {
     const router = useRouter();
     
     const navigateToParentItinerary = () => {
@@ -17,19 +23,9 @@ const GeneralItineraryInformation: FC = () => {
       };
     
     const [itinerary, setItinerary] = useRecoilState(currentlyViewingItineraryState);
-    const [summarySectionHidden, setSummarySectionHidden] = useState(false);
-    
-    const toggleSummarySection = () => {
-        setSummarySectionHidden(!summarySectionHidden);
-      }
   
     return (
         <div className = {styles.generalItineraryInformationContainer}>
-          <ButtonToolbarContainer 
-            toggleSummarySection={toggleSummarySection} 
-            summarySectionHidden = {summarySectionHidden}
-            />
-
            {!summarySectionHidden && <div className={styles.itinGeneralInfoPhotoContainer}>
                 {itinerary?.settings?.galleryPhotoUrl && 
                     <Image 

@@ -15,9 +15,6 @@ return (
       
 
       <main className={styles.main}>        
-          <div className={styles.jumboPlusHomePage}>
-            <JumboPlus />
-          </div>
           <SearchBar />
       </main>
     </>

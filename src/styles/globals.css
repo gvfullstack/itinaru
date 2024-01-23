@@ -72,7 +72,8 @@ body {
   display: flex;
   flex-direction: column;
   width: 100VW;
-
+  margin-top: 2.99rem;
+  align-items: center;
 }
 
 .ql-snow .ql-editor .ql-size-16px {

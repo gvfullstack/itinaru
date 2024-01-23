@@ -10,7 +10,8 @@
 
 .plusSign{
     cursor: pointer;  
-    color:rgb(59, 59, 59);; 
+    color: #bebebe;
+ 
 }
 
 }
@@ -26,9 +27,5 @@
         width: fit-content;
     }
     
-    .plusSign{
-        cursor: pointer;  
-        color:#bebebe; 
-    }
     
 }

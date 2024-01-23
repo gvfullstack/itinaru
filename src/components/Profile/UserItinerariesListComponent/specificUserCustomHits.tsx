@@ -47,7 +47,7 @@ export default function CustomHits({ searchClient, searchQuery }: CustomHitsProp
                 neighborhood={itin.settings?.neighborhood || ''}
                 city={itin.settings?.city || ''}
                 state={itin.settings?.state || ''}
-                duration={itin.settings?.duration || ''}
+                duration={itin.settings?.duration || 0}
                 imageUrl={itin.settings?.galleryPhotoUrl || ''}
             />
         ))}</>

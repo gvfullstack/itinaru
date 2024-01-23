@@ -40,6 +40,7 @@ const PublicProfile: React.FC<PublicProfileProps> = ({ publicProfile, userID }) 
     </div>
     
   );
+
 };
 
 export default PublicProfile;

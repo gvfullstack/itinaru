@@ -29,7 +29,7 @@ export type ItineraryItem = {
     neighborhood?: string;
     city: string;
     state: string;
-    duration?: string;
+    duration?: number;
     imageUrl?: string;
     visibility: 'private' | 'shared' | 'public';
     readAccess?: string[];

@@ -42,7 +42,7 @@ export type ItineraryItem = {
     neighborhood?: string;
     city: string;
     state: string;
-    duration?: string;
+    duration?: number;
     galleryPhotoUrl?: string;
     visibility: 'private' | 'shared' | 'public';
    keywords?: string;

@@ -41,7 +41,7 @@ export const ItemTypes = {
     neighborhood?: string;
     city: string;
     state: string;
-    duration?: string;
+    duration?: number;
     galleryPhotoUrl?: string;
     visibility: 'private' | 'shared' | 'public';
     readAccess?: string[];

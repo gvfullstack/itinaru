@@ -5,6 +5,7 @@
   font-family: 'Roboto', sans-serif;
   height: 3rem;
   width: fit-content;
+  
 }
 
 .menuButton {
@@ -21,7 +22,7 @@
 }
 
 .menuBar {
-  z-index: 30;
+  z-index:30;
 
   position: fixed;
   top: 0;
@@ -36,7 +37,8 @@
 
 .menuBar.show {
   right: 0; /* Visible */
-  
+  z-index:1000;
+
 }
 
 .menuOptions {

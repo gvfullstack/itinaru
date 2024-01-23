@@ -38,7 +38,7 @@ const PublicUserProfilePage: React.FC<Props> = ({ publicProfile, userID }) => {
       </Head>
 
       <div style={{display:"flex", justifyContent:"center"}}>
-        <PublicProfile publicProfile={publicProfile} userID = {userID}/>;
+        <PublicProfile publicProfile={publicProfile} userID = {userID}/>
       </div>
     </>
   );
