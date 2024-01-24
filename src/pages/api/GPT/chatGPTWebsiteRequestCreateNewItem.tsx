@@ -15,9 +15,7 @@ export default async function addItemToItineraryHandler(req: NextApiRequest, res
       await itemRef.set({
         ...item,
         creationTimestamp: admin.firestore.FieldValue.serverTimestamp(),
-        lastUpdatedTimestamp: admin.firestore.FieldValue.serverTimestamp(),
-        startTime: startTimeTimestamp,
-        endTime: endTimeTimestamp,      
+        lastUpdatedTimestamp: admin.firestore.FieldValue.serverTimestamp(),  
         isDeleted: false,
         descHidden: true,
         id: itemRef.id,
@@ -27,7 +25,11 @@ export default async function addItemToItineraryHandler(req: NextApiRequest, res
 
       res.status(200).json({ message: `Item added successfully to itinerary ${itineraryId}` });
     } catch (error) {
-      res.status(500).json({ error: error.message || "An unknown error occurred" });
+        if (error instanceof Error) {
+            res.status(500).json({ error: error.message });
+          } else {
+            res.status(500).json({ error: 'An unknown error occurred' });
+          }
     }
   } else {
     res.setHeader('Allow', ['POST']);
