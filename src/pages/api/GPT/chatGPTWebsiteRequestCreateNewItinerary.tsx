@@ -11,13 +11,16 @@ export default async function createItineraryHandler(req: NextApiRequest, res: N
       const itineraryId = dbServer.collection('itineraries').doc().id;
       const itineraryRef = dbServer.collection('itineraries').doc(itineraryId);
 
+      const localSettings = {...settings};
+      localSettings.visibility = "public";
+
       batch.set(itineraryRef, {
-        ...settings,
+        ...localSettings,
         creationTimestamp: admin.firestore.FieldValue.serverTimestamp(),
         lastUpdatedTimestamp: admin.firestore.FieldValue.serverTimestamp(),
         uid: "aOmGE5uedJTuxBTZGexTdOkUHbu1",
         isDeleted: false,
-        profilePictureUrl: settings.profilePictureUrl || "default_url_here"
+        profilePictureUrl: "https://firebasestorage.googleapis.com/v0/b/itinaru-6e85c.appspot.com/o/profilePictures%2FaOmGE5uedJTuxBTZGexTdOkUHbu1%2FprofilePicture?alt=media&token=3a432d96-92d0-40b2-8812-45f01462f078" || "default_url_here"
       });
 
       await batch.commit();
