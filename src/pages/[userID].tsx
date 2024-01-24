@@ -3,7 +3,7 @@ import { GetServerSideProps } from 'next';
 import { getPublicProfileWithAdminSDK } from '../server/profile';
 import PublicProfile from '../components/Profile/PublicProfile';
 import { AuthenticatedUser } from "@/components/typeDefs";
-
+import style from '../styles/PublicProfile.module.css';
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const userID = context.params?.userID as string; // Extract user ID from URL
   const publicProfile = await getPublicProfileWithAdminSDK(userID);
@@ -37,7 +37,7 @@ const PublicUserProfilePage: React.FC<Props> = ({ publicProfile, userID }) => {
           <meta name="twitter:image" content={publicProfile?.profilePictureUrl || ''} />
       </Head>
 
-      <div style={{display:"flex", justifyContent:"center"}}>
+      <div className={style.publicProfileContainer}>
         <PublicProfile publicProfile={publicProfile} userID = {userID}/>
       </div>
     </>
