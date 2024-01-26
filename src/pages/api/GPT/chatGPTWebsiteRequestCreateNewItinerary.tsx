@@ -16,6 +16,7 @@ export default async function createItineraryHandler(req: NextApiRequest, res: N
 
       batch.set(itineraryRef, {
         ...localSettings,
+        id: itineraryId,
         creationTimestamp: admin.firestore.FieldValue.serverTimestamp(),
         lastUpdatedTimestamp: admin.firestore.FieldValue.serverTimestamp(),
         uid: "aOmGE5uedJTuxBTZGexTdOkUHbu1",
