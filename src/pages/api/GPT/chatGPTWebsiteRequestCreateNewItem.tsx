@@ -11,7 +11,7 @@ export default async function addItemToItineraryHandler(req: NextApiRequest, res
       const itemRef = itemsRef.doc(); // Firestore document reference for the item
 
       // Function to convert ISO 8601 time string to TimeObject
-      const convertToTimeObject = (timeString) => {
+      const convertToTimeObject = (timeString:string) => {
         const timestamp = admin.firestore.Timestamp.fromDate(new Date(timeString));
         return { time: timestamp };
       };
