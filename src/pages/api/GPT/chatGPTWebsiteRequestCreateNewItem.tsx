@@ -1,6 +1,6 @@
 import admin from 'firebase-admin';
 import dbServer from "../../../utils/firebase.admin"; 
-import { TransformedItineraryItem } from './gptRelatedTypeDefs';
+import { TransformedItineraryItem, TimeObject } from './gptRelatedTypeDefs';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function addItemToItineraryHandler(req: NextApiRequest, res: NextApiResponse) {
@@ -10,10 +10,20 @@ export default async function addItemToItineraryHandler(req: NextApiRequest, res
       const itemsRef = dbServer.collection('itineraries').doc(itineraryId).collection('items');
       const itemRef = itemsRef.doc(); // Firestore document reference for the item
 
-      // Time calculations here...
+      // Function to convert ISO 8601 time string to TimeObject
+      const convertToTimeObject = (timeString:string) => {
+        const timestamp = admin.firestore.Timestamp.fromDate(new Date(timeString));
+        return { time: timestamp };
+      };
+
+      // Convert startTime and endTime to TimeObject
+      const startTimeObject = item.startTime ? convertToTimeObject(item.startTime) : null;
+      const endTimeObject = item.endTime ? convertToTimeObject(item.endTime) : null;
 
       await itemRef.set({
         ...item,
+        startTime: startTimeObject,
+        endTime: endTimeObject,
         creationTimestamp: admin.firestore.FieldValue.serverTimestamp(),
         lastUpdatedTimestamp: admin.firestore.FieldValue.serverTimestamp(),  
         isDeleted: false,
