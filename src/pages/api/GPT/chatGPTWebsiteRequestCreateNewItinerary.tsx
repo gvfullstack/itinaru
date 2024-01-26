@@ -15,13 +15,14 @@ export default async function createItineraryHandler(req: NextApiRequest, res: N
       localSettings.visibility = "public";
 
       batch.set(itineraryRef, {
-        ...localSettings,
         id: itineraryId,
         creationTimestamp: admin.firestore.FieldValue.serverTimestamp(),
         lastUpdatedTimestamp: admin.firestore.FieldValue.serverTimestamp(),
         uid: "aOmGE5uedJTuxBTZGexTdOkUHbu1",
         isDeleted: false,
-        profilePictureUrl: "https://firebasestorage.googleapis.com/v0/b/itinaru-6e85c.appspot.com/o/profilePictures%2FaOmGE5uedJTuxBTZGexTdOkUHbu1%2FprofilePicture?alt=media&token=3a432d96-92d0-40b2-8812-45f01462f078" || "default_url_here"
+        profilePictureUrl: "https://firebasestorage.googleapis.com/v0/b/itinaru-6e85c.appspot.com/o/profilePictures%2FaOmGE5uedJTuxBTZGexTdOkUHbu1%2FprofilePicture?alt=media&token=3a432d96-92d0-40b2-8812-45f01462f078" || "default_url_here",
+        settings:{...localSettings}
+
       });
 
       await batch.commit();
