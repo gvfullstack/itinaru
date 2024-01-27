@@ -1,5 +1,4 @@
-import firebase from 'firebase/compat/app';
-import dbServer from "../../../utils/firebase.admin"; 
+import { dbServer, admin } from "../../../utils/firebase.admin";
 import { TransformedItineraryItem, TimeObject } from './gptRelatedTypeDefs';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -11,18 +10,13 @@ export default async function addItemToItineraryHandler(req: NextApiRequest, res
       const itemRef = itemsRef.doc(); // Firestore document reference for the item
 
       // Function to convert ISO 8601 UTC time string to TimeObject
-      const convertToTimeObject = (timeString: string) => {
-        const date = new Date(timeString);
-        const utcDate = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds()));
+      const createTimeObject = (timeString: string) => timeString ? { time: admin.firestore.Timestamp.fromDate(new Date(timeString)) } : null;
 
-        const timestamp = firebase.firestore.Timestamp.fromDate(utcDate);
-        return { time: timestamp };
-      };
       // startTime: item.startTime?.time ? { time: firebase.firestore.Timestamp.fromDate(item.startTime.time.toDate()) } : { time: null },
 
       // Convert startTime and endTime to TimeObject
-      const startTimeObject = item.startTime ? convertToTimeObject(item.startTime) : null;
-      const endTimeObject = item.endTime ? convertToTimeObject(item.endTime) : null;
+      const startTimeObject = item.startTime ? createTimeObject(item.startTime) : null;
+      const endTimeObject = item.endTime ? createTimeObject(item.endTime) : null;
 
       // Update the description to include the original and converted times
       const updatedDescription = `${item.description || ''}\nOriginal Start Time: ${item.startTime}\nConverted Start Time: ${startTimeObject?.time.toDate().toISOString()}\nOriginal End Time: ${item.endTime}\nConverted End Time: ${endTimeObject?.time.toDate().toISOString()}`;
@@ -32,8 +26,8 @@ export default async function addItemToItineraryHandler(req: NextApiRequest, res
         description: updatedDescription,
         startTime: startTimeObject,
         endTime: endTimeObject,
-        creationTimestamp: firebase.firestore.FieldValue.serverTimestamp(),
-        lastUpdatedTimestamp: firebase.firestore.FieldValue.serverTimestamp(),  
+        creationTimestamp: admin.firestore.FieldValue.serverTimestamp(),
+        lastUpdatedTimestamp: admin.firestore.FieldValue.serverTimestamp(),  
         isDeleted: false,
         descHidden: true,
         id: itemRef.id,
