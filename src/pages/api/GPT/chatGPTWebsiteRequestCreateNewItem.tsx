@@ -11,8 +11,12 @@ export default async function addItemToItineraryHandler(req: NextApiRequest, res
       const itemRef = itemsRef.doc(); // Firestore document reference for the item
 
       // Function to convert ISO 8601 UTC time string to TimeObject
-      const createTimeObject = (timeString: string) => timeString ? { time: admin.firestore.Timestamp.fromDate(new Date(timeString)) } : null;
-
+      const createTimeObject = (timeString: string) => {
+        if (!timeString) return null;
+        const date = new Date(timeString);
+        const timestamp = admin.firestore.Timestamp.fromMillis(date.getTime());
+        return { time: timestamp };
+      };
       // startTime: item.startTime?.time ? { time: firebase.firestore.Timestamp.fromDate(item.startTime.time.toDate()) } : { time: null },
 
       // Convert startTime and endTime to TimeObject
