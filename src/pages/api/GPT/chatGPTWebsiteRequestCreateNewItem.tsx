@@ -1,4 +1,4 @@
-import admin from 'firebase-admin';
+import firebase from 'firebase/compat/app';
 import dbServer from "../../../utils/firebase.admin"; 
 import { TransformedItineraryItem, TimeObject } from './gptRelatedTypeDefs';
 import { NextApiRequest, NextApiResponse } from 'next';
@@ -15,9 +15,10 @@ export default async function addItemToItineraryHandler(req: NextApiRequest, res
         const date = new Date(timeString);
         const utcDate = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds()));
 
-        const timestamp = admin.firestore.Timestamp.fromDate(utcDate);
+        const timestamp = firebase.firestore.Timestamp.fromDate(utcDate);
         return { time: timestamp };
       };
+      // startTime: item.startTime?.time ? { time: firebase.firestore.Timestamp.fromDate(item.startTime.time.toDate()) } : { time: null },
 
       // Convert startTime and endTime to TimeObject
       const startTimeObject = item.startTime ? convertToTimeObject(item.startTime) : null;
@@ -31,8 +32,8 @@ export default async function addItemToItineraryHandler(req: NextApiRequest, res
         description: updatedDescription,
         startTime: startTimeObject,
         endTime: endTimeObject,
-        creationTimestamp: admin.firestore.FieldValue.serverTimestamp(),
-        lastUpdatedTimestamp: admin.firestore.FieldValue.serverTimestamp(),  
+        creationTimestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        lastUpdatedTimestamp: firebase.firestore.FieldValue.serverTimestamp(),  
         isDeleted: false,
         descHidden: true,
         id: itemRef.id,
