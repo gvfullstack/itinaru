@@ -1,4 +1,5 @@
-import { dbServer, admin } from "../../../utils/firebase.admin";
+import  dbServer from "../../../utils/firebase.admin";
+import { admin } from "../../../utils/firebase.admin";
 import { TransformedItineraryItem, TimeObject } from './gptRelatedTypeDefs';
 import { NextApiRequest, NextApiResponse } from 'next';
 

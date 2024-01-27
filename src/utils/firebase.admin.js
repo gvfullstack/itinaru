@@ -24,6 +24,5 @@ const dbServer = admin.firestore();
 const authServer = admin.auth();
 const storageServer = admin.storage(); // Initialize Firebase Storage
 
-
-// Export everything
-export { admin, authServer, storageServer, dbServer };
+export { authServer, storageServer, admin };
+export default dbServer;
