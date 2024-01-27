@@ -10,15 +10,22 @@ export default async function addItemToItineraryHandler(req: NextApiRequest, res
       const itemsRef = dbServer.collection('itineraries').doc(itineraryId).collection('items');
       const itemRef = itemsRef.doc(); // Firestore document reference for the item
 
-      // Function to convert ISO 8601 time string to TimeObject
-      const convertToTimeObject = (timeString:string) => {
-        const timestamp = admin.firestore.Timestamp.fromDate(new Date(timeString));
+    // Function to convert ISO 8601 UTC time string to TimeObject
+      const convertToTimeObject = (timeString: string) => {
+        // Parse the string as UTC
+        const date = new Date(timeString);
+        const utcDate = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds()));
+
+        const timestamp = admin.firestore.Timestamp.fromDate(utcDate);
         return { time: timestamp };
       };
 
-      // Convert startTime and endTime to TimeObject
+
+            // Convert startTime and endTime to TimeObject
       const startTimeObject = item.startTime ? convertToTimeObject(item.startTime) : null;
       const endTimeObject = item.endTime ? convertToTimeObject(item.endTime) : null;
+
+
 
       await itemRef.set({
         ...item,
