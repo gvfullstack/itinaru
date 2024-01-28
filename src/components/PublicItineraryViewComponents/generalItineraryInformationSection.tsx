@@ -24,12 +24,14 @@ const GeneralItineraryInformation: FC<GeneralItineraryInformationProps> = ({ sum
     
     const [itinerary, setItinerary] = useRecoilState(currentlyViewingItineraryState);
   
+    const defaultItinImageUrl = "https://firebasestorage.googleapis.com/v0/b/itinaru-6e85c.appspot.com/o/profilePictures%2FaOmGE5uedJTuxBTZGexTdOkUHbu1%2FprofilePicture?alt=media&token=3a432d96-92d0-40b2-8812-45f01462f078"
+
     return (
         <div className = {styles.generalItineraryInformationContainer}>
            {!summarySectionHidden && <div className={styles.itinGeneralInfoPhotoContainer}>
                 {itinerary?.settings?.galleryPhotoUrl && 
                     <Image 
-                        src={itinerary.settings?.galleryPhotoUrl ? itinerary.settings.galleryPhotoUrl : ''} 
+                        src={itinerary.settings?.galleryPhotoUrl ? itinerary.settings.galleryPhotoUrl : defaultItinImageUrl} 
                         alt="Itinerary Gallery Photo" 
                         width={2400} // replace with actual image width
                         height={2400} // replace with actual image height
@@ -38,6 +40,7 @@ const GeneralItineraryInformation: FC<GeneralItineraryInformationProps> = ({ sum
                         style={{objectFit: 'cover'}}            
                     />
                     }
+            
             </div>}
 
              {itinerary?.derivedFromItineraryId && (
