@@ -12,8 +12,8 @@ export default async function addItemToItineraryHandler(req: NextApiRequest, res
       const itemsRef = dbServer.collection('itineraries').doc(itineraryId).collection('items');
       const itemRef = itemsRef.doc(); // Firestore document reference for the item
 
-      const { itineraryUID: itineraryUID, error: itineraryError } = await getItineraryUID(itineraryId);
       const { userID: tokenUserID, error: tokenError } = await getUserIDFromToken(userToken);
+      const { itineraryUID: itineraryUID, error: itineraryError } = await getItineraryUID(itineraryId);
   
        // Compare itineraryUID and tokenUserID, and only proceed if they match
        if (itineraryUID !== tokenUserID) {

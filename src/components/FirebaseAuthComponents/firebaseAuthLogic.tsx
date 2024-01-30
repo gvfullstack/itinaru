@@ -63,12 +63,7 @@ export default function FirebaseAuthLogic() {
             sessionStorage.removeItem('preLoginRouteIsLogin');
           }
           else {
-            const preLoginRoute = sessionStorage.getItem('preLoginRoute');
-            if (preLoginRoute) {
-                router.push(preLoginRoute);
-            } else {
-                router.push('/'); // Replace '/default-route' with your actual default route
-            }
+           
             return; // Exit the function after handling the routing
           }
         } else {
