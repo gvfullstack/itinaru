@@ -14,8 +14,7 @@ const PublicProfile: React.FC<PublicProfileProps> = ({ publicProfile, userID }) 
  
   return (
     <div className={styles.profileStaticContainer}>
-          {publicProfile?.profilePictureUrl && 
-                <div className={styles.profilePicImageContainer}>
+          <div className={styles.profilePicImageContainer}>
                   <Image 
                           src={publicProfile?.profilePictureUrl || ''} 
                           alt="user profile picture" 
@@ -24,7 +23,7 @@ const PublicProfile: React.FC<PublicProfileProps> = ({ publicProfile, userID }) 
                           loading='lazy'
                           style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }}            
                       />
-                </div>}
+                </div>
           {publicProfile?.username && 
           <p className={styles.profileStaticFields}>{publicProfile?.username}</p>}
           {publicProfile?.userFirstLastName && 
