@@ -24,6 +24,7 @@ const ItinGalleryComponent: React.FC<Props> = ({...props}) => {
   
   const router = useRouter();
   const defaultImageUrl = 'https://firebasestorage.googleapis.com/v0/b/itinaru-6e85c.appspot.com/o/defaultAssets%2FuserSilhouette.svg?alt=media&token=98731ed6-dfc8-4e46-bdb1-1ce257f2f258';
+  const defaultItinImageUrl = "https://firebasestorage.googleapis.com/v0/b/itinaru-6e85c.appspot.com/o/profilePictures%2FaOmGE5uedJTuxBTZGexTdOkUHbu1%2FprofilePicture?alt=media&token=3a432d96-92d0-40b2-8812-45f01462f078";
   const truncateText = (text: string, maxLength: number) => {
     if(!text) return "";
     if (text.length > maxLength) {
@@ -39,26 +40,22 @@ const ItinGalleryComponent: React.FC<Props> = ({...props}) => {
       truncateText(props.description, 700);
   };
 
-  const getRandomImage = () => {
-    const images = ['dubaiShine.jpg', 'landscape.jpg', 'rainbow.jpg', 'sunflower.jpg', 'tropicalSunset.jpg'];
-    const randomIndex = Math.floor(Math.random() * images.length);
-    return `/images/homePageGalleryDefaultImages/${images[randomIndex]}`;
-  };
+
   
 
   return (
     <div className={styles.container} onClick={() => router.push(`/viewItinerary/${props.itinId}`)}>
       <div className={styles.imageWrapper}>
-      {props.imageUrl && <div className={styles.aspectRatioBox}> 
+       <div className={styles.aspectRatioBox}> 
             <Image
-              src={props.imageUrl || getRandomImage()} 
+              src={props.imageUrl || defaultItinImageUrl} 
               alt="No image uploaded by creator."   
               width={2400}
               height={2400}
               loading='lazy'
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}            
               />
-          </div>}
+          </div>
       </div>
      
       <div>

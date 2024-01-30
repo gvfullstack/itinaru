@@ -56,11 +56,7 @@ const ItinGalleryComponent: React.FC<ItinGalleryComponentProps> = ({itinerary}) 
 
   const truncatedDescription = truncateText(description, 135);
 
-  const getRandomImage = () => {
-    const images = ['dubaiShine.jpg', 'landscape.jpg', 'rainbow.jpg', 'sunflower.jpg', 'tropicalSunset.jpg'];
-    const randomIndex = Math.floor(Math.random() * images.length);
-    return `/images/homePageGalleryDefaultImages/${images[randomIndex]}`;
-  };
+  const defaultItinImageUrl = "https://firebasestorage.googleapis.com/v0/b/itinaru-6e85c.appspot.com/o/profilePictures%2FaOmGE5uedJTuxBTZGexTdOkUHbu1%2FprofilePicture?alt=media&token=3a432d96-92d0-40b2-8812-45f01462f078"
   
 ////////////////////////////////
 const checkedItineraryRef = useRef<TransformedItinerary | null>(null);
@@ -104,7 +100,7 @@ const updateIndexedDB = async () => {
       <div className={styles.imageWrapper}>
         <div className={styles.aspectRatioBox}> 
             <Image
-              src={galleryPhotoUrl || getRandomImage()} 
+              src={galleryPhotoUrl || defaultItinImageUrl} 
               alt="No image uploaded by creator."   
               width={2400}
               height={2400}
