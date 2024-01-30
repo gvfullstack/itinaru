@@ -2,14 +2,24 @@ import  dbServer from "../../../utils/firebase.admin";
 import { admin } from "../../../utils/firebase.admin";
 import { TransformedItineraryItem, TimeObject } from './gptRelatedTypeDefs';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { getUserIDFromToken } from './utils/getUserIDFromToken';
+import {getItineraryUID} from './utils/getItineraryUID';
 
 export default async function addItemToItineraryHandler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
     try {
-      const { itineraryId, item } = req.body;
+      const { userToken, itineraryId, item } = req.body;
       const itemsRef = dbServer.collection('itineraries').doc(itineraryId).collection('items');
       const itemRef = itemsRef.doc(); // Firestore document reference for the item
 
+      const { itineraryUID: itineraryUID, error: itineraryError } = await getItineraryUID(itineraryId);
+      const { userID: tokenUserID, error: tokenError } = await getUserIDFromToken(userToken);
+  
+       // Compare itineraryUID and tokenUserID, and only proceed if they match
+       if (itineraryUID !== tokenUserID) {
+        return res.status(403).json({ error: 'Permission denied. Itinerary and user do not match.' });
+      }
+      
       // Function to convert ISO 8601 UTC time string to TimeObject
       const createTimeObject = (timeString: string) => {
         if (!timeString) return null;
