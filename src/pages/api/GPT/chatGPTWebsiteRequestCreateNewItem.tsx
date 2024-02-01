@@ -32,16 +32,18 @@ export default async function addItemToItineraryHandler(req: NextApiRequest, res
         return res.status(403).json({ error: 'Permission denied. Itinerary and user do not match.' });
       }
 
-      const createTimeObject = (timeString: string) => {
-        if (!timeString) return null;
-      
-        // Parse the OK this transit C ds DTC dates string as a UTC date
-        const date = new Date(timeString);
-            
-        // Create a Firestore timestamp from the UTC date
-        const timestamp = admin.firestore.Timestamp.fromDate(date);
-      
-        return { time: timestamp };
+      const dayjs = require('dayjs');
+
+      const createTimeObject = (timeString:string) => {
+          if (!timeString) return null;
+        
+          // Parse the time string as a UTC date using Day.js
+          const date = dayjs(timeString).toDate();
+              
+          // Create a Firestore timestamp from the UTC date
+          const timestamp = admin.firestore.Timestamp.fromDate(date);
+        
+          return { time: timestamp };
       };
       
 
