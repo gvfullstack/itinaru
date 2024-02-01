@@ -34,20 +34,21 @@ export default async function addItemToItineraryHandler(req: NextApiRequest, res
 
       const dayjs = require('dayjs');
 
-      const createTimeObject = (timeString:string) => {
-        console.log('timeString', timeString);
-          if (!timeString) return null;
-        
-          // Parse the time string as a UTC date using Day.js
-          const date = dayjs(timeString).toDate();
-              
-          // Create a Firestore timestamp from the UTC date
-          const timestamp = admin.firestore.Timestamp.fromDate(date);
-          console.log('timestamp', timestamp);
-    
-          return { time: timestamp };
-      };
+      const createTimeObject = (timeString: string) => {
+        console.log('Original timeString', timeString);
+        if (!timeString) return null;
       
+        // Parse the time string as a UTC date using Day.js
+        const date = dayjs(timeString).add(8, 'hour').toDate(); // Add 8 hours to the time
+        console.log('Modified date', date);  // Log the modified date for debugging
+        
+        // Create a Firestore timestamp from the modified date
+        const timestamp = admin.firestore.Timestamp.fromDate(date);
+        console.log('Modified timestamp', timestamp);  // Log the modified timestamp for debugging
+      
+        return { time: timestamp };
+    };
+    
 
       const startTimeObject = item.startTime ? createTimeObject(item.startTime) : null;
       const endTimeObject = item.endTime ? createTimeObject(item.endTime) : null;
@@ -57,8 +58,8 @@ export default async function addItemToItineraryHandler(req: NextApiRequest, res
       await itemRef.set({
         ...item,
         description: updatedDescription,
-        startTime:  item.startTime ? createTimeObject(item.startTime) : null,
-        endTime: item.endTime ? createTimeObject(item.endTime) : null,
+        startTime:  startTimeObject,
+        endTime: endTimeObject,
         creationTimestamp: admin.firestore.FieldValue.serverTimestamp(),
         lastUpdatedTimestamp: admin.firestore.FieldValue.serverTimestamp(),
         isDeleted: false,
