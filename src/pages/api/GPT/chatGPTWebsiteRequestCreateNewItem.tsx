@@ -50,7 +50,7 @@ export default async function addItemToItineraryHandler(req: NextApiRequest, res
       const startTimeObject = item.startTime ? createTimeObject(item.startTime) : null;
       const endTimeObject = item.endTime ? createTimeObject(item.endTime) : null;
 
-      const updatedDescription = `${item.description || ''} start time send to firebase ${startTimeObject}`;
+      const updatedDescription = `${item.description || ''} start time send to firebase ${startTimeObject?.time}`;
 
       await itemRef.set({
         ...item,
