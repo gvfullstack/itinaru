@@ -52,13 +52,13 @@ export default async function addItemToItineraryHandler(req: NextApiRequest, res
       const startTimeObject = item.startTime ? createTimeObject(item.startTime) : null;
       const endTimeObject = item.endTime ? createTimeObject(item.endTime) : null;
 
-      const updatedDescription = `${item.description || ''} start time sent to firebase ${startTimeObject?.time}`;
+      const updatedDescription = `${item.description || ''}`;
 
       await itemRef.set({
         ...item,
         description: updatedDescription,
-        startTime: startTimeObject,
-        endTime: endTimeObject,
+        startTime:  item.startTime ? createTimeObject(item.startTime) : null,
+        endTime: item.endTime ? createTimeObject(item.endTime) : null,
         creationTimestamp: admin.firestore.FieldValue.serverTimestamp(),
         lastUpdatedTimestamp: admin.firestore.FieldValue.serverTimestamp(),
         isDeleted: false,
