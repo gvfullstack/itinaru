@@ -255,15 +255,18 @@ const updateItineraryWithCoordinates = (latitude: number, longitude: number) => 
     const handleTimeChangeWithRecoilUpdate = (timeField: 'startTime' | 'endTime') => {
       return (date: Dayjs | null) => {
         if (dayjs.isDayjs(date) && date.isValid()) {
+          // Set the date part to 1/1/2000
+          const standardizedDate = date.year(2000).month(0).date(1);
+    
           // Update Recoil state only if date is a valid Dayjs object
           setItineraryInEdit((prevItinerary: Itinerary) => {
             const updatedItems = prevItinerary.items?.map((item) => {
-              if (item.id === initialItemState.id) {  // Replace `initialItemState.id` with appropriate logic if needed
+              if (item.id === initialItemState.id) {
                 return {
                   ...item,
                   [timeField]: {
                     ...item[timeField],
-                    time: date
+                    time: standardizedDate
                   }
                 };
               }

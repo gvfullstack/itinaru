@@ -286,9 +286,7 @@ async function saveItineraryToFirestore() {
   let defaultItinerary: TransformedItinerary = {isDeleted: false, id: '', uid: "", settings: {title: "", description: "", city: "", state: "", visibility: "private", galleryPhotoUrl: "", keywords:""},items:[]}
   // Initialize transformedItinerary with the same shape as TransformedItinerary, but empty values
   let originalTransformedItinerary = previousTransformedItinerary ?? defaultItinerary
-  console.log('originalTransformedItinerary', originalTransformedItinerary);
   let updatedTransformedItinerary = createCurrentTransformedItinerary(itinerary);
-  console.log('updatedTransformedItinerary', updatedTransformedItinerary);
   ///save to external DB/firestore
   if(!originalTransformedItinerary?.id || 
     originalTransformedItinerary?.id !== updatedTransformedItinerary?.id) { // If the IDs do not match it means the currentlyEditingItinerary did not reset before page loaded for the new itinerary. 

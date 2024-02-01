@@ -34,15 +34,24 @@ export default async function addItemToItineraryHandler(req: NextApiRequest, res
 
       const createTimeObject = (timeString: string) => {
         if (!timeString) return null;
+      
+        // Parse the OK this transit C ds DTC dates string as a UTC date
         const date = new Date(timeString);
-        const timestamp = admin.firestore.Timestamp.fromMillis(date.getTime());
+        
+        // Convert the date to UTC by subtracting the local time zone offset
+        const utcDate = new Date(date.getTime() + (date.getTimezoneOffset() * 60000));
+      
+        // Create a Firestore timestamp from the UTC date
+        const timestamp = admin.firestore.Timestamp.fromDate(utcDate);
+      
         return { time: timestamp };
       };
+      
 
       const startTimeObject = item.startTime ? createTimeObject(item.startTime) : null;
       const endTimeObject = item.endTime ? createTimeObject(item.endTime) : null;
 
-      const updatedDescription = `${item.description || ''}\nOriginal Start Time: ${item.startTime}\nConverted Start Time: ${startTimeObject?.time.toDate().toISOString()}\nOriginal End Time: ${item.endTime}\nConverted End Time: ${endTimeObject?.time.toDate().toISOString()}`;
+      const updatedDescription = `${item.description || ''}`;
 
       await itemRef.set({
         ...item,
