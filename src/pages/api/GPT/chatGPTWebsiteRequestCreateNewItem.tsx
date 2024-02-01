@@ -35,6 +35,7 @@ export default async function addItemToItineraryHandler(req: NextApiRequest, res
       const dayjs = require('dayjs');
 
       const createTimeObject = (timeString:string) => {
+        console.log('timeString', timeString);
           if (!timeString) return null;
         
           // Parse the time string as a UTC date using Day.js
@@ -43,6 +44,7 @@ export default async function addItemToItineraryHandler(req: NextApiRequest, res
           // Create a Firestore timestamp from the UTC date
           const timestamp = admin.firestore.Timestamp.fromDate(date);
           console.log('timestamp', timestamp);
+    
           return { time: timestamp };
       };
       
@@ -50,7 +52,7 @@ export default async function addItemToItineraryHandler(req: NextApiRequest, res
       const startTimeObject = item.startTime ? createTimeObject(item.startTime) : null;
       const endTimeObject = item.endTime ? createTimeObject(item.endTime) : null;
 
-      const updatedDescription = `${item.description || ''} start time send to firebase ${startTimeObject}`;
+      const updatedDescription = `${item.description || ''} start time sent to firebase ${startTimeObject?.time}`;
 
       await itemRef.set({
         ...item,
