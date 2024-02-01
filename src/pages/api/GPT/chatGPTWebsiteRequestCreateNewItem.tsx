@@ -37,12 +37,9 @@ export default async function addItemToItineraryHandler(req: NextApiRequest, res
       
         // Parse the OK this transit C ds DTC dates string as a UTC date
         const date = new Date(timeString);
-        
-        // Convert the date to UTC by subtracting the local time zone offset
-        const utcDate = new Date(date.getTime() + (date.getTimezoneOffset() * 60000));
-      
+            
         // Create a Firestore timestamp from the UTC date
-        const timestamp = admin.firestore.Timestamp.fromDate(utcDate);
+        const timestamp = admin.firestore.Timestamp.fromDate(date);
       
         return { time: timestamp };
       };
