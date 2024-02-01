@@ -42,7 +42,7 @@ export default async function addItemToItineraryHandler(req: NextApiRequest, res
               
           // Create a Firestore timestamp from the UTC date
           const timestamp = admin.firestore.Timestamp.fromDate(date);
-        
+          console.log('timestamp', timestamp);
           return { time: timestamp };
       };
       
@@ -50,7 +50,7 @@ export default async function addItemToItineraryHandler(req: NextApiRequest, res
       const startTimeObject = item.startTime ? createTimeObject(item.startTime) : null;
       const endTimeObject = item.endTime ? createTimeObject(item.endTime) : null;
 
-      const updatedDescription = `${item.description || ''}`;
+      const updatedDescription = `${item.description || ''} start time send to firebase ${startTimeObject}`;
 
       await itemRef.set({
         ...item,
