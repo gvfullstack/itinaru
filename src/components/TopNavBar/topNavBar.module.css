@@ -13,9 +13,6 @@
   transition: top 0.3s; /* Smooth transition for moving the bar */
 }
 
-.navHidden {
-  top: -3rem; /* Adjust this value as needed */
-}
 
 .topNavContainer{
     height: 3rem;

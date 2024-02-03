@@ -1,0 +1,111 @@
+/* efficientItinerary.module.css */
+
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    color: #333;
+    background-color: #f7f7f7;
+}
+
+.header {
+    background-color: #ffffff;
+    padding: 20px;
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.gptLink{
+    margin: 0 1rem;
+}
+
+.header h1 {
+    margin: 0;
+    color: #333;
+    font-weight: 300;
+}
+
+.header p {
+    margin: 10px 0 0;
+    color: #666;
+    font-size: 0.9em;
+}
+
+.mainContent {
+    margin-top: 30px;
+}
+
+.mainContent section {
+    background-color: #ffffff;
+    padding: 20px;
+    margin-bottom: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.mainContent h2 {
+    color: #333;
+    margin-bottom: 15px;
+    font-weight: 400;
+    border-bottom: 2px solid #eeeeee;
+    padding-bottom: 5px;
+}
+
+.mainContent h3 {
+    color: #555;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    font-weight: 400;
+    font-weight: bold;
+}
+
+.mainContent ul {
+    list-style: none;
+    padding: 0;
+}
+
+.mainContent li {
+    background: #f9f9f9;
+    margin-bottom: 10px;
+    padding: 15px;
+    border-left: 3px solid #717171;
+    border-radius: 5px;
+    transition: transform 0.2s;
+}
+
+.mainContent li:hover {
+    transform: scale(1.002);
+}
+
+.footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #ffffff;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    border-top: 1px solid #eeeeee;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.footer p {
+    margin: 0;
+    color: #666;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+
+    .header, .footer {
+        padding: 10px;
+    }
+
+    .mainContent section {
+        margin-bottom: 20px;
+    }
+}

@@ -23,7 +23,7 @@ export type Itinerary = {
 	lastUpdatedTimestamp?: firebase.firestore.Timestamp | Date | firebase.firestore.FieldValue;
   derivedFromItineraryId?: string,
   id?: string,
-  uid: string,
+  uid?: string,
   profilePictureUrl?: string | null;
   isDeleted?: boolean;
   settings?: ItinerarySettings;

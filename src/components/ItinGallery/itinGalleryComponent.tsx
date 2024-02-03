@@ -83,7 +83,7 @@ const ItinGalleryComponent: React.FC<Props> = ({...props}) => {
                       <img
                         src={defaultImageUrl} // URL of your SVG
                         alt="No image uploaded by creator."
-                        className = {styles.defaultImage}
+                        className = {styles.profilePicture}
                         title='Visit User profile page'
 
                       />
