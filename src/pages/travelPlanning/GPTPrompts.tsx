@@ -87,4 +87,3 @@ const EfficientItinerary = () => {
 
 export default EfficientItinerary;
 
-// efficientItinerary.module.css (remains the same)
