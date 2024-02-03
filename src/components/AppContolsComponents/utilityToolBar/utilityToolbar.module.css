@@ -1,10 +1,6 @@
 /* buttonToolbarContainer.module.css */
 @media (min-width: 0px) {
   .toolbarContainer.stickyToolbar {
-    position: fixed;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
     width: 100%; /* Fits the width of .sharedContainer */
     max-width: 800px; /* Matches the max-width of .sharedContainer */
     z-index: 20;

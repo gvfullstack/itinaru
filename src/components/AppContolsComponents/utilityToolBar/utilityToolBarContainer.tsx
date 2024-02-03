@@ -2,7 +2,7 @@
     import CopyItineraryButton from './copyItineraryForEditByEndUser'; // Replace with your actual component path
     import ItineraryLink from '../shareableLink/itineraryPublicLink'; // Replace with your actual component path
     import {DynamicFontAwesomeIcon} from '@/components';
-    import { faList, faExpandAlt, faHouseChimney, faSquareShareNodes, faWindowMinimize, faDownLeftAndUpRightToCenter } from '@fortawesome/free-solid-svg-icons';
+    import { faPenToSquare, faList, faExpandAlt, faHouseChimney, faSquareShareNodes, faWindowMinimize, faDownLeftAndUpRightToCenter } from '@fortawesome/free-solid-svg-icons';
     import { useRouter } from 'next/router';
     import {currentlyViewingItineraryState} from '../../PublicItineraryViewComponents/publicItinViewAtoms';
     import {useRecoilState} from 'recoil';
@@ -10,7 +10,7 @@
     import ShareIcons from '../shareableLink/shareIcons';
     import ShareButton from '../shareableLink/webShareAPIicon';
     import JumboPlus from '../jumboPlus';
-
+    import EditButton from "../shareableLink/editItinerary"
 
     type ButtonToolbarContainerProps = {
         toggleSummarySection: () => void;
@@ -99,8 +99,7 @@
                     >
                         {summarySectionHidden ? expandIcon : collapseIcon}
                     </button>
-                    <CopyItineraryButton /> 
-                   
+                    <CopyItineraryButton />                    
                     <button
                         className={styles.utilityToolbarButton}
                         onClick={toggleShareIconsVisibility}
@@ -109,6 +108,9 @@
                     >
                         {shareIcon}
                     </button> 
+                    
+                    <EditButton />
+             
                     {/* <div
                         className={styles.utilityToolbarButtonJumboPlus}>
                         <JumboPlus />

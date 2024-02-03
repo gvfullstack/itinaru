@@ -151,7 +151,11 @@ if (itineraryItem.locationAddress) {
 
   const shortItemTitle = itineraryItem.itemTitle?.substring(0, 50) || "untitled item" + "...";
 
- 
+// Provide a default string if itineraryItem.itemTitle is undefined
+  let encodedDestination = encodeURIComponent(itineraryItem.locationAddress || 'defaultTitle');
+
+  let yelpURL = `https://www.yelp.com/search?find_desc=Restaurants&find_loc=${encodedDestination}`;
+  
 
   return (
     <>
@@ -205,7 +209,7 @@ if (itineraryItem.locationAddress) {
                                             >{mapMarkerAlt}
                                             </a>
                                                 
-                                    </div>
+                                    </div>                                  
                           </div> 
                             <div className={`${styles.itinTitleDescription} ${hideDescription ? "" : styles.isShown}`}>  
                                <ItemDescriptionStaticComponent description={itineraryItem.description || ""} />
@@ -235,15 +239,17 @@ if (itineraryItem.locationAddress) {
 
 
                             <div className={styles.youtubeLink}>      
-                            <a href={mapsUrl} 
+                            <a href={yelpURL} 
                               target="_blank" 
                               rel="noopener noreferrer">
-                              {externalLink} <span className={styles.youTubeLinkText}>Search on Maps</span>
+                              {externalLink} <span className={styles.youTubeLinkText}>Search on Yelp</span>
                             </a>
                             </div>
-
-
-                            <StarRating starRating={itineraryItem.rating}/>
+                            <div style={{"marginTop":".5rem"}}>
+                                Expected per person budget:${itineraryItem.expectedPerPersonBudget}
+                            </div>
+                            
+                            {/* <StarRating starRating={itineraryItem.rating}/> */}
                           </div>
                   
                         

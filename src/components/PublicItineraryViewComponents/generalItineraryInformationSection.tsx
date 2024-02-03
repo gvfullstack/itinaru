@@ -23,7 +23,7 @@ const GeneralItineraryInformation: FC<GeneralItineraryInformationProps> = ({ sum
       };
     
     const [itinerary, setItinerary] = useRecoilState(currentlyViewingItineraryState);
-  
+    const defaultUserImageUrl = 'https://firebasestorage.googleapis.com/v0/b/itinaru-6e85c.appspot.com/o/defaultAssets%2FuserSilhouette.svg?alt=media&token=98731ed6-dfc8-4e46-bdb1-1ce257f2f258';
     const defaultItinImageUrl = "https://firebasestorage.googleapis.com/v0/b/itinaru-6e85c.appspot.com/o/profilePictures%2FaOmGE5uedJTuxBTZGexTdOkUHbu1%2FprofilePicture?alt=media&token=3a432d96-92d0-40b2-8812-45f01462f078"
 
     return (
@@ -57,6 +57,32 @@ const GeneralItineraryInformation: FC<GeneralItineraryInformationProps> = ({ sum
             
            <div className={styles.itinGeneralInfoTextSectionWIthCopyButton}> 
                 <div className={styles.itinGeneralInfoTextSection}>
+                <div  
+                      className={styles.aspectRatioBox2}
+                      onClick={(e) => {
+                        e.stopPropagation(); // This stops the event from bubbling up to the parent
+                        router.push(`/${itinerary?.uid}`);
+                      }}                  >
+                    {itinerary?.profilePictureUrl ? (
+                      <Image
+                        src={itinerary?.profilePictureUrl}
+                        alt="User profile picture"
+                        width={2400}
+                        height={2400}
+                        loading='lazy'
+                        // style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        className = {styles.profilePicture}
+                        title='Visit User profile page'
+                      />
+                    ) : (
+                      <img
+                        src={defaultUserImageUrl} // URL of your SVG
+                        alt="No image uploaded by creator."
+                        title='Visit User profile page'
+                        className = {styles.profilePicture}
+                      />
+                    )}
+                  </div>
                     <p className={styles.publicItinViewTitle}>{itinerary?.settings?.title }</p>
                     <p>{itinerary?.settings?.city || 'CITY MISSING'}, {itinerary?.settings?.state || 'STATE MISSING'}</p>
                 </div>

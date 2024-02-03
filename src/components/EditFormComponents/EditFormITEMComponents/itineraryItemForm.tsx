@@ -454,7 +454,7 @@ const updateItineraryWithCoordinates = (latitude: number, longitude: number) => 
     }}
     />
    
-   <StarRating initialItem={initialItem} updateItemInRecoilState={updateItemInRecoilState}/>
+   {/* <StarRating initialItem={initialItem} updateItemInRecoilState={updateItemInRecoilState}/> */}
    
    {!showDeleteConfirmation && (
     <div className={styles.saveOrCancelButtonSection}>
