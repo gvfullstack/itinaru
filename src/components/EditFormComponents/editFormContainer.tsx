@@ -11,7 +11,7 @@ import { faFloppyDisk } from '@fortawesome/free-regular-svg-icons';
 import { authUserState } from '../../atoms/atoms'
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
-import { db  } from '../FirebaseAuthComponents/config/firebase.database';
+import { db,Timestamp  } from '../FirebaseAuthComponents/config/firebase.database';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -36,6 +36,7 @@ import {saveUpdatedFields} from './util/saveUpdatedFields';
 import { markItineraryAndItemsAsDeleted } from './util/markItineraryAndItemsAsDeleted';
 import {myItinerariesResults} from '../MyItinerariesGallery/myItinerariesAtoms';
 import {serverTimestamp } from 'firebase/firestore'
+import dayjs from 'dayjs';
 
 const GoogleMapsProvider = dynamic(() => 
     import('./EditFormITEMComponents/googleMapsProvider'), {
@@ -108,6 +109,10 @@ useEffect(() => {
 
       // Firestore logic to add item to Firestore and retrieve the ID of the new item
       const itemsRef = db.collection('itineraries').doc(itinerary.id).collection('items');
+      const specificDate = new Date('2000-01-01T08:00:00Z');
+      const startTime = {time: Timestamp.fromDate(specificDate)};
+      const endTime = {time: Timestamp.fromDate(specificDate)};
+
       const docRef = await itemsRef.add({
         // Add other fields as necessary
         descHidden: true,
@@ -115,15 +120,21 @@ useEffect(() => {
         isDeleted: false,
         creationTimestamp: serverTimestamp(),
         lastUpdatedTimestamp: serverTimestamp(),
+        startTime,
+        endTime
       });
 
-
+      const startTimeDayJs = { time: dayjs(specificDate) };
+      const endTimeDayJs = { time: dayjs(specificDate) };
+      
       // Await is used to ensure we get the docRef before proceeding
       const newItem = {
         id: docRef.id,
         descHidden: true,
         itineraryParentId: itinerary.id,
         isDeleted: false,
+        startTime: startTimeDayJs,
+        endTime: endTimeDayJs
         // Add other default fields or those returned by Firestore as necessary
       };
       // Now, update the Recoil state with the new item
@@ -328,6 +339,7 @@ const trashDelete = (
       onClick={()=>setDisplayDeleteConfirmation(true)}
   />
 );
+
 const floppySave = (
   <DynamicFontAwesomeIcon 
       icon={faFloppyDisk} 
@@ -343,6 +355,20 @@ const floppySave = (
   />
 );
 
+const floppySaveExit = (
+  <DynamicFontAwesomeIcon 
+      icon={faFloppyDisk} 
+      className={styles.floppyDisk} 
+      type="button" 
+      onClick={async ()=> {
+        saveItineraryToFirestore();
+        // await setIndexDBNeedsRefreshTrue();
+        setMyItineraries([])
+        router.push(`/viewItinerary/${itinerary.id}`);
+      }
+        }
+  />
+);
 
 const attachIcon = (
   <DynamicFontAwesomeIcon 
@@ -655,8 +681,10 @@ return (
               )}
               <div className={styles.EFpageTopNav}>
                  <div className={styles.topNavGenericDiv}></div>
-                  <Link className={styles.previewLink} href="/viewItinerary/previewItinerary" 
-                  onClick={handlePreviewItinerary}>Preview</Link>
+
+                  {/* <Link className={styles.previewLink} href="/viewItinerary/previewItinerary" 
+                  onClick={handlePreviewItinerary}>Preview</Link> */}
+                  
                   <div className={styles.addContributorIconContainer} >
                     {addContributorIcon}          
                   </div>
@@ -724,6 +752,12 @@ return (
                   <div className = {styles.iconSectionContainerP}>                                      
                       <div className = {styles.formControlsIconContainerP}>                
                           {floppySave}
+                      </div>
+                      <p className = {styles.formControlsIconTextP}>Save/My Itineraries</p>
+                  </div>
+                  <div className = {styles.iconSectionContainerP}>                                      
+                      <div className = {styles.formControlsIconContainerP}>                
+                          {floppySaveExit}
                       </div>
                       <p className = {styles.formControlsIconTextP}>Save/Exit</p>
                   </div>        
