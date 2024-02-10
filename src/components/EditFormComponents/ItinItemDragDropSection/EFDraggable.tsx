@@ -285,7 +285,7 @@ const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.tim
                                   <a href={`https://www.youtube.com/results?search_query=${encodeURIComponent(itineraryItem.itemTitle ? itineraryItem.itemTitle : "")}`} target="_blank">
                                   {externalLink} <span className={styles.youTubeLinkText}>Search on YouTube</span></a>
                             </div>
-                            <StaticStarRating starRating={itineraryItem.rating}/>
+                            {/* <StaticStarRating starRating={itineraryItem.rating}/> */}
 
                             <div className={`${styles.expandedMenu} ${hideDescription ? "" : styles.isShown }`}>
                               <div className={styles.expandedMenuItem} onClick={handleShowItemForm}>{editItemIcon} Edit</div>

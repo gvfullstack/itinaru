@@ -234,6 +234,15 @@ const updateItineraryWithCoordinates = (latitude: number, longitude: number) => 
       };
   });
 }
+
+const sortItineraryItemsByStartTime = (items: ItineraryItem[]): ItineraryItem[] => {
+  return items.sort((a, b) => {
+    const timeA = a.startTime?.time ? a.startTime.time.valueOf() : Infinity;
+    const timeB = b.startTime?.time ? b.startTime.time.valueOf() : Infinity;
+    return timeA - timeB;
+  });
+};
+
    
     const cancelMark = 
         <DynamicFontAwesomeIcon 
@@ -255,10 +264,9 @@ const updateItineraryWithCoordinates = (latitude: number, longitude: number) => 
     const handleTimeChangeWithRecoilUpdate = (timeField: 'startTime' | 'endTime') => {
       return (date: Dayjs | null) => {
         if (dayjs.isDayjs(date) && date.isValid()) {
-          // Set the date part to 1/1/2000
+          // Standardize the date to 1/1/2000
           const standardizedDate = date.year(2000).month(0).date(1);
-    
-          // Update Recoil state only if date is a valid Dayjs object
+          
           setItineraryInEdit((prevItinerary: Itinerary) => {
             const updatedItems = prevItinerary.items?.map((item) => {
               if (item.id === initialItemState.id) {
@@ -273,14 +281,17 @@ const updateItineraryWithCoordinates = (latitude: number, longitude: number) => 
               return item;
             });
     
+            const sortedItems = sortItineraryItemsByStartTime(updatedItems ?? []);
+            
             return {
               ...prevItinerary,
-              items: updatedItems
+              items: sortedItems
             };
           });
         }
       };
     };
+    
 
       const resetLatLong = () => {
         setItineraryInEdit((prevItinerary: Itinerary) => {

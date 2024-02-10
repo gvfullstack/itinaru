@@ -8,5 +8,7 @@ if (!firebase.apps.length) {
   }
   
   const db = firebase.firestore();
+  const Timestamp = firebase.firestore.Timestamp;
+
   
-  export { db };
+  export { db, Timestamp};

@@ -5,7 +5,7 @@ const EfficientItinerary = () => {
     return (
         <div className={styles.container}>
             <header className={styles.header}>
-                <h1>Explore these propmts while interacting with 
+                <h1>Explore these prompts while interacting with 
                 <a href="https://chat.openai.com/g/g-cxjX4K4Gn-itinaru-gpt-travel-itineraries" 
                     target="_blank" 
                     rel="noopener noreferrer" 

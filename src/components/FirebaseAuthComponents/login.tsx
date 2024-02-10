@@ -51,7 +51,7 @@ const Login: React.FC = () => {
               ui.start(uiRef.current, uiConfig);}
             });
           }
-        }, 1500);
+        }, 2500);
       }
 
       return () => {
