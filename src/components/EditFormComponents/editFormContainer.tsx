@@ -142,7 +142,7 @@ useEffect(() => {
         const prevItems = prevItinerary.items || []; // Provide a fallback empty array
         return {
           ...prevItinerary,
-          items: [...prevItems, newItem]
+          items: [newItem, ...prevItems ]
         };
       });
 
@@ -657,7 +657,7 @@ return (
                   handleRemoveClick={handleRemoveItem} 
                   handleShowItemForm={handleSaveItemAndShowItemForm} 
                   mode="create"
-                  initialItem={itinerary.items?.[itinerary.items.length - 1] ?? undefined}  // Pass the last item as a prop, or null if 'itinerary.items' is undefined
+                  initialItem={itinerary.items?.[0] ?? undefined}  // Pass the last item as a prop, or null if 'itinerary.items' is undefined
                   />
               </GoogleMapsProvider>
             </div>
