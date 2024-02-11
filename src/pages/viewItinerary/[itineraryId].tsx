@@ -1,6 +1,5 @@
 import Head from 'next/head';
-import PublicItinViewContainer from '../../components/PublicItineraryViewComponents/publicItinViewContainer';
-import React,{ useEffect} from 'react';
+import React,{ useEffect, useState} from 'react';
 import dynamic from 'next/dynamic';
 import {currentlyViewingItineraryState} from '../../components/PublicItineraryViewComponents/publicItinViewAtoms';
 import { useRecoilState } from 'recoil';
@@ -11,10 +10,21 @@ import dayjs, {Dayjs} from 'dayjs';
 import styles from '@/styles/Home.module.css'
 import { authServer } from '@/utils/firebase.admin';
 
+// Skeleton component for loading state
+const SkeletonView = () => (
+  <div className={styles.loadingOverlay}>
+    <div className={styles.loadingSpinner}></div>
+    <p>Loading...</p>
+  </div>
+);
+
+const PublicItinViewContainer = dynamic(() => import('../../components/PublicItineraryViewComponents/publicItinViewContainer'), {
+  loading: () => <SkeletonView />,
+});
+
 export const getServerSideProps = async (context:GetServerSidePropsContext) => {
   const itineraryId = context.params?.itineraryId as string; // Extracting itineraryId from context
   const idToken = context.req.cookies['idToken']; // Replace with your cookie name
-
 
    try {
       let decodedToken;
@@ -66,6 +76,7 @@ export const getServerSideProps = async (context:GetServerSidePropsContext) => {
       }
     }, [itinerary, setItinerary]);
   
+
     return (
       <>
        <Head>
@@ -82,13 +93,10 @@ export const getServerSideProps = async (context:GetServerSidePropsContext) => {
           <meta name="twitter:image" content={itinerary?.settings?.galleryPhotoUrl} />
       </Head>
 
-          <div className={styles.publicItinViewMain}>
-            {localItinerary ? (
-              <PublicItinViewContainer />
-            ) : (
-              <p className={styles.deletedMessage}>This itinerary has been deleted or is unavailable.</p>
-            )}
-          </div>
+      <div className={styles.publicItinViewMain}>
+        <PublicItinViewContainer />
+      </div>
+
       </>
     );
   };

@@ -1,9 +1,22 @@
 import Head from 'next/head';
 import { GetServerSideProps } from 'next';
 import { getPublicProfileWithAdminSDK } from '../server/profile';
-import PublicProfile from '../components/Profile/PublicProfile';
+import dynamic from 'next/dynamic';
+// import PublicProfile from '../components/Profile/PublicProfile';
 import { AuthenticatedUser } from "@/components/typeDefs";
 import style from '../styles/PublicProfile.module.css';
+
+const SkeletonLoader = () => (
+  <div className={style.loadingOverlay}>
+    <div className={style.loadingSpinner}></div>
+    <p>Loading profile...</p>
+  </div>
+);
+
+const PublicProfile = dynamic(() => import('../components/Profile/PublicProfile'), {
+  loading: () => <SkeletonLoader />,
+});
+
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const userID = context.params?.userID as string; // Extract user ID from URL
   const publicProfile = await getPublicProfileWithAdminSDK(userID);
@@ -16,6 +29,7 @@ type Props = {
   publicProfile: AuthenticatedUser | null;
   userID: string;
 };
+
 
 const PublicUserProfilePage: React.FC<Props> = ({ publicProfile, userID }) => {   
   const canonicalUrl = `https://www.itinaru.com/${userID}`;
