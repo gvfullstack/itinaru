@@ -92,7 +92,7 @@ const ItinGalleryComponent: React.FC<Props> = ({...props}) => {
                 </div>
             <h5 className={styles.title}>{props.title}</h5>
         </div>  
-        <p className={styles.text}>{props.city}, {props.state}</p>
+        {/* <p className={styles.text}>{props.city}, {props.state}</p> */}
         <div className={styles.text}>
            <QuillTextParserComponent description={truncatedDescription()}/>
         </div>

@@ -9,7 +9,6 @@ import algoliasearch from 'algoliasearch';
 import { useRecoilState } from 'recoil';
 import {searchResultsState, searchQueryState} from './searchAtoms';
 
-
 const appId = process.env.NEXT_PUBLIC_ALGOLIA_APP_ID || '';
 const searchKey = process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_KEY || '';
 const searchClient = algoliasearch(appId, searchKey);
@@ -75,11 +74,12 @@ const SearchBar: React.FC = () => {
                         </div>
                     )}                      
             <ItinGalCompWrapper>                            
-                        {searchQuery && 
+                        {/* {searchQuery &&  */}
                             <div>   
                                 <CustomHits searchClient={searchClient}/>                        
                             </div>
-                            }       
+                         {/* } */}
+                       
                         </ItinGalCompWrapper>                
                 </div>
             </InstantSearch>

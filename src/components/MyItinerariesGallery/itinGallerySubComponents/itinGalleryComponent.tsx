@@ -62,37 +62,9 @@ const ItinGalleryComponent: React.FC<ItinGalleryComponentProps> = ({itinerary}) 
 const checkedItineraryRef = useRef<TransformedItinerary | null>(null);
 
 const handleOpenEditView = async () => {
-    if (!authUser || !authUser.uid) {
-      toast.error("No authenticated user found. Please log in and try again.");
-      console.error("No authenticated user found.");
-      return;
-    }
+  router.push(`/viewItinerary/${itinerary.id}`);
+}
 
-    if (typeof authUser?.uid !== 'string') {
-      throw new Error("UID is not a string or is missing");
-  }
-  
-  const items = await fetchItineraryItems(itinerary.id as string) ?? [];
-  checkedItineraryRef.current = {
-    ...itinerary,
-    items,
-  };
-
-  setCheckedItinerary(checkedItineraryRef.current);
-  await updateIndexedDB();
-
-};
-
-const updateIndexedDB = async () => {
-  if (checkedItineraryRef.current) {
-    const indexDB = await openDB('itinerariesDatabase');
-    const tx = indexDB.transaction('itineraries', 'readwrite');
-    const store = tx.objectStore('itineraries');
-    await store.put(checkedItineraryRef.current, `currentlyEditingItineraryStateEF_${authUser?.uid}`);
-    await tx.done;
-    router.push(`/user/editItineraryLoader`);
-  }
-};
 
 //////////////////////////////
   return (
@@ -112,7 +84,6 @@ const updateIndexedDB = async () => {
       </div>
       <div>
         <h5 className={styles.title}>{title}</h5>
-        <p className={styles.text}>{`${city}${city?",":""} ${state}`}</p>
         <div className={styles.text}>
            <QuillTextParserComponent description={truncatedDescription}/>
         </div>

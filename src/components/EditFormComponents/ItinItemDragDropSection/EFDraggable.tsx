@@ -4,7 +4,7 @@ import { ItineraryItem, ItemTypes, Itinerary} from '../editFormTypeDefs';
 const { v4: uuidv4 } = require('uuid');
 import {DynamicFontAwesomeIcon} from '@/components';
 import { faExternalLinkAlt, faDiamondTurnRight, faEllipsisVertical, 
-  faStopwatch, faTrash, faPenToSquare} from "@fortawesome/free-solid-svg-icons";
+  faStopwatch, faTrash, faPenToSquare, faCaretDown, faCaretUp} from "@fortawesome/free-solid-svg-icons";
 import { useRecoilState } from 'recoil';
 import getConfig from 'next/config';
 import styles from'.././EditFormCSS/editItineraryCSS.module.css'
@@ -20,6 +20,7 @@ const ellipsisVertical = <DynamicFontAwesomeIcon className={styles2.itinItemsIco
 const clock = <DynamicFontAwesomeIcon className={styles2.itinItemsIcons} icon={faStopwatch} />;
 const deleteItemIcon = <DynamicFontAwesomeIcon className={styles2.itinItemsIcons} icon={faTrash} />;
 const editItemIcon = <DynamicFontAwesomeIcon className={styles2.itinItemsIcons} icon={faPenToSquare} />;
+
 
 
 import { currentlyEditingItineraryState } from '../editFormAtoms';
@@ -55,6 +56,16 @@ const EFDraggable = React.forwardRef((
   const handleShowHideDescription = () => {
     setHideDescription(prev=>!prev)
 }
+
+const caretDown = <DynamicFontAwesomeIcon 
+    className={styles2.itinItemsIcons} 
+    icon={faCaretDown} 
+    onClick={()=>handleShowHideDescription()}/>;
+
+const caretUp = <DynamicFontAwesomeIcon 
+    className={styles2.itinItemsIcons} 
+    icon={faCaretUp} 
+    onClick={()=>handleShowHideDescription()}/>;
 
   
   const [{ isDragging }, drag] = useDrag(() => ({
@@ -224,8 +235,7 @@ const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.tim
              <div className={styles.mainItinItemContainer}>
                   <div className={`${styles.itineraryItemContainerContainer} ${hideDescription ? "" : styles.isShown}`}>
                       {/* <div className={styles.itinTitleContainer}> */}
-                          <h3 className={`${styles.itinTitle} ${hideDescription ? "" : styles.isShown}`} 
-                            onClick={()=>handleShowHideDescription()}>
+                          <h3 className={`${styles.itinTitle} ${hideDescription ? "" : styles.isShown}`}>
                               {hideDescription ? shortItemTitle : itineraryItem.itemTitle}                           
                             </h3>
                             <div className={`${styles.activityTime} ${hideDescription ? "" : styles.isShown}`}>
@@ -318,13 +328,21 @@ const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.tim
                   
                         
                           <div 
-                            className={`${styles.hamburgerMenuContainer} ${hideDescription ? "" : styles.isShown}`} 
-                            onClick={handleMenuClick} 
-                            ref={menuRef}
+                            className={`${styles.collapseContainer}`} 
                             >
+                              <div
+                                className={`${styles.hamburgerMenuContainer} ${hideDescription ? "" : styles.isShown}`} 
+                                onClick={handleMenuClick} 
+                                ref={menuRef}
+                                >
                                       {ellipsisVertical}
                                       {menuOpen && <Menu />
                                       }
+                                      {caretDown}
+                              </div>
+                              <div
+                                className={`${styles.caretUpContainer} ${hideDescription ? styles.isShown : ""}`}
+                              >{caretUp}</div>
                           </div>
                                                        
               </div>

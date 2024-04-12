@@ -68,7 +68,6 @@ export default function CustomHits({ searchClient }: CustomHitsProps) {
     
             // Step 4: Ensure uniqueness
             combinedItineraries = Array.from(new Map(combinedItineraries.map(itin => [itin.objectID, itin])).values());
-    
             // Update the existing itineraries in the global state
             setSearchResults(combinedItineraries);
         };
@@ -76,11 +75,6 @@ export default function CustomHits({ searchClient }: CustomHitsProps) {
         processHits();
     }, [hits]); // Assuming hits is a dependency for this effect
     
-
-    useEffect(() => {
-            console.log('savedHits:', savedHits)
-        
-    }, [hits])
 
     return (
         <>{savedHits.map((itin, index) => (
