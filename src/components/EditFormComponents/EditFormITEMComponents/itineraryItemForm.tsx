@@ -482,7 +482,8 @@ const sortItineraryItemsByStartTime = (items: ItineraryItem[]): ItineraryItem[] 
                 <div className = {styles.formControlsIconContainer}>                
                     {cancelMark}
                 </div>
-                <p className = {styles.formControlsIconText}>Close</p>
+                <p className = {styles.formControlsIconText}>Save/</p>
+                <div className = {styles.formControlsIconText}>Close</div>
             </div>            
         </div>)}
         {showDeleteConfirmation && (

@@ -220,8 +220,14 @@
         line-height: 14px;
     }
     
-    
-    .hamburgerMenuContainer{
+    .collapseContainer{
+        display: flex;
+        justify-self: flex-end;
+        align-self: flex-end;
+    }
+
+    .hamburgerMenuContainer
+    {
         height: 100%;
         width: 2rem;
         font-size: 20px;
@@ -229,7 +235,17 @@
         color: rgb(29, 29, 29);
         padding: 6px 0px 0px 2px;
     }
-    
+
+    .caretUpContainer{
+        display: block;
+        width: 100%;
+        text-align: right;
+
+    }
+    .caretUpContainer.isShown{
+        display: none;
+       
+    }
     .expandedItinMapText{
         display: none;
         color: black;
@@ -252,6 +268,8 @@
         text-align: right;
         display: none;
     }
+
+
     
     /* /////////////Expanded Itin Item View///////////////////// */ 
     

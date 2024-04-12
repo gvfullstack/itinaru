@@ -734,9 +734,9 @@ return (
                   <ItineraryEditForm />
               
                   <div className={styles.plusSignContainerEF}>
-                    <div className={styles.plusSignEF} onClick={handleSaveItemAndShowItemForm}>
-                      <span className={styles.plusSignText}> itinerary item</span> + 
-                    </div>
+                    <button className={styles.plusSignEF} onClick={handleSaveItemAndShowItemForm}>
+                       Add Item 
+                    </button>
                   </div>
                   <DragDropSection />
               </div>

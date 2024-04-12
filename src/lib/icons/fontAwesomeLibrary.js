@@ -25,7 +25,9 @@ import {
     faWindowMinimize,
     faShare,
     faDownLeftAndUpRightToCenter,
-    faPenToSquare
+    faPenToSquare, 
+    faCaretDown,
+    faCaretUp
 } from '@fortawesome/free-solid-svg-icons';
 
 
@@ -51,4 +53,4 @@ library.add(faDiamondTurnRight,
     faSquareShareNodes,
     faWindowMinimize,
     faShare,faDownLeftAndUpRightToCenter,
-    faPenToSquare);
+    faPenToSquare, faCaretDown, faCaretUp);

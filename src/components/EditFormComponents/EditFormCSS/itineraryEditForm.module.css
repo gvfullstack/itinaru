@@ -1,4 +1,7 @@
-
+.splitText {
+  display: flex;
+  flex-direction: column;
+}
 .itineraryEditFormContainer{
     margin-top: 1rem;
     width: 100%;
@@ -262,15 +265,31 @@
   height: 3rem;
   color: #bebebe;
   width: 100%;
-  align-self:flex-end    
+  align-self:flex-end;  
+  padding-right: 1rem;  
 }
 
-.plusSignEF{
+.plusSignEF {
   cursor: pointer;
   align-self: center;
   justify-self: center;
+  font-size: 1rem;
+  background-color: #007bff; /* Nice hue of yellow */
+  border-width: 1px;
+  border-color: #007bff; /* Same color as background */
+  border-radius: 7px;
+  padding: 0.5rem 1rem; /* Adjust padding as needed */
+  color: rgb(254, 254, 254); /* White text color */
+  transition: background-color 0.3s ease; /* Smooth transition effect */
+
+  /* Add any additional styles or hover effects here */
 }
 
+.plusSignEF:hover {
+  background-color: #0056b3;
+  border-color: #0056b3/* Lighter shade of yellow on hover */
+}
+  
 .plusSignText{
   font-size: 1.5rem;
   align-self: center;
