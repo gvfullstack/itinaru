@@ -5,3 +5,18 @@
     align-items: center;
     justify-items: center;
 }
+
+.spinner {
+    border: 4rem solid rgba(255, 255, 255, 0.3);  /* Light grey */
+    border-radius: 50%;                          /* Rounded */
+    border-top: 2rem solid #676565;                  /* Black on top */
+    border-left: 2rem solid #676565;                  /* Black on top */
+    width: 10rem;
+    height: 10rem;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
