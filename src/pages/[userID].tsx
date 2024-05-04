@@ -2,13 +2,12 @@ import Head from 'next/head';
 import { GetServerSideProps } from 'next';
 import { getPublicProfileWithAdminSDK } from '../server/profile';
 import dynamic from 'next/dynamic';
-// import PublicProfile from '../components/Profile/PublicProfile';
 import { AuthenticatedUser } from "@/components/typeDefs";
 import style from '../styles/PublicProfile.module.css';
 
 const SkeletonLoader = () => (
   <div className={style.loadingOverlay}>
-    <div className={style.loadingSpinner}></div>
+    <div className={style.spinner}></div>
     <p>Loading profile...</p>
   </div>
 );
@@ -28,12 +27,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 type Props = {
   publicProfile: AuthenticatedUser | null;
   userID: string;
+  loading: boolean; // Add loading state
 };
 
-
-const PublicUserProfilePage: React.FC<Props> = ({ publicProfile, userID }) => {   
+const PublicUserProfilePage: React.FC<Props> = ({ publicProfile, userID, loading }) => {   
   const canonicalUrl = `https://www.itinaru.com/${userID}`;
   
+  if (loading) {
+    return <SkeletonLoader />;
+  }
+
   return (
     <>
      <Head>
