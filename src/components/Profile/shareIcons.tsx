@@ -14,7 +14,7 @@ import { useRecoilState } from 'recoil';
 
 const ShareIcons: React.FC = () => {
     const [authUser, setAuthUser] = useRecoilState(authUserState)
-    const shareUrl = `https://www.itinaru.com/${authUser?.uid}`;
+    const shareUrl = `https://www.itinaru.com/user/${authUser?.uid}/publicUserProfileLoading`;
     const subject = 'Link to my itinaru itineraries, profile page.';
     const body = 'Hello, I would like to share my itinaru itineraries profile page with you.';
 

@@ -11,7 +11,7 @@ const CopyShareButton: React.FC = () => {
     const copyIcon = <DynamicFontAwesomeIcon icon={faLink} />
 
     const copyToClipboard = () => {
-        const url = `https://www.itinaru.com/${user?.uid}`;
+        const url = `https://www.itinaru.com/user/${user?.uid}/publicUserProfileLoading`;
         navigator.clipboard.writeText(url).then(() => {
         
         }).catch(err => {

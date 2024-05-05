@@ -61,7 +61,7 @@ const GeneralItineraryInformation: FC<GeneralItineraryInformationProps> = ({ sum
                       className={styles.aspectRatioBox2}
                       onClick={(e) => {
                         e.stopPropagation(); // This stops the event from bubbling up to the parent
-                        router.push(`/${itinerary?.uid}`);
+                        router.push(`/user/${itinerary?.uid}/publicUserProfileLoading`);
                       }}                  >
                     {itinerary?.profilePictureUrl ? (
                       <Image

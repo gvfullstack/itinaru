@@ -20,7 +20,7 @@ const GoogleMapIframe: FC = () => {
   const intermediateWaypoints = waypoints.slice(1, -1);
 
   // Initialize Google Maps URL
-  let googleMapURL = `https://www.google.com/maps/embed/v1/directions?key=${'AIzaSyDI6tYErd_J2V4l0yQvj6ug4hYSMmeCMJ0'}&origin=${origin}&destination=${destination}`;
+  let googleMapURL = `https://www.google.com/maps/embed/v1/directions?key=${process.env.NEXT_PUBLIC_GMAPEMBED_API_KEY}&origin=${origin}&destination=${destination}`;
 
   // Add waypoints to the URL if there are more than two
   if (intermediateWaypoints.length > 0) {

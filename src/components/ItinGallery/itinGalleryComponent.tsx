@@ -66,7 +66,7 @@ const ItinGalleryComponent: React.FC<Props> = ({...props}) => {
                       className={styles.aspectRatioBox2}
                       onClick={(e) => {
                         e.stopPropagation(); // This stops the event from bubbling up to the parent
-                        router.push(`/${props.userId}`);
+                        router.push(`/user/${props.userId}/publicUserProfileLoading`);
                       }}                  >
                     {props.profilePictureUrl ? (
                       <Image
