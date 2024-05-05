@@ -22,7 +22,7 @@ const GoogleMapIframe: FC = () => {
       .join('|');
   }
 
-  const googleMapURL = `https://www.google.com/maps/embed/v1/directions?key=${'AIzaSyDI6tYErd_J2V4l0yQvj6ug4hYSMmeCMJ0'}&origin=${origin}&destination=${destination}&waypoints=${waypoints}`;
+  const googleMapURL = `https://www.google.com/maps/embed/v1/directions?key=${process.env.NEXT_PUBLIC_GMAPEMBED_API_KEY}&origin=${origin}&destination=${destination}&waypoints=${waypoints}`;
 
   return (
     <div style={{padding: '1rem', textAlign:"center"}}>

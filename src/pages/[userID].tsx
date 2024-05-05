@@ -32,10 +32,6 @@ type Props = {
 
 const PublicUserProfilePage: React.FC<Props> = ({ publicProfile, userID, loading }) => {   
   const canonicalUrl = `https://www.itinaru.com/${userID}`;
-  
-  if (loading) {
-    return <SkeletonLoader />;
-  }
 
   return (
     <>
