@@ -1,7 +1,17 @@
 {
     "redirects": [
       {
-        "source": "/(.*)",
+        "source": "https://itinaru.com/(.*)",
+        "destination": "https://www.itinaru.com/$1",
+        "permanent": true
+      },
+      {
+        "source": "http://itinaru.com/(.*)",
+        "destination": "https://www.itinaru.com/$1",
+        "permanent": true
+      },
+      {
+        "source": "http://www.itinaru.com/(.*)",
         "destination": "https://www.itinaru.com/$1",
         "permanent": true
       }
