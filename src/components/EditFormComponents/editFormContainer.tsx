@@ -119,7 +119,7 @@ useEffect(() => {
   
       // First, add the item to the state without an ID
       setItinerary(prevItinerary => {
-          const updatedItems = [newItem, ...prevItinerary.items]; // Add new item at the start
+          const updatedItems = [newItem, ...prevItinerary.items || []]; // Add new item at the start
           return { ...prevItinerary, items: updatedItems };
       });
   
@@ -133,7 +133,7 @@ useEffect(() => {
   
       // Once the ID is available, update the item in state with the ID
       setItinerary(prevItinerary => {
-          const updatedItems = [...prevItinerary.items];
+          const updatedItems = [...prevItinerary.items || []];
           const index = updatedItems.findIndex(item => item.creationTimestamp === newItem.creationTimestamp);
           if (index !== -1) {
               updatedItems[index] = { ...updatedItems[index], id: docRef.id }; // Update the item with the ID
@@ -146,60 +146,7 @@ useEffect(() => {
   };
 
   
-    // const handleSaveItineraryItem = async () => {
-
-    //   //ensure all changes are saved before attempting to add an item
-    //   if (timerId) {
-    //     clearTimeout(timerId);
-    //     timerId = undefined; // Reset the timerId
-    //   }
-    //   await saveItineraryToFirestore();
-
-    //   // Firestore logic to add item to Firestore and retrieve the ID of the new item
-    //   const itemsRef = db.collection('itineraries').doc(itinerary.id).collection('items');
-    //   const specificDate = new Date('2000-01-01T08:00:00Z');
-    //   const startTime = {time: Timestamp.fromDate(specificDate)};
-    //   const endTime = {time: Timestamp.fromDate(specificDate)};
-
-    //   const docRef = await itemsRef.add({
-    //     // Add other fields as necessary
-    //     descHidden: true,
-    //     itineraryParentId: itinerary.id,
-    //     isDeleted: false,
-    //     creationTimestamp: serverTimestamp(),
-    //     lastUpdatedTimestamp: serverTimestamp(),
-    //     startTime,
-    //     endTime
-    //   });
-
-    //   const startTimeDayJs = { time: dayjs(specificDate) };
-    //   const endTimeDayJs = { time: dayjs(specificDate) };
-      
-    //   // Await is used to ensure we get the docRef before proceeding
-    //   const newItem = {
-    //     id: docRef.id,
-    //     descHidden: true,
-    //     itineraryParentId: itinerary.id,
-    //     isDeleted: false,
-    //     startTime: startTimeDayJs,
-    //     endTime: endTimeDayJs
-    //     // Add other default fields or those returned by Firestore as necessary
-    //   };
-    //   // Now, update the Recoil state with the new item
-    //   setItinerary((prevItinerary) => {
-    //     const prevItems = prevItinerary.items || []; // Provide a fallback empty array
-    //     return {
-    //       ...prevItinerary,
-    //       items: [...prevItems, newItem]
-    //     };
-    //   });
-
-    //   setPreviousTransformedItineraryNeedsUpdate(true);
-
-    // };
-  
-    //to ensure previousTransformedItinerary only updates after itinerary state has completed updating. 
-    useEffect(() => {
+   useEffect(() => {
       if (previousTransformedItineraryNeedsUpdate) {
         const transformed = createPreviousTransformedItinerary(itinerary);
         setPreviousTransformedItinerary(transformed);
