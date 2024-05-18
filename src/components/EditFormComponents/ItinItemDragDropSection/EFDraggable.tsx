@@ -235,8 +235,11 @@ const formattedStartTime = formatTimeWithoutSeconds(itineraryItem.startTime?.tim
              <div className={styles.mainItinItemContainer}>
                   <div className={`${styles.itineraryItemContainerContainer} ${hideDescription ? "" : styles.isShown}`}>
                       {/* <div className={styles.itinTitleContainer}> */}
-                          <h3 className={`${styles.itinTitle} ${hideDescription ? "" : styles.isShown}`}>
-                              {hideDescription ? shortItemTitle : itineraryItem.itemTitle}                           
+                          <h3 
+                          className={`${styles.itinTitle} ${hideDescription ? "" : styles.isShown}`}
+                          onClick={()=>handleShowHideDescription()}>
+  
+                              {hideDescription ? shortItemTitle : itineraryItem.itemTitle || "untitled item" + "..."}                           
                             </h3>
                             <div className={`${styles.activityTime} ${hideDescription ? "" : styles.isShown}`}>
                                     <div className={`${styles.infoBannerWords} ${hideDescription ? "" : styles.isShown}`}>Start:</div>
